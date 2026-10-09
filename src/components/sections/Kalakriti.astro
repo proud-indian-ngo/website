@@ -2,7 +2,7 @@
 /** Kalakriti: the festival poster, two tear-off tickets, and all 8 events on a bunting clothesline.
  *  Content: src/content/kalakriti.yaml. */
 import MarginDoodles from "../margins/MarginDoodles.astro";
-import { getKalakriti, getSite } from "../../lib/content";
+import { getKalakriti } from "../../lib/content";
 import { asset } from "../../lib/images";
 import BuntingString from "../scenes/BuntingString.astro";
 import KalaSparkle from "../doodles/KalaSparkle.astro";
@@ -17,7 +17,6 @@ import Sticker from "../ui/Sticker.astro";
 import Ticket from "../ui/Ticket.astro";
 
 const k = await getKalakriti();
-const site = await getSite();
 const e = k.edition;
 const rows = [k.line.photos.slice(0, 4), k.line.photos.slice(4, 8)];
 const troupeClass = ["t-fd", "t-dn", "t-pt"];
@@ -144,7 +143,7 @@ const troupePhone = ["35vw", "46vw", "35vw"];
       </p>
       <Ticket
         variant="paper"
-        href={site.links.register}
+        href="#volunteer"
         kicker={k.tickets.volunteer.kicker}
         title={k.tickets.volunteer.title}
         arrow

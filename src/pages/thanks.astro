@@ -1,0 +1,70 @@
+---
+/**
+ * /thanks/: where Razorpay sends donors after a successful payment (the Payment Page's "redirect after payment" URL).
+ * Not linked from the site, noindex, and out of the sitemap (astro.config.mjs). When Razorpay passes the payment id
+ * back (?razorpay_payment_id=pay_…), the page shows it so the donor can quote it. Copy: copy.yaml → thanks.
+ */
+import Matka from "../components/doodles/Matka.astro";
+import Sparkle from "../components/doodles/Sparkle.astro";
+import Button from "../components/ui/Button.astro";
+import Base from "../layouts/Base.astro";
+import { getCopy, getSite } from "../lib/content";
+import "../styles/thanks-page.css";
+
+const { thanks: t } = await getCopy();
+const site = await getSite();
+const finance = site.contacts.emails.find((e) => e.label === "Donations") ?? site.contacts.emails[0]!;
+---
+
+<Base title={t.title} description={t.description} noindex>
+  <main
+    id="main"
+    class="s-hero thx relative flex min-h-dvh flex-col items-start justify-center overflow-hidden bg-sky px-14 py-24 max-tab:px-5 max-tab:py-16"
+  >
+    <div
+      class="thx-pot absolute right-[7vw] bottom-[9vh] w-[clamp(180px,22vw,300px)] rotate-5 max-lap:relative max-lap:right-auto max-lap:bottom-auto max-lap:order-10 max-lap:mt-10 max-lap:mr-[12%] max-lap:w-[clamp(140px,36vw,220px)] max-lap:self-end"
+      aria-hidden="true"
+    >
+      <Matka class="thx-bob block h-auto w-full origin-bottom overflow-visible" />
+      <Sparkle class="pi-doodle thx-sp absolute top-[2%] -left-[14%] w-9" />
+      <Sparkle class="pi-doodle thx-sp absolute -top-[14%] -right-[8%] w-[46px] [animation-delay:160ms]" />
+      <Sparkle class="pi-doodle thx-sp absolute top-[34%] -right-[18%] w-7 [animation-delay:320ms]" />
+    </div>
+    <p class="thx-kicker font-pi-display text-40 leading-none font-extrabold tracking-title max-tab:text-30">
+      {t.kicker}
+    </p>
+    <h1
+      class="giant thx-h mt-3 max-w-[11ch] font-pi-display text-[clamp(60px,10vw,160px)] leading-[.86] font-extrabold tracking-tighter text-white"
+    >
+      {t.heading}
+    </h1>
+    <p class="mt-10 max-w-[44ch] text-19 leading-[1.4] max-tab:text-16-5">{t.line}</p>
+    <p class="mt-4 max-w-[52ch] text-16 leading-[1.5]">{t.receipt}</p>
+    <p
+      class="thx-pay mt-4 max-w-[52ch] text-16 leading-[1.5] [&_b]:font-semibold [&_b]:tabular-nums"
+      data-template={t.payment}
+      hidden
+    ></p>
+    <p class="mt-4 text-15">
+      {t.questions}{" "}
+      <a class="font-semibold underline decoration-[1.5px] underline-offset-4" href={`mailto:${finance.address}`}
+        >{finance.address}</a
+      >
+    </p>
+    <div class="ctas mt-8 flex flex-wrap gap-2.5">
+      <Button href="/#volunteer" class="px-5 py-3 text-15" arrow>{t.volunteer}</Button>
+      <Button href="/#reports" variant="ghost" class="px-5 py-3 text-15">{t.reports}</Button>
+      <Button href="/" variant="ghost" class="px-5 py-3 text-15">{t.home}</Button>
+    </div>
+  </main>
+</Base>
+
+<script>
+  // Razorpay appends the payment id to the redirect; only a well-formed id is shown
+  const el = document.querySelector<HTMLElement>(".thx-pay");
+  const id = new URLSearchParams(location.search).get("razorpay_payment_id");
+  if (el && id && /^pay_[A-Za-z0-9]{6,40}$/.test(id)) {
+    el.innerHTML = (el.dataset.template ?? "").replace("{id}", id);
+    el.hidden = false;
+  }
+</script>

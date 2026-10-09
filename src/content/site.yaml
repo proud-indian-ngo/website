@@ -56,7 +56,8 @@ social:
     url: https://x.com/ProudIndianNGO
 
 links:
-  # every "Become an Optimist" / "Volunteer for this" button
+  # the volunteer section's sign-up links (step 1, its "Become an Optimist" button, the empty poster). Every other
+  # "Become an Optimist" / "Volunteer for this" button on the site goes to the volunteer section (#volunteer) first
   register: https://dash.proudindian.ngo/register
   # the dashboard's events list ("See every session", and the poster when sessions can't be loaded); signed-out
   # visitors sign in first and land on it

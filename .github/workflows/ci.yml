@@ -24,6 +24,8 @@ concurrency:
 permissions:
   contents: read
   deployments: write
+  # the deploy job comments the preview URL on pull requests
+  pull-requests: write
 
 env:
   PROJECT: proudindian
@@ -161,6 +163,28 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           wranglerVersion: "4"
           command: pages deploy dist --project-name=${{ env.PROJECT }} --branch=${{ github.head_ref || github.ref_name }} --commit-hash=${{ github.event.pull_request.head.sha || github.sha }} --commit-dirty=true
+      # one comment per pull request, edited on every push, so the preview link is always on the PR
+      - name: Comment the preview URL
+        if: github.event_name == 'pull_request' && steps.deploy.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+          URL: ${{ steps.deploy.outputs.deployment-url }}
+          ALIAS: ${{ steps.deploy.outputs.pages-deployment-alias-url }}
+        run: |
+          marker="<!-- preview-url -->"
+          body="$marker
+          **Preview:** ${ALIAS:-$URL}
+
+          This commit (\`${SHA::7}\`): $URL"
+          id=$(gh api "repos/$GITHUB_REPOSITORY/issues/$PR/comments" --paginate \
+            --jq ".[] | select(.body | startswith(\"$marker\")) | .id" | head -n 1)
+          if [ -n "$id" ]; then
+            gh api -X PATCH "repos/$GITHUB_REPOSITORY/issues/comments/$id" -f body="$body" > /dev/null
+          else
+            gh pr comment "$PR" -R "$GITHUB_REPOSITORY" --body "$body"
+          fi
       - name: Summary
         run: |
           if [ "${{ steps.deploy.outcome }}" = success ]; then

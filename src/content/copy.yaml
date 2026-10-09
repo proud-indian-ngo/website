@@ -284,3 +284,18 @@ stickyBar:
   lead: Fund a weekend
   rest: " · 80G tax receipt"
   donate: Donate
+
+# /thanks/: where Razorpay sends donors after a successful payment (set it as the Payment Page's redirect URL)
+thanks:
+  title: Thank you · Proud Indian
+  description: Thank you for your gift to Proud Indian.
+  kicker: Thank you!
+  heading: You just funded a weekend.
+  line: Your gift goes into the matka for classes, meals, art and outings with children in Bengaluru, run by volunteers every weekend.
+  receipt: Razorpay has emailed your payment receipt. If you added your PAN, we email your 80G receipt too, and Form 10BE after the financial year ends.
+  # shown only when Razorpay passes the payment id back; {id} is the id
+  payment: "Your payment ID is <b>{id}</b>. Mention it if you write to us about this gift."
+  questions: Questions about your gift?
+  home: Back to the home page
+  volunteer: Spend a weekend with us
+  reports: See where the money goes

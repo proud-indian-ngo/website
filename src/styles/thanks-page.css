@@ -1,0 +1,45 @@
+/* Thank-you page only (imported by src/pages/thanks.astro), so the home page doesn't carry it. Layout, sizes and
+   positions are utilities in the page; this keeps what utilities express badly: the paper outline round the matka
+   (four drop-shadows), the matka's ink lines (doodle internals) and the motion. @reference gives it the theme without
+   emitting global.css a second time. */
+@reference "./global.css";
+
+@layer components {
+  .thx-pot {
+    filter: drop-shadow(4px 0 0 var(--color-paper))
+      drop-shadow(-4px 0 0 var(--color-paper))
+      drop-shadow(0 -4px 0 var(--color-paper))
+      drop-shadow(0 4px 0 var(--color-paper));
+  }
+  .thx-pot .ink {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  /* the matka bobs and the sparkles pop in, only while motion is on; the delays are utilities, which win over this
+     layer's animation shorthand */
+  html[data-motion="on"] .thx-bob {
+    animation: thx-bob 3.2s ease-in-out infinite;
+  }
+  html[data-motion="on"] .thx-sp {
+    animation: thx-pop 700ms var(--ease-spring) both;
+  }
+  @keyframes thx-bob {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0);
+    }
+    50% {
+      transform: translateY(-5px) rotate(-2.5deg);
+    }
+  }
+  @keyframes thx-pop {
+    from {
+      scale: 0;
+      rotate: -40deg;
+      opacity: 0;
+    }
+  }
+}

@@ -2,9 +2,6 @@
 import HeroSun from "../components/doodles/HeroSun.astro";
 import Button from "../components/ui/Button.astro";
 import Base from "../layouts/Base.astro";
-import { getSite } from "../lib/content";
-
-const site = await getSite();
 ---
 
 <Base title="Page not found · Proud Indian" description="This page could not be found." noindex>
@@ -25,7 +22,7 @@ const site = await getSite();
     </p>
     <div class="ctas mt-6 gap-2.5">
       <Button href="/" class="px-5 py-3 text-15" arrow>Back to the home page</Button>
-      <Button href={site.links.register} variant="ghost" class="px-5 py-3 text-15">Become an Optimist</Button>
+      <Button href="/#volunteer" variant="ghost" class="px-5 py-3 text-15">Become an Optimist</Button>
     </div>
   </main>
 </Base>

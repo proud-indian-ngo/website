@@ -1,11 +1,10 @@
 ---
 /** Header: split sticker pills on desktop, a burger that opens the poster menu below 1180px. */
-import { getCopy, getSite } from "../../lib/content";
+import { getCopy } from "../../lib/content";
 import Lockup from "../brand/Lockup.astro";
 import Button from "../ui/Button.astro";
 
 const copy = await getCopy();
-const site = await getSite();
 const nav = copy.nav;
 ---
 
@@ -41,7 +40,7 @@ const nav = copy.nav;
       data-reveal="rise"
       data-y="-16"
     >
-      <Button href={site.links.register} class="px-[18px] py-[11px] text-14 max-tab:hidden">{nav.join}</Button>
+      <Button href="#volunteer" class="px-[18px] py-[11px] text-14 max-tab:hidden">{nav.join}</Button>
       <Button href="#donate" variant="donate" class="px-[18px] py-[11px] text-14 max-[359px]:px-3.5">{nav.donate}</Button>
       <button
         class="burger hidden size-11 cursor-pointer place-items-center rounded-round border-line border-ink bg-ink max-nav:grid"

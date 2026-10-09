@@ -108,6 +108,8 @@ node scripts/qa/events.mjs     # switches the mock between a, b, one, empty, slo
 
 Buttons deep-link to Razorpay: `https://pages.razorpay.com/proud-indian-ngo-donate?your_donation=<rupees>`, with a minimum of ₹100. Below the minimum the total dims, the button reads "Enter ₹100 or more" and is `aria-disabled` (clicks do nothing), and a note appears once an amount is typed. Focusing or typing in the "Or enter another amount" field deselects the presets. The parameter name is the Razorpay item name in snake case. **If the item is renamed in Razorpay, the amount silently stops pre-filling** (it happened once: the item became "Your donation"). It is configured once, in `site.yaml` → `links.razorpay`. `bun run check:razorpay` reads the live page and fails if the parameter or the minimum no longer match; CI runs it on every deploy and flags a mismatch as a warning without blocking the deploy.
 
+**After paying**, Razorpay sends donors to `/thanks/` (`src/pages/thanks.astro`, copy in `copy.yaml` → `thanks`): a thank-you page with the matka, what the gift does, the receipts they will get, the payment ID when Razorpay passes `razorpay_payment_id` back, and links to volunteering and the reports. It is noindex and out of the sitemap. Set it in Razorpay: Payment Pages → the donate page → Settings → "Redirect to a URL after successful payment" → `https://proudindian.ngo/thanks/`.
+
 ## Deploying to Cloudflare Pages
 
 GitHub Actions checks, builds and deploys (`.github/workflows/ci.yml`; the `deploy` job runs after `checks`) with `wrangler pages deploy` to the Cloudflare Pages project `proudindian` (<https://proudindian.pages.dev>) in the **Proud Indian** Cloudflare account. Cloudflare's own Git integration is not used.
@@ -115,7 +117,7 @@ GitHub Actions checks, builds and deploys (`.github/workflows/ci.yml`; the `depl
 | Trigger | Result |
 |---|---|
 | Push to `main` | Production deployment |
-| Pull request | Preview deployment at `https://<branch>.proudindian.pages.dev`, linked in the run summary. Pull requests from forks build and check but don't deploy. |
+| Pull request | Preview deployment at `https://<branch>.proudindian.pages.dev`, posted as a comment on the PR (one comment, updated on every push) and in the run summary. Pull requests from forks build and check but don't deploy. |
 | `repository_dispatch` of type `events-changed` | Rebuild with fresh sessions (for pi-dash to call when an event changes) |
 | Nightly at 06:00 IST | Rebuild, only once `PUBLIC_EVENTS_URL` is set |
 | Run workflow (Actions tab) | Manual rebuild |
@@ -210,7 +212,7 @@ src/
   content/                 site.yaml, copy.yaml, kalakriti.yaml, reports.yaml, trustees.yaml, programmes/*.yaml
   assets/                  photos/, cutouts/, board/ (optimised at build)
   layouts/Base.astro       head (SEO, OG, Twitter, icons), motion decision, font preloads, scripts
-  pages/                   index, privacy (renders src/content/privacy.md), 404, styleguide
+  pages/                   index, privacy (renders src/content/privacy.md), thanks (after a donation), 404, styleguide
   components/
     sections/              Header, PhoneMenu, ProgrammeIndex, Hero, Marquee, ProgrammesIntro, ProgrammeBand,
                            Kalakriti, Volunteer, Donate, Reports, Trustees, ReportsDrawer, Closing, Footer,
