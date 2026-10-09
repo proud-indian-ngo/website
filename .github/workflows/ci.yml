@@ -75,7 +75,8 @@ jobs:
       # astro check runs beside the build; its result is read after the preview deploy
       - name: Start the type check
         if: env.CODE_CHECKS == 'true'
-        run: (bun run check:types > "$RUNNER_TEMP/types.log" 2>&1; echo $? > "$RUNNER_TEMP/types.exit") &
+        # the outer redirect too: a background process holding the step's output open makes the step wait for it
+        run: (bun run check:types > "$RUNNER_TEMP/types.log" 2>&1; echo $? > "$RUNNER_TEMP/types.exit") > /dev/null 2>&1 &
       # a renamed Razorpay item breaks the amount pre-fill: warn, but don't hold back the deploy
       - name: Razorpay pre-fill
         run: bun run check:razorpay || echo "::warning title=Razorpay::The donate page no longer pre-fills the amount; see the step log and update site.yaml → links.razorpay"
@@ -128,7 +129,8 @@ jobs:
       - name: Type check
         if: env.CODE_CHECKS == 'true'
         run: |
-          while [ ! -f "$RUNNER_TEMP/types.exit" ]; do sleep 1; done
+          for _ in $(seq 1 180); do [ -f "$RUNNER_TEMP/types.exit" ] && break; sleep 1; done
+          [ -f "$RUNNER_TEMP/types.exit" ] || { cat "$RUNNER_TEMP/types.log"; echo "::error::the type check didn't finish"; exit 1; }
           cat "$RUNNER_TEMP/types.log"
           exit "$(cat "$RUNNER_TEMP/types.exit")"
 
