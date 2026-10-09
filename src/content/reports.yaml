@@ -2,6 +2,11 @@
 # kind: annual | audited | disclosure. `year` is the financial year (2023-24); `date` is the month a disclosure was
 # issued (2025-09). The PDFs are in public/reports/, unaltered.
 # The bento counts, the drawer tab counts and the year ranges are all derived from this list.
+- id: annual-2024-25
+  kind: annual
+  title: "Annual report 2024-25"
+  year: 2024-25
+  url: /reports/annual-report-2024-25.pdf
 - id: annual-2023-24
   kind: annual
   title: "Annual report 2023-24"

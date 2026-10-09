@@ -1,7 +1,7 @@
 ---
 /** Footer: contacts, registrations stamps, the Pause motion toggle (WCAG 2.2.2) and the
  *  notebook-margin doodles. */
-import { getCopy, getSite } from "../../lib/content";
+import { getCopy, getSite, postalAddress } from "../../lib/content";
 import { socialIcons as icons } from "../../lib/social";
 import Lockup from "../brand/Lockup.astro";
 import MarginDoodles from "../margins/MarginDoodles.astro";
@@ -76,7 +76,21 @@ const link = "tap-44 font-pi-sans text-16 font-semibold wrap-anywhere";
               </li>
             </ul>
             <span class:list={[stamp, "mt-6.5"]}>{f.visit}</span>
-            <p class={body}><small class={small}>{site.contacts.address.label}</small>{site.contacts.address.text}</p>
+            <ul class="space-y-[9px]">
+              {
+                site.contacts.addresses.map((a) => (
+                  <li class={body}>
+                    <small class={small}>{a.label}</small>
+                    {postalAddress(a)}
+                    {a.map && (
+                      <a class:list={[link, "mt-0.5 block"]} href={a.map} target="_blank" rel="noopener" aria-label={`${f.directions}: ${a.label}`}>
+                        {f.directions}
+                      </a>
+                    )}
+                  </li>
+                ))
+              }
+            </ul>
           </div>
           <div class="col-span-full">
             <span class={stamp}>{f.follow}</span>

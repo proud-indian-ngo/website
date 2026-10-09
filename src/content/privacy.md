@@ -15,7 +15,7 @@ lede: >-
 
 ## Who we are
 
-Proud Indian is a volunteer-run charitable trust in Bengaluru, registered under registration number INT-4-00864-2018-19. Our registered office is at #206, 8th A Main Rd, LBS Nagar, Kaggadasapura, Bengaluru 560017.
+Proud Indian is a volunteer-run charitable trust in Bengaluru, registered under registration number INT-4-00864-2018-19. Our registered office is at No. 224, 3rd Floor, WorkFlo Ranka Junction, 80/3, Old Madras Road, KR Puram, Bengaluru 560016.
 
 For the personal data described here, Proud Indian is the Data Fiduciary under India's Digital Personal Data Protection Act, 2023 (the DPDP Act). That means we decide why and how the data is used, and we are responsible for it.
 
@@ -196,7 +196,7 @@ If you are unhappy with how we have handled your data, write to our Grievance Of
 
 Somasundaram A, Secretary, Proud Indian
 Email: connect@proudindian.ngo
-Address: #206, 8th A Main Rd, LBS Nagar, Kaggadasapura, Bengaluru 560017
+Address: No. 224, 3rd Floor, WorkFlo Ranka Junction, 80/3, Old Madras Road, KR Puram, Bengaluru 560016
 
 We usually reply within a few days, and always within the time the DPDP Rules allow. If you are not satisfied with our answer, you can complain to the Data Protection Board of India.
 

@@ -34,7 +34,11 @@ const site = defineCollection({
     name: z.string(),
     url: z.url(),
     city: z.string(),
-    founded: z.object({ long: z.string(), short: z.string() }),
+    founded: z.object({
+      long: z.string(),
+      short: z.string(),
+      date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    }),
     stats: z.object({
       optimists: z.string(),
       hours: z.string(),
@@ -55,7 +59,20 @@ const site = defineCollection({
         display: z.string(),
         tel: z.string(),
       }),
-      address: z.object({ label: z.string(), text: z.string() }),
+      addresses: z
+        .array(
+          z.object({
+            label: z.string(),
+            name: z.string().optional(),
+            street: z.string(),
+            locality: z.string(),
+            region: z.string(),
+            postalCode: z.string().optional(),
+            map: z.url().optional(),
+            geo: z.object({ lat: z.number(), lng: z.number() }).optional(),
+          })
+        )
+        .min(1),
     }),
     social: z.array(
       z.object({
@@ -389,6 +406,7 @@ const copy = defineCollection({
       write: z.string(),
       call: z.string(),
       visit: z.string(),
+      directions: z.string(),
       follow: z.string(),
       stampsLabel: z.string(),
       stampsHeading: z.string(),

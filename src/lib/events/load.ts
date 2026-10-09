@@ -14,7 +14,11 @@ export interface LoadedEvents {
 
 const BUILD_TIMEOUT_MS = 8000;
 
-export async function loadEvents(): Promise<LoadedEvents> {
+let loaded: Promise<LoadedEvents> | undefined;
+/** Fetched once per build: the home page and /llms.txt show the same sessions. */
+export const loadEvents = () => (loaded ??= fetchEvents());
+
+async function fetchEvents(): Promise<LoadedEvents> {
   const url = import.meta.env.PUBLIC_EVENTS_URL?.trim() || null;
   const unavailable = (why: string): LoadedEvents => {
     if (url) console.warn(`[events] ${why}; the poster links to the dashboard`);

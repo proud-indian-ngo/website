@@ -3,9 +3,11 @@
 # programme bands in programmes/; Kalakriti in kalakriti.yaml; documents in reports.yaml; people in trustees.yaml.
 # "accent" is the one highlighted word of a headline.
 
+# The home page's <title> and description: what search results and AI answers show. They lead with what people
+# search for ("weekend volunteering", Bengaluru and Bangalore); keep both city names.
 meta:
-  title: Proud Indian · Be an Optimist
-  description: Proud Indian is a volunteer-run NGO in Bengaluru. Optimists, our volunteers, run maths and English classes, art & craft, shared meals, Kalakriti and community days, mostly at weekends.
+  title: Weekend volunteering in Bengaluru · Proud Indian
+  description: Weekend volunteering in Bangalore with Proud Indian, a volunteer-run NGO. Teach maths, Spoken English and art to children. No experience needed.
 
 nav:
   skip: Skip to content
@@ -86,7 +88,7 @@ programmesIntro:
 volunteer:
   eyebrow: Volunteer
   heading: { before: "Your next weekend,", accent: sorted. }
-  lede: Bring a few free hours and some patience; the children bring the rest. Most sessions are at weekends, and no experience is needed.
+  lede: Bring a few free hours and some patience; the children bring the rest. Most sessions are at weekends in neighbourhoods across Bengaluru, and no experience is needed.
   stepsLabel: How to join
   steps:
     [Register on the dashboard, Tap “Show interest”, "Get approved, show up"]
@@ -268,6 +270,8 @@ footer:
   write: Write to us
   call: Call
   visit: Visit
+  # the link under an address that has a map (site.yaml → contacts.addresses)
+  directions: Get directions
   follow: Follow
   stampsLabel: Registrations
   stampsHeading: Registered and verifiable

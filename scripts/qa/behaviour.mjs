@@ -204,9 +204,12 @@ async function run(browser, url, tag) {
         document.querySelector(".cDrawer").hidden &&
         document.activeElement.classList.contains("cDis")
     );
-    // street scene loop when in view, pause toggle
+    // street scene loop when in view, pause toggle (scroll to the scene itself: at the bottom of the page a tall
+    // footer can push it off screen)
     await page.evaluate(() =>
-      scrollTo(0, document.documentElement.scrollHeight)
+      document
+        .querySelector(".fC-scene.dk")
+        .scrollIntoView({ block: "center", behavior: "instant" })
     );
     await sleep(700);
     r["scene loop runs in view"] = await page.evaluate(

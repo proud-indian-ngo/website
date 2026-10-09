@@ -40,6 +40,10 @@ export async function getTrustees() {
 
 type Site = Awaited<ReturnType<typeof getSite>>;
 
+/** "No. 224, …, KR Puram, Bengaluru 560016": one of site.yaml → contacts.addresses on one line */
+export const postalAddress = (a: Site["contacts"]["addresses"][number]) =>
+  `${a.street}, ${a.locality}${a.postalCode ? ` ${a.postalCode}` : ""}`;
+
 /** Values the copy can reference as {placeholders}, so facts are written once in site.yaml. */
 export function facts(site: Site): Record<string, string> {
   return {
