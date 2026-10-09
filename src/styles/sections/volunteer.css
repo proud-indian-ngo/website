@@ -205,12 +205,17 @@
   transform: rotate(2deg);
   transform-origin: bottom;
 }
+/* beside the child's head, clear of the title, which can run to three lines with a long session name */
 .s-vol .psp {
   position: absolute;
   width: 40px;
-  right: 330px;
-  bottom: 250px;
+  right: 40px;
+  bottom: 255px;
   z-index: 3;
+}
+/* a sky line: the ink line the doodles default to doesn't show on the ink poster */
+.s-vol .psp .pi-ln {
+  stroke: var(--color-sky);
 }
 .s-vol .stks {
   display: grid;
@@ -332,8 +337,8 @@
     right: 8px;
   }
   .s-vol .psp {
-    right: 150px;
-    bottom: 120px;
+    right: 24px;
+    bottom: 180px;
     width: 30px;
   }
   .s-vol .stks {
@@ -408,9 +413,6 @@
   bottom: auto;
   top: 132px;
   right: 30px;
-}
-.s-vol .poster.is-empty > .psp .pi-ln {
-  stroke: var(--color-sky);
 }
 .s-vol .poster.is-empty .preg {
   margin-top: var(--space-24);
