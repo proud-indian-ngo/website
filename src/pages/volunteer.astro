@@ -46,7 +46,7 @@ const navLinks = page.nav.links;
 const menuLinks = [{ label: page.nav.home, href: "/" }, ...navLinks];
 ---
 
-<Base title={page.meta.title} description={page.meta.description}>
+<Base title={page.meta.title} description={page.meta.description} og="volunteer">
   <script is:inline slot="head" type="application/ld+json" set:html={jsonLd(structured)} />
   <MarginSprite />
   <Header anchors={anchors} links={navLinks} join={site.links.register} />

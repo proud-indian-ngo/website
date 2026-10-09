@@ -11,6 +11,7 @@
     "astro": "astro",
     "lint:css": "bun scripts/check-css.ts",
     "motion:load": "bun scripts/load-motion.ts",
+    "og": "bun scripts/og.ts",
     "check": "oxfmt --check . && oxlint . --max-warnings=0 && bun run check:design && bun run lint:css && bun run motion:load --check",
     "check:types": "astro check",
     "check:fallow": "fallow dead-code && fallow dupes",

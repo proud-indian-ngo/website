@@ -3,18 +3,24 @@ import "../styles/global.css";
 import briconFont from "@proudindian/design/fonts/bricolage-grotesque-800-latin.woff2?url";
 import geistFont from "@proudindian/design/fonts/geist-latin-wght-normal.woff2?url";
 import LogoSprite from "../components/brand/LogoSprite.astro";
+import { getShareCard } from "../lib/content";
 
 interface Props {
   title: string;
   description: string;
   /** keep out of search results (style guide, 404) */
   noindex?: boolean;
+  /** this page's share image in public/og/ (rendered by `bun run og` from src/content/og.yaml); default: the brand
+   *  card public/og.png */
+  og?: string;
 }
 
-const { title, description, noindex = false } = Astro.props;
+const { title, description, noindex = false, og } = Astro.props;
 const site = Astro.site ?? new URL("https://proudindian.ngo/");
 const canonical = new URL(Astro.url.pathname, site).href;
-const ogImage = new URL("/og.png", site).href;
+const card = og ? await getShareCard(og) : undefined;
+const ogImage = new URL(og ? `/og/${og}.png` : "/og.png", site).href;
+const ogAlt = card?.alt ?? "Proud Indian: Be an Optimist.";
 ---
 
 <!doctype html>
@@ -40,12 +46,13 @@ const ogImage = new URL("/og.png", site).href;
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Proud Indian: Be an Optimist." />
+    <meta property="og:image:alt" content={ogAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@ProudIndianNGO" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogAlt} />
     <script is:inline>
       /* Decide motion before first paint: the footer "Pause motion" choice wins, and reduced motion always turns it off. */
       (function () {

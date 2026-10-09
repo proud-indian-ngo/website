@@ -36,6 +36,7 @@ bun run preview    # serve dist/ at http://localhost:4321
 | `bun run qa:lighthouse` | Lighthouse ×3 on mobile and desktop, for the home page and the volunteer guide (`PAGES` picks pages), against `dist/` served like Cloudflare Pages; fails if accessibility, best practices or SEO drop below 100, or performance below 90, CLS above 0.1 or TBT above 200ms. CI runs it on pull requests and pushes (the `lighthouse` job, not required), mobile and desktop on separate runners; `FORMS=desktop` runs one |
 | `bun run qa:perf` | Build, serve like Cloudflare Pages (brotli, `_headers`), Lighthouse ×5 on mobile and desktop, and the frame profiler at 4× and 6× CPU throttling (see [Performance](#performance)) |
 | `bun run motion:load` | Regenerate `src/styles/sections/load-motion.css` (the header and hero load sequence) from `scripts/load-motion.ts`; `bun run check` fails if it is out of date |
+| `bun run og` | Render the per-page share images (`src/content/og.yaml`) to `public/og/<page>.png`, in the brand card's style; `bun run og volunteer` renders one. Commit the PNGs. The home page keeps the package's `public/og.png` |
 
 Lint and format match proud-indian-ngo/dash: oxlint (correctness rules as errors) and oxfmt (ultracite settings, inlined). oxfmt can sort Tailwind classes, but it does not format `.astro` files, so classes in markup are not auto-sorted.
 
@@ -72,6 +73,7 @@ All content is YAML in `src/content/`, validated against typed schemas in `src/c
 | The poster when sessions cannot be loaded | `copy.yaml` → `volunteer.unavailable` |
 | The volunteer guide (`/volunteer/`): its hero, "What you'll do" cards, where we meet, internships and the FAQ | `src/content/volunteer.yaml`. The sessions, the how-to-join steps and the closing are shared with the home page (`copy.yaml`). FAQ answers can use `[text](url)` links and `{register}`, `{events}`, `{hr}`, `{connect}`, `{phone}`; emails become links. |
 | The privacy policy | `src/content/privacy.md` (Markdown with front matter: `draft`, `draftNote`, `effectiveDate`, `lede`) |
+| A page's share image (what WhatsApp, LinkedIn and X show for a link): its line, big word, chips, cut-outs and alt text | `src/content/og.yaml`, then `bun run og`; the page passes `og="<page>"` to `Base`. Pages without one use `public/og.png` |
 
 The copy was finalised on 2026-10-08, with small edits on 2026-10-09 (donate fine print and labels, the volunteer fallback, fewer repeated stats, and the page title, description and volunteer lede for search). Change it deliberately.
 

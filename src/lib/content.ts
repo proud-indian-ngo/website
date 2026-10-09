@@ -18,6 +18,14 @@ export async function getVolunteerPage() {
   if (!entry) throw missing("volunteer");
   return entry.data;
 }
+/** The share card for a page (src/content/og.yaml), or undefined for the default brand card. */
+export async function getShareCard(page: string) {
+  const entry = await getEntry("og", "og");
+  if (!entry) throw missing("og");
+  const card = entry.data[page];
+  if (!card) throw new Error(`No share card "${page}" in src/content/og.yaml`);
+  return card;
+}
 export async function getKalakriti() {
   const entry = await getEntry("kalakriti", "kalakriti");
   if (!entry) throw missing("kalakriti");

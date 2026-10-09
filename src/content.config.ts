@@ -456,6 +456,21 @@ const privacy = defineCollection({
   }),
 });
 
+/** Share images per page (src/content/og.yaml); `bun run og` renders them to public/og/ */
+const og = defineCollection({
+  loader: single("og"),
+  schema: z.record(
+    z.string(),
+    z.object({
+      pre: z.string(),
+      word: z.string(),
+      pills: z.array(z.string()),
+      kids: z.array(asset).max(2),
+      alt: z.string(),
+    })
+  ),
+});
+
 /** /volunteer/: the volunteer guide (src/content/volunteer.yaml) */
 const volunteer = defineCollection({
   loader: single("volunteer"),
@@ -538,4 +553,5 @@ export const collections = {
   copy,
   privacy,
   volunteer,
+  og,
 };

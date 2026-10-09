@@ -30,6 +30,9 @@
 /og.png
   ! Cache-Control
   Cache-Control: public, max-age=86400
+/og/*
+  ! Cache-Control
+  Cache-Control: public, max-age=86400
 
 # Report PDFs (public/reports/): the documents never change under a name (a corrected report gets a new file name),
 # so cache them for a year. Served inline so they open in the browser's PDF viewer.
