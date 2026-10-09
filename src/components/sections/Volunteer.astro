@@ -13,7 +13,6 @@ import MarginDoodles from "../margins/MarginDoodles.astro";
 import AlarmClock from "../doodles/AlarmClock.astro";
 import HandsUp from "../doodles/HandsUp.astro";
 import PlaneFlight from "../scenes/PlaneFlight.astro";
-import Sparkle from "../doodles/Sparkle.astro";
 import StepArrow from "../doodles/StepArrow.astro";
 import AccentWord from "../ui/AccentWord.astro";
 import Button from "../ui/Button.astro";
@@ -32,7 +31,7 @@ const labels: EventLabels = {
   register: v.poster.register,
   ticketRegister: v.ticketRegister,
   empty: { ...v.empty, href: site.links.register },
-  unavailable: { ...v.unavailable, href: site.links.register },
+  unavailable: { ...v.unavailable, href: site.links.events },
 };
 // no sessions: the poster shows its empty state and the "More weekends" row hides (also with just one session).
 // If the build could not load the sessions, the same poster points to the dashboard; no sample sessions are shown.
@@ -131,14 +130,13 @@ const state = {
           >
             <Fragment set:html={p.body} />
             <Sticker
-              class="kid"
+              class="kid wob"
               src={asset(v.posterKid.image)}
               alt={v.posterKid.label}
               crop={v.posterKid.crop}
               width={300}
               phone="150px"
             />
-            <Sparkle class="pi-doodle psp" fill="#4CC0EC" aria-hidden="true" />
             {/* empty state only (CSS shows it under .is-empty); kept across refreshes so the loop system knows it */}
             <AlarmClock class="pi-doodle vclock pclock loop" aria-hidden="true" />
           </article>
@@ -153,7 +151,7 @@ const state = {
           </h3>
           <a
             class="more tap-44 font-pi-sans text-15 font-semibold whitespace-nowrap text-sky-ink underline decoration-[1.5px] underline-offset-4"
-            href={site.links.register}
+            href={site.links.events}
             >{v.more.link} <span aria-hidden="true">→</span></a>
         </div>
         <ol class="stks pi-scroll-thin" data-events-list set:html={more} />

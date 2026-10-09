@@ -19,8 +19,8 @@ interface State {
   events: PublicEvent[];
 }
 
-/** Children of the poster that never change: the cut-out child, the sparkle and the empty-state clock. */
-const KEEP = ["kid", "psp", "pclock"];
+/** Children of the poster that never change: the cut-out child and the empty-state clock. */
+const KEEP = ["kid", "pclock"];
 
 function render(events: PublicEvent[], labels: EventLabels) {
   const el = document.querySelector<HTMLElement>("[data-events-poster]");

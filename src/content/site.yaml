@@ -58,6 +58,9 @@ social:
 links:
   # every "Become an Optimist" / "Volunteer for this" button
   register: https://dash.proudindian.ngo/register
+  # the dashboard's events list ("See every session", and the poster when sessions can't be loaded); signed-out
+  # visitors sign in first and land on it
+  events: https://dash.proudindian.ngo/events
   dashboardHost: dash.proudindian.ngo
   # Razorpay Payment Page. The pre-fill parameter is the item name lower-cased with underscores; the value is whole
   # rupees. If the item is renamed in Razorpay, this parameter changes and the amount silently stops pre-filling.
