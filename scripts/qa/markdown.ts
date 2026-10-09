@@ -1,7 +1,7 @@
 /**
  * Markdown for agents (functions/_middleware.ts): serves dist/ with the Pages Function through `wrangler pages dev`,
  * then checks that `Accept: text/markdown` gets each page's index.md, and that browsers, crawlers and wildcard Accept
- * headers still get the HTML with its _headers (Link included) and _redirects. Prints a pass or FAIL line per check and exits 1 if any fails.
+ * headers still get the HTML with its _headers (Link included) and _redirects, and that the API catalog is a linkset. Prints a pass or FAIL line per check and exits 1 if any fails.
  *   bun run build && bun run qa:markdown
  *   SITE=https://<branch>.proudindian.pages.dev/ bun run qa:markdown   # or check a deployment
  */
@@ -106,6 +106,21 @@ r["index.md direct: markdown, noindex"] =
 const llms = await get("/llms.txt", "text/markdown");
 r["/llms.txt unchanged"] =
   llms.status === 200 && type(llms).startsWith("text/plain");
+const catalog = await get(
+  "/.well-known/api-catalog",
+  "application/linkset+json"
+);
+const linkset = catalog.ok
+  ? ((await catalog.json()) as { linkset?: { anchor?: string }[] }).linkset
+  : undefined;
+r["/.well-known/api-catalog: linkset+json"] =
+  type(catalog).startsWith("application/linkset+json") &&
+  !!linkset?.length &&
+  linkset.every((entry) => entry.anchor?.startsWith("https://"));
+r["home Link points to the API catalog"] =
+  (await get("/", BROWSER)).headers
+    .get("Link")
+    ?.includes('</.well-known/api-catalog>; rel="api-catalog"') === true;
 
 wrangler?.kill();
 for (const [check, ok] of Object.entries(r))
