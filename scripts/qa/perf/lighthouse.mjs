@@ -23,7 +23,12 @@ export async function runLighthouse(
 ) {
   const chrome = await chromeLauncher.launch({
     chromePath: chromium.executablePath(),
-    chromeFlags: ["--headless=new"],
+    // CI runners (Ubuntu 24.04) block Chrome's sandbox for unprivileged users; Playwright adds this flag itself,
+    // chrome-launcher does not
+    chromeFlags: [
+      "--headless=new",
+      ...(process.env.CI ? ["--no-sandbox"] : []),
+    ],
   });
   const out = {};
   try {
