@@ -168,7 +168,15 @@ const troupePhone = ["35vw", "46vw", "35vw"];
     >
       {k.line.heading} <span class="font-pi-sans text-14 font-semibold tracking-normal text-marigold">{k.line.stamp}</span>
     </p>
-    <div class="kl-scroll pi-scroll-thin pi-scroll-dark" role="region" aria-label={k.line.regionLabel} tabindex="0">
+    <div
+      class="kl-scroll"
+      role="region"
+      aria-label={k.line.regionLabel}
+      tabindex="0"
+      data-swipe
+      data-swipe-prev={k.line.prev}
+      data-swipe-next={k.line.next}
+    >
       {
         rows.map((row) => (
           <div class="kl-row loop">

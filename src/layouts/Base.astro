@@ -56,12 +56,6 @@ const ogImage = new URL("/og.png", site).href;
         } catch (e) {}
         d.dataset.motion = p === "1" || matchMedia("(prefers-reduced-motion: reduce)").matches ? "off" : "on";
         d.classList.add("js");
-        /* macOS keeps the system's own scrollbars: html[data-native-scrollbar] switches off every rule in
-           @proudindian/design/scrollbar.css. iPadOS reports "MacIntel" but has touch points, so it is not a Mac. */
-        var n = navigator,
-          ua = n.userAgentData;
-        if ((ua && ua.platform ? ua.platform === "macOS" : /Mac/.test(n.platform || n.userAgent)) && !(n.maxTouchPoints > 1))
-          d.setAttribute("data-native-scrollbar", "");
       })();
     </script>
     <link rel="preload" href={briconFont} as="font" type="font/woff2" crossorigin />

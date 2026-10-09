@@ -401,13 +401,10 @@
 .s-ft .fC-cg a {
   color: var(--color-paper);
 }
-/* the swipe row hides its scrollbar on touch screens; mouse and trackpad users get the thin brand bar
-   (.pi-scroll-thin, @proudindian/design/scrollbar.css) so they can see it scrolls */
-@media (hover: none), (pointer: coarse) {
-  .s-ft .fC-strip {
-    scrollbar-width: none;
-  }
-  .s-ft .fC-strip::-webkit-scrollbar {
-    display: none;
-  }
+/* the photo strip never shows a scrollbar */
+.s-ft .fC-strip {
+  scrollbar-width: none;
+}
+.s-ft .fC-strip::-webkit-scrollbar {
+  display: none;
 }

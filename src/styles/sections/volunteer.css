@@ -427,13 +427,3 @@
     margin-top: var(--space-18);
   }
 }
-/* the swipe row hides its scrollbar on touch screens; mouse and trackpad users get the thin brand bar
-   (.pi-scroll-thin, @proudindian/design/scrollbar.css) so they can see it scrolls */
-@media (hover: none), (pointer: coarse) {
-  .s-vol .stks {
-    scrollbar-width: none;
-  }
-  .s-vol .stks::-webkit-scrollbar {
-    display: none;
-  }
-}

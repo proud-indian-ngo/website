@@ -21,8 +21,8 @@
 @import "@proudindian/design/fonts.css";
 
 @import "@proudindian/design/base.css" layer(base);
-/* brand scrollbars (mouse and trackpad only): an ink pill on a transparent track, sky on hover */
-@import "@proudindian/design/scrollbar.css";
+/* brand scrollbars (mouse and trackpad only); unlayered so they win */
+@import "./scrollbar.css";
 @import "./base.css" layer(base);
 @import "./images.css" layer(base);
 
@@ -49,6 +49,7 @@
 @import "./sections/closing-footer.css" layer(components);
 @import "./sections/margins.css" layer(components);
 @import "./sections/programme-bands.css" layer(components);
+@import "./sections/swipe.css" layer(components);
 @import "./sections/motion.css" layer(components);
 @import "./sections/load-motion.css" layer(components);
 @import "./sections/ambient.css" layer(components);
