@@ -48,6 +48,16 @@ https://:project.pages.dev/*
   Content-Type: application/pdf
   Content-Disposition: inline
 
+# Link headers for agent discovery (RFC 8288): each page with Markdown points to it (the same as its
+# <link rel="alternate" type="text/markdown">), and to /llms.txt, the whole site in Markdown. A new page with an
+# index.md.ts gets its own block here.
+/
+  Link: </index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
+/volunteer/
+  Link: </volunteer/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
+/privacy/
+  Link: </privacy/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
+
 # The pages as Markdown for agents (src/pages/**/index.md.ts; functions/_middleware.ts serves them at the pages' own
 # URLs to `Accept: text/markdown`). Fetched directly, they stay out of search: the HTML page is the one to index.
 /index.md

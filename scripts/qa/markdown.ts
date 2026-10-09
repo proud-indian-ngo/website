@@ -1,7 +1,7 @@
 /**
  * Markdown for agents (functions/_middleware.ts): serves dist/ with the Pages Function through `wrangler pages dev`,
  * then checks that `Accept: text/markdown` gets each page's index.md, and that browsers, crawlers and wildcard Accept
- * headers still get the HTML with its _headers and _redirects. Prints a pass or FAIL line per check and exits 1 if any fails.
+ * headers still get the HTML with its _headers (Link included) and _redirects. Prints a pass or FAIL line per check and exits 1 if any fails.
  *   bun run build && bun run qa:markdown
  *   SITE=https://<branch>.proudindian.pages.dev/ bun run qa:markdown   # or check a deployment
  */
@@ -61,11 +61,15 @@ for (const path of ["/", "/volunteer/", "/privacy/"]) {
     body.startsWith("# ") &&
     !body.includes("<html");
   const html = await get(path, BROWSER);
-  r[`${path} HTML to a browser, with _headers`] =
+  r[`${path} HTML to a browser, with _headers and Link`] =
     html.status === 200 &&
     type(html).startsWith("text/html") &&
     varies(html) &&
-    html.headers.has("Content-Security-Policy");
+    html.headers.has("Content-Security-Policy") &&
+    html.headers.get("Link")?.includes(`<${path}index.md>; rel="alternate"`) ===
+      true &&
+    html.headers.get("Link")?.includes('</llms.txt>; rel="describedby"') ===
+      true;
 }
 r["/volunteer (no slash) markdown"] = type(
   await get("/volunteer", "text/markdown")
