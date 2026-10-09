@@ -308,16 +308,22 @@ async function run(browser, url, tag) {
       const cdp = await ctx.newCDPSession(page);
       const moved = () =>
         el.evaluate((n, b) => n.scrollLeft > b + 50, before).catch(() => false);
-      // a slow runner can need more than one gesture and some time for the scroll to settle
-      for (let attempt = 0; attempt < 2; attempt++) {
-        await cdp.send("Input.synthesizeScrollGesture", {
-          x: box.x + box.width * 0.8,
-          y: box.y + Math.min(box.height / 2, 150),
-          xDistance: -260,
-          yDistance: 0,
-          gestureSourceType: "touch",
-          speed: 1200,
+      // a real touch drag (finger down, moves, up): the same on every platform, unlike a synthesized scroll gesture.
+      // a slow runner can need a second drag and some time for the scroll to settle
+      const y = box.y + Math.min(box.height / 2, 150);
+      const x0 = box.x + box.width * 0.8;
+      const touch = (type, x) =>
+        cdp.send("Input.dispatchTouchEvent", {
+          type,
+          touchPoints: type === "touchEnd" ? [] : [{ x, y }],
         });
+      for (let attempt = 0; attempt < 2; attempt++) {
+        await touch("touchStart", x0);
+        for (let i = 1; i <= 12; i++) {
+          await touch("touchMove", x0 - (260 * i) / 12);
+          await sleep(16);
+        }
+        await touch("touchEnd", x0 - 260);
         for (let t = 0; t < 25; t++) {
           if (await moved()) return true;
           await sleep(100);
