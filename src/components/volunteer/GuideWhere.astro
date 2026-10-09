@@ -1,0 +1,120 @@
+---
+/**
+ * Volunteer guide, "Where we meet.": the areas the upcoming sessions are in (from the events feed), a taped photo, and
+ * the community centre card (site.yaml → contacts.addresses, the entry with a `name`) with the bird hopping on it.
+ * Copy: volunteer.yaml → where.
+ */
+import { getSite, getVolunteerPage, postalAddress } from "../../lib/content";
+import type { PublicEvent } from "../../lib/events/contract";
+import { neighbourhood } from "../../lib/events/format";
+import { asset } from "../../lib/images";
+import PerchedBird from "../doodles/PerchedBird.astro";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import AccentWord from "../ui/AccentWord.astro";
+import Button from "../ui/Button.astro";
+import Polaroid from "../ui/Polaroid.astro";
+
+interface Props {
+  events: PublicEvent[];
+}
+
+const { events } = Astro.props;
+const { where: w } = await getVolunteerPage();
+const site = await getSite();
+const centre = site.contacts.addresses.find((a) => a.name);
+// "Bellandur, Bangalore" -> "Bellandur", once each, in the order the sessions come
+const areas = [...new Set(events.map((e) => neighbourhood(e.area) ?? e.area))];
+const PIN =
+  '<path d="M10 18.2C6.4 14 4.3 10.8 4.3 8A5.7 5.7 0 0 1 15.7 8C15.7 10.8 13.6 14 10 18.2Z"></path><circle cx="10" cy="8" r="2"></circle>';
+---
+
+<div class="s-tr">
+  <section
+    class="vg-where relative overflow-hidden border-t-line border-ink bg-paper px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+    id="where"
+    data-spy="where"
+    aria-labelledby="vg-where-h"
+  >
+    <MarginDoodles set="vwhere" />
+    <div
+      class="relative z-2 mx-auto grid max-w-section grid-cols-[1fr_minmax(0,500px)] items-center gap-18 max-lap:grid-cols-1 max-lap:gap-14"
+    >
+      <div>
+        <div data-stagger="75">
+          <p
+            class="mb-5.5 inline-flex rounded-pill border-line border-ink bg-white px-3.5 py-1 font-pi-sans text-15 font-semibold"
+            data-reveal="rise"
+          >
+            {w.eyebrow}
+          </p>
+          <h2
+            id="vg-where-h"
+            class="font-pi-display text-96 leading-[.88] font-extrabold tracking-poster max-tab:text-56"
+            data-reveal="wipe"
+          >
+            {w.heading.before} <AccentWord class="relative inline-block">{w.heading.accent}</AccentWord>
+          </h2>
+          <p
+            class="mt-6.5 max-w-[44ch] font-pi-sans text-19 leading-lede text-pretty max-tab:text-17"
+            data-reveal="rise"
+          >
+            {w.lede}
+          </p>
+        </div>
+        {
+          areas.length > 0 && (
+            <div class="mt-8">
+              <p class="mb-3 font-pi-sans text-13 font-bold tracking-stamp text-text-muted uppercase">{w.areas}</p>
+              <ul class="pi-chips">
+                {areas.map((a) => (
+                  <li class="pi-chip inline-flex items-center gap-1.5">
+                    <svg viewBox="0 0 20 20" class="vg-pin size-4" aria-hidden="true" set:html={PIN} />
+                    {a}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+        <div class="vg-where-pic wob mt-12 max-lap:hidden">
+          <span class="pi-tape tape" aria-hidden="true" />
+          <Polaroid src={asset(w.photo.image)} alt={w.photo.alt} width={240} caption={w.photo.caption} />
+        </div>
+      </div>
+      {
+        centre && (
+          <article class="vg-centre pi-card pi-card--sky relative" aria-labelledby="vg-centre-h">
+            <PerchedBird class="pi-doodle gl-bird loop" aria-hidden="true" />
+            <p class="mb-4 inline-flex self-start rounded-pill border-line border-ink bg-paper px-3 py-1 font-pi-sans text-13 font-bold tracking-stamp uppercase">
+              {w.centre.kicker}
+            </p>
+            <h3 id="vg-centre-h" class="font-pi-display text-40 leading-title font-extrabold tracking-title max-tab:text-30">
+              {centre.name}
+            </h3>
+            <p class="mt-4 flex items-start gap-2 font-pi-sans text-17 leading-body">
+              <svg viewBox="0 0 20 20" class="vg-pin mt-0.5 size-5 flex-none" aria-hidden="true" set:html={PIN} />
+              <span>{postalAddress(centre)}</span>
+            </p>
+            <p class="mt-6 mb-2.5 font-pi-sans text-13 font-bold tracking-stamp uppercase">{w.centre.does}</p>
+            <ul class="grid gap-2 font-pi-sans text-17 font-medium">
+              {w.centre.items.map((i) => (
+                <li class="flex items-center gap-2.5">
+                  <svg viewBox="0 0 20 20" class="vg-tick size-5 flex-none" aria-hidden="true">
+                    <circle cx="10" cy="10" r="8.6" />
+                    <path d="M6.2 10.4L8.8 12.9L13.9 7.4" />
+                  </svg>
+                  {i}
+                </li>
+              ))}
+            </ul>
+            {centre.map && (
+              <Button href={centre.map} class="mt-7 self-start" target="_blank" rel="noopener" arrow>
+                {w.centre.directions}
+              </Button>
+            )}
+          </article>
+        )
+      }
+    </div>
+  </section>
+</div>

@@ -17,8 +17,9 @@ import StickyDonateBar from "../components/sections/StickyDonateBar.astro";
 import Trustees from "../components/sections/Trustees.astro";
 import Volunteer from "../components/sections/Volunteer.astro";
 import Base from "../layouts/Base.astro";
-import { getCopy, getProgrammes } from "../lib/content";
+import { getCopy, getProgrammes, getSite } from "../lib/content";
 import { loadEvents } from "../lib/events/load";
+import { homeStructuredData, jsonLd } from "../lib/structured-data";
 
 const copy = await getCopy();
 const programmes = await getProgrammes();
@@ -29,10 +30,17 @@ const band = (anchor: string) => {
   return b;
 };
 const events = await loadEvents();
+const structured = homeStructuredData(
+  await getSite(),
+  copy,
+  events.data.events,
+  (Astro.site ?? new URL("https://proudindian.ngo/")).href
+);
 ---
 
 <Base title={copy.meta.title} description={copy.meta.description}>
   <HeroPreload slot="head" />
+  <script is:inline slot="head" type="application/ld+json" set:html={jsonLd(structured)} />
   <MarginSprite />
   <Header />
   <PhoneMenu />
@@ -50,7 +58,7 @@ const events = await loadEvents();
     <div class="s-prog">
       <ProgrammeBand band={band("b3")} />
     </div>
-    <Volunteer events={events} />
+    <Volunteer events={events} guide="/volunteer/" />
     <Donate />
     <Reports><Trustees /></Reports>
     <Closing />

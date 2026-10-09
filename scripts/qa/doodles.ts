@@ -12,6 +12,7 @@
  *   SITE=http://127.0.0.1:4321/ bun run qa:doodles   # or check a running server
  *   WIDTHS=1440,2560 bun run qa:doodles
  *   JOBS=1 bun run qa:doodles                         # widths checked at once (default 4)
+ *   PAGES=volunteer/ bun run qa:doodles               # pages, relative to SITE (default: the home page and the volunteer guide)
  *
  * Exits non-zero on any overlap.
  */
@@ -43,6 +44,7 @@ if (!SITE) {
 }
 
 const JOBS = Number(process.env.JOBS ?? 4);
+const PAGES = (process.env.PAGES ?? ",volunteer/").split(",");
 
 interface Check {
   n: number;
@@ -51,12 +53,16 @@ interface Check {
   aligned: number;
 }
 
-async function check(browser: Browser, w: number): Promise<Check> {
+async function check(
+  browser: Browser,
+  path: string,
+  w: number
+): Promise<Check> {
   const page = await browser.newPage({
     viewport: { width: w, height: 1000 },
     reducedMotion: "reduce",
   });
-  await page.goto(SITE!, { waitUntil: "networkidle" });
+  await page.goto(new URL(path, SITE!).href, { waitUntil: "networkidle" });
   // walk the page so every lazy image has its size
   await page.evaluate(async () => {
     for (let y = 0; y < document.body.scrollHeight; y += 600) {
@@ -150,18 +156,22 @@ async function check(browser: Browser, w: number): Promise<Check> {
         ...box(q),
       });
     }
-    // the programme rail column: the rail (forced visible) plus the widest label it can show beside it
-    const rail = document.querySelector(".pidx")!;
-    const wasShown = rail.classList.contains("show");
-    rail.classList.add("show");
-    let railLeft = rail.getBoundingClientRect().left;
-    for (const lb of rail.querySelectorAll<HTMLElement>(".lb")) {
-      const o = lb.style.display;
-      lb.style.display = "block";
-      railLeft = Math.min(railLeft, lb.getBoundingClientRect().left);
-      lb.style.display = o;
+    // the programme rail column: the rail (forced visible) plus the widest label it can show beside it (pages without
+    // the rail, like the volunteer guide, have no such column)
+    const rail = document.querySelector(".pidx");
+    let railLeft = innerWidth;
+    if (rail) {
+      const wasShown = rail.classList.contains("show");
+      rail.classList.add("show");
+      railLeft = rail.getBoundingClientRect().left;
+      for (const lb of rail.querySelectorAll<HTMLElement>(".lb")) {
+        const o = lb.style.display;
+        lb.style.display = "block";
+        railLeft = Math.min(railLeft, lb.getBoundingClientRect().left);
+        lb.style.display = o;
+      }
+      if (!wasShown) rail.classList.remove("show");
     }
-    if (!wasShown) rail.classList.remove("show");
     const rq = { left: railLeft - 8, right: innerWidth };
     // the fixed header's pills over the hero (page top)
     const hdr = [
@@ -217,23 +227,25 @@ async function check(browser: Browser, w: number): Promise<Check> {
   return r;
 }
 
-// JOBS widths at a time, each in its own page; the rows print in WIDTHS order
+// JOBS page widths at a time, each in its own page; the rows print in PAGES, then WIDTHS order
+const tasks = PAGES.flatMap((path) => WIDTHS.map((w) => ({ path, w })));
 const browser = await chromium.launch();
 const results: Check[] = [];
 let next = 0;
 await Promise.all(
-  Array.from({ length: Math.min(JOBS, WIDTHS.length) }, async () => {
-    while (next < WIDTHS.length) {
+  Array.from({ length: Math.min(JOBS, tasks.length) }, async () => {
+    while (next < tasks.length) {
       const i = next++;
-      results[i] = await check(browser, WIDTHS[i]);
+      results[i] = await check(browser, tasks[i].path, tasks[i].w);
     }
   })
 );
 await browser.close();
 let total = 0;
-WIDTHS.forEach((w, i) => {
+tasks.forEach(({ path, w }, i) => {
   const r = results[i];
   total += r.out.length;
+  if (i === 0 || tasks[i - 1].path !== path) console.log(`/${path}`);
   console.log(
     `${String(w).padStart(4)}  doodles=${String(r.n).padStart(2)}  obstacles=${r.obs}  aligned<30px=${r.aligned}  overlaps=${r.out.length}${r.out.length ? `  ${[...new Set(r.out)].join("; ")}` : ""}`
   );

@@ -14,7 +14,13 @@ export interface LoadedEvents {
 
 const BUILD_TIMEOUT_MS = 8000;
 
-export async function loadEvents(): Promise<LoadedEvents> {
+let loaded: Promise<LoadedEvents> | undefined;
+/** Fetched once per build, so every page shows the same sessions. In `astro dev` it fetches on every render, so a
+ *  failed or stale fetch doesn't stick until the server restarts. */
+export const loadEvents = () =>
+  import.meta.env.DEV ? fetchEvents() : (loaded ??= fetchEvents());
+
+async function fetchEvents(): Promise<LoadedEvents> {
   const url = import.meta.env.PUBLIC_EVENTS_URL?.trim() || null;
   const unavailable = (why: string): LoadedEvents => {
     if (url) console.warn(`[events] ${why}; the poster links to the dashboard`);

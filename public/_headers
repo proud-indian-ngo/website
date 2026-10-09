@@ -12,6 +12,11 @@
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://dash.proudindian.ngo https://cloudflareinsights.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests
   Cache-Control: public, max-age=0, must-revalidate
 
+# The project's own pages.dev address serves the same site as proudindian.ngo: keep it out of search, so only the real
+# domain is indexed. (Branch previews already get X-Robots-Tag: noindex from Cloudflare.)
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex
+
 # Hashed build output (JS, CSS, fonts, optimised images): cache for a year, never revalidate.
 /_astro/*
   ! Cache-Control
@@ -28,6 +33,9 @@
   ! Cache-Control
   Cache-Control: public, max-age=86400
 /og.png
+  ! Cache-Control
+  Cache-Control: public, max-age=86400
+/og/*
   ! Cache-Control
   Cache-Control: public, max-age=86400
 

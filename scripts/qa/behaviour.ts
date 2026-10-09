@@ -271,7 +271,12 @@ async function desktopActions(browser: Browser, url: string) {
 async function desktopPause(browser: Browser, url: string) {
   const r: Record<string, boolean | string> = {};
   const { ctx, page, errors } = await open(browser, url);
-  await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+  // scroll to the scene itself: at the bottom of the page a tall footer can push it off screen
+  await page.evaluate(() =>
+    document
+      .querySelector(".fC-scene.dk")!
+      .scrollIntoView({ block: "center", behavior: "instant" })
+  );
   r["scene loop runs in view"] = await until(
     page,
     () =>
@@ -560,6 +565,69 @@ async function lockPhoneMenu(browser: Browser, url: string) {
   return r;
 }
 
+// ---------- the volunteer guide (/volunteer/): it loads clean, reveals and loops run, the FAQ opens and closes, its own
+// own nav and its scroll-spy work; and the home page links to it
+async function guide(browser: Browser, url: string) {
+  const r: Record<string, boolean | string> = {};
+  const { ctx, page, errors } = await open(
+    browser,
+    new URL("volunteer/", url).href
+  );
+  r["guide: js-reveal wired"] = await until(page, () =>
+    document.documentElement.classList.contains("js-reveal")
+  );
+  r["guide: one h1, FAQPage data"] = await page.evaluate(
+    () =>
+      document.querySelectorAll("h1").length === 1 &&
+      [...document.querySelectorAll('script[type="application/ld+json"]')].some(
+        (s) => s.textContent.includes('"FAQPage"')
+      )
+  );
+  const q = page.locator(".vg-q").nth(1);
+  await q.locator("summary").click();
+  const opened = await q.evaluate((d) => (d as HTMLDetailsElement).open);
+  await q.locator("summary").click();
+  r["guide: FAQ opens and closes"] =
+    opened && !(await q.evaluate((d) => (d as HTMLDetailsElement).open));
+  r["guide: own nav links"] = await page.evaluate(
+    () =>
+      [...document.querySelectorAll(".site-hd [data-spy-link]")]
+        .map((a) => a.getAttribute("href"))
+        .join() === "#volunteer,#do,#where,#internships,#faq" &&
+      document.querySelector('.site-hd a[href="/#donate"]') !== null &&
+      document.querySelector(
+        '.site-hd a[href^="https://dash.proudindian.ngo/register"]'
+      ) !== null &&
+      document.querySelector('#menu a[href="/"]') !== null
+  );
+  await page.evaluate(() =>
+    document.querySelector("#faq")!.scrollIntoView({ behavior: "instant" })
+  );
+  r["guide: nav lights the section in view"] = await until(page, () =>
+    document
+      .querySelector('.site-hd [data-spy-link="faq"]')!
+      .matches(".on, [aria-current]")
+  );
+  await page.evaluate(() =>
+    document
+      .querySelector("#internships")!
+      .scrollIntoView({ block: "center", behavior: "instant" })
+  );
+  r["guide: sparkle loop runs in view"] = await until(
+    page,
+    () => !document.querySelector(".vg-kspark")!.classList.contains("is-paused")
+  );
+  r["guide: no console errors"] = errors.length === 0;
+  if (errors.length) console.log(errors);
+  await ctx.close();
+  const home = await open(browser, url);
+  r["home links to the guide"] = await home.page.evaluate(
+    () => document.querySelectorAll('a[href="/volunteer/"]').length >= 2
+  );
+  await home.ctx.close();
+  return r;
+}
+
 // the sessions share nothing (each has its own browser context), so JOBS of them run at once; the table keeps
 // this order
 const SESSIONS = [
@@ -572,6 +640,7 @@ const SESSIONS = [
   lockShortWindow,
   lockTablet,
   lockPhoneMenu,
+  guide,
 ];
 const JOBS = Number(process.env.JOBS ?? 4);
 const browser = await chromium.launch();

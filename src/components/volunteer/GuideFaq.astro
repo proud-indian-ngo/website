@@ -1,0 +1,66 @@
+---
+/**
+ * Volunteer guide FAQ: the questions as an accordion of <details> (open without JavaScript, every answer in the HTML
+ * for search engines and agents), with the self-ticking notepad. The same answers go into the page's FAQPage
+ * structured data. Copy: volunteer.yaml → faq.
+ */
+import { getVolunteerPage } from "../../lib/content";
+import Notepad from "../doodles/Notepad.astro";
+import Squiggle from "../doodles/Squiggle.astro";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import AccentWord from "../ui/AccentWord.astro";
+
+interface Props {
+  /** the questions with their answers already rendered (src/lib/inline.ts) */
+  items: { q: string; a: string }[];
+}
+
+const { items } = Astro.props;
+const { faq: f } = await getVolunteerPage();
+---
+
+<div class="s-tr">
+  <section
+    class="vg-faq relative overflow-hidden border-t-line border-ink bg-paper-2 px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+    id="faq"
+    data-spy="faq"
+    aria-labelledby="vg-faq-h"
+  >
+    <MarginDoodles set="vfaq" />
+    <div class="relative z-2 mx-auto max-w-[880px]">
+      <div class="vg-faq-head relative" data-stagger="75">
+        <Notepad class="pi-doodle tr-list vg-np loop" aria-hidden="true" />
+        <p
+          class="mb-5.5 inline-flex rounded-pill border-line border-ink bg-white px-3.5 py-1 font-pi-sans text-15 font-semibold"
+          data-reveal="rise"
+        >
+          {f.eyebrow}
+        </p>
+        <h2
+          id="vg-faq-h"
+          class="font-pi-display text-96 leading-[.88] font-extrabold tracking-poster max-tab:text-56"
+          data-reveal="wipe"
+        >
+          {f.heading.before}
+          <AccentWord class="relative inline-block"
+            >{f.heading.accent}<Squiggle class="pi-doodle vg-sq" data-reveal="draw" data-at="560" aria-hidden="true"
+            /></AccentWord
+          >
+        </h2>
+      </div>
+      <div class="vg-qs mt-12 grid gap-3.5 max-tab:mt-9">
+        {
+          items.map((it, i) => (
+            <details class="vg-q" open={i === 0}>
+              <summary>
+                <span>{it.q}</span>
+                <span class="vg-q-ic" aria-hidden="true" />
+              </summary>
+              <p set:html={it.a} />
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</div>

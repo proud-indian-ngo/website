@@ -2,7 +2,7 @@
 
 The Proud Indian website: a fully prerendered [Astro](https://astro.build) site, styled with Tailwind CSS v4 on a token system, deployed to Cloudflare Pages.
 
-One page for the Proud Indian NGO in Bengaluru: the programmes (Teach, Feed, Paint, Gather), the Kalakriti festival, upcoming volunteer sessions, donations, reports and trustees, plus a privacy policy and an internal style guide.
+One page for the Proud Indian NGO in Bengaluru: the programmes (Teach, Feed, Paint, Gather), the Kalakriti festival, upcoming volunteer sessions, donations, reports and trustees, plus a volunteer guide (`/volunteer/`), a privacy policy and an internal style guide.
 
 - Repo: <https://github.com/proud-indian-ngo/website>. Pushes to `main` deploy to Cloudflare Pages (see [Deploying](#deploying-to-cloudflare-pages)).
 - Brand tokens, primitive CSS, fonts and logo artwork come from [proud-indian-ngo/design](https://github.com/proud-indian-ngo/design) (`@proudindian/design`; see [Design package](#design-package-proudindiandesign)).
@@ -31,11 +31,12 @@ bun run preview    # serve dist/ at http://localhost:4321
 | `bun run check:razorpay` | The live Razorpay page still pre-fills the amount from `site.yaml` → `links.razorpay` (item name and minimum; see [Donations](#donations)) |
 | `bun run design:sync` | Copy the favicons and `og.png` from the package into `public/` (after a package update) |
 | `bun run qa:behaviour` | Motion-on behaviour checks against a running site (reveals, loops, Pause, menu, drawer, donate, scroll lock); see [Quality checks](#quality-checks) |
-| `bun run qa:doodles` | The margin doodles touch no content, rail, header pill or viewport edge, at 390 to 2560px (serves `dist/` itself; run `bun run build` first, or set `SITE`). See [Margin doodles](#margin-doodles) |
+| `bun run qa:doodles` | The margin doodles touch no content, rail, header pill or viewport edge, at 390 to 2560px, on the home page and the volunteer guide (serves `dist/` itself; run `bun run build` first, or set `SITE`; `PAGES` picks pages). See [Margin doodles](#margin-doodles) |
 | `bun run qa:events` | The events flow end to end against the mock feed (`bun run qa:events:mock`); see [Events](#events-volunteer-section) |
-| `bun run qa:lighthouse` | Lighthouse ×3 on mobile and desktop against `dist/` served like Cloudflare Pages; fails if accessibility, best practices or SEO drop below 100, or performance below 90, CLS above 0.1 or TBT above 200ms. CI runs it on pull requests and pushes (the `lighthouse` job, not required), mobile and desktop on separate runners; `FORMS=desktop` runs one |
+| `bun run qa:lighthouse` | Lighthouse ×3 on mobile and desktop, for the home page and the volunteer guide (`PAGES` picks pages), against `dist/` served like Cloudflare Pages; fails if accessibility, best practices or SEO drop below 100, or performance below 90, CLS above 0.1 or TBT above 200ms. CI runs it on pull requests and pushes (the `lighthouse` job, not required), mobile and desktop on separate runners; `FORMS=desktop` runs one |
 | `bun run qa:perf` | Build, serve like Cloudflare Pages (brotli, `_headers`), Lighthouse ×5 on mobile and desktop, and the frame profiler at 4× and 6× CPU throttling (see [Performance](#performance)) |
 | `bun run motion:load` | Regenerate `src/styles/sections/load-motion.css` (the header and hero load sequence) from `scripts/load-motion.ts`; `bun run check` fails if it is out of date |
+| `bun run og` | Render the per-page share images (`src/content/og.yaml`) to `public/og/<page>.png`, in the brand card's style; `bun run og volunteer` renders one. Commit the PNGs. The home page keeps the package's `public/og.png` |
 
 Lint and format match proud-indian-ngo/dash: oxlint (correctness rules as errors) and oxfmt (ultracite settings, inlined). oxfmt can sort Tailwind classes, but it does not format `.astro` files, so classes in markup are not auto-sorted.
 
@@ -62,7 +63,7 @@ All content is YAML in `src/content/`, validated against typed schemas in `src/c
 
 | To change | Edit |
 |---|---|
-| Stats (3.6k+, 14k+, 23k+, 95%), registrations (80G, 12A, Darpan, PAN), founding date, emails, phone, address, social links, the register link, the Razorpay page | `src/content/site.yaml` |
+| Stats (3.6k+, 14k+, 23k+, 95%), registrations (80G, 12A, Darpan, PAN), founding date, emails, phone, addresses (registered office, community centre), social links, the register link, the Razorpay page | `src/content/site.yaml` |
 | Any headline, paragraph, button label or section text | `src/content/copy.yaml`, in page order. `{placeholders}` such as `{darpan}` pull facts from `site.yaml`. |
 | A programme band (Teach, Feed, Gather): line, chips, the three polaroids, the floor sticker | `src/content/programmes/teach.yaml`, `feed.yaml`, `gather.yaml` (`paint.yaml` only places Kalakriti in the order and the index rail) |
 | Kalakriti: edition, date, numbers, the 8 events and their photos, tickets | `src/content/kalakriti.yaml` |
@@ -70,9 +71,11 @@ All content is YAML in `src/content/`, validated against typed schemas in `src/c
 | Trustees | `src/content/trustees.yaml` (`fit` positions the cut-out in its tile) |
 | Donation presets and the default amount | `copy.yaml` → `donate.card.presets` |
 | The poster when sessions cannot be loaded | `copy.yaml` → `volunteer.unavailable` |
+| The volunteer guide (`/volunteer/`): its hero, "What you'll do" cards, where we meet, internships and the FAQ | `src/content/volunteer.yaml`. The sessions, the how-to-join steps and the closing are shared with the home page (`copy.yaml`). FAQ answers can use `[text](url)` links and `{register}`, `{events}`, `{hr}`, `{connect}`, `{phone}`; emails become links. |
 | The privacy policy | `src/content/privacy.md` (Markdown with front matter: `draft`, `draftNote`, `effectiveDate`, `lede`) |
+| A page's share image (what WhatsApp, LinkedIn and X show for a link): its line, big word, chips, cut-outs and alt text | `src/content/og.yaml`, then `bun run og`; the page passes `og="<page>"` to `Base`. Pages without one use `public/og.png` |
 
-The copy was finalised on 2026-10-08, with small edits on 2026-10-09 (donate fine print and labels, the volunteer fallback, fewer repeated stats). Change it deliberately.
+The copy was finalised on 2026-10-08, with small edits on 2026-10-09 (donate fine print and labels, the volunteer fallback, fewer repeated stats, and the page title, description and volunteer lede for search). Change it deliberately.
 
 The YAML is plain files in git, so a git-backed CMS (Keystatic or Sveltia CMS) can be pointed at `src/content/` later without changing the site.
 
@@ -134,6 +137,16 @@ Every run installs with the frozen lockfile. Production deploys only once every 
 The output is fully static, with no adapter and no functions. `public/_headers` sets the following:
 - **Caching:** a year, immutable, for the hashed `/_astro/*` assets; HTML revalidates on every visit; icons and the OG image get a day; the report PDFs in `/reports/*` get a year (served inline as `application/pdf`), so a corrected report needs a new file name.
 - **Security headers:** HSTS, nosniff, frame denial, a referrer policy, a permissions policy and a CSP. The CSP `connect-src` allows `https://dash.proudindian.ngo`; if `PUBLIC_EVENTS_URL` points anywhere else, add that origin. Cloudflare Web Analytics is enabled for proudindian.ngo in the Cloudflare dashboard, so the CSP also allows its beacon: `https://static.cloudflareinsights.com` in `script-src` and `https://cloudflareinsights.com` in `connect-src`. Remove both if the analytics is turned off, and update the privacy policy (`src/content/privacy.md`) to match. `public/robots.txt` and the generated `sitemap-index.xml` exclude `/styleguide/`.
+
+## Search and AI agents
+
+The site is meant to come up when someone, or an assistant answering for them, looks for weekend volunteering in Bengaluru or Bangalore.
+
+- **Volunteer guide** (`/volunteer/`, `src/pages/volunteer.astro`): the page for "weekend volunteering in Bengaluru/Bangalore". Its title leads with that phrase; the home page's title is about the NGO (`copy.yaml` → `meta`), so the two don't compete for the same search. It has the live sessions, what you'd do, where we meet (with the community centre), internships and a visible FAQ, which also goes out as `FAQPage` structured data. The old site's volunteering, FAQ and internship URLs redirect to it. Keep both city names in titles and descriptions: people search for both.
+- **Structured data.** The home page carries schema.org JSON-LD (`src/lib/structured-data.ts`): the `NGO` (registered office, the community centre with its map pin, contacts, registrations, socials, Bengaluru/Bangalore as the area served), the `WebSite`, and one free `Event` per upcoming session from the events feed, linking to its sign-up page. It is built from `site.yaml`, `copy.yaml` and the feed, so there is nothing to edit by hand; the rebuild on every events change keeps the sessions current. Check it with Google's [Rich Results Test](https://search.google.com/test/rich-results) after a deploy.
+- **`/llms.txt`** (`src/pages/llms.txt.ts`, [llmstxt.org](https://llmstxt.org)): the site in plain Markdown for AI agents: what Proud Indian is, how to volunteer, the upcoming sessions with their sign-up links, programmes, donations, reports and contacts. Built from the same content and feed.
+- **Redirects from the old site.** `public/_redirects` sends every page and report PDF of the old PHP site to where it lives now (301), so links and search ranking carry over: old pages go to their section of the home page, old PDFs to the identical file in `public/reports/` (matched by SHA-256). Keep them.
+- **Crawlers.** `public/robots.txt` allows everyone except `/styleguide/`. Cloudflare can still block AI crawlers before robots.txt is read: Security → Bots → "Block AI bots" / AI Crawl Control in the dashboard. In October 2026 it answered 403 to GPTBot, ClaudeBot and CCBot, so models trained on the web don't learn about Proud Indian; the search crawlers that assistants use live (OAI-SearchBot, Claude-SearchBot, PerplexityBot) were allowed.
 
 ## Styling
 
@@ -212,7 +225,9 @@ src/
   content/                 site.yaml, copy.yaml, kalakriti.yaml, reports.yaml, trustees.yaml, programmes/*.yaml
   assets/                  photos/, cutouts/, board/ (optimised at build)
   layouts/Base.astro       head (SEO, OG, Twitter, icons), motion decision, font preloads, scripts
-  pages/                   index, privacy (renders src/content/privacy.md), thanks (after a donation), 404, styleguide
+  pages/                   index, volunteer (the volunteer guide), privacy (renders src/content/privacy.md), thanks (after
+                           a donation), 404, styleguide,
+                           llms.txt (for AI agents)
   components/
     sections/              Header, PhoneMenu, ProgrammeIndex, Hero, Marquee, ProgrammesIntro, ProgrammeBand,
                            Kalakriti, Volunteer, Donate, Reports, Trustees, ReportsDrawer, Closing, Footer,
@@ -223,15 +238,18 @@ src/
                            inline SVG (see Design package)
     brand/                 logo sprite, lockup, seal (seal artwork from the package)
     scenes/                site-only SVG scenes (street scenes, bunting, clothesline, footer margins, plane path)
+    volunteer/             the volunteer guide's own sections (hero, what you'd do, where, internships, FAQ); it reuses
+                           Header, PhoneMenu, Volunteer, Closing, Footer and StickyDonateBar, whose "#…" links go to the
+                           home page unless the page lists the anchor (`anchors`, src/lib/links.ts)
     margins/               margin doodles: placements.ts (seeded scatter), MarginDoodles (one layer per section),
                            MarginSprite (the package's outline sprite, inlined once)
-  lib/                     content helpers, image resolver, events (contract, load, render, format)
+  lib/                     content helpers, image resolver, events (contract, load, render, format), structured data
   scripts/                 client modules: reveal, loops, wobble, plane, coins, donate, reports drawer, rail, menu,
                            nudge, pause, events refresh (entry: main.ts)
   styles/                  global.css (entry: package CSS + site CSS), sections/, base.css (site-only), images.css
 scripts/                   check-css.ts (style lint), check-design.ts (package check, design:sync),
                            qa/ (behaviour, doodles, events, mock-events, perf)
-public/                    _headers, robots.txt, site.webmanifest, favicons and og.png (copies of package files),
+public/                    _headers, _redirects (old site URLs), robots.txt, site.webmanifest, favicons and og.png (copies of package files),
                            reports/ (the report PDFs)
 ```
 
@@ -302,7 +320,7 @@ bun run qa:doodles     # margin doodles clear of content at 390-2560px (needs a 
 
 ## TODO
 
-- [ ] **Privacy policy.** The draft text is in `src/content/privacy.md` (Markdown; `/privacy/` builds its table of contents from the `##` headings). It needs legal review, and every `<!-- CONFIRM: ... -->` note in it answered. Then set `effectiveDate` and `draft: false`, which removes the draft note, the noindex and the sitemap exclusion.
+- [ ] **Privacy policy follow-ups.** Published on 2026-10-09 after an internal review (no lawyer). The `<!-- NOTE: ... -->` comments in `src/content/privacy.md` list what is still open: a verifiable parental-consent process for photos and Kalakriti before the DPDP Rules on it apply (13 May 2027), the R2 private-storage cutover, and the dashboard checking the 18+ rule at sign-up (a pi-dash pull request is in progress). A legal review is still worth doing when it becomes possible.
 - [ ] **pi-dash events endpoint.** `GET /api/public/events` is not implemented yet. When it ships:
   - set `PUBLIC_EVENTS_URL` in Cloudflare Pages;
   - have pi-dash send CORS headers for `https://proudindian.ngo` (plus preview origins), GET only;

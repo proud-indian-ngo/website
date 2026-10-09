@@ -40,7 +40,13 @@ export type SetName =
   | "rp"
   | "tr"
   | "cl"
-  | "ft";
+  | "ft"
+  // the volunteer guide (/volunteer/)
+  | "vhero"
+  | "vdo"
+  | "vwhere"
+  | "vint"
+  | "vfaq";
 export interface Spot {
   m: Motif;
   side: "l" | "r";
@@ -152,6 +158,42 @@ const plans: Record<SetName, Plan> = {
     gl: 372,
     gr: 372,
     y: [6, 70],
+  },
+  vhero: {
+    l: ["kite", "star", "sparkle"],
+    r: ["heart", "sun"],
+    h: 900,
+    gl: 400,
+    gr: 400,
+    y: [14, 90],
+  },
+  vdo: {
+    l: ["book", "pencil", "star"],
+    r: ["bowl", "brush", "sparkle"],
+    h: 1500,
+    gl: 400,
+    gr: 400,
+  },
+  vwhere: {
+    l: ["hands", "heart"],
+    r: ["kite", "star"],
+    h: 900,
+    gl: 400,
+    gr: 400,
+  },
+  vint: {
+    l: ["notepad", "pencil"],
+    r: ["tick", "star"],
+    h: 760,
+    gl: 400,
+    gr: 400,
+  },
+  vfaq: {
+    l: ["notepad", "sparkle", "star"],
+    r: ["clock", "book"],
+    h: 1300,
+    gl: 400,
+    gr: 400,
   },
   ft: {
     l: ["pencil", "book", "rupee", "star"],

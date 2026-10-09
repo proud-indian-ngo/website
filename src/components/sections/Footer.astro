@@ -1,7 +1,8 @@
 ---
 /** Footer: contacts, registrations stamps, the Pause motion toggle (WCAG 2.2.2) and the
  *  notebook-margin doodles. */
-import { getCopy, getSite } from "../../lib/content";
+import { getCopy, getSite, postalAddress } from "../../lib/content";
+import { type Anchors, linkTo } from "../../lib/links";
 import { socialIcons as icons } from "../../lib/social";
 import Lockup from "../brand/Lockup.astro";
 import MarginDoodles from "../margins/MarginDoodles.astro";
@@ -10,6 +11,12 @@ import FooterMargins from "../scenes/FooterMargins.astro";
 const { footer: f } = await getCopy();
 const site = await getSite();
 const r = site.registrations;
+interface Props {
+  /** the in-page anchors on this page, when it is not the home page (src/lib/links.ts) */
+  anchors?: Anchors;
+}
+const { anchors } = Astro.props;
+const to = (href: string) => linkTo(href, anchors);
 const stamp =
   "stamp mb-3 inline-block rounded-3 bg-paper px-2.5 pt-1 pb-[3px] font-pi-sans text-13 font-bold tracking-stamp text-ink uppercase";
 const body = "font-pi-sans text-15-5 leading-copy font-normal text-paper-a90";
@@ -38,7 +45,7 @@ const link = "tap-44 font-pi-sans text-16 font-semibold wrap-anywhere";
             {
               f.links.map((l) => (
                 <li>
-                  <a href={l.href} class="tap-44 font-pi-sans text-17 font-semibold">
+                  <a href={to(l.href)} class="tap-44 font-pi-sans text-17 font-semibold">
                     {l.label}
                   </a>
                 </li>
@@ -76,7 +83,21 @@ const link = "tap-44 font-pi-sans text-16 font-semibold wrap-anywhere";
               </li>
             </ul>
             <span class:list={[stamp, "mt-6.5"]}>{f.visit}</span>
-            <p class={body}><small class={small}>{site.contacts.address.label}</small>{site.contacts.address.text}</p>
+            <ul class="space-y-[9px]">
+              {
+                site.contacts.addresses.map((a) => (
+                  <li class={body}>
+                    <small class={small}>{a.label}</small>
+                    {postalAddress(a)}
+                    {a.map && (
+                      <a class:list={[link, "mt-0.5 block"]} href={a.map} target="_blank" rel="noopener" aria-label={`${f.directions}: ${a.label}`}>
+                        {f.directions}
+                      </a>
+                    )}
+                  </li>
+                ))
+              }
+            </ul>
           </div>
           <div class="col-span-full">
             <span class={stamp}>{f.follow}</span>

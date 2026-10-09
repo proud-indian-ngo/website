@@ -1,0 +1,107 @@
+# /volunteer/: everything about volunteering, for people looking for weekend volunteering in Bengaluru (Bangalore).
+# The sessions, the "how to join" steps and the closing come from copy.yaml (volunteer, closing) and the events feed.
+# Facts confirmed on 2026-10-09: volunteers are 18 or over; a certificate or letter for hours served on request;
+# internships are volunteering plus a letter; the community centre runs Spoken English classes, community programmes,
+# drives and distributions.
+# Text may use {placeholders}: {register} {events} {hr} {connect} {phone}. FAQ answers may also use [text](url) links;
+# email addresses become mailto links.
+
+meta:
+  title: Weekend volunteering in Bengaluru (Bangalore) · Proud Indian
+  description: "Volunteer with children in Bangalore at weekends: maths, Spoken English, art & craft and drives in Bellandur and Iblur. 18+, free, no experience needed."
+
+# The guide's own header and phone menu links (the home page's are in copy.yaml → nav and menu). `spy` lights the
+# header link while its section is on screen. The header's join button goes straight to the dashboard's register page.
+nav:
+  links:
+    - { label: Sessions, href: "#volunteer", spy: volunteer }
+    - { label: What you’ll do, href: "#do", spy: do }
+    - { label: Where, href: "#where", spy: where }
+    - { label: Internships, href: "#internships", spy: internships }
+    - { label: FAQ, href: "#faq", spy: faq }
+  # the phone menu's first link, back to the home page
+  home: Home
+
+hero:
+  eyebrow: Volunteer in Bengaluru
+  heading: { before: Weekend volunteering in, accent: Bengaluru. }
+  lede: "Give a Saturday morning or a Sunday afternoon to children in Bengaluru’s low-income communities. Teach a class, run an art session or help at a food drive, alongside Optimists who have done it before."
+  join: Become an Optimist
+  sessions: See upcoming sessions
+  facts:
+    [18 and over, No experience needed, Free to join, Saturdays and Sundays]
+  kids:
+    - image: cutouts/ArtCraft_May2026_1000381054.png
+      label: A girl holding up the painting she made in art and craft class
+    - image: cutouts/GiftASmile2026_DSC_0036.png
+      label: A boy with the badminton set he got at Gift a Smile
+
+do:
+  eyebrow: What you’ll do
+  heading: { before: Pick how you, accent: help. }
+  lede: Classes meet every week, so we ask class volunteers to come regularly. Drives, Gift a Smile, outings and Kalakriti are one-off days, so come when you can.
+  # one card per programme, in this order. `programme` is an anchor from programmes/*.yaml (or kalakriti);
+  # `photo` picks that programme's polaroid (or Kalakriti photo) by position, from 0
+  cards:
+    - { programme: b0, when: Every week, photo: 1 }
+    - { programme: b1, when: One-off drives, photo: 0 }
+    - { programme: kalakriti, when: Once a year, photo: 4 }
+    - { programme: b3, when: One-off days, photo: 0 }
+  cta: Find a session
+
+where:
+  eyebrow: Where
+  heading: { before: Where we, accent: meet. }
+  lede: Most sessions are in south-east Bengaluru, around Bellandur and Iblur, near the Outer Ring Road. Each session lists its area, and you get the exact meeting point once you’re approved.
+  areas: Areas with sessions coming up
+  centre:
+    kicker: Our community centre
+    does: What happens here
+    items:
+      [Spoken English classes, Community programmes, Drives and distributions]
+    directions: Get directions
+  photo:
+    image: photos/feed-food-drive-sep2022.jpg
+    alt: A smiling boy holding his plate of food at the September 2022 food distribution
+    caption: Food drive
+
+internships:
+  eyebrow: Internships
+  heading: { before: Interning? Start, accent: here. }
+  lede: Students intern with Proud Indian by volunteering on our programmes, like every Optimist. Join sessions for as long as your internship runs, and at the end we write you a letter for the hours you served.
+  steps: [Register on the dashboard, Volunteer at sessions, Ask for your letter]
+  apply: Write to {hr} with your college, your dates and the hours you need.
+  button: Email us about an internship
+  subject: Internship
+  ticket:
+    {
+      kicker: Admit one · Intern,
+      title: Intern with us,
+      rail: [Volunteer, Log hours, Get a letter],
+      stub: Intern pass,
+    }
+
+faq:
+  eyebrow: FAQ
+  heading: { before: "Questions,", accent: answered. }
+  items:
+    - q: Who can volunteer with Proud Indian?
+      a: Anyone aged 18 or over. You don’t need a teaching background or any experience; patience and turning up matter most.
+    - q: Is there a fee to volunteer?
+      a: No. Volunteering with Proud Indian is free.
+    - q: When are the sessions?
+      a: Most are on Saturdays or Sundays. Every session’s date, time and area are listed [above](#volunteer) and on the [dashboard]({events}).
+    - q: How much time do I need to give?
+      a: Classes (maths, Spoken English, art and craft) run every week, so we ask class volunteers to come regularly. Drives, Gift a Smile, outings and Kalakriti are one-off days; come when you can.
+    - q: Where do sessions happen?
+      a: In neighbourhoods in south-east Bengaluru, around Bellandur and Iblur, and at our community centre in Ibbaluru. You get the exact meeting point once you’re approved.
+    - q: How do I sign up?
+      a: "[Register on the dashboard]({register}), tap “Show interest” on a session, and come along once you’re approved."
+    - q: Do I get a certificate?
+      a: On request. Write to {hr} and we’ll send you a certificate or letter for the hours you’ve volunteered.
+    - q: Can I volunteer as an internship?
+      a: Yes. Students intern by volunteering on our programmes, and get a letter for their hours at the end. [More about internships](#internships).
+    - q: Can my company or group volunteer together?
+      a: Yes. We run volunteering days with companies and groups. Write to {connect} to plan one.
+    - q: Can I help without volunteering?
+      a: You can [donate](/#donate) towards class materials, meals and Kalakriti. Every gift gets an 80G tax receipt by email.

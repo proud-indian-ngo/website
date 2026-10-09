@@ -1,0 +1,367 @@
+/* Volunteer guide page only (imported by src/pages/volunteer.astro), so the home page doesn't carry it. Layout and type
+   sizes are utilities in the components (src/components/volunteer/); this keeps what utilities express badly: where
+   the cut-outs and doodles sit, the tilted polaroids and stamps, and the FAQ accordion. @reference gives it the theme
+   without emitting global.css a second time. */
+@reference "./global.css";
+
+@layer components {
+  /* ── hero ── */
+  .vg-h1 {
+    max-width: 12ch;
+    font-size: clamp(56px, 7.6vw, 120px);
+  }
+  .vg-kids {
+    position: absolute;
+    right: max(
+      var(--space-24),
+      calc((100% - var(--container-section)) / 2 - 40px)
+    );
+    bottom: 0;
+    width: clamp(380px, 34vw, 520px);
+    height: 100%;
+    pointer-events: none;
+  }
+  .vg-kids > * {
+    pointer-events: auto;
+  }
+  .vg-k1,
+  .vg-k2 {
+    position: absolute;
+    bottom: -14px;
+  }
+  .vg-k1 {
+    left: 0;
+    width: 54%;
+    rotate: -4deg;
+  }
+  .vg-k2 {
+    right: 0;
+    width: 50%;
+    bottom: 30px;
+    rotate: 5deg;
+  }
+  .vg-sun {
+    position: absolute;
+    right: 8%;
+    top: 112px;
+    width: 120px;
+  }
+  .vg-spark {
+    position: absolute;
+    left: 12%;
+    top: 34%;
+    width: 46px;
+    color: var(--color-ink);
+  }
+  .vg-tick,
+  .vg-pin {
+    fill: var(--color-white);
+    stroke: var(--color-ink);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .vg-tick path {
+    fill: none;
+    stroke: var(--color-accent-ink);
+    stroke-width: 2.2;
+  }
+  .vg-pin circle {
+    fill: var(--color-sky);
+  }
+  /* below desk width the cut-outs move under the copy, side by side */
+  @media (width < --theme(--breakpoint-desk)) {
+    .vg-kids {
+      position: relative;
+      right: auto;
+      width: min(520px, 100%);
+      height: clamp(260px, 52vw, 380px);
+      margin: var(--space-40) auto 0;
+    }
+    .vg-k1,
+    .vg-k2 {
+      bottom: 0;
+    }
+    /* no room for the sun beside the stacked kids */
+    .vg-sun {
+      display: none;
+    }
+    .vg-hero {
+      padding-bottom: 0;
+    }
+  }
+
+  /* ── what you'll do ── */
+  .vg-uline {
+    position: absolute;
+    left: -4%;
+    bottom: -0.16em;
+    width: 108%;
+    height: auto;
+    overflow: visible;
+  }
+  .vg-card .pi-card {
+    padding: var(--space-28) var(--space-28) var(--space-32);
+    box-shadow: var(--shadow-ink);
+    overflow: visible;
+  }
+  .vg-card--l {
+    rotate: -0.6deg;
+  }
+  .vg-card--r {
+    rotate: 0.8deg;
+    translate: 0 var(--space-28);
+  }
+  .vg-when {
+    flex: none;
+    padding: var(--space-4) var(--space-12);
+    font-family: var(--font-pi-sans);
+    font-size: var(--text-13);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: var(--tracking-stamp);
+    text-transform: uppercase;
+    background: var(--color-marigold);
+    border: var(--line-ink);
+    border-radius: var(--radius-4);
+    rotate: 3deg;
+  }
+  .vg-card-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 180px;
+    gap: var(--space-24);
+    align-items: start;
+    margin-top: var(--space-16);
+  }
+  .vg-verb {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    font-size: var(--text-84);
+  }
+  .vg-ic {
+    flex: none;
+    width: 56px;
+    height: auto;
+    overflow: visible;
+  }
+  .vg-pic {
+    position: relative;
+    margin-top: var(--space-8);
+    rotate: 4deg;
+  }
+  .vg-card--r .vg-pic {
+    rotate: -3deg;
+  }
+  .vg-pic .pi-polaroid,
+  .vg-where-pic .pi-polaroid {
+    padding: var(--space-10) var(--space-10) 0;
+  }
+  .vg-pic .tape,
+  .vg-where-pic .tape {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: -12px;
+    width: 72px;
+    height: 22px;
+    margin-left: -36px;
+    background: var(--color-sky-a55);
+    rotate: -4deg;
+  }
+  @media (width < --theme(--breakpoint-lap)) {
+    .vg-card--r {
+      translate: none;
+    }
+  }
+  @media (width < --theme(--breakpoint-tab)) {
+    .vg-card .pi-card {
+      padding: var(--space-22) var(--space-20) var(--space-24);
+    }
+    /* the photo drops under the chips, so the big verb keeps the card's full width */
+    .vg-card-body {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-20);
+    }
+    .vg-pic {
+      justify-self: end;
+      width: 56%;
+      margin: var(--space-4) var(--space-8) 0 0;
+    }
+    .vg-verb {
+      font-size: var(--text-56);
+      gap: var(--space-8);
+    }
+    .vg-ic {
+      width: 40px;
+    }
+  }
+
+  /* ── where we meet ── */
+  .vg-where-pic {
+    position: relative;
+    width: 240px;
+    rotate: -4deg;
+  }
+  .vg-centre {
+    padding: var(--space-36) var(--space-36) var(--space-40);
+    box-shadow: var(--shadow-ink);
+    overflow: visible;
+    rotate: 1deg;
+  }
+  .s-tr .vg-centre .gl-bird {
+    top: -50px;
+    right: 56px;
+  }
+  @media (width < --theme(--breakpoint-tab)) {
+    .vg-centre {
+      padding: var(--space-28) var(--space-22) var(--space-32);
+      rotate: none;
+    }
+  }
+
+  /* ── internships ── */
+  .vg-int-apply a {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-marigold);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .vg-int-ticket {
+    rotate: -3deg;
+  }
+  .vg-int-ticket .pi-ticket {
+    max-width: 460px;
+  }
+  .s-kala .kspark.vg-kspark {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    right: -18px;
+    top: -42px;
+    width: 58px;
+    rotate: 10deg;
+  }
+  .vg-tarr {
+    position: absolute;
+    left: -64px;
+    top: 38%;
+    width: 58px;
+    color: var(--color-paper);
+    overflow: visible;
+  }
+  @media (width < --theme(--breakpoint-lap)) {
+    .vg-tarr {
+      display: none;
+    }
+    .vg-int-ticket {
+      margin-right: var(--space-24);
+    }
+  }
+
+  /* ── FAQ ── */
+  .s-tr .vg-np {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 0;
+    rotate: 6deg;
+  }
+  .vg-sq {
+    position: absolute;
+    left: 0;
+    bottom: -0.2em;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .vg-q {
+    background: var(--color-white);
+    border: var(--line-ink);
+    border-radius: var(--radius-18);
+    box-shadow: var(--shadow-ink-sm);
+  }
+  .vg-q summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-16);
+    padding: var(--space-18) var(--space-22);
+    font-family: var(--font-pi-display);
+    font-size: var(--text-22);
+    font-weight: var(--font-weight-extrabold);
+    line-height: var(--leading-title);
+    letter-spacing: var(--tracking-subtitle);
+    cursor: pointer;
+    list-style: none;
+  }
+  .vg-q summary::-webkit-details-marker {
+    display: none;
+  }
+  .vg-q-ic {
+    position: relative;
+    flex: none;
+    width: 34px;
+    height: 34px;
+    background: var(--color-sky);
+    border: var(--line-ink);
+    border-radius: var(--radius-round);
+  }
+  .vg-q-ic::before,
+  .vg-q-ic::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 14px;
+    height: 2.5px;
+    margin: -1.25px 0 0 -7px;
+    background: var(--color-ink);
+    border-radius: 2px;
+  }
+  .vg-q-ic::after {
+    rotate: 90deg;
+  }
+  .vg-q[open] .vg-q-ic {
+    background: var(--color-marigold);
+  }
+  .vg-q[open] .vg-q-ic::after {
+    rotate: 0deg;
+  }
+  html[data-motion="on"] .vg-q-ic::after {
+    transition: rotate 0.25s var(--ease-spring);
+  }
+  .vg-q p {
+    max-width: 62ch;
+    padding: 0 var(--space-22) var(--space-22);
+    font-family: var(--font-pi-sans);
+    font-size: var(--text-17);
+    line-height: var(--leading-copy);
+  }
+  .vg-q p a {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-link);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .vg-q summary:hover {
+      color: var(--color-sky-ink);
+    }
+  }
+  @media (width < --theme(--breakpoint-tab)) {
+    .s-tr .vg-np {
+      top: auto;
+      bottom: 4px;
+      right: 0;
+      width: 72px;
+    }
+    .vg-q summary {
+      padding: var(--space-16) var(--space-16) var(--space-16) var(--space-18);
+      font-size: var(--text-19);
+    }
+    .vg-q p {
+      padding: 0 var(--space-18) var(--space-18);
+      font-size: var(--text-16-5);
+    }
+  }
+}

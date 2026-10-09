@@ -9,6 +9,7 @@
  * factors (CI runs each on its own runner, so one doesn't slow the other's measurements).
  *
  *   bun run qa:lighthouse              RUNS=1 bun run qa:lighthouse              FORMS=desktop bun run qa:lighthouse
+ *   PAGES=volunteer/ bun run qa:lighthouse   (default: the home page and the volunteer guide)
  */
 import { appendFileSync, existsSync } from "node:fs";
 
@@ -25,33 +26,42 @@ const CLS_MAX = 0.1;
 const TBT_MAX = 200;
 const PORT = 4401;
 const FORMS = (process.env.FORMS ?? "mobile,desktop").split(",");
+/** pages, relative to the site root: the home page and the volunteer guide */
+const PAGES = (process.env.PAGES ?? ",volunteer/").split(",");
 
 const server = await serve(DIST, PORT);
 const failures = [];
 const rows = [];
 try {
-  const lh = await runLighthouse(`http://127.0.0.1:${PORT}/`, {
-    runs: Number(process.env.RUNS ?? 3),
-    forms: FORMS,
-  });
-  for (const [form, r] of Object.entries(lh)) {
-    const m = r.median;
-    const { LCP, TBT, CLS, FCP } = r.metrics;
-    for (const c of ["accessibility", "best-practices", "seo"])
-      if (m[c] < 100) failures.push(`${form} ${c} ${m[c]} (needs 100)`);
-    if (m.performance < PERF_MIN)
-      failures.push(`${form} performance ${m.performance} (needs ${PERF_MIN})`);
-    if (CLS > CLS_MAX)
-      failures.push(`${form} CLS ${CLS.toFixed(3)} (max ${CLS_MAX})`);
-    if (TBT > TBT_MAX)
-      failures.push(`${form} TBT ${Math.round(TBT)}ms (max ${TBT_MAX}ms)`);
-    rows.push(
-      `| ${form} | ${m.performance} (${r.scores.performance.join(", ")}) | ${m.accessibility} | ${m["best-practices"]} | ${m.seo} | ${Math.round(FCP)}ms | ${Math.round(LCP)}ms | ${Math.round(TBT)}ms | ${CLS.toFixed(3)} |`
-    );
-    console.log(
-      `${form}: performance ${m.performance} (runs ${r.scores.performance.join(", ")}) / accessibility ${m.accessibility} / best-practices ${m["best-practices"]} / seo ${m.seo}; FCP ${Math.round(FCP)}ms LCP ${Math.round(LCP)}ms TBT ${Math.round(TBT)}ms CLS ${CLS.toFixed(3)}`
-    );
-    if (r.failing.length) console.log(`  not perfect: ${r.failing.join("; ")}`);
+  for (const path of PAGES) {
+    const url = new URL(path, `http://127.0.0.1:${PORT}/`);
+    const lh = await runLighthouse(url.href, {
+      runs: Number(process.env.RUNS ?? 3),
+      forms: FORMS,
+    });
+    for (const [device, r] of Object.entries(lh)) {
+      const form = `${url.pathname} ${device}`;
+      const m = r.median;
+      const { LCP, TBT, CLS, FCP } = r.metrics;
+      for (const c of ["accessibility", "best-practices", "seo"])
+        if (m[c] < 100) failures.push(`${form} ${c} ${m[c]} (needs 100)`);
+      if (m.performance < PERF_MIN)
+        failures.push(
+          `${form} performance ${m.performance} (needs ${PERF_MIN})`
+        );
+      if (CLS > CLS_MAX)
+        failures.push(`${form} CLS ${CLS.toFixed(3)} (max ${CLS_MAX})`);
+      if (TBT > TBT_MAX)
+        failures.push(`${form} TBT ${Math.round(TBT)}ms (max ${TBT_MAX}ms)`);
+      rows.push(
+        `| ${form} | ${m.performance} (${r.scores.performance.join(", ")}) | ${m.accessibility} | ${m["best-practices"]} | ${m.seo} | ${Math.round(FCP)}ms | ${Math.round(LCP)}ms | ${Math.round(TBT)}ms | ${CLS.toFixed(3)} |`
+      );
+      console.log(
+        `${form}: performance ${m.performance} (runs ${r.scores.performance.join(", ")}) / accessibility ${m.accessibility} / best-practices ${m["best-practices"]} / seo ${m.seo}; FCP ${Math.round(FCP)}ms LCP ${Math.round(LCP)}ms TBT ${Math.round(TBT)}ms CLS ${CLS.toFixed(3)}`
+      );
+      if (r.failing.length)
+        console.log(`  not perfect: ${r.failing.join("; ")}`);
+    }
   }
 } finally {
   server.close();

@@ -1,0 +1,25 @@
+# Share images (Open Graph cards, 1200x630), one per page. `bun run og` renders each entry to public/og/<page>.png in
+# the style of the brand's default card (public/og.png, which the home page keeps; it comes from @proudindian/design).
+# Re-run it after changing this file or a cut-out, and commit the PNGs. A page uses its card through the `og` prop of
+# src/layouts/Base.astro.
+#   pre    the small line above the big word
+#   word   the big outlined word (it shrinks to fit beside the cut-outs)
+#   pills  the chips along the bottom
+#   kids   cut-outs under src/assets/, drawn as stickers at the right (none, one or two)
+#   alt    the image's description for screen readers and social platforms
+volunteer:
+  pre: Weekend volunteering in
+  word: Bengaluru.
+  pills: [18+ · No experience needed, Saturdays & Sundays]
+  kids:
+    [
+      cutouts/ArtCraft_May2026_1000381054.png,
+      cutouts/GiftASmile2026_DSC_0036.png,
+    ]
+  alt: "Weekend volunteering in Bengaluru with Proud Indian: 18 and over, no experience needed, Saturdays and Sundays."
+privacy:
+  pre: How we handle your data
+  word: Privacy policy.
+  pills: [No cookies on this site, DPDP Act 2023]
+  kids: []
+  alt: Proud Indian's privacy policy.

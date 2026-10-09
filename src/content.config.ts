@@ -34,7 +34,11 @@ const site = defineCollection({
     name: z.string(),
     url: z.url(),
     city: z.string(),
-    founded: z.object({ long: z.string(), short: z.string() }),
+    founded: z.object({
+      long: z.string(),
+      short: z.string(),
+      date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    }),
     stats: z.object({
       optimists: z.string(),
       hours: z.string(),
@@ -55,7 +59,20 @@ const site = defineCollection({
         display: z.string(),
         tel: z.string(),
       }),
-      address: z.object({ label: z.string(), text: z.string() }),
+      addresses: z
+        .array(
+          z.object({
+            label: z.string(),
+            name: z.string().optional(),
+            street: z.string(),
+            locality: z.string(),
+            region: z.string(),
+            postalCode: z.string().optional(),
+            map: z.url().optional(),
+            geo: z.object({ lat: z.number(), lng: z.number() }).optional(),
+          })
+        )
+        .min(1),
     }),
     social: z.array(
       z.object({
@@ -260,6 +277,7 @@ const copy = defineCollection({
       steps: z.array(z.string()).length(3),
       join: z.string(),
       joinNote: z.string(),
+      guide: z.string(),
       poster: z.object({
         kicker: z.string(),
         open: z.string(),
@@ -389,6 +407,7 @@ const copy = defineCollection({
       write: z.string(),
       call: z.string(),
       visit: z.string(),
+      directions: z.string(),
       follow: z.string(),
       stampsLabel: z.string(),
       stampsHeading: z.string(),
@@ -437,6 +456,94 @@ const privacy = defineCollection({
   }),
 });
 
+/** Share images per page (src/content/og.yaml); `bun run og` renders them to public/og/ */
+const og = defineCollection({
+  loader: single("og"),
+  schema: z.record(
+    z.string(),
+    z.object({
+      pre: z.string(),
+      word: z.string(),
+      pills: z.array(z.string()),
+      kids: z.array(asset).max(2),
+      alt: z.string(),
+    })
+  ),
+});
+
+/** /volunteer/: the volunteer guide (src/content/volunteer.yaml) */
+const volunteer = defineCollection({
+  loader: single("volunteer"),
+  schema: z.object({
+    meta: z.object({ title: z.string(), description: z.string() }),
+    nav: z.object({
+      links: z
+        .array(
+          z.object({ label: z.string(), href: z.string(), spy: z.string() })
+        )
+        .min(1),
+      home: z.string(),
+    }),
+    hero: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      join: z.string(),
+      sessions: z.string(),
+      facts: z.array(z.string()).min(1),
+      kids: z.array(z.object({ image: asset, label: z.string() })).length(2),
+    }),
+    do: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      cards: z
+        .array(
+          z.object({
+            programme: z.string(),
+            when: z.string(),
+            photo: z.number().int().min(0),
+          })
+        )
+        .min(1),
+      cta: z.string(),
+    }),
+    where: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      areas: z.string(),
+      centre: z.object({
+        kicker: z.string(),
+        does: z.string(),
+        items: z.array(z.string()),
+        directions: z.string(),
+      }),
+      photo: pic.extend({ caption: z.string() }),
+    }),
+    internships: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      steps: z.array(z.string()).min(1),
+      apply: z.string(),
+      button: z.string(),
+      subject: z.string(),
+      ticket: z.object({
+        kicker: z.string(),
+        title: z.string(),
+        rail: z.array(z.string()).length(3),
+        stub: z.string(),
+      }),
+    }),
+    faq: z.object({
+      eyebrow: z.string(),
+      heading,
+      items: z.array(z.object({ q: z.string(), a: z.string() })).min(1),
+    }),
+  }),
+});
+
 export const collections = {
   site,
   programmes,
@@ -445,4 +552,6 @@ export const collections = {
   trustees,
   copy,
   privacy,
+  volunteer,
+  og,
 };

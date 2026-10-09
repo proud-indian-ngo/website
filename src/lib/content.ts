@@ -13,6 +13,19 @@ export async function getCopy() {
   if (!entry) throw missing("copy");
   return entry.data;
 }
+export async function getVolunteerPage() {
+  const entry = await getEntry("volunteer", "volunteer");
+  if (!entry) throw missing("volunteer");
+  return entry.data;
+}
+/** The share card for a page (src/content/og.yaml), or undefined for the default brand card. */
+export async function getShareCard(page: string) {
+  const entry = await getEntry("og", "og");
+  if (!entry) throw missing("og");
+  const card = entry.data[page];
+  if (!card) throw new Error(`No share card "${page}" in src/content/og.yaml`);
+  return card;
+}
 export async function getKalakriti() {
   const entry = await getEntry("kalakriti", "kalakriti");
   if (!entry) throw missing("kalakriti");
@@ -39,6 +52,10 @@ export async function getTrustees() {
 }
 
 type Site = Awaited<ReturnType<typeof getSite>>;
+
+/** "No. 224, …, KR Puram, Bengaluru 560016": one of site.yaml → contacts.addresses on one line */
+export const postalAddress = (a: Site["contacts"]["addresses"][number]) =>
+  `${a.street}, ${a.locality}${a.postalCode ? ` ${a.postalCode}` : ""}`;
 
 /** Values the copy can reference as {placeholders}, so facts are written once in site.yaml. */
 export function facts(site: Site): Record<string, string> {

@@ -6,6 +6,8 @@ city: Bengaluru
 founded:
   long: 26 January 2019
   short: 26 Jan 2019
+  # ISO date for search engines (structured data)
+  date: "2019-01-26"
 
 stats:
   optimists: 3.6k+
@@ -33,9 +35,24 @@ contacts:
     label: Call or WhatsApp
     display: +91 99864 31321
     tel: "+919986431321"
-  address:
-    label: Registered office
-    text: "#206, 8th A Main Rd, LBS Nagar, Kaggadasapura, Bengaluru 560017"
+  # The footer's "Visit" list, in order; the first is the registered office. Shown as "street, locality postalCode",
+  # with a directions link when `map` is set. The parts and `geo` also go to search engines (structured data).
+  addresses:
+    - label: Registered office
+      street: "No. 224, 3rd Floor, WorkFlo Ranka Junction, 80/3, Old Madras Road, KR Puram"
+      locality: Bengaluru
+      region: Karnataka
+      postalCode: "560016"
+      map: https://maps.app.goo.gl/PVV4XS5HHiqoP5mL9
+      geo: { lat: 12.9976896, lng: 77.6695257 }
+    - label: Community centre
+      name: Proud Indian LoG Community
+      street: "Near Suncity Apartment, Ibbaluru, Bellandur"
+      locality: Bengaluru
+      region: Karnataka
+      postalCode: "560102"
+      map: https://maps.app.goo.gl/1friHkonFm5LPv4G9
+      geo: { lat: 12.9271133, lng: 77.6651309 }
 
 # Social profiles, in footer order. The phone menu's Instagram pill uses the instagram URL.
 social:

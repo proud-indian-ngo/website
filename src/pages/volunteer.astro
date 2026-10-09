@@ -1,0 +1,66 @@
+---
+/**
+ * /volunteer/: everything about volunteering with Proud Indian, for people looking for weekend volunteering in
+ * Bengaluru. The hero, then the home page's volunteer section (live sessions, how to join), what you'd do, where we
+ * meet, internships and the FAQ, then the closing section and the footer. Copy: src/content/volunteer.yaml; sessions
+ * from the events feed. Structured data: the page, its FAQ and the sessions (src/lib/structured-data.ts).
+ */
+import MarginSprite from "../components/margins/MarginSprite.astro";
+import Closing from "../components/sections/Closing.astro";
+import Footer from "../components/sections/Footer.astro";
+import Header from "../components/sections/Header.astro";
+import PhoneMenu from "../components/sections/PhoneMenu.astro";
+import StickyDonateBar from "../components/sections/StickyDonateBar.astro";
+import Volunteer from "../components/sections/Volunteer.astro";
+import GuideDo from "../components/volunteer/GuideDo.astro";
+import GuideFaq from "../components/volunteer/GuideFaq.astro";
+import GuideHero from "../components/volunteer/GuideHero.astro";
+import GuideInternships from "../components/volunteer/GuideInternships.astro";
+import GuideWhere from "../components/volunteer/GuideWhere.astro";
+import Base from "../layouts/Base.astro";
+// after Base, so global.css (and its @layer order) comes first
+import "../styles/volunteer-page.css";
+import { getSite, getVolunteerPage } from "../lib/content";
+import { loadEvents } from "../lib/events/load";
+import { guideValues, inline } from "../lib/inline";
+import { jsonLd, volunteerStructuredData } from "../lib/structured-data";
+
+const page = await getVolunteerPage();
+const site = await getSite();
+const events = await loadEvents();
+const values = guideValues(site);
+const faq = page.faq.items.map((f) => ({ q: f.q, a: inline(f.a, values) }));
+const origin = (Astro.site ?? new URL("https://proudindian.ngo/")).href;
+const pageUrl = new URL(Astro.url.pathname, origin).href;
+const structured = volunteerStructuredData(
+  { url: pageUrl, title: page.meta.title, description: page.meta.description },
+  // structured data is read away from the page, so its links are absolute ("#volunteer", "/#donate")
+  page.faq.items.map((f) => ({ q: f.q, a: inline(f.a, values, pageUrl) })),
+  events.data.events,
+  origin
+);
+/** the sections on this page: header, menu and footer links to them stay here, the rest (and the logo, "#top") go to
+ *  the home page */
+const anchors = ["#volunteer", "#do", "#where", "#internships", "#faq", "#closing"];
+// the guide's own nav: its sections, and the phone menu adds a way home
+const navLinks = page.nav.links;
+const menuLinks = [{ label: page.nav.home, href: "/" }, ...navLinks];
+---
+
+<Base title={page.meta.title} description={page.meta.description} og="volunteer">
+  <script is:inline slot="head" type="application/ld+json" set:html={jsonLd(structured)} />
+  <MarginSprite />
+  <Header anchors={anchors} links={navLinks} join={site.links.register} />
+  <PhoneMenu anchors={anchors} links={menuLinks} />
+  <main id="main">
+    <GuideHero />
+    <Volunteer events={events} />
+    <GuideDo />
+    <GuideWhere events={events.data.events} />
+    <GuideInternships values={values} email={values.hr!} />
+    <GuideFaq items={faq} />
+    <Closing anchors={anchors} />
+  </main>
+  <Footer anchors={anchors} />
+  <StickyDonateBar anchors={anchors} />
+</Base>
