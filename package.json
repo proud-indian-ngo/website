@@ -21,6 +21,7 @@
     "qa:lighthouse": "bun scripts/qa/lighthouse.ts",
     "qa:behaviour": "bun scripts/qa/behaviour.ts",
     "qa:doodles": "bun scripts/qa/doodles.ts",
+    "qa:markdown": "bun scripts/qa/markdown.ts",
     "prepare": "lefthook install || true",
     "check:design": "bun scripts/check-design.ts",
     "check:razorpay": "bun scripts/check-razorpay.ts",

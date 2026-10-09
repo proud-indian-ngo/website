@@ -51,6 +51,37 @@ export async function getTrustees() {
   }));
 }
 
+/** The volunteer guide's "Pick how you help." cards (volunteer.yaml → do.cards), each with its programme's verb,
+ *  name, line, chips (Kalakriti: its events) and polaroid. */
+export async function getGuideCards() {
+  const [{ do: d }, programmes, kala] = await Promise.all([
+    getVolunteerPage(),
+    getProgrammes(),
+    getKalakriti(),
+  ]);
+  return d.cards.map((c) => {
+    const p = programmes.find((x) => x.anchor === c.programme);
+    if (!p)
+      throw new Error(`volunteer.yaml do.cards: no programme ${c.programme}`);
+    const band = p.kind === "band" ? p : null;
+    const photo = band ? band.polaroids[c.photo] : kala.line.photos[c.photo];
+    if (!photo)
+      throw new Error(
+        `volunteer.yaml do.cards: ${c.programme} has no photo ${c.photo}`
+      );
+    return {
+      ...c,
+      kind: p.kind,
+      num: p.num,
+      name: p.name,
+      verb: p.verb,
+      line: band ? band.line : kala.tickets.note,
+      chips: band ? band.chips : kala.edition.events,
+      photo,
+    };
+  });
+}
+
 type Site = Awaited<ReturnType<typeof getSite>>;
 
 /** "No. 224, …, KR Puram, Bengaluru 560016": one of site.yaml → contacts.addresses on one line */
@@ -84,12 +115,13 @@ export function fill(text: string, values: Record<string, string>): string {
 export const shortYear = (year: string) =>
   `${year.slice(2, 4)}–${year.slice(5, 7)}`;
 
-/** The privacy policy (src/content/privacy.md): front matter, rendered HTML and its headings. */
+/** The privacy policy (src/content/privacy.md): front matter, its Markdown, rendered HTML and its headings. */
 export async function getPrivacy() {
   const entry = await getEntry("privacy", "privacy");
   if (!entry) throw new Error("Missing src/content/privacy.md");
   return {
     ...entry.data,
+    body: entry.body ?? "",
     html: entry.rendered?.html ?? "",
     headings: (entry.rendered?.metadata?.headings ?? []) as MarkdownHeading[],
   };
