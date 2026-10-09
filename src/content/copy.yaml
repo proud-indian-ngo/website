@@ -98,7 +98,12 @@ volunteer:
     image: cutouts/ArtCraft_Jun2026_IMG_114811.png
     label: A boy holding up the bookmark he made in art and craft class
     crop: 507/600
-  more: { heading: More weekends, link: See every session on the dashboard }
+  more:
+    heading: More weekends
+    link: See every session on the dashboard
+    # the arrow buttons at each end of the ticket row
+    prev: Earlier sessions
+    next: Later sessions
   ticketRegister: Register to join
   # the poster when the dashboard has no upcoming sessions (the "More weekends" row hides); the button links to links.register
   empty:

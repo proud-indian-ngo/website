@@ -339,13 +339,3 @@ html[data-motion="on"] .s-kala .kl-row + .kl-row .hg {
     stroke: var(--color-marigold);
   }
 }
-/* the swipe row hides its scrollbar on touch screens; mouse and trackpad users get the thin brand bar
-   (.pi-scroll-thin, @proudindian/design/scrollbar.css) so they can see it scrolls */
-@media (hover: none), (pointer: coarse) {
-  .s-kala .kl-scroll {
-    scrollbar-width: none;
-  }
-  .s-kala .kl-scroll::-webkit-scrollbar {
-    display: none;
-  }
-}

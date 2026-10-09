@@ -154,7 +154,14 @@ const state = {
             href={site.links.events}
             >{v.more.link} <span aria-hidden="true">→</span></a>
         </div>
-        <ol class="stks pi-scroll-thin" data-events-list set:html={more} />
+        <ol
+          class="stks"
+          data-events-list
+          data-swipe
+          data-swipe-prev={v.more.prev}
+          data-swipe-next={v.more.next}
+          set:html={more}
+        />
       </div>
     </div>
     <script is:inline type="application/json" id="events-state" set:html={JSON.stringify(state).replace(/</g, "\\u003c")} />

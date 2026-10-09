@@ -58,6 +58,9 @@ line:
   heading: All 8 events, on the line
   stamp: Kalakriti 3.0 · 20 Sep 2026
   regionLabel: Kalakriti 3.0 photos, one per event
+  # the arrow buttons at each end of the line
+  prev: Previous moments
+  next: More moments
   swipe: swipe the line
   # one polaroid per event, hung four to a string
   photos:

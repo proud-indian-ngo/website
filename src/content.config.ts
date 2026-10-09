@@ -157,6 +157,8 @@ const kalakriti = defineCollection({
       heading: z.string(),
       stamp: z.string(),
       regionLabel: z.string(),
+      prev: z.string(),
+      next: z.string(),
       swipe: z.string(),
       photos: z
         .array(pic.extend({ event: z.string(), caption: z.string(), position }))
@@ -264,7 +266,12 @@ const copy = defineCollection({
         register: z.string(),
       }),
       posterKid: kid,
-      more: z.object({ heading: z.string(), link: z.string() }),
+      more: z.object({
+        heading: z.string(),
+        link: z.string(),
+        prev: z.string(),
+        next: z.string(),
+      }),
       ticketRegister: z.string(),
       empty: z.object({
         label: z.string(),

@@ -16,6 +16,7 @@ import { initPlane, layoutPlane } from "./plane";
 import { initRail, onScroll } from "./rail";
 import { initReportsDrawer } from "./reports-drawer";
 import { fireLoadTriggers, initReveal, sweep } from "./reveal";
+import { initSwipe } from "./swipe";
 import { initWobble } from "./wobble";
 
 const relayout = () => {
@@ -35,6 +36,7 @@ initDonate();
 initReportsDrawer();
 initLoops();
 initWobble();
+initSwipe();
 initBento();
 initReveal();
 initPlane();

@@ -49,6 +49,7 @@
 @import "./sections/closing-footer.css" layer(components);
 @import "./sections/margins.css" layer(components);
 @import "./sections/programme-bands.css" layer(components);
+@import "./sections/swipe.css" layer(components);
 @import "./sections/motion.css" layer(components);
 @import "./sections/load-motion.css" layer(components);
 @import "./sections/ambient.css" layer(components);
