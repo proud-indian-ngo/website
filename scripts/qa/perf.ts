@@ -2,9 +2,9 @@
  * Performance check: builds the site to a temp folder, serves it the way Cloudflare Pages does (public/_headers,
  * brotli), then runs
  *   1. Lighthouse 5 times on mobile and on desktop (medians, and every scored audit that isn't a perfect pass), and
- *   2. the adaptive draw-on check (scripts/qa/perf/drawmode.mjs): drawn up to 3x CPU, lite wipe at 4x and 6x, and
+ *   2. the adaptive draw-on check (scripts/qa/perf/drawmode.ts): drawn up to 3x CPU, lite wipe at 4x and 6x, and
  *      the wipe path itself, and
- *   3. the frame profiler (scripts/qa/perf/frames.mjs) at 4x and 6x CPU throttling, 390px and 1440px.
+ *   3. the frame profiler (scripts/qa/perf/frames.ts) at 4x and 6x CPU throttling, 390px and 1440px.
  * Gates (exit code 1 if missed): Lighthouse 100 in all four categories on both form factors (median; mobile Performance
  * 99 is accepted, MOBILE_PERF_MIN=100 to tighten), and at 4x, under
  * 1% bad frames (over 16.7ms) and no long task during an animation, in every scenario. 6x is reported, not gated.
@@ -20,14 +20,15 @@
 import { execSync } from "node:child_process";
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 
-import { checkDrawMode } from "./perf/drawmode.mjs";
-import { runFrames, table } from "./perf/frames.mjs";
-import { runLighthouse } from "./perf/lighthouse.mjs";
-import { serve } from "./perf/serve.mjs";
+import { checkDrawMode } from "./perf/drawmode.ts";
+import { runFrames, table } from "./perf/frames.ts";
+import type { TraceStats } from "./perf/frames.ts";
+import { runLighthouse } from "./perf/lighthouse.ts";
+import { serve } from "./perf/serve.ts";
 
 const OUT = process.env.OUT ?? "/tmp/pi-perf-qa";
 const PORT = 4400;
-const env = (k, d) => process.env[k] ?? d;
+const env = <T>(k: string, d: T) => process.env[k] ?? d;
 mkdirSync(OUT, { recursive: true });
 
 let url = process.env.SITE;
@@ -36,14 +37,14 @@ if (!url) {
   const dist = `${OUT}/dist`;
   rmSync(dist, { recursive: true, force: true });
   console.log(`building to ${dist} ...`);
-  execSync(`bunx astro build --outDir ${dist}`, {
+  execSync(`bunx --bun astro build --outDir ${dist}`, {
     stdio: ["ignore", "ignore", "inherit"],
   });
   server = await serve(dist, PORT);
   url = `http://127.0.0.1:${PORT}/`;
 }
 
-const failures = [];
+const failures: string[] = [];
 try {
   if (!process.env.SKIP_LH) {
     const lh = await runLighthouse(url, { runs: +env("RUNS", 5) });
@@ -64,7 +65,7 @@ try {
         console.log(`  not perfect: ${r.failing.join("; ")}`);
       // mobile Performance 99 is accepted (2026-10-08): what's left is Lighthouse counting the below-the-fold lazy
       // images that start before the first paint; raise MOBILE_PERF_MIN to 100 to gate on it again
-      const min = (c) =>
+      const min = (c: string) =>
         form === "mobile" && c === "performance"
           ? +env("MOBILE_PERF_MIN", 99)
           : 100;
@@ -90,12 +91,13 @@ try {
     );
     for (const [label, res] of Object.entries(fr)) {
       if (!label.endsWith("-x4")) continue;
+      // only the scenario entries carry frames; idle and the layer snapshots are skipped below
       const rows = {
         ...res,
         ...Object.fromEntries(
           Object.entries(res.idle ?? {}).map(([k, v]) => [`idle:${k}`, v])
         ),
-      };
+      } as Record<string, TraceStats | null | undefined>;
       for (const [name, r] of Object.entries(rows)) {
         if (!r?.frames || name === "idle") continue;
         if (r.frames.badPct >= 1)
