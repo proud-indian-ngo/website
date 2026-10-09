@@ -1,12 +1,13 @@
 ---
 # Privacy policy text. Edit the Markdown below; the page at /privacy/ renders it with a table of contents built from
-# the ## headings. Lines starting with <!-- CONFIRM: ... --> are notes for the team and do not appear on the page.
+# the ## headings. HTML comments (<!-- NOTE: ... -->) are notes for the team and do not appear on the page.
 title: Privacy policy
 # While true, the page shows the draft note, stays out of search engines (noindex) and out of the sitemap.
-# Set to false only after legal review.
-draft: true
-draftNote: This policy is a draft. It needs legal review before the site launches, and it may change.
-effectiveDate: "1 January 2026"
+# Published on 9 October 2026 after an internal review (no lawyer); set back to true only to withdraw it.
+draft: false
+draftNote: This policy is a draft and may change.
+# change this whenever the policy changes (see "Changes to this policy")
+effectiveDate: "9 October 2026"
 lede: >-
   This policy explains what personal data Proud Indian collects, why we collect it, who we share it with and what
   you can ask us to do with it. It covers this website, our volunteer dashboard at dash.proudindian.ngo, donations
@@ -33,9 +34,11 @@ Cloudflare hosts the website. Like any web host, Cloudflare receives your IP add
 
 We use Cloudflare Web Analytics to count visits. A small script from Cloudflare records each page view: the page address, the page you came from, your browser and device type, your approximate country, and how quickly the page loaded. Cloudflare says this analytics does not use cookies or local storage and does not track you across other websites. We see only totals, never individual visitors. Cloudflare handles this data under its own [privacy policy](https://www.cloudflare.com/privacypolicy/).
 
-The "Volunteer" section lists upcoming sessions. To keep that list fresh, your browser may ask our dashboard at dash.proudindian.ngo for the current list of public events. That request carries no personal data beyond what any web request carries, such as your IP address.
+The volunteer section on the home page and the volunteer guide at /volunteer/ list upcoming sessions. To keep that list fresh, your browser may ask our dashboard at dash.proudindian.ngo for the current list of public events. That request carries no personal data beyond what any web request carries, such as your IP address.
 
 If you press "Pause motion" in the footer, your browser remembers that choice. See [Cookies and local storage](#cookies-and-local-storage).
+
+Links to Google Maps, our social media pages, the dashboard and Razorpay take you to those services, which handle your visit under their own policies. We don't embed maps, videos or social media posts in our pages.
 
 ### If you donate
 
@@ -50,17 +53,19 @@ You pay by card, UPI, net banking or another method on Razorpay's page. Your car
 
 We use these to email your donation receipt and 80G certificate, to answer questions about your donation, and to meet our duties under the Income Tax Act, 1961. Those duties include reporting donations to the Income Tax Department in Form 10BD and issuing donation certificates in Form 10BE, which need your name, address and PAN.
 
+After you pay, Razorpay sends you back to our thank-you page. If Razorpay adds your payment ID to that page's address, the page shows it to you so you can quote it if you write to us. The page doesn't store it or send it anywhere.
+
 Razorpay handles your payment under its own [privacy policy](https://razorpay.com/privacy/).
 
 ### If you volunteer through the dashboard
 
 You sign up at dash.proudindian.ngo to volunteer. Volunteer accounts are for people aged 18 and over. When you register, we ask for your name, email address, phone number, date of birth and gender, and you choose a password. We store the password only in hashed form, so nobody at Proud Indian can read it. If you sign up from a link for a particular group or event, we note that too.
 
-The dashboard asks for your date of birth and gender at sign-up. We don't currently use them for anything.
+We ask for your date of birth so we can check that you are 18 or over. We ask for your gender only to choose the style of your default cartoon avatar (see below). You can change either in the dashboard's settings.
 
 We use your phone number for WhatsApp messages and for adding you to the WhatsApp groups of your teams and events. We check whether the number you gave is registered on WhatsApp so we know whether to message you there.
 
-<!-- CONFIRM: we collect date of birth and gender but don't use them. The DPDP Act expects us to collect only what we need (data minimisation), so either stop asking for them at sign-up or decide what they are for and say so here. -->
+<!-- NOTE: the dashboard does not yet check the 18+ rule from the date of birth at sign-up; the team checks it. If the dashboard ever stops needing date of birth or gender, stop collecting them and update this section (DPDP data minimisation). -->
 
 While you use the dashboard, we also keep:
 
@@ -73,7 +78,7 @@ While you use the dashboard, we also keep:
 - a record of the actions you take in the dashboard, with your name and role, so we can trace changes;
 - sign-in details: your session, the IP address you signed in from and your browser type.
 
-If you don't upload a photo, the dashboard shows a picture from Gravatar if your email address has one, or else a generated cartoon avatar from DiceBear. To do this it sends Gravatar a scrambled (hashed) form of your email address, and your browser loads the cartoon from DiceBear using a scrambled code. Neither service receives your email address in readable form.
+If you don't upload a photo, the dashboard shows a picture from Gravatar if your email address has one, or else a generated cartoon avatar from DiceBear. To do this it sends Gravatar a scrambled (hashed) form of your email address, and your browser loads the cartoon from DiceBear using a scrambled code and style options that follow the gender you chose. Neither service receives your email address in readable form.
 
 If you claim a reimbursement or an advance for programme costs, we keep the claim, its line items, your bills and receipts, approval screenshots, and the bank account the money should go to (account holder name, account number and IFSC code). We need these to pay you and to keep proper accounts.
 
@@ -136,7 +141,7 @@ We share personal data only with the services that help us run Proud Indian, and
 | Income Tax Department | Donor name, address, PAN and donation amount | 80G reporting (Form 10BD) |
 | Courts, police or regulators | Only what a lawful order or the law requires | Legal compliance |
 
-<!-- CONFIRM: the email (SMTP) provider used by the dashboard, and name it in the table. -->
+<!-- NOTE: name the dashboard's email (SMTP) provider in the table above once it is settled. -->
 
 We store event photos in Immich, a photo library that we run ourselves, so photos uploaded there are not shared with an outside company. Our WhatsApp messages go out through a WhatsApp account we connect ourselves, so they pass through WhatsApp's own systems.
 
@@ -167,13 +172,13 @@ We keep personal data until it is deleted, either because you ask us to delete i
 - All our sites use HTTPS.
 - Passwords are stored only as hashes.
 - The dashboard gives each volunteer access only to what their role needs, and it records who changed what.
-- Uploaded files are kept in private storage. The dashboard checks that you are allowed to see a file and then gives your browser a link that works for a few minutes.
+- The dashboard shows an uploaded file only to people allowed to see it, through a link that works for a few minutes.
 - Sign-in and sign-up are rate-limited to slow down password guessing.
 - We never see your card or UPI details.
 
 If a personal data breach affects you, we will tell you and the Data Protection Board of India, as the DPDP Act and Rules require.
 
-<!-- CONFIRM: that the R2 private-storage cutover is complete and the bucket's public URL is disabled (pi-dash DEPLOYMENT.md, steps 1 to 9). Until then, the "private storage" sentence is not fully true. -->
+<!-- NOTE: once the R2 private-storage cutover is done and the bucket's public URL is disabled (pi-dash DEPLOYMENT.md, steps 1 to 9), the line above can say "Uploaded files are kept in private storage". -->
 
 ## Your rights
 
@@ -198,9 +203,7 @@ Somasundaram A, Secretary, Proud Indian
 Email: connect@proudindian.ngo
 Address: No. 224, 3rd Floor, WorkFlo Ranka Junction, 80/3, Old Madras Road, KR Puram, Bengaluru 560016
 
-We usually reply within a few days, and always within the time the DPDP Rules allow. If you are not satisfied with our answer, you can complain to the Data Protection Board of India.
-
-<!-- CONFIRM: the Data Protection Board's complaint link. -->
+We usually reply within a few days, and always within the time the DPDP Rules allow. If you are not satisfied with our answer, you can complain to the Data Protection Board of India, which accepts complaints online.
 
 ## Cookies and local storage
 
@@ -216,15 +219,14 @@ We take extra care with children's personal data, as section 9 of the DPDP Act r
 
 We hold two kinds of personal data about children.
 
-- Photos. Volunteers photograph sessions and events, and some photos of children appear on this website and our social media. We use them to show our work and to raise support. Before photos are taken or published, we ask the child's parent or guardian, or the partner centre the child comes through.
+- Photos. Volunteers photograph sessions and events, and some photos of children appear on this website and our social media. We use them to show our work and to raise support. Before photos are taken or published, we ask the child's parent or guardian, or the partner centre the child comes through. On this website we never publish a child's name or school next to their photo.
 - Kalakriti records. For the festival we keep each child's name, date of birth, gender, centre, competitions and event-day records, as listed under [Kalakriti](#kalakriti). We use them only to run the festival and keep children safe on the day. The partner centre registers the child, and we ask it to check with the parent or guardian first.
 
 We do not track children's behaviour online, and we do not use their data for advertising. Volunteer accounts are for people aged 18 and over, and children do not have accounts.
 
 If you are a parent or guardian and want a photo of your child taken down, or your child's details removed, write to connect@proudindian.ngo. We will remove the photo from our website and our social media accounts, and delete the record unless the law requires us to keep it.
 
-<!-- CONFIRM: a written, verifiable parental-consent process (DPDP Act section 9) must be set up before launch, for both photos and Kalakriti registrations. It is not formalised yet. Once it exists, describe it here and in the legal-basis table, and decide who keeps the records. -->
-<!-- CONFIRM: whether to promise that a child's full name or school is never published next to their photo. Add it here if that is the practice. -->
+<!-- NOTE: the DPDP Rules on verifiable parental consent (rule 10) apply from 13 May 2027. Before then, set up a written, verifiable consent process for photos and Kalakriti registrations, describe it here and in the legal-basis table, and decide who keeps the records. -->
 
 ## Changes to this policy
 
