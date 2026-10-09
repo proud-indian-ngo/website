@@ -131,7 +131,7 @@ Every run installs with the frozen lockfile. Production deploys only once every 
 **Secrets and variables** (repository settings → Secrets and variables → Actions):
 - Secret `CLOUDFLARE_API_TOKEN`: an account-owned API token in the Proud Indian account ("GitHub Actions: proud-indian-ngo/website (Pages deploy)"), with Pages Write only. Replace it there if it leaks.
 - Secret `CLOUDFLARE_ACCOUNT_ID`: the Proud Indian account ID.
-- Variable `PUBLIC_EVENTS_URL`: set it once the pi-dash endpoint ships (see [Events](#events-volunteer-section)).
+- Variable `PUBLIC_EVENTS_URL`: the pi-dash events feed, `https://dash.proudindian.ngo/api/public/events` (see [Events](#events-volunteer-section)). The build in CI reads it; Cloudflare Pages doesn't build, so it isn't set there.
 
 **Going live** is done in the Cloudflare dashboard, after the first deployment: add `proudindian.ngo` (and `www`) as custom domains of the Pages project, and redirect `www` to the bare domain.
 
@@ -329,9 +329,6 @@ bun run qa:markdown    # Accept: text/markdown gets Markdown, browsers get HTML 
 ## TODO
 
 - [ ] **Privacy policy follow-ups.** Published on 2026-10-09 after an internal review (no lawyer). The `<!-- NOTE: ... -->` comments in `src/content/privacy.md` list what is still open: a verifiable parental-consent process for photos and Kalakriti before the DPDP Rules on it apply (13 May 2027), the R2 private-storage cutover, and the dashboard checking the 18+ rule at sign-up (a pi-dash pull request is in progress). A legal review is still worth doing when it becomes possible.
-- [ ] **pi-dash events endpoint.** `GET /api/public/events` is not implemented yet. When it ships:
-  - set `PUBLIC_EVENTS_URL` in Cloudflare Pages;
-  - keep `connect-src` in `public/_headers` in step.
 - [ ] **Custom domains.** Add `proudindian.ngo` and `www` to the Pages project once the Razorpay URLs are checked.
 - [ ] **Real-device check.** The safe-area insets (notch, home indicator) for the sticky donate bar, the menu and the drawer are only verified in CSS; check them on an iPhone.
 - [ ] **Razorpay redirects and webhooks.** Before moving DNS, check the Razorpay dashboard for a redirect URL or webhook pointing at the current PHP site (`payment_success.php`, `verify-razorpay-payment.php`, `webhooks-verify.php`). The new site has no server, so those stop working.
