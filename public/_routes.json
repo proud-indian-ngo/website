@@ -18,6 +18,7 @@
     "/robots.txt",
     "/llms.txt",
     "/sitemap-index.xml",
-    "/sitemap-0.xml"
+    "/sitemap-0.xml",
+    "/.well-known/*"
   ]
 }

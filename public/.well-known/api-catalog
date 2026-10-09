@@ -1,0 +1,19 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://dash.proudindian.ngo/api/public/events",
+      "service-desc": [
+        {
+          "href": "https://dash.proudindian.ngo/api/public/openapi.json",
+          "type": "application/vnd.oai.openapi+json"
+        }
+      ],
+      "status": [
+        {
+          "href": "https://dash.proudindian.ngo/api/health",
+          "type": "application/json"
+        }
+      ]
+    }
+  ]
+}

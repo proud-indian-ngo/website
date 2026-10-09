@@ -49,10 +49,10 @@ https://:project.pages.dev/*
   Content-Disposition: inline
 
 # Link headers for agent discovery (RFC 8288): each page with Markdown points to it (the same as its
-# <link rel="alternate" type="text/markdown">), and to /llms.txt, the whole site in Markdown. A new page with an
-# index.md.ts gets its own block here.
+# <link rel="alternate" type="text/markdown">), and to /llms.txt, the whole site in Markdown; the home page also to the
+# API catalog. A new page with an index.md.ts gets its own block here.
 /
-  Link: </index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
+  Link: </index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain", </.well-known/api-catalog>; rel="api-catalog"
 /volunteer/
   Link: </volunteer/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
 /privacy/
@@ -66,3 +66,11 @@ https://:project.pages.dev/*
   X-Robots-Tag: noindex
 /privacy/index.md
   X-Robots-Tag: noindex
+
+# API catalog (RFC 9727): the public events feed on dash.proudindian.ngo, with its OpenAPI description and health check.
+# Pages already sends Access-Control-Allow-Origin: * on every response, so agents in a browser can read it.
+/.well-known/api-catalog
+  ! Content-Type
+  Content-Type: application/linkset+json
+  ! Cache-Control
+  Cache-Control: public, max-age=3600
