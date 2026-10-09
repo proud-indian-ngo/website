@@ -38,15 +38,19 @@ const structured = volunteerStructuredData(
   events.data.events,
   origin
 );
-/** the sections on this page: header, menu and footer links to them stay here, the rest go to the home page */
-const anchors = ["#top", "#volunteer", "#programmes", "#where", "#internships", "#faq", "#closing"];
+/** the sections on this page: header, menu and footer links to them stay here, the rest (and the logo, "#top") go to
+ *  the home page */
+const anchors = ["#volunteer", "#programmes", "#where", "#internships", "#faq", "#closing"];
+// the guide's own nav: its sections, and the phone menu adds a way home
+const navLinks = page.nav.links;
+const menuLinks = [{ label: page.nav.home, href: "/" }, ...navLinks];
 ---
 
 <Base title={page.meta.title} description={page.meta.description}>
   <script is:inline slot="head" type="application/ld+json" set:html={jsonLd(structured)} />
   <MarginSprite />
-  <Header anchors={anchors} />
-  <PhoneMenu anchors={anchors} />
+  <Header anchors={anchors} links={navLinks} join={site.links.register} />
+  <PhoneMenu anchors={anchors} links={menuLinks} />
   <main id="main">
     <GuideHero />
     <Volunteer events={events} />

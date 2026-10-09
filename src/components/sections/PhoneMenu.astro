@@ -13,8 +13,10 @@ const m = copy.menu;
 interface Props {
   /** the in-page anchors on this page, when it is not the home page (src/lib/links.ts) */
   anchors?: Anchors;
+  /** this page's own menu links (default: the home page's, copy.yaml → menu.links) */
+  links?: { label: string; href: string }[];
 }
-const { anchors } = Astro.props;
+const { anchors, links = m.links } = Astro.props;
 const to = (href: string) => linkTo(href, anchors);
 const r = site.registrations;
 const social = m.social.map((p) => {
@@ -41,7 +43,7 @@ const pill = "rounded-pill border-line border-ink bg-paper px-[11px] py-[5px]";
   >{m.close} <span aria-hidden="true">✕</span></button>
   <nav class="mlinks relative z-2 flex flex-col" aria-label={m.label}>
     {
-      m.links.map((l) => (
+      links.map((l) => (
         <a
           class="big flex items-center justify-between border-b-line border-ink py-2.5 font-pi-display text-46 leading-title font-extrabold tracking-title max-tab:text-40"
           href={to(l.href)}

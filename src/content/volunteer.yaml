@@ -10,6 +10,18 @@ meta:
   title: Weekend volunteering in Bengaluru (Bangalore) · Proud Indian
   description: "Volunteer with children in Bangalore at weekends: maths, Spoken English, art & craft and drives in Bellandur and Iblur. 18+, free, no experience needed."
 
+# The guide's own header and phone menu links (the home page's are in copy.yaml → nav and menu). `spy` lights the
+# header link while its section is on screen. The header's join button goes straight to the dashboard's register page.
+nav:
+  links:
+    - { label: Sessions, href: "#volunteer", spy: volunteer }
+    - { label: What you’ll do, href: "#programmes", spy: do }
+    - { label: Where, href: "#where", spy: where }
+    - { label: Internships, href: "#internships", spy: internships }
+    - { label: FAQ, href: "#faq", spy: faq }
+  # the phone menu's first link, back to the home page
+  home: Home
+
 hero:
   eyebrow: Volunteer in Bengaluru
   heading: { before: Weekend volunteering in, accent: Bengaluru. }

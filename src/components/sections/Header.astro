@@ -10,8 +10,12 @@ const nav = copy.nav;
 interface Props {
   /** the in-page anchors on this page, when it is not the home page (src/lib/links.ts) */
   anchors?: Anchors;
+  /** this page's own nav links (default: the home page's, copy.yaml → nav.links) */
+  links?: { label: string; href: string; spy: string }[];
+  /** where "Become an Optimist" goes (default: the volunteer section) */
+  join?: string;
 }
-const { anchors } = Astro.props;
+const { anchors, links = nav.links, join = "#volunteer" } = Astro.props;
 const to = (href: string) => linkTo(href, anchors);
 ---
 
@@ -31,7 +35,7 @@ const to = (href: string) => linkTo(href, anchors);
       >
       <ul class="links ml-3 flex gap-0.5 font-pi-sans text-14 font-medium max-nav:hidden">
         {
-          nav.links.map((l) => (
+          links.map((l) => (
             <li>
               <a href={to(l.href)} data-spy-link={l.spy} class="flex items-center gap-[7px] rounded-pill px-3 py-[9px]">
                 <i aria-hidden="true" class="size-2 rounded-round border-line border-ink" />
@@ -47,7 +51,7 @@ const to = (href: string) => linkTo(href, anchors);
       data-reveal="rise"
       data-y="-16"
     >
-      <Button href={to("#volunteer")} class="px-[18px] py-[11px] text-14 max-tab:hidden">{nav.join}</Button>
+      <Button href={to(join)} class="px-[18px] py-[11px] text-14 max-tab:hidden">{nav.join}</Button>
       <Button href={to("#donate")} variant="donate" class="px-[18px] py-[11px] text-14 max-[359px]:px-3.5">{nav.donate}</Button>
       <button
         class="burger hidden size-11 cursor-pointer place-items-center rounded-round border-line border-ink bg-ink max-nav:grid"

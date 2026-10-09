@@ -530,7 +530,7 @@ async function lockPhoneMenu(browser, url) {
 }
 
 // ---------- the volunteer guide (/volunteer/): it loads clean, reveals and loops run, the FAQ opens and closes, its own
-// sections stay in-page and the rest of the header goes to the home page; and the home page links to it
+// own nav and its scroll-spy work; and the home page links to it
 async function guide(browser, url) {
   const r = {};
   const { ctx, page, errors } = await open(
@@ -553,11 +553,24 @@ async function guide(browser, url) {
   await q.locator("summary").click();
   r["guide: FAQ opens and closes"] =
     opened && !(await q.evaluate((d) => d.open));
-  r["guide: header links"] = await page.evaluate(
+  r["guide: own nav links"] = await page.evaluate(
     () =>
-      document.querySelector('.site-hd a[href="#volunteer"]') !== null &&
+      [...document.querySelectorAll(".site-hd [data-spy-link]")]
+        .map((a) => a.getAttribute("href"))
+        .join() === "#volunteer,#programmes,#where,#internships,#faq" &&
       document.querySelector('.site-hd a[href="/#donate"]') !== null &&
-      document.querySelector('.site-hd a[href="/#reports"]') !== null
+      document.querySelector(
+        '.site-hd a[href^="https://dash.proudindian.ngo/register"]'
+      ) !== null &&
+      document.querySelector('#menu a[href="/"]') !== null
+  );
+  await page.evaluate(() =>
+    document.querySelector("#faq").scrollIntoView({ behavior: "instant" })
+  );
+  r["guide: nav lights the section in view"] = await until(page, () =>
+    document
+      .querySelector('.site-hd [data-spy-link="faq"]')
+      .matches(".on, [aria-current]")
   );
   await page.evaluate(() =>
     document

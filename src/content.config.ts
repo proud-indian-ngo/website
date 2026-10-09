@@ -461,6 +461,14 @@ const volunteer = defineCollection({
   loader: single("volunteer"),
   schema: z.object({
     meta: z.object({ title: z.string(), description: z.string() }),
+    nav: z.object({
+      links: z
+        .array(
+          z.object({ label: z.string(), href: z.string(), spy: z.string() })
+        )
+        .min(1),
+      home: z.string(),
+    }),
     hero: z.object({
       eyebrow: z.string(),
       heading,
