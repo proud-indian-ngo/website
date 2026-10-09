@@ -277,6 +277,7 @@ const copy = defineCollection({
       steps: z.array(z.string()).length(3),
       join: z.string(),
       joinNote: z.string(),
+      guide: z.string(),
       poster: z.object({
         kicker: z.string(),
         open: z.string(),
@@ -455,6 +456,71 @@ const privacy = defineCollection({
   }),
 });
 
+/** /volunteer/: the volunteer guide (src/content/volunteer.yaml) */
+const volunteer = defineCollection({
+  loader: single("volunteer"),
+  schema: z.object({
+    meta: z.object({ title: z.string(), description: z.string() }),
+    hero: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      join: z.string(),
+      sessions: z.string(),
+      facts: z.array(z.string()).min(1),
+      kids: z.array(z.object({ image: asset, label: z.string() })).length(2),
+    }),
+    do: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      cards: z
+        .array(
+          z.object({
+            programme: z.string(),
+            when: z.string(),
+            photo: z.number().int().min(0),
+          })
+        )
+        .min(1),
+      cta: z.string(),
+    }),
+    where: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      areas: z.string(),
+      centre: z.object({
+        kicker: z.string(),
+        does: z.string(),
+        items: z.array(z.string()),
+        directions: z.string(),
+      }),
+      photo: pic.extend({ caption: z.string() }),
+    }),
+    internships: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      steps: z.array(z.string()).min(1),
+      apply: z.string(),
+      button: z.string(),
+      subject: z.string(),
+      ticket: z.object({
+        kicker: z.string(),
+        title: z.string(),
+        rail: z.array(z.string()).length(3),
+        stub: z.string(),
+      }),
+    }),
+    faq: z.object({
+      eyebrow: z.string(),
+      heading,
+      items: z.array(z.object({ q: z.string(), a: z.string() })).min(1),
+    }),
+  }),
+});
+
 export const collections = {
   site,
   programmes,
@@ -463,4 +529,5 @@ export const collections = {
   trustees,
   copy,
   privacy,
+  volunteer,
 };

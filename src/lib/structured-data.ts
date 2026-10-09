@@ -1,6 +1,6 @@
 /**
- * schema.org JSON-LD for the home page: the NGO, the website, and one Event per upcoming session from the build's
- * events feed. Search engines and AI agents read it to answer "where can I volunteer at weekends in Bangalore?".
+ * schema.org JSON-LD. The home page: the NGO, the website, and one Event per upcoming session from the build's
+ * events feed. The volunteer guide (/volunteer/): the page, its FAQ and the same sessions. Search engines and AI agents read it to answer "where can I volunteer at weekends in Bangalore?".
  * Facts come from site.yaml and copy.yaml, sessions from the pi-dash feed (src/lib/events/load.ts), so nothing here
  * needs editing by hand. The browser refresh does not touch it; the rebuild on every events change keeps it current.
  */
@@ -143,6 +143,61 @@ export function homeStructuredData(
     "@graph": [
       ngo,
       website,
+      ...events.map((e) => sessionEvent(e, origin, orgId)),
+    ],
+  };
+}
+
+/**
+ * The volunteer guide: the page (about the NGO, with a breadcrumb home), its FAQ and the upcoming sessions. `faq`
+ * answers are the HTML the page shows (Google allows links and basic markup in an Answer).
+ */
+export function volunteerStructuredData(
+  page: { url: string; title: string; description: string },
+  faq: { q: string; a: string }[],
+  events: PublicEvent[],
+  origin: string
+) {
+  const orgId = new URL("/#organization", origin).href;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": page.url,
+        url: page.url,
+        name: page.title,
+        description: page.description,
+        inLanguage: "en-IN",
+        isPartOf: { "@id": new URL("/#website", origin).href },
+        about: { "@id": orgId },
+        breadcrumb: {
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Home",
+              item: new URL("/", origin).href,
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: "Volunteer",
+              item: page.url,
+            },
+          ],
+        },
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${page.url}#faq`,
+        mainEntity: faq.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      },
       ...events.map((e) => sessionEvent(e, origin, orgId)),
     ],
   };

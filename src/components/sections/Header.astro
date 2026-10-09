@@ -1,11 +1,18 @@
 ---
 /** Header: split sticker pills on desktop, a burger that opens the poster menu below 1180px. */
 import { getCopy } from "../../lib/content";
+import { type Anchors, linkTo } from "../../lib/links";
 import Lockup from "../brand/Lockup.astro";
 import Button from "../ui/Button.astro";
 
 const copy = await getCopy();
 const nav = copy.nav;
+interface Props {
+  /** the in-page anchors on this page, when it is not the home page (src/lib/links.ts) */
+  anchors?: Anchors;
+}
+const { anchors } = Astro.props;
+const to = (href: string) => linkTo(href, anchors);
 ---
 
 <a class="skip" href="#main">{nav.skip}</a>
@@ -19,14 +26,14 @@ const nav = copy.nav;
       data-reveal="rise"
       data-y="-16"
     >
-      <a class="logo tap-44 flex items-center text-ink" href="#top" aria-label={nav.logoLabel}
+      <a class="logo tap-44 flex items-center text-ink" href={to("#top")} aria-label={nav.logoLabel}
         ><Lockup class="lk block aspect-[6.2877] h-7 w-auto max-tab:h-6 max-[359px]:h-[18px]" /></a
       >
       <ul class="links ml-3 flex gap-0.5 font-pi-sans text-14 font-medium max-nav:hidden">
         {
           nav.links.map((l) => (
             <li>
-              <a href={l.href} data-spy-link={l.spy} class="flex items-center gap-[7px] rounded-pill px-3 py-[9px]">
+              <a href={to(l.href)} data-spy-link={l.spy} class="flex items-center gap-[7px] rounded-pill px-3 py-[9px]">
                 <i aria-hidden="true" class="size-2 rounded-round border-line border-ink" />
                 {l.label}
               </a>
@@ -40,8 +47,8 @@ const nav = copy.nav;
       data-reveal="rise"
       data-y="-16"
     >
-      <Button href="#volunteer" class="px-[18px] py-[11px] text-14 max-tab:hidden">{nav.join}</Button>
-      <Button href="#donate" variant="donate" class="px-[18px] py-[11px] text-14 max-[359px]:px-3.5">{nav.donate}</Button>
+      <Button href={to("#volunteer")} class="px-[18px] py-[11px] text-14 max-tab:hidden">{nav.join}</Button>
+      <Button href={to("#donate")} variant="donate" class="px-[18px] py-[11px] text-14 max-[359px]:px-3.5">{nav.donate}</Button>
       <button
         class="burger hidden size-11 cursor-pointer place-items-center rounded-round border-line border-ink bg-ink max-nav:grid"
         type="button"

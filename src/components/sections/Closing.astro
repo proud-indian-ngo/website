@@ -2,6 +2,7 @@
 /** Closing call to action: "See you this weekend?", the taped photo strip and the street scene. */
 import MarginDoodles from "../margins/MarginDoodles.astro";
 import { getCopy, getSite } from "../../lib/content";
+import { type Anchors, linkTo } from "../../lib/links";
 import { asset } from "../../lib/images";
 import ClosingBird from "../doodles/ClosingBird.astro";
 import ClosingPlane from "../doodles/ClosingPlane.astro";
@@ -15,6 +16,12 @@ import Polaroid from "../ui/Polaroid.astro";
 
 const { closing: c } = await getCopy();
 const site = await getSite();
+interface Props {
+  /** the in-page anchors on this page, when it is not the home page (src/lib/links.ts) */
+  anchors?: Anchors;
+}
+const { anchors } = Astro.props;
+const to = (href: string) => linkTo(href, anchors);
 const cta = "min-h-12 max-tab:px-5.5 max-tab:py-3.5 max-tab:text-16-5";
 ---
 
@@ -58,7 +65,7 @@ const cta = "min-h-12 max-tab:px-5.5 max-tab:py-3.5 max-tab:text-16-5";
       <div
         class="ft-ctas mt-8 flex flex-wrap items-center justify-center gap-3.5 max-tab:mt-6.5 max-tab:gap-3"
       >
-        <Button href="#volunteer" size="lg" class={cta} arrow>{c.join}</Button><Button
+        <Button href={to("#volunteer")} size="lg" class={cta} arrow>{c.join}</Button><Button
           class={cta}
           href={site.links.razorpay.base}
           variant="donate"

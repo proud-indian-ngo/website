@@ -8,6 +8,7 @@
  * Writes a Markdown table to $GITHUB_STEP_SUMMARY when it is set. Run `bun run build` first.
  *
  *   bun run qa:lighthouse              RUNS=1 bun run qa:lighthouse
+ *   PAGES=volunteer/ bun run qa:lighthouse   (default: the home page and the volunteer guide)
  */
 import { appendFileSync, existsSync } from "node:fs";
 
@@ -23,32 +24,39 @@ const PERF_MIN = Number(process.env.PERF_MIN ?? 90);
 const CLS_MAX = 0.1;
 const TBT_MAX = 200;
 const PORT = 4401;
+const PAGES = (process.env.PAGES ?? ",volunteer/").split(",");
 
 const server = await serve(DIST, PORT);
 const failures = [];
 const rows = [];
 try {
-  const lh = await runLighthouse(`http://127.0.0.1:${PORT}/`, {
-    runs: Number(process.env.RUNS ?? 3),
-  });
-  for (const [form, r] of Object.entries(lh)) {
-    const m = r.median;
-    const { LCP, TBT, CLS, FCP } = r.metrics;
-    for (const c of ["accessibility", "best-practices", "seo"])
-      if (m[c] < 100) failures.push(`${form} ${c} ${m[c]} (needs 100)`);
-    if (m.performance < PERF_MIN)
-      failures.push(`${form} performance ${m.performance} (needs ${PERF_MIN})`);
-    if (CLS > CLS_MAX)
-      failures.push(`${form} CLS ${CLS.toFixed(3)} (max ${CLS_MAX})`);
-    if (TBT > TBT_MAX)
-      failures.push(`${form} TBT ${Math.round(TBT)}ms (max ${TBT_MAX}ms)`);
-    rows.push(
-      `| ${form} | ${m.performance} (${r.scores.performance.join(", ")}) | ${m.accessibility} | ${m["best-practices"]} | ${m.seo} | ${Math.round(FCP)}ms | ${Math.round(LCP)}ms | ${Math.round(TBT)}ms | ${CLS.toFixed(3)} |`
-    );
-    console.log(
-      `${form}: performance ${m.performance} (runs ${r.scores.performance.join(", ")}) / accessibility ${m.accessibility} / best-practices ${m["best-practices"]} / seo ${m.seo}; FCP ${Math.round(FCP)}ms LCP ${Math.round(LCP)}ms TBT ${Math.round(TBT)}ms CLS ${CLS.toFixed(3)}`
-    );
-    if (r.failing.length) console.log(`  not perfect: ${r.failing.join("; ")}`);
+  for (const path of PAGES) {
+    const lh = await runLighthouse(`http://127.0.0.1:${PORT}/${path}`, {
+      runs: Number(process.env.RUNS ?? 3),
+    });
+    for (const [device, r] of Object.entries(lh)) {
+      const form = `/${path} ${device}`;
+      const m = r.median;
+      const { LCP, TBT, CLS, FCP } = r.metrics;
+      for (const c of ["accessibility", "best-practices", "seo"])
+        if (m[c] < 100) failures.push(`${form} ${c} ${m[c]} (needs 100)`);
+      if (m.performance < PERF_MIN)
+        failures.push(
+          `${form} performance ${m.performance} (needs ${PERF_MIN})`
+        );
+      if (CLS > CLS_MAX)
+        failures.push(`${form} CLS ${CLS.toFixed(3)} (max ${CLS_MAX})`);
+      if (TBT > TBT_MAX)
+        failures.push(`${form} TBT ${Math.round(TBT)}ms (max ${TBT_MAX}ms)`);
+      rows.push(
+        `| ${form} | ${m.performance} (${r.scores.performance.join(", ")}) | ${m.accessibility} | ${m["best-practices"]} | ${m.seo} | ${Math.round(FCP)}ms | ${Math.round(LCP)}ms | ${Math.round(TBT)}ms | ${CLS.toFixed(3)} |`
+      );
+      console.log(
+        `${form}: performance ${m.performance} (runs ${r.scores.performance.join(", ")}) / accessibility ${m.accessibility} / best-practices ${m["best-practices"]} / seo ${m.seo}; FCP ${Math.round(FCP)}ms LCP ${Math.round(LCP)}ms TBT ${Math.round(TBT)}ms CLS ${CLS.toFixed(3)}`
+      );
+      if (r.failing.length)
+        console.log(`  not perfect: ${r.failing.join("; ")}`);
+    }
   }
 } finally {
   server.close();

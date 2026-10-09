@@ -479,10 +479,63 @@ async function lockChecks(browser, url) {
   return r;
 }
 
+/** The volunteer guide (/volunteer/): it loads clean, reveals and loops run, the FAQ opens and closes, its own
+ *  sections stay in-page and the rest of the header goes to the home page, and the home page links to it. */
+async function guideChecks(browser, site) {
+  const r = {};
+  const url = new URL("volunteer/", site).href;
+  {
+    const { ctx, page, errors } = await open(browser, url);
+    r["guide: js-reveal wired"] = await page.evaluate(() =>
+      document.documentElement.classList.contains("js-reveal")
+    );
+    r["guide: one h1, FAQPage data"] = await page.evaluate(
+      () =>
+        document.querySelectorAll("h1").length === 1 &&
+        [
+          ...document.querySelectorAll('script[type="application/ld+json"]'),
+        ].some((s) => s.textContent.includes('"FAQPage"'))
+    );
+    const q = page.locator(".vg-q").nth(1);
+    await q.locator("summary").click();
+    const opened = await q.evaluate((d) => d.open);
+    await q.locator("summary").click();
+    r["guide: FAQ opens and closes"] =
+      opened && !(await q.evaluate((d) => d.open));
+    r["guide: header links"] = await page.evaluate(
+      () =>
+        document.querySelector('.site-hd a[href="#volunteer"]') !== null &&
+        document.querySelector('.site-hd a[href="/#donate"]') !== null &&
+        document.querySelector('.site-hd a[href="/#reports"]') !== null
+    );
+    await page.evaluate(() =>
+      document
+        .querySelector("#internships")
+        .scrollIntoView({ block: "center", behavior: "instant" })
+    );
+    await sleep(700);
+    r["guide: sparkle loop runs in view"] = await page.evaluate(
+      () =>
+        !document.querySelector(".vg-kspark").classList.contains("is-paused")
+    );
+    r["guide: no console errors"] = errors.length === 0 || errors.join(" | ");
+    await ctx.close();
+  }
+  {
+    const { ctx, page } = await open(browser, site);
+    r["home links to the guide"] = await page.evaluate(
+      () => document.querySelectorAll('a[href="/volunteer/"]').length >= 2
+    );
+    await ctx.close();
+  }
+  return r;
+}
+
 const browser = await chromium.launch();
 const s = {
   ...(await run(browser, SITE, "site")),
   ...(await lockChecks(browser, SITE)),
+  ...(await guideChecks(browser, SITE)),
 };
 await browser.close();
 const skipped = (v) => String(v).startsWith("skipped");

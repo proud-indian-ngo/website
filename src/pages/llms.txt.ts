@@ -11,10 +11,12 @@ import {
   getProgrammes,
   getReports,
   getSite,
+  getVolunteerPage,
   postalAddress,
 } from "../lib/content";
 import { dateLabel, timeRange } from "../lib/events/format";
 import { loadEvents } from "../lib/events/load";
+import { guideValues, plain } from "../lib/inline";
 
 export const GET: APIRoute = async ({ site: origin }) => {
   const [site, copy, programmes, kalakriti, reports, events] =
@@ -26,6 +28,8 @@ export const GET: APIRoute = async ({ site: origin }) => {
       getReports(),
       loadEvents(),
     ]);
+  const guide = await getVolunteerPage();
+  const values = guideValues(site);
   const abs = (path: string) => new URL(path, origin ?? site.url).href;
   const r = site.registrations;
   const v = copy.volunteer;
@@ -35,7 +39,7 @@ export const GET: APIRoute = async ({ site: origin }) => {
   const lines = [
     `# ${site.name}`,
     "",
-    `> ${site.name} is a volunteer-run NGO in Bengaluru (Bangalore), India, founded on ${site.founded.long}. Its volunteers, called Optimists, spend weekends with children in Bengaluru's low-income communities: maths and Spoken English classes, art and craft, shared meals, community days and the Kalakriti festival. Anyone can join, and no experience is needed.`,
+    `> ${site.name} is a volunteer-run NGO in Bengaluru (Bangalore), India, founded on ${site.founded.long}. Its volunteers, called Optimists, spend weekends with children in Bengaluru's low-income communities: maths and Spoken English classes, art and craft, shared meals, community days and the Kalakriti festival. Anyone aged 18 or over can join, and no experience is needed.`,
     "",
     "## Weekend volunteering in Bengaluru",
     "",
@@ -47,7 +51,7 @@ export const GET: APIRoute = async ({ site: origin }) => {
     "",
     `- [Register as a volunteer](${site.links.register}): create an account on the Proud Indian dashboard, then show interest in a session.`,
     `- [Every upcoming session](${site.links.events}): the dashboard's list, after signing in.`,
-    `- [Volunteer section of the website](${abs("/#volunteer")})`,
+    `- [Volunteer guide](${abs("/volunteer/")}): what you'd do, where we meet, internships and the FAQ.`,
     `- Questions about volunteering or internships: ${site.contacts.emails.find((e) => /volunteer/i.test(e.label))?.address ?? site.contacts.emails[0]?.address}, or call or WhatsApp ${site.contacts.phone.display}.`,
     "",
     "## Upcoming sessions",
@@ -72,6 +76,14 @@ export const GET: APIRoute = async ({ site: origin }) => {
           `New sessions go up on the [dashboard](${site.links.events}) first, usually for the coming weekends.`,
         ]),
     "",
+    "## Volunteering FAQ",
+    "",
+    ...guide.faq.items.flatMap((f) => [
+      `### ${f.q}`,
+      "",
+      plain(f.a, values),
+      "",
+    ]),
     "## Programmes",
     "",
     ...programmes.map((p) =>

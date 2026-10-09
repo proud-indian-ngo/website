@@ -20,9 +20,11 @@ import Sticker from "../ui/Sticker.astro";
 
 interface Props {
   events: LoadedEvents;
+  /** link to the volunteer guide under the join button (the home page; the guide itself leaves it out) */
+  guide?: string;
 }
 
-const { events } = Astro.props;
+const { events, guide } = Astro.props;
 const { volunteer: v } = await getCopy();
 const site = await getSite();
 const labels: EventLabels = {
@@ -120,6 +122,16 @@ const state = {
               arrow>{v.join}</Button
             >
             <p class="cnote font-pi-sans text-13 font-semibold tracking-caption text-text-muted">{v.joinNote}</p>
+            {
+              guide && (
+                <a
+                  class="tap-44 font-pi-sans text-15 font-semibold text-sky-ink underline decoration-[1.5px] underline-offset-4"
+                  href={guide}
+                >
+                  {v.guide} <span aria-hidden="true">→</span>
+                </a>
+              )
+            }
           </div>
         </div>
         <div class="cr relative pt-1" data-events-source={events.source}>

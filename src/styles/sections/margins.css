@@ -73,6 +73,11 @@
   --cl: 620px; /* the 1328px footer */
   --cr: 620px;
 }
+/* the volunteer guide's sections: the 1264px section width, plus the hero's cut-outs and the cards' overhang */
+.mg:is(.vhero, .vdo, .vwhere, .vint, .vfaq) {
+  --cl: 660px;
+  --cr: 660px;
+}
 /* layers that sit inside a content-width block: span the viewport so the gutter maths matches */
 .mg.tr,
 .mg.rp {
@@ -120,7 +125,18 @@
 }
 /* when each layer appears: once its gutter is wide enough */
 @media (width >= 1440px) {
-  :is(.mg.vol, .mg.don, .mg.tr, .mg.rp, .mg.ft) {
+  :is(
+    .mg.vol,
+    .mg.don,
+    .mg.tr,
+    .mg.rp,
+    .mg.ft,
+    .mg.vhero,
+    .mg.vdo,
+    .mg.vwhere,
+    .mg.vint,
+    .mg.vfaq
+  ) {
     display: block;
   }
   /* the footer's own scatter replaces its fixed margin set (FooterMargins.astro, kept below 1440px) */

@@ -3,11 +3,12 @@
 # programme bands in programmes/; Kalakriti in kalakriti.yaml; documents in reports.yaml; people in trustees.yaml.
 # "accent" is the one highlighted word of a headline.
 
-# The home page's <title> and description: what search results and AI answers show. They lead with what people
-# search for ("weekend volunteering", Bengaluru and Bangalore); keep both city names.
+# The home page's <title> and description: what search results and AI answers show. The home page ranks for the NGO
+# itself; "weekend volunteering in Bengaluru" belongs to the volunteer guide (volunteer.yaml → meta), so the two pages
+# don't compete for it. Keep both city names: people search for both.
 meta:
-  title: Weekend volunteering in Bengaluru · Proud Indian
-  description: Weekend volunteering in Bangalore with Proud Indian, a volunteer-run NGO. Teach maths, Spoken English and art to children. No experience needed.
+  title: Proud Indian · Volunteer-run NGO in Bengaluru (Bangalore)
+  description: Proud Indian is a volunteer-run NGO in Bangalore. At weekends, our volunteers teach maths, Spoken English and art to children. No experience needed.
 
 nav:
   skip: Skip to content
@@ -94,6 +95,8 @@ volunteer:
     [Register on the dashboard, Tap “Show interest”, "Get approved, show up"]
   join: Become an Optimist
   joinNote: Opens dash.proudindian.ngo
+  # home page only: the link to /volunteer/ (FAQ, internships, where we meet)
+  guide: Questions? Read the volunteer guide
   poster:
     { kicker: Next up, open: Open to everyone, register: Register to join }
   posterKid:
@@ -262,7 +265,7 @@ footer:
   links:
     - { label: Programmes, href: "#programmes" }
     - { label: Kalakriti, href: "#kalakriti" }
-    - { label: Volunteer, href: "#volunteer" }
+    - { label: Volunteer, href: /volunteer/ }
     - { label: Donate, href: "#donate" }
     - { label: Reports, href: "#reports" }
     - { label: About, href: "#about" }

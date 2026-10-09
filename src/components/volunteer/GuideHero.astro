@@ -1,0 +1,98 @@
+---
+/**
+ * Volunteer guide hero: "Weekend volunteering in Bengaluru." on cyan with two cut-out kids, the sun and a sparkle,
+ * the two calls to action and the quick facts. Copy: volunteer.yaml → hero.
+ */
+import { getSite, getVolunteerPage } from "../../lib/content";
+import { asset } from "../../lib/images";
+import HandsUp from "../doodles/HandsUp.astro";
+import HeroSun from "../doodles/HeroSun.astro";
+import Sparkle from "../doodles/Sparkle.astro";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import AccentWord from "../ui/AccentWord.astro";
+import Button from "../ui/Button.astro";
+import Sticker from "../ui/Sticker.astro";
+
+const { hero: h } = await getVolunteerPage();
+const site = await getSite();
+const [k1, k2] = h.kids;
+---
+
+<div class="s-hero relative" id="top">
+  <section
+    class="vg-hero relative overflow-hidden bg-sky px-14 pt-[150px] pb-28 max-tab:px-5 max-tab:pt-[104px] max-tab:pb-14"
+    aria-labelledby="vg-h"
+  >
+    <MarginDoodles set="vhero" tone="sky" />
+    <div class="relative z-2 mx-auto max-w-section" data-stagger="80">
+      <p
+        class="mb-6 inline-flex items-center gap-2 rounded-pill border-line border-ink bg-white py-1 pr-3.5 pl-1.5 font-pi-sans text-15 font-semibold"
+        data-reveal="rise"
+      >
+        <HandsUp class="pi-doodle w-[26px]" aria-hidden="true" />{h.eyebrow}
+      </p>
+      <h1
+        id="vg-h"
+        class="vg-h1 font-pi-display leading-[.88] font-extrabold tracking-poster text-balance"
+        data-reveal="wipe"
+      >
+        {h.heading.before} <AccentWord variant="outline" class="relative inline-block">{h.heading.accent}</AccentWord>
+      </h1>
+      <p
+        class="mt-7 max-w-[46ch] font-pi-sans text-20 leading-lede text-pretty max-tab:mt-5 max-tab:text-17"
+        data-reveal="rise"
+      >
+        {h.lede}
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-3 max-tab:mt-6" data-reveal="rise">
+        <Button href={site.links.register} size="lg" arrow>{h.join}</Button>
+        <Button href="#volunteer" variant="ghost" size="lg">{h.sessions}</Button>
+      </div>
+      <ul class="vg-facts mt-9 flex flex-wrap gap-2.5 max-tab:mt-7" aria-label="At a glance">
+        {
+          h.facts.map((f) => (
+            <li class="inline-flex items-center gap-2 rounded-pill border-line border-ink bg-paper py-1.5 pr-4 pl-2 font-pi-sans text-15 font-semibold max-tab:text-14">
+              <svg viewBox="0 0 20 20" class="vg-tick size-5 flex-none" aria-hidden="true">
+                <circle cx="10" cy="10" r="8.6" />
+                <path d="M6.2 10.4L8.8 12.9L13.9 7.4" />
+              </svg>
+              {f}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div class="vg-kids" data-stagger="0">
+      <HeroSun class="sun loop vg-sun overflow-visible" aria-hidden="true" />
+      <Sparkle class="vg-spark" data-reveal="slap" data-at="700" aria-hidden="true" />
+      {
+        k1 && (
+          <Sticker
+            class="vg-k1 wob"
+            src={asset(k1.image)}
+            alt={k1.label}
+            width={300}
+            phone="44vw"
+            eager
+            data-reveal="slap"
+            data-at="300"
+          />
+        )
+      }
+      {
+        k2 && (
+          <Sticker
+            class="vg-k2 wob"
+            src={asset(k2.image)}
+            alt={k2.label}
+            width={280}
+            phone="40vw"
+            eager
+            data-reveal="slap"
+            data-at="480"
+          />
+        )
+      }
+    </div>
+  </section>
+</div>

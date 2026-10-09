@@ -3,7 +3,8 @@
 # Each moves permanently to where that content lives now, so search ranking and inbound links carry over. The old
 # site answered both /page.php and /page, so both are listed. Keep them: old links live on in other sites for years.
 
-# Pages: to the section of the one-page site that replaced them. "Know your benefits" has no new page.
+# Pages: to the page or section that replaced them (volunteering, the FAQ and internships: the volunteer guide).
+# "Know your benefits" has no new page.
 /index.php                                                  /                                                          301
 /index                                                      /                                                          301
 /about-us.php                                               /#about                                                    301
@@ -12,24 +13,24 @@
 /contact-us                                                 /#about                                                    301
 /initiatives.php                                            /#programmes                                               301
 /initiatives                                                /#programmes                                               301
-/get-involved.php                                           /#volunteer                                                301
-/get-involved                                               /#volunteer                                                301
-/optimist-join-now.php                                      /#volunteer                                                301
-/optimist-join-now                                          /#volunteer                                                301
-/lead-optimist.php                                          /#volunteer                                                301
-/lead-optimist                                              /#volunteer                                                301
-/event-calendar.php                                         /#volunteer                                                301
-/event-calendar                                             /#volunteer                                                301
-/internships.php                                            /#volunteer                                                301
-/internships                                                /#volunteer                                                301
-/faq.php                                                    /#volunteer                                                301
-/faq                                                        /#volunteer                                                301
-/optimist-testimonial-shilpa.php                            /#volunteer                                                301
-/optimist-testimonial-shilpa                                /#volunteer                                                301
-/optimist-testimonial_Beni.php                              /#volunteer                                                301
-/optimist-testimonial_Beni                                  /#volunteer                                                301
-/optimist-testimonial_pavish.php                            /#volunteer                                                301
-/optimist-testimonial_pavish                                /#volunteer                                                301
+/get-involved.php                                           /volunteer/                                                301
+/get-involved                                               /volunteer/                                                301
+/optimist-join-now.php                                      /volunteer/                                                301
+/optimist-join-now                                          /volunteer/                                                301
+/lead-optimist.php                                          /volunteer/                                                301
+/lead-optimist                                              /volunteer/                                                301
+/event-calendar.php                                         /volunteer/#volunteer                                      301
+/event-calendar                                             /volunteer/#volunteer                                      301
+/internships.php                                            /volunteer/#internships                                    301
+/internships                                                /volunteer/#internships                                    301
+/faq.php                                                    /volunteer/#faq                                            301
+/faq                                                        /volunteer/#faq                                            301
+/optimist-testimonial-shilpa.php                            /volunteer/                                                301
+/optimist-testimonial-shilpa                                /volunteer/                                                301
+/optimist-testimonial_Beni.php                              /volunteer/                                                301
+/optimist-testimonial_Beni                                  /volunteer/                                                301
+/optimist-testimonial_pavish.php                            /volunteer/                                                301
+/optimist-testimonial_pavish                                /volunteer/                                                301
 /donate-now.php                                             /#donate                                                   301
 /donate-now                                                 /#donate                                                   301
 /annual-reports.php                                         /#reports                                                  301

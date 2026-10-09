@@ -1,6 +1,7 @@
 ---
 /** Phone and tablet poster menu: full-screen cyan dialog opened from the header burger. */
 import { getCopy, getSite } from "../../lib/content";
+import { type Anchors, linkTo } from "../../lib/links";
 import { asset } from "../../lib/images";
 import { socialIcons } from "../../lib/social";
 import Lockup from "../brand/Lockup.astro";
@@ -9,6 +10,12 @@ import Sticker from "../ui/Sticker.astro";
 const copy = await getCopy();
 const site = await getSite();
 const m = copy.menu;
+interface Props {
+  /** the in-page anchors on this page, when it is not the home page (src/lib/links.ts) */
+  anchors?: Anchors;
+}
+const { anchors } = Astro.props;
+const to = (href: string) => linkTo(href, anchors);
 const r = site.registrations;
 const social = m.social.map((p) => {
   const s = site.social.find((x) => x.network === p.network);
@@ -23,7 +30,7 @@ const pill = "rounded-pill border-line border-ink bg-paper px-[11px] py-[5px]";
   id="menu" role="dialog" aria-modal="true" aria-label={m.label} hidden>
   <a
     class="slogo absolute top-5.5 left-[max(--spacing(6),env(safe-area-inset-left))] text-ink max-tab:top-5 max-tab:left-5"
-    href="#top"
+    href={to("#top")}
     aria-label={copy.nav.logoLabel}
     data-menu-link><Lockup class="block aspect-[6.2877] h-7 w-auto max-tab:h-6" /></a
   >
@@ -37,7 +44,7 @@ const pill = "rounded-pill border-line border-ink bg-paper px-[11px] py-[5px]";
       m.links.map((l) => (
         <a
           class="big flex items-center justify-between border-b-line border-ink py-2.5 font-pi-display text-46 leading-title font-extrabold tracking-title max-tab:text-40"
-          href={l.href}
+          href={to(l.href)}
           data-menu-link
         >
           {l.label} <span aria-hidden="true">→</span>

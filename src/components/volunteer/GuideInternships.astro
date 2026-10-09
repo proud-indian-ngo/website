@@ -1,0 +1,90 @@
+---
+/**
+ * Volunteer guide, internships: interning is volunteering plus a letter for the hours. Three steps, how to ask, and
+ * the "Admit one · Intern" ticket (a mailto link to the volunteering address). Copy: volunteer.yaml → internships.
+ */
+import { getVolunteerPage } from "../../lib/content";
+import { inline } from "../../lib/inline";
+import KalaSparkle from "../doodles/KalaSparkle.astro";
+import TicketArrow from "../doodles/TicketArrow.astro";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import AccentWord from "../ui/AccentWord.astro";
+import Button from "../ui/Button.astro";
+import Ticket from "../ui/Ticket.astro";
+
+interface Props {
+  /** {placeholders} for the copy (src/lib/inline.ts) */
+  values: Record<string, string>;
+  /** the volunteering and internships email address */
+  email: string;
+}
+
+const { values, email } = Astro.props;
+const { internships: n } = await getVolunteerPage();
+const mailto = `mailto:${email}?subject=${encodeURIComponent(n.subject)}`;
+---
+
+<div class="s-kala">
+  <section
+    class="vg-int relative overflow-hidden bg-ink px-14 pt-28 pb-32 text-paper max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+    id="internships"
+    aria-labelledby="vg-int-h"
+  >
+    <MarginDoodles set="vint" tone="ink" />
+    <div
+      class="relative z-2 mx-auto grid max-w-section grid-cols-[1fr_minmax(0,460px)] items-center gap-18 max-lap:grid-cols-1 max-lap:gap-14"
+    >
+      <div>
+        <div data-stagger="75">
+          <p
+            class="mb-5.5 inline-flex rounded-pill border-line border-paper bg-paper px-3.5 py-1 font-pi-sans text-15 font-semibold text-ink"
+            data-reveal="rise"
+          >
+            {n.eyebrow}
+          </p>
+          <h2
+            id="vg-int-h"
+            class="font-pi-display text-96 leading-[.88] font-extrabold tracking-poster max-tab:text-56"
+            data-reveal="wipe"
+          >
+            {n.heading.before} <AccentWord variant="marigold" class="relative inline-block">{n.heading.accent}</AccentWord>
+          </h2>
+          <p
+            class="mt-6.5 max-w-[46ch] font-pi-sans text-19 leading-lede text-pretty text-paper-a90 max-tab:text-17"
+            data-reveal="rise"
+          >
+            {n.lede}
+          </p>
+        </div>
+        <ol class="mt-8 grid gap-3 font-pi-display text-21 leading-[1.15] font-extrabold tracking-label max-tab:text-18">
+          {
+            n.steps.map((s, i) => (
+              <li class="flex items-center gap-3">
+                <span class="grid size-[34px] flex-none place-items-center rounded-round border-line border-paper bg-marigold text-16 text-ink">
+                  {i + 1}
+                </span>
+                {s}
+              </li>
+            ))
+          }
+        </ol>
+        <p class="vg-int-apply mt-7 max-w-[46ch] font-pi-sans text-17 leading-body text-paper-a90" set:html={inline(n.apply, values)} />
+        <Button href={mailto} variant="donate" size="lg" class="mt-6" arrow>{n.button}</Button>
+      </div>
+      <div class="vg-int-ticket relative">
+        <KalaSparkle class="pi-doodle kspark vg-kspark loop" aria-hidden="true" />
+        <TicketArrow class="pi-doodle vg-tarr" aria-hidden="true" />
+        <Ticket
+          class="wob"
+          variant="marigold"
+          href={mailto}
+          kicker={n.ticket.kicker}
+          title={n.ticket.title}
+          arrow
+          rail={n.ticket.rail}
+          stub={n.ticket.stub}
+        />
+      </div>
+    </div>
+  </section>
+</div>

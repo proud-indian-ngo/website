@@ -13,6 +13,11 @@ export async function getCopy() {
   if (!entry) throw missing("copy");
   return entry.data;
 }
+export async function getVolunteerPage() {
+  const entry = await getEntry("volunteer", "volunteer");
+  if (!entry) throw missing("volunteer");
+  return entry.data;
+}
 export async function getKalakriti() {
   const entry = await getEntry("kalakriti", "kalakriti");
   if (!entry) throw missing("kalakriti");

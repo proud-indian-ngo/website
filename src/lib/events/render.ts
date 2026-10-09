@@ -1,3 +1,4 @@
+import { esc } from "../escape";
 /**
  * HTML for the "Next up" poster and the "More weekends" tickets. One implementation, used twice: at build time
  * (set:html in Volunteer.astro) and in the browser when the refresh finds newer data, so both always produce the
@@ -38,15 +39,6 @@ const NAMES: Record<string, string> = {
   kalakriti: "Kalakriti",
   community: "Community",
 };
-
-const esc = (s: string) =>
-  s.replace(
-    /[&<>"']/g,
-    (c) =>
-      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
-        c
-      ]!
-  );
 
 /** Programme label shown on the poster and ticket chip. */
 const programmeName = (e: PublicEvent) =>

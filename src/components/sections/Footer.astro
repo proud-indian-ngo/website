@@ -2,6 +2,7 @@
 /** Footer: contacts, registrations stamps, the Pause motion toggle (WCAG 2.2.2) and the
  *  notebook-margin doodles. */
 import { getCopy, getSite, postalAddress } from "../../lib/content";
+import { type Anchors, linkTo } from "../../lib/links";
 import { socialIcons as icons } from "../../lib/social";
 import Lockup from "../brand/Lockup.astro";
 import MarginDoodles from "../margins/MarginDoodles.astro";
@@ -10,6 +11,12 @@ import FooterMargins from "../scenes/FooterMargins.astro";
 const { footer: f } = await getCopy();
 const site = await getSite();
 const r = site.registrations;
+interface Props {
+  /** the in-page anchors on this page, when it is not the home page (src/lib/links.ts) */
+  anchors?: Anchors;
+}
+const { anchors } = Astro.props;
+const to = (href: string) => linkTo(href, anchors);
 const stamp =
   "stamp mb-3 inline-block rounded-3 bg-paper px-2.5 pt-1 pb-[3px] font-pi-sans text-13 font-bold tracking-stamp text-ink uppercase";
 const body = "font-pi-sans text-15-5 leading-copy font-normal text-paper-a90";
@@ -38,7 +45,7 @@ const link = "tap-44 font-pi-sans text-16 font-semibold wrap-anywhere";
             {
               f.links.map((l) => (
                 <li>
-                  <a href={l.href} class="tap-44 font-pi-sans text-17 font-semibold">
+                  <a href={to(l.href)} class="tap-44 font-pi-sans text-17 font-semibold">
                     {l.label}
                   </a>
                 </li>

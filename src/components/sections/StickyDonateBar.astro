@@ -1,9 +1,16 @@
 ---
 /** Phone sticky donate bar: after the hero, never over Donate, the closing section or the footer. */
 import { getCopy } from "../../lib/content";
+import { type Anchors, linkTo } from "../../lib/links";
 import Button from "../ui/Button.astro";
 
 const { stickyBar: s } = await getCopy();
+interface Props {
+  /** the in-page anchors on this page, when it is not the home page (src/lib/links.ts) */
+  anchors?: Anchors;
+}
+const { anchors } = Astro.props;
+const to = (href: string) => linkTo(href, anchors);
 ---
 
 <div
@@ -12,5 +19,5 @@ const { stickyBar: s } = await getCopy();
   inert
 >
   <span class="sbt"><b class="font-bold">{s.lead}</b>{s.rest}</span>
-  <Button class="sbb px-5 py-2.5 text-15 shadow-none" href="#donate" variant="donate">{s.donate}</Button>
+  <Button class="sbb px-5 py-2.5 text-15 shadow-none" href={to("#donate")} variant="donate">{s.donate}</Button>
 </div>

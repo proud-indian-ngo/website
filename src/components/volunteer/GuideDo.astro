@@ -1,0 +1,117 @@
+---
+/**
+ * Volunteer guide, "Pick how you help.": one card per programme (Teach, Feed, Paint, Gather) with its icon, verb, line,
+ * chips, how often it runs and a taped polaroid. Copy: volunteer.yaml → do; the programmes from programmes/*.yaml and
+ * kalakriti.yaml.
+ */
+import { getKalakriti, getProgrammes, getVolunteerPage } from "../../lib/content";
+import { asset } from "../../lib/images";
+import IndexBook from "../doodles/IndexBook.astro";
+import IndexBowl from "../doodles/IndexBowl.astro";
+import IndexBrush from "../doodles/IndexBrush.astro";
+import IndexHands from "../doodles/IndexHands.astro";
+import UnderlineLoop from "../doodles/UnderlineLoop.astro";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import AccentWord from "../ui/AccentWord.astro";
+import Button from "../ui/Button.astro";
+import Chip from "../ui/Chip.astro";
+import Polaroid from "../ui/Polaroid.astro";
+import SectionLabel from "../ui/SectionLabel.astro";
+
+const { do: d } = await getVolunteerPage();
+const programmes = await getProgrammes();
+const kala = await getKalakriti();
+const icons = { b0: IndexBook, b1: IndexBowl, kalakriti: IndexBrush, b3: IndexHands } as Record<string, typeof IndexBook>;
+
+const cards = d.cards.map((c) => {
+  const p = programmes.find((x) => x.anchor === c.programme);
+  if (!p) throw new Error(`volunteer.yaml do.cards: no programme ${c.programme}`);
+  const band = p.kind === "band" ? p : null;
+  const photo = band ? band.polaroids[c.photo] : kala.line.photos[c.photo];
+  if (!photo) throw new Error(`volunteer.yaml do.cards: ${c.programme} has no photo ${c.photo}`);
+  return {
+    ...c,
+    num: p.num,
+    name: p.name,
+    verb: p.verb,
+    line: band ? band.line : kala.tickets.note,
+    chips: band ? band.chips : kala.edition.events.slice(0, 4),
+    photo,
+    Icon: icons[c.programme],
+  };
+});
+---
+
+<section
+    class="vg-do relative overflow-hidden border-t-line border-ink bg-sky px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+    id="programmes"
+    aria-labelledby="vg-do-h"
+  >
+    <MarginDoodles set="vdo" tone="sky" />
+    <div class="relative z-2 mx-auto max-w-section">
+      <div class="max-w-[46ch]" data-stagger="75">
+        <p
+          class="mb-5.5 inline-flex rounded-pill border-line border-ink bg-white px-3.5 py-1 font-pi-sans text-15 font-semibold"
+          data-reveal="rise"
+        >
+          {d.eyebrow}
+        </p>
+        <h2
+          id="vg-do-h"
+          class="font-pi-display text-96 leading-[.88] font-extrabold tracking-poster max-tab:text-56"
+          data-reveal="wipe"
+        >
+          {d.heading.before}{" "}
+          <AccentWord variant="outline" class="relative inline-block"
+            >{d.heading.accent}<UnderlineLoop class="pi-doodle vg-uline" data-reveal="draw" data-at="560" aria-hidden="true"
+            /></AccentWord
+          >
+        </h2>
+        <p class="mt-6.5 font-pi-sans text-19 leading-lede text-pretty max-tab:text-17" data-reveal="rise">{d.lede}</p>
+      </div>
+      <ul class="vg-cards mt-16 grid grid-cols-2 gap-7 max-lap:grid-cols-1 max-tab:mt-11 max-tab:gap-6">
+        {
+          cards.map((c, i) => (
+            <li class:list={["vg-card relative", i % 2 ? "vg-card--r" : "vg-card--l"]}>
+              <article class="pi-card pi-card--paper h-full">
+                <div class="vg-card-top flex items-start justify-between gap-4">
+                  <SectionLabel num={c.num}>{c.name}</SectionLabel>
+                  <span class="vg-when">{c.when}</span>
+                </div>
+                <div class="vg-card-body">
+                  <div class="min-w-0">
+                    <h3 class="vg-verb font-pi-display leading-[.86] font-extrabold tracking-tightest">
+                      {c.Icon && <c.Icon class="pi-doodle vg-ic" aria-hidden="true" />}
+                      <span>
+                        {c.verb}<span class="text-accent-ink">.</span>
+                      </span>
+                    </h3>
+                    <p class="mt-4 mb-4.5 font-pi-sans text-17 leading-body font-medium text-pretty">{c.line}</p>
+                    <ul class="pi-chips">
+                      {c.chips.map((x) => (
+                        <Chip>{x}</Chip>
+                      ))}
+                    </ul>
+                  </div>
+                  <div class="vg-pic wob">
+                    <span class="pi-tape tape" aria-hidden="true" />
+                    <Polaroid
+                      src={asset(c.photo.image)}
+                      alt={c.photo.alt}
+                      width={200}
+                      phone="44vw"
+                      caption={c.photo.caption}
+                      position={c.photo.position}
+                    />
+                  </div>
+                </div>
+              </article>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="mt-12 flex justify-center max-tab:mt-9">
+        <Button href="#volunteer" size="lg" arrow>{d.cta}</Button>
+      </div>
+    </div>
+  </section>
