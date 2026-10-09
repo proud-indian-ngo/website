@@ -15,6 +15,16 @@
 @source not "../../README.md";
 @source not "../../scripts";
 
+/* hover for mouse and trackpad only, the site's rule for every hover effect: Tailwind's own hover: checks
+   (hover: hover) but not (pointer: fine), so a tap could leave the style stuck on some touch devices */
+@custom-variant hover-fine {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @slot;
+    }
+  }
+}
+
 @import "tailwindcss/theme.css" layer(theme);
 @import "@proudindian/design/theme.css";
 @import "@proudindian/design/tokens.css" layer(theme);

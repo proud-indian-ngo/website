@@ -117,7 +117,7 @@ GitHub Actions checks, builds and deploys (`.github/workflows/ci.yml`; the `depl
 | Trigger | Result |
 |---|---|
 | Push to `main` | Production deployment |
-| Pull request | Preview deployment at `https://<branch>.proudindian.pages.dev`, linked in the run summary. Pull requests from forks build and check but don't deploy. |
+| Pull request | Preview deployment at `https://<branch>.proudindian.pages.dev`, posted as a comment on the PR (one comment, updated on every push) and in the run summary. Pull requests from forks build and check but don't deploy. |
 | `repository_dispatch` of type `events-changed` | Rebuild with fresh sessions (for pi-dash to call when an event changes) |
 | Nightly at 06:00 IST | Rebuild, only once `PUBLIC_EVENTS_URL` is set |
 | Run workflow (Actions tab) | Manual rebuild |

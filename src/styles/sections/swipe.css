@@ -1,60 +1,8 @@
 /* Swipe rows (src/scripts/swipe.ts): the "More weekends" tickets and the Kalakriti line. No scrollbar on any device;
-   a round button at each end scrolls by about a card while there is more that way. */
+   a round button at each end (its look is utilities in swipe.ts) scrolls by about a card while there is more that way. */
 [data-swipe] {
   scrollbar-width: none;
 }
 [data-swipe]::-webkit-scrollbar {
   display: none;
-}
-.swipe-host {
-  position: relative;
-}
-.swipe-btn {
-  position: absolute;
-  z-index: 4;
-  translate: 0 -50%;
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--color-surface-paper);
-  color: var(--color-ink);
-  border: var(--line-ink);
-  box-shadow: var(--shadow-ink-sm);
-  cursor: pointer;
-  transition:
-    background-color var(--dur-fast) var(--ease-settle),
-    scale 100ms var(--ease-settle);
-}
-.swipe-btn[hidden] {
-  display: none;
-}
-.swipe-btn svg {
-  width: 22px;
-  height: 22px;
-}
-.swipe-prev {
-  left: -8px;
-}
-.swipe-prev svg {
-  rotate: 180deg;
-}
-.swipe-next {
-  right: -8px;
-}
-@media (hover: hover) and (pointer: fine) {
-  .swipe-btn:hover {
-    background: var(--color-sky);
-  }
-}
-.swipe-btn:active {
-  scale: 0.94;
-}
-.swipe-btn:focus-visible {
-  outline: var(--focus-ring);
-  outline-offset: 3px;
-}
-.s-kala .swipe-btn:focus-visible {
-  outline: var(--focus-ring-on-dark);
 }

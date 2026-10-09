@@ -21,11 +21,14 @@ const finance = site.contacts.emails.find((e) => e.label === "Donations") ?? sit
     id="main"
     class="s-hero thx relative flex min-h-dvh flex-col items-start justify-center overflow-hidden bg-sky px-14 py-24 max-tab:px-5 max-tab:py-16"
   >
-    <div class="thx-pot" aria-hidden="true">
-      <Matka />
-      <Sparkle class="pi-doodle thx-sp thx-sp1" />
-      <Sparkle class="pi-doodle thx-sp thx-sp2" />
-      <Sparkle class="pi-doodle thx-sp thx-sp3" />
+    <div
+      class="thx-pot absolute right-[7vw] bottom-[9vh] w-[clamp(180px,22vw,300px)] rotate-5 max-lap:relative max-lap:right-auto max-lap:bottom-auto max-lap:order-10 max-lap:mt-10 max-lap:mr-[12%] max-lap:w-[clamp(140px,36vw,220px)] max-lap:self-end"
+      aria-hidden="true"
+    >
+      <Matka class="thx-bob block h-auto w-full origin-bottom overflow-visible" />
+      <Sparkle class="pi-doodle thx-sp absolute top-[2%] -left-[14%] w-9" />
+      <Sparkle class="pi-doodle thx-sp absolute -top-[14%] -right-[8%] w-[46px] [animation-delay:160ms]" />
+      <Sparkle class="pi-doodle thx-sp absolute top-[34%] -right-[18%] w-7 [animation-delay:320ms]" />
     </div>
     <p class="thx-kicker font-pi-display text-40 leading-none font-extrabold tracking-title max-tab:text-30">
       {t.kicker}
@@ -37,7 +40,11 @@ const finance = site.contacts.emails.find((e) => e.label === "Donations") ?? sit
     </h1>
     <p class="mt-10 max-w-[44ch] text-19 leading-[1.4] max-tab:text-16-5">{t.line}</p>
     <p class="mt-4 max-w-[52ch] text-16 leading-[1.5]">{t.receipt}</p>
-    <p class="thx-pay mt-4 max-w-[52ch] text-16 leading-[1.5]" data-template={t.payment} hidden></p>
+    <p
+      class="thx-pay mt-4 max-w-[52ch] text-16 leading-[1.5] [&_b]:font-semibold [&_b]:tabular-nums"
+      data-template={t.payment}
+      hidden
+    ></p>
     <p class="mt-4 text-15">
       {t.questions}{" "}
       <a class="font-semibold underline decoration-[1.5px] underline-offset-4" href={`mailto:${finance.address}`}
