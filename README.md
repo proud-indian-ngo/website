@@ -66,10 +66,13 @@ The YAML is plain files in git, so a git-backed CMS (Keystatic or Sveltia CMS) c
 
 The "Next up" poster shows the next session and the "More weekends" tickets show the three after it. With only one session the tickets row (heading, link and tickets) is hidden. With none, the poster switches to its empty state: the "Next up" pill, the alarm clock, "Nothing on the calendar yet.", a line and a "Register on the dashboard" button (`site.yaml` → `links.register`), with the same cut-out. Its copy is `copy.yaml` → `volunteer.empty`, and its `aria-label` is "No upcoming sessions". The tickets row is hidden.
 
-1. **Build time.** `src/lib/events/load.ts` fetches `PUBLIC_EVENTS_URL` (8s timeout) and validates the response against the contract in `src/lib/events/contract.ts`. The contract is `proud-indian-design/research/pi-dash-public-events-api.md`: `{ events: [{ id, occurrenceDate, name, summary, startTime, endTime, area, city, team, programme?, signUpUrl }], generatedAt }`. The poster and tickets are rendered into the HTML.
+The feed is pi-dash's `GET https://dash.proudindian.ngo/api/public/events` (proud-indian-ngo/dash#150): public, upcoming, not cancelled, never Kalakriti, no personal data, sorted by start time then id. With no query it returns Bengaluru (`city=bangalore`), the next 30 days, at most 20 events; `city`, `from`, `days` (≤ 90) and `limit` (≤ 50) narrow it, and a bad parameter gets a 400. Responses are cached for 5 minutes (`stale-while-revalidate` an hour), and it allows 60 requests a minute per IP.
+
+1. **Build time.** `src/lib/events/load.ts` fetches `PUBLIC_EVENTS_URL` (8s timeout) and validates the response against `src/lib/events/contract.ts`: `{ generatedAt, events: [{ id, occurrenceDate, name, summary, startTime, endTime, area, city, team, programme?, signUpUrl }] }`. `endTime` equals `startTime` for an open-ended session, which then shows its start time only; `area` is just the city when no area is set. The poster and tickets are rendered into the HTML.
 2. **Fallback.** If the variable is unset, or the request fails, times out or returns the wrong shape, the build has no sessions and marks them unavailable. The poster uses the empty-state layout with the `copy.yaml` → `volunteer.unavailable` copy ("Pick a weekend.", a line and a "See this week's sessions" button to `links.register`; `aria-label` "Upcoming sessions are on the dashboard"), and the tickets row is hidden. It never claims the calendar is empty, and the public never sees sample sessions or sign-up buttons for sessions that don't exist.
 3. **Browser refresh.** On load, `src/scripts/events-refresh.ts` re-fetches the same URL with a ~4s timeout. If the data differs from what was built, it re-renders the poster and tickets with the same renderer the build used (`src/lib/events/render.ts`), and replaces the "unavailable" poster once live data arrives (with sessions, or the empty state if the answer is empty). An empty answer is followed: the page switches to the empty state, and if the build was empty and the refresh finds sessions, it switches to the normal poster and tickets. Errors and timeouts keep whatever was built.
-4. **Links.** Sign-up links use the contract's `signUpUrl` (`https://dash.proudindian.ngo/register?next=/events/<id>`). Only `https://dash.proudindian.ngo/` links are accepted. Times are shown in IST.
+4. **Links.** Sign-up links are each event's `signUpUrl`, used exactly as sent: `https://dash.proudindian.ngo/register?interestEventId=<id>[&occDate=YYYY-MM-DD]`. Never build them: `occDate` picks the occurrence of a recurring session, and pi-dash doesn't support other forms. A new volunteer registers, verifies their email and lands on the event with their interest filed; an existing one signs in and taps "I'm interested". Only `https://dash.proudindian.ngo/` links are accepted. Times are shown in IST.
+5. **CORS.** The feed allows `https://proudindian.ngo` and `https://*.pages.dev` previews only. On `localhost` the browser refresh fails quietly (no CORS header) and the page keeps what the build fetched, which is enough for local work.
 
 Test it locally against a mock endpoint:
 
@@ -85,7 +88,7 @@ python3 -m http.server 4332 -d /tmp/dist-events-one &
 node scripts/qa/events.mjs     # switches the mock between a, b, one, empty, slow, error, bad (SITE, SITE_EMPTY, SITE_ONE override the ports)
 ```
 
-To keep sessions fresh without visitors' browsers doing the work, add a Cloudflare Pages deploy hook and call it on a schedule (or from pi-dash when an event changes).
+**Rebuilds.** pi-dash checks the feed every 5 minutes and, when it changed, asks for a rebuild by sending the `events-changed` `repository_dispatch` to this repo (see [Deploying](#deploying-to-cloudflare-pages)); a nightly rebuild is the backstop. Visitors' browsers refresh the sessions on load either way.
 
 ## Donations
 

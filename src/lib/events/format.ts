@@ -43,6 +43,8 @@ export function timeLabel(iso: string) {
   return `${h % 12 || 12}:${m} ${h < 12 ? "am" : "pm"}`;
 }
 
-/** "10:00 am – 12:30 pm" */
+/** "10:00 am – 12:30 pm", or just "10:00 am" for an open-ended session (the feed sends endTime = startTime) */
 export const timeRange = (start: string, end: string) =>
-  `${timeLabel(start)} – ${timeLabel(end)}`;
+  Date.parse(end) > Date.parse(start)
+    ? `${timeLabel(start)} – ${timeLabel(end)}`
+    : timeLabel(start);

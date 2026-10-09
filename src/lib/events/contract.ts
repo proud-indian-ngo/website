@@ -1,31 +1,34 @@
 /**
- * pi-dash public events API, GET https://dash.proudindian.ngo/api/public/events
- * Contract: proud-indian-design/research/pi-dash-public-events-api.md (draft, 2026-10-07; not implemented yet).
+ * pi-dash public events API, GET https://dash.proudindian.ngo/api/public/events (proud-indian-ngo/dash#150).
+ * Public, upcoming, not cancelled, never Kalakriti, no personal data; sorted by startTime, then id. Defaults: city
+ * bangalore, the next 30 days, at most 20 events. CORS allows https://proudindian.ngo and https://*.pages.dev only.
  * Shared by the build (src/lib/events/load.ts) and the browser refresh (src/scripts/events-refresh.ts), so it has no
  * dependencies.
  */
 
-/** Optional mapping from team to programme, used to colour-code sessions. */
+/** Optional mapping from team to programme, used to colour-code sessions. Left out (never null) when unknown. */
 export type Programme = "education" | "nutrition" | "kalakriti" | "community";
 
 export interface PublicEvent {
   /** event id; for a recurring series, the series id (one entry per occurrence) */
   id: string;
-  /** ISO date of this occurrence, e.g. "2026-10-18" */
+  /** date of this occurrence in India, e.g. "2026-10-18" */
   occurrenceDate: string;
   name: string;
-  /** plain text, about 200 characters at most */
+  /** plain text, 200 characters at most */
   summary: string;
   /** ISO 8601 UTC, e.g. "2026-10-18T04:30:00.000Z" */
   startTime: string;
+  /** always present; equal to startTime for an open-ended event */
   endTime: string;
-  /** coarse public area, never the exact address, e.g. "Iblur, Bengaluru" */
+  /** coarse public area, never the exact address, e.g. "Koramangala, Bengaluru"; just the city when no area is set */
   area: string;
   /** cityEnum value, e.g. "bangalore" */
   city: string;
   team: string;
   programme?: Programme;
-  /** "https://dash.proudindian.ngo/register?next=/events/<id>" */
+  /** used exactly as sent: "https://dash.proudindian.ngo/register?interestEventId=<id>[&occDate=YYYY-MM-DD]" (occDate
+   *  identifies the occurrence of a recurring session; never rebuild this link) */
   signUpUrl: string;
 }
 
@@ -93,7 +96,12 @@ export function parseEventsResponse(
   const events = r.events
     .map(parseEvent)
     .filter((e): e is PublicEvent => e !== null);
-  events.sort((a, b) => Date.parse(a.startTime) - Date.parse(b.startTime));
+  // the feed's own order: startTime, then id
+  events.sort(
+    (a, b) =>
+      Date.parse(a.startTime) - Date.parse(b.startTime) ||
+      (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)
+  );
   return { events, generatedAt: str(r.generatedAt) ? r.generatedAt : "" };
 }
 

@@ -1,5 +1,6 @@
 /**
  * Local stand-in for GET https://dash.proudindian.ngo/api/public/events (with CORS), for testing the events flow.
+ * Mode b's last session is open-ended (endTime = startTime) and has no area, so area falls back to the city.
  *   bun scripts/qa/mock-events.ts            serves http://127.0.0.1:8788/events
  *   curl -X POST 127.0.0.1:8788/mode/b       switch what it returns: a | b | one | empty | error | slow | bad
  */
@@ -23,7 +24,7 @@ const ev = (
   city: "bangalore",
   team,
   programme,
-  signUpUrl: `https://dash.proudindian.ngo/register?next=/events/${id}`,
+  signUpUrl: `https://dash.proudindian.ngo/register?interestEventId=${id}&occDate=${date}`,
 });
 const A = [
   ev(
@@ -92,9 +93,9 @@ const B = [
     "b4",
     "2026-11-15",
     "04:30",
-    "07:00",
+    "04:30",
     "Football afternoon",
-    "Agara, Bengaluru",
+    "Bengaluru",
     "community",
     "Community"
   ),

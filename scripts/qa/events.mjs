@@ -34,8 +34,9 @@ results["build a: live poster in HTML"] =
 results["build a: tickets in HTML"] =
   html.includes("Lunch drive") && html.includes("Park outing");
 results["build a: no sample note"] = !html.includes("Sample sessions.");
+// the feed's signUpUrl, used exactly as sent (HTML-escaped)
 results["build a: sign-up link"] = html.includes(
-  "https://dash.proudindian.ngo/register?next=/events/a1"
+  "https://dash.proudindian.ngo/register?interestEventId=a1&amp;occDate=2026-10-17"
 );
 results["build a: not the empty state"] =
   !emptyPoster.test(html) && !rowHidden.test(html);
@@ -103,6 +104,13 @@ const look = async (site, m, wait, opts = {}) => {
       tickets: [...document.querySelectorAll("[data-events-list] h4")].map(
         (h) => h.textContent
       ),
+      lastMeta:
+        [...document.querySelectorAll("[data-events-list] .meta")].at(-1)
+          ?.textContent ?? null,
+      firstReg:
+        document
+          .querySelector("[data-events-list] .reg")
+          ?.getAttribute("href") ?? null,
       cmoreShown: !!cmore && cmore.getBoundingClientRect().height > 0,
       note: !!document.querySelector("[data-events-sample]"),
       kid: !!poster?.querySelector(".kid"),
@@ -134,6 +142,10 @@ const isB = (s) =>
   !s.empty &&
   s.prog === "Education" &&
   JSON.stringify(s.tickets) === JSON.stringify(B_TICKETS) &&
+  // the feed's signUpUrl as sent; an open-ended session shows its start time only; no area falls back to the city
+  s.firstReg ===
+    "https://dash.proudindian.ngo/register?interestEventId=b2&occDate=2026-10-26" &&
+  s.lastMeta === "Bengaluru10:00 am" &&
   s.cmoreShown &&
   s.kid &&
   !s.clockShown;
