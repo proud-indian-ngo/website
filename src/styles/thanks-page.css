@@ -1,0 +1,98 @@
+/* Thank-you page only (imported by src/pages/thanks.astro), so the home page doesn't carry it. Same layer as the
+   section CSS; @reference gives it the theme (for --theme() breakpoints) without emitting global.css a second time. */
+@reference "./global.css";
+
+@layer components {
+  /* the matka, full of coins, with sparkles popping round it; bottom right, standing on the page edge */
+  .thx-pot {
+    position: absolute;
+    right: 7vw;
+    bottom: 9vh;
+    width: clamp(180px, 22vw, 300px);
+    rotate: 5deg;
+    filter: drop-shadow(4px 0 0 var(--color-paper))
+      drop-shadow(-4px 0 0 var(--color-paper))
+      drop-shadow(0 -4px 0 var(--color-paper))
+      drop-shadow(0 4px 0 var(--color-paper));
+  }
+  .thx-pot > svg:first-child {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    transform-origin: 50% 100%;
+  }
+  .thx-pot .ink {
+    fill: none;
+    stroke: var(--color-ink);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .thx-sp {
+    position: absolute;
+    width: 36px;
+  }
+  .thx-sp1 {
+    left: -14%;
+    top: 2%;
+  }
+  .thx-sp2 {
+    right: -8%;
+    top: -14%;
+    width: 46px;
+  }
+  .thx-sp3 {
+    right: -18%;
+    top: 34%;
+    width: 28px;
+  }
+  .thx-pay b {
+    font-weight: var(--font-weight-semibold);
+    font-variant-numeric: tabular-nums;
+  }
+
+  html[data-motion="on"] .thx-pot > svg:first-child {
+    animation: thx-bob 3.2s ease-in-out infinite;
+  }
+  html[data-motion="on"] .thx-sp {
+    animation: thx-pop 700ms var(--ease-spring) both;
+  }
+  html[data-motion="on"] .thx-sp2 {
+    animation-delay: 160ms;
+  }
+  html[data-motion="on"] .thx-sp3 {
+    animation-delay: 320ms;
+  }
+  @keyframes thx-bob {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0);
+    }
+    50% {
+      transform: translateY(-5px) rotate(-2.5deg);
+    }
+  }
+  @keyframes thx-pop {
+    from {
+      scale: 0;
+      rotate: -40deg;
+      opacity: 0;
+    }
+  }
+
+  /* phones and tablets: the matka sits under the buttons instead of beside the text */
+  @media (width < --theme(--breakpoint-lap)) {
+    .thx-pot {
+      position: relative;
+      right: auto;
+      bottom: auto;
+      align-self: flex-end;
+      order: 10;
+      /* room for the sparkles on the right */
+      margin-right: 12%;
+      margin-top: var(--space-40);
+      width: clamp(140px, 36vw, 220px);
+    }
+  }
+}

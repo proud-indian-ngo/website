@@ -408,6 +408,19 @@ const copy = defineCollection({
       rest: z.string(),
       donate: z.string(),
     }),
+    thanks: z.object({
+      title: z.string(),
+      description: z.string(),
+      kicker: z.string(),
+      heading: z.string(),
+      line: z.string(),
+      receipt: z.string(),
+      payment: z.string(),
+      questions: z.string(),
+      home: z.string(),
+      volunteer: z.string(),
+      reports: z.string(),
+    }),
   }),
 });
 
