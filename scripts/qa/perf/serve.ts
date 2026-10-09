@@ -5,11 +5,11 @@
  *   const server = await serve("/tmp/site", 4400); ... server.close();
  */
 import { existsSync, readFileSync, statSync } from "node:fs";
-import { createServer } from "node:http";
+import { createServer, type Server } from "node:http";
 import { extname, join } from "node:path";
 import { brotliCompressSync, constants, gzipSync } from "node:zlib";
 
-const TYPES = {
+const TYPES: Record<string, string> = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
   ".css": "text/css; charset=utf-8",
@@ -27,11 +27,17 @@ const TYPES = {
 };
 const COMPRESSIBLE = /^(text\/|application\/(json|xml|manifest)|image\/svg)/;
 
-function parseHeaders(root) {
-  const rules = [];
+interface Rule {
+  re: RegExp;
+  set: [string, string][];
+  del: string[];
+}
+
+function parseHeaders(root: string): Rule[] {
+  const rules: Rule[] = [];
   const file = join(root, "_headers");
   if (!existsSync(file)) return rules;
-  let cur = null;
+  let cur: Rule | null = null;
   for (const raw of readFileSync(file, "utf8").split("\n")) {
     const line = raw.trim();
     if (!line || line.startsWith("#")) continue;
@@ -45,10 +51,10 @@ function parseHeaders(root) {
       };
       rules.push(cur);
     } else if (line.startsWith("!"))
-      cur.del.push(line.slice(1).trim().toLowerCase());
+      cur!.del.push(line.slice(1).trim().toLowerCase());
     else {
       const i = line.indexOf(":");
-      cur.set.push([
+      cur!.set.push([
         line.slice(0, i).trim().toLowerCase(),
         line.slice(i + 1).trim(),
       ]);
@@ -57,11 +63,11 @@ function parseHeaders(root) {
   return rules;
 }
 
-export function serve(root, port) {
+export function serve(root: string, port: number): Promise<Server> {
   const rules = parseHeaders(root);
-  const cache = new Map();
+  const cache = new Map<string, Buffer>();
   const server = createServer((req, res) => {
-    const path = decodeURIComponent(new URL(req.url, "http://x").pathname);
+    const path = decodeURIComponent(new URL(req.url!, "http://x").pathname);
     let file = join(root, path);
     if (existsSync(file) && statSync(file).isDirectory())
       file = join(file, "index.html");
@@ -77,13 +83,13 @@ export function serve(root, port) {
       return;
     }
     const type = TYPES[extname(file)] ?? "application/octet-stream";
-    const headers = { "content-type": type };
+    const headers: Record<string, string | number> = { "content-type": type };
     for (const r of rules)
       if (r.re.test(path)) {
         for (const d of r.del) delete headers[d];
         for (const [k, v] of r.set) headers[k] = v;
       }
-    let body = readFileSync(file);
+    let body: Buffer = readFileSync(file);
     const accept = req.headers["accept-encoding"] ?? "";
     if (COMPRESSIBLE.test(type) && body.length > 512) {
       const enc = /\bbr\b/.test(accept)
@@ -102,7 +108,7 @@ export function serve(root, port) {
                 })
               : gzipSync(body, { level: 9 })
           );
-        body = cache.get(key);
+        body = cache.get(key)!;
         headers["content-encoding"] = enc;
         headers.vary = "accept-encoding";
       }

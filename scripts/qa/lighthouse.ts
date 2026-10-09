@@ -12,8 +12,8 @@
  */
 import { appendFileSync, existsSync } from "node:fs";
 
-import { runLighthouse } from "./perf/lighthouse.mjs";
-import { serve } from "./perf/serve.mjs";
+import { runLighthouse } from "./perf/lighthouse.ts";
+import { serve } from "./perf/serve.ts";
 
 const DIST = new URL("../../dist/", import.meta.url).pathname;
 if (!existsSync(`${DIST}index.html`)) {

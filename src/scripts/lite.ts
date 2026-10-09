@@ -12,7 +12,7 @@
  *      after the first one (the first render), summed over the first WINDOW ms after boot. Lite at LOAF_MS or more.
  *      As a backstop (browsers without that API), requestAnimationFrame intervals in the same window: lite if more
  *      than a quarter are over 20ms.
- *   Calibration (Playwright Chromium, CDP CPU throttling, 390px and 1440px, 3 runs each; scripts/qa/perf.mjs re-checks
+ *   Calibration (Playwright Chromium, CDP CPU throttling, 390px and 1440px, 3 runs each; scripts/qa/perf.ts re-checks
  *   it): the loop took 1.5-2.2ms unthrottled, 3-3.5ms at 2x, 4.4-5.3ms at 3x, 5.9-8.2ms at 4x, 8.5-10.9ms at 6x; the
  *   long frames after the first summed to 0 unthrottled, ~60ms at 3x, 75-290ms at 4x and 300ms+ at 6x. So unthrottled,
  *   2x and 3x stay drawn; 4x and 6x switch at boot, well before the first below-the-fold draw-on.

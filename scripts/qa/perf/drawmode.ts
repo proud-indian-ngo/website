@@ -7,13 +7,25 @@
  */
 import { chromium } from "playwright";
 
+/** The decision src/scripts/lite.ts leaves on window.__piDraw (its Probe, the fields read here). */
+interface DrawProbe {
+  lite: boolean;
+  source: string;
+  at?: number;
+  bench?: number;
+  loaf?: number;
+}
+
 export async function checkDrawMode(
-  url,
-  { rates = [1, 2, 3, 4, 6], widths = [390, 1440] } = {}
-) {
+  url: string,
+  {
+    rates = [1, 2, 3, 4, 6],
+    widths = [390, 1440],
+  }: { rates?: number[]; widths?: number[] } = {}
+): Promise<{ rows: string[]; failures: string[] }> {
   const browser = await chromium.launch({ channel: "chromium" });
-  const rows = [];
-  const failures = [];
+  const rows: string[] = [];
+  const failures: string[] = [];
   try {
     for (const w of widths)
       for (const rate of rates) {
@@ -29,7 +41,9 @@ export async function checkDrawMode(
           await cdp.send("Emulation.setCPUThrottlingRate", { rate });
         await page.goto(url);
         await page.waitForTimeout(3000);
-        const d = await page.evaluate(() => window.__piDraw);
+        const d = await page.evaluate(
+          () => (window as unknown as { __piDraw: DrawProbe }).__piDraw
+        );
         const want = rate >= 4;
         rows.push(
           `w${w} x${rate}: ${d.lite ? "lite" : "drawn"} (${d.source}, at ${d.at}ms, loop ${d.bench}ms, long frames ${d.loaf ?? "-"}ms)`
@@ -47,7 +61,7 @@ export async function checkDrawMode(
     await page.goto(`${url}${url.includes("?") ? "&" : "?"}draw=lite`);
     await page.waitForTimeout(1500);
     await page.evaluate(() => {
-      const el = document.querySelector("#closing");
+      const el = document.querySelector("#closing")!;
       scrollTo({
         top: scrollY + el.getBoundingClientRect().top - 100,
         behavior: "instant",
@@ -60,7 +74,11 @@ export async function checkDrawMode(
         .filter(
           (a) => a.playState === "running" && !(a instanceof CSSAnimation)
         )
-        .flatMap((a) => a.effect.getKeyframes().flatMap((k) => Object.keys(k)))
+        .flatMap((a) =>
+          (a.effect as KeyframeEffect)
+            .getKeyframes()
+            .flatMap((k) => Object.keys(k))
+        )
     );
     const wipe = props.includes("clipPath");
     const stroke = props.includes("strokeDashoffset");

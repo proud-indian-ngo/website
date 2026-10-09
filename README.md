@@ -10,7 +10,7 @@ One page for the Proud Indian NGO in Bengaluru: the programmes (Teach, Feed, Pai
 
 ## Run
 
-Needs [Bun](https://bun.sh) 1.4.2+ (`packageManager` in `package.json`) and Node 22.12+.
+Needs [Bun](https://bun.sh) 1.4.2+ (`packageManager` in `package.json`), which runs Astro (`bunx --bun astro`) and every script, and Node 22.12+ for the tools whose launchers ask for Node (Wrangler, the Playwright CLI, commitlint).
 
 ```sh
 bun install
@@ -43,7 +43,7 @@ Lint and format match proud-indian-ngo/dash: oxlint (correctness rules as errors
 
 These follow proud-indian-ngo/dash.
 - **Hooks.** Lefthook (`bun install` sets it up) formats and lints staged files, runs the design and style checks and the type check on commit, and checks the commit message.
-- **Commits and PR titles** are [Conventional Commits](https://www.conventionalcommits.org) (`feat: …`, `fix(events): …`, `chore(deps): …`; lower-case subject, at most 100 characters), checked by commitlint (`commitlint.config.js`). Pull requests are squash-merged with the PR title as the commit message, so the title is what lands on `main`.
+- **Commits and PR titles** are [Conventional Commits](https://www.conventionalcommits.org) (`feat: …`, `fix(events): …`, `chore(deps): …`; lower-case subject, at most 100 characters), checked by commitlint (`commitlint.config.ts`). Pull requests are squash-merged with the PR title as the commit message, so the title is what lands on `main`.
 - **CI.** `.github/workflows/ci.yml` runs the `lighthouse` job beside `checks` on pull requests and pushes, with the scores in the run summary; it isn't required, because performance scores on shared runners vary, so the 100 target stays a manual check (`qa:perf`). It also runs the `checks` job (lint, types, fallow, build, `qa:behaviour`, `qa:doodles`, and the Razorpay check as a warning, then the deploy) on every pull request and push. A change that only touches Markdown outside `src/` skips the browser checks and Lighthouse (`.github/docs-only.sh`), and the `events-changed` and nightly rebuilds skip lint, types and fallow, since the code is `main`'s and already checked. `checks` is required on `main`, which also needs a pull request with one approval (admins can push directly).
 - **Dependencies.** [Renovate](https://docs.renovatebot.com) (`renovate.json`) opens update PRs on weekday mornings (IST): patches are grouped and automerged once `checks` passes, minor updates are grouped into one PR, and `@proudindian/design` releases get their own PR. Dependabot security updates and secret scanning (with push protection) are on.
 
@@ -94,12 +94,12 @@ Test it locally against a mock endpoint:
 bun scripts/qa/mock-events.ts &                                     # http://127.0.0.1:8788/events
 for m in a empty one; do                                            # three builds: many, none, one session
   curl -sX POST 127.0.0.1:8788/mode/$m
-  PUBLIC_EVENTS_URL=http://127.0.0.1:8788/events bunx astro build --outDir /tmp/dist-events-$m
+  PUBLIC_EVENTS_URL=http://127.0.0.1:8788/events bunx --bun astro build --outDir /tmp/dist-events-$m
 done
 python3 -m http.server 4330 -d /tmp/dist-events-a &
 python3 -m http.server 4331 -d /tmp/dist-events-empty &
 python3 -m http.server 4332 -d /tmp/dist-events-one &
-node scripts/qa/events.mjs     # switches the mock between a, b, one, empty, slow, error, bad (SITE, SITE_EMPTY, SITE_ONE override the ports)
+bun scripts/qa/events.ts     # switches the mock between a, b, one, empty, slow, error, bad (SITE, SITE_EMPTY, SITE_ONE override the ports)
 ```
 
 **Rebuilds.** pi-dash checks the feed every 5 minutes and, when it changed, asks for a rebuild by sending the `events-changed` `repository_dispatch` to this repo (see [Deploying](#deploying-to-cloudflare-pages)); a nightly rebuild is the backstop. Visitors' browsers refresh the sessions on load either way.
