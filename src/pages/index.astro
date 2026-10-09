@@ -38,7 +38,7 @@ const structured = homeStructuredData(
 );
 ---
 
-<Base title={copy.meta.title} description={copy.meta.description}>
+<Base title={copy.meta.title} description={copy.meta.description} markdown>
   <HeroPreload slot="head" />
   <script is:inline slot="head" type="application/ld+json" set:html={jsonLd(structured)} />
   <MarginSprite />

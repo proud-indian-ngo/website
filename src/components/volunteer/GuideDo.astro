@@ -4,7 +4,7 @@
  * chips, how often it runs and a taped polaroid. Copy: volunteer.yaml → do; the programmes from programmes/*.yaml and
  * kalakriti.yaml.
  */
-import { getKalakriti, getProgrammes, getVolunteerPage } from "../../lib/content";
+import { getGuideCards, getVolunteerPage } from "../../lib/content";
 import { asset } from "../../lib/images";
 import IndexBook from "../doodles/IndexBook.astro";
 import IndexBowl from "../doodles/IndexBowl.astro";
@@ -19,27 +19,14 @@ import Polaroid from "../ui/Polaroid.astro";
 import SectionLabel from "../ui/SectionLabel.astro";
 
 const { do: d } = await getVolunteerPage();
-const programmes = await getProgrammes();
-const kala = await getKalakriti();
 const icons = { b0: IndexBook, b1: IndexBowl, kalakriti: IndexBrush, b3: IndexHands } as Record<string, typeof IndexBook>;
 
-const cards = d.cards.map((c) => {
-  const p = programmes.find((x) => x.anchor === c.programme);
-  if (!p) throw new Error(`volunteer.yaml do.cards: no programme ${c.programme}`);
-  const band = p.kind === "band" ? p : null;
-  const photo = band ? band.polaroids[c.photo] : kala.line.photos[c.photo];
-  if (!photo) throw new Error(`volunteer.yaml do.cards: ${c.programme} has no photo ${c.photo}`);
-  return {
-    ...c,
-    num: p.num,
-    name: p.name,
-    verb: p.verb,
-    line: band ? band.line : kala.tickets.note,
-    chips: band ? band.chips : kala.edition.events.slice(0, 4),
-    photo,
-    Icon: icons[c.programme],
-  };
-});
+// Kalakriti's card shows its first 4 events
+const cards = (await getGuideCards()).map((c) => ({
+  ...c,
+  chips: c.kind === "festival" ? c.chips.slice(0, 4) : c.chips,
+  Icon: icons[c.programme],
+}));
 ---
 
 <section

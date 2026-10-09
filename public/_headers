@@ -47,3 +47,12 @@ https://:project.pages.dev/*
   ! Content-Type
   Content-Type: application/pdf
   Content-Disposition: inline
+
+# The pages as Markdown for agents (src/pages/**/index.md.ts; functions/_middleware.ts serves them at the pages' own
+# URLs to `Accept: text/markdown`). Fetched directly, they stay out of search: the HTML page is the one to index.
+/index.md
+  X-Robots-Tag: noindex
+/volunteer/index.md
+  X-Robots-Tag: noindex
+/privacy/index.md
+  X-Robots-Tag: noindex

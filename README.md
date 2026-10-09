@@ -32,6 +32,7 @@ bun run preview    # serve dist/ at http://localhost:4321
 | `bun run design:sync` | Copy the favicons and `og.png` from the package into `public/` (after a package update) |
 | `bun run qa:behaviour` | Motion-on behaviour checks against a running site (reveals, loops, Pause, menu, drawer, donate, scroll lock); see [Quality checks](#quality-checks) |
 | `bun run qa:doodles` | The margin doodles touch no content, rail, header pill or viewport edge, at 390 to 2560px, on the home page and the volunteer guide (serves `dist/` itself; run `bun run build` first, or set `SITE`; `PAGES` picks pages). See [Margin doodles](#margin-doodles) |
+| `bun run qa:markdown` | Markdown for agents: serves `dist/` with the Pages Function (`wrangler pages dev`) and checks that `Accept: text/markdown` gets each page's Markdown while browsers get the HTML, `_headers` and `_redirects` as before (run `bun run build` first, or set `SITE` to a deployment). See [Search and AI agents](#search-and-ai-agents) |
 | `bun run qa:events` | The events flow end to end against the mock feed (`bun run qa:events:mock`); see [Events](#events-volunteer-section) |
 | `bun run qa:lighthouse` | Lighthouse ×3 on mobile and desktop, for the home page and the volunteer guide (`PAGES` picks pages), against `dist/` served like Cloudflare Pages; fails if accessibility, best practices or SEO drop below 100, or performance below 90, CLS above 0.1 or TBT above 200ms. CI runs it on pull requests and pushes (the `lighthouse` job, not required), mobile and desktop on separate runners; `FORMS=desktop` runs one |
 | `bun run qa:perf` | Build, serve like Cloudflare Pages (brotli, `_headers`), Lighthouse ×5 on mobile and desktop, and the frame profiler at 4× and 6× CPU throttling (see [Performance](#performance)) |
@@ -45,7 +46,7 @@ Lint and format match proud-indian-ngo/dash: oxlint (correctness rules as errors
 These follow proud-indian-ngo/dash.
 - **Hooks.** Lefthook (`bun install` sets it up) formats and lints staged files, runs the design and style checks and the type check on commit, and checks the commit message.
 - **Commits and PR titles** are [Conventional Commits](https://www.conventionalcommits.org) (`feat: …`, `fix(events): …`, `chore(deps): …`; lower-case subject, at most 100 characters), checked by commitlint (`commitlint.config.ts`). Pull requests are squash-merged with the PR title as the commit message, so the title is what lands on `main`.
-- **CI.** `.github/workflows/ci.yml` runs the `lighthouse` job beside `checks` on pull requests and pushes, with the scores in the run summary; it isn't required, because performance scores on shared runners vary, so the 100 target stays a manual check (`qa:perf`). It also runs the `checks` job (lint, types, fallow, build, `qa:behaviour`, `qa:doodles`, and the Razorpay check as a warning, then the deploy) on every pull request and push. A change that only touches Markdown outside `src/` skips the browser checks and Lighthouse (`.github/docs-only.sh`), and the `events-changed` and nightly rebuilds skip lint, types and fallow, since the code is `main`'s and already checked. `checks` is required on `main`, which also needs a pull request with one approval (admins can push directly).
+- **CI.** `.github/workflows/ci.yml` runs the `lighthouse` job beside `checks` on pull requests and pushes, with the scores in the run summary; it isn't required, because performance scores on shared runners vary, so the 100 target stays a manual check (`qa:perf`). It also runs the `checks` job (lint, types, fallow, build, `qa:behaviour`, `qa:doodles`, `qa:markdown`, and the Razorpay check as a warning, then the deploy) on every pull request and push. A change that only touches Markdown outside `src/` skips the browser checks and Lighthouse (`.github/docs-only.sh`), and the `events-changed` and nightly rebuilds skip lint, types and fallow, since the code is `main`'s and already checked. `checks` is required on `main`, which also needs a pull request with one approval (admins can push directly).
 - **Dependencies.** [Renovate](https://docs.renovatebot.com) (`renovate.json`) opens update PRs on weekday mornings (IST): patches are grouped and automerged once `checks` passes, minor updates are grouped into one PR, and `@proudindian/design` releases get their own PR. Dependabot security updates and secret scanning (with push protection) are on.
 
 ## Environment
@@ -134,7 +135,7 @@ Every run installs with the frozen lockfile. Production deploys only once every 
 
 **Going live** is done in the Cloudflare dashboard, after the first deployment: add `proudindian.ngo` (and `www`) as custom domains of the Pages project, and redirect `www` to the bare domain.
 
-The output is fully static, with no adapter and no functions. `public/_headers` sets the following:
+The output is fully static, with no adapter. The one Pages Function, `functions/_middleware.ts`, serves the pages' Markdown to AI agents (see [Search and AI agents](#search-and-ai-agents)); `public/_routes.json` keeps the assets (`/_astro/*`, images, PDFs, icons, `llms.txt`, the sitemap) away from it, so only page requests count towards the Free plan's 100,000 Functions requests a day. Add a new top-level asset there too. `public/_headers` sets the following:
 - **Caching:** a year, immutable, for the hashed `/_astro/*` assets; HTML revalidates on every visit; icons and the OG image get a day; the report PDFs in `/reports/*` get a year (served inline as `application/pdf`), so a corrected report needs a new file name.
 - **Security headers:** HSTS, nosniff, frame denial, a referrer policy, a permissions policy and a CSP. The CSP `connect-src` allows `https://dash.proudindian.ngo`; if `PUBLIC_EVENTS_URL` points anywhere else, add that origin. Cloudflare Web Analytics is enabled for proudindian.ngo in the Cloudflare dashboard, so the CSP also allows its beacon: `https://static.cloudflareinsights.com` in `script-src` and `https://cloudflareinsights.com` in `connect-src`. Remove both if the analytics is turned off, and update the privacy policy (`src/content/privacy.md`) to match. `public/robots.txt` and the generated `sitemap-index.xml` exclude `/styleguide/`.
 
@@ -145,6 +146,7 @@ The site is meant to come up when someone, or an assistant answering for them, l
 - **Volunteer guide** (`/volunteer/`, `src/pages/volunteer.astro`): the page for "weekend volunteering in Bengaluru/Bangalore". Its title leads with that phrase; the home page's title is about the NGO (`copy.yaml` → `meta`), so the two don't compete for the same search. It has the live sessions, what you'd do, where we meet (with the community centre), internships and a visible FAQ, which also goes out as `FAQPage` structured data. The old site's volunteering, FAQ and internship URLs redirect to it. Keep both city names in titles and descriptions: people search for both.
 - **Structured data.** The home page carries schema.org JSON-LD (`src/lib/structured-data.ts`): the `NGO` (registered office, the community centre with its map pin, contacts, registrations, socials, Bengaluru/Bangalore as the area served), the `WebSite`, and one free `Event` per upcoming session from the events feed, linking to its sign-up page. It is built from `site.yaml`, `copy.yaml` and the feed, so there is nothing to edit by hand; the rebuild on every events change keeps the sessions current. Check it with Google's [Rich Results Test](https://search.google.com/test/rich-results) after a deploy.
 - **`/llms.txt`** (`src/pages/llms.txt.ts`, [llmstxt.org](https://llmstxt.org)): the site in plain Markdown for AI agents: what Proud Indian is, how to volunteer, the upcoming sessions with their sign-up links, programmes, donations, reports and contacts. Built from the same content and feed.
+- **Markdown for agents** (content negotiation, as [Cloudflare's Markdown for Agents](https://developers.cloudflare.com/fundamentals/reference/markdown-for-agents/) does, without its Pro plan): a request for `/`, `/volunteer/` or `/privacy/` whose `Accept` header asks for `text/markdown` (and likes it at least as much as `text/html`) gets the page as Markdown, with `Content-Type: text/markdown`, `Vary: Accept` and an `x-markdown-tokens` estimate. Browsers, search crawlers and a bare `*/*` get the HTML as before. The Markdown is built beside each page (`dist/volunteer/index.md`, from the `index.md.ts` endpoints in `src/pages/` and `src/lib/page-markdown.ts`, from the same content and feed; the home page's is the same text as `/llms.txt`), each page links it with `<link rel="alternate" type="text/markdown">` (`Base`'s `markdown` prop), and `functions/_middleware.ts` picks it per request. Fetched directly, the `.md` files are `noindex`. A new page gets Markdown with its own `index.md.ts`, the `markdown` prop and a `noindex` line in `_headers`. Try it with `curl -H "Accept: text/markdown" https://proudindian.ngo/volunteer/`; `bun run qa:markdown` checks it.
 - **Redirects from the old site.** `public/_redirects` sends every page and report PDF of the old PHP site to where it lives now (301), so links and search ranking carry over: old pages go to their section of the home page, old PDFs to the identical file in `public/reports/` (matched by SHA-256). Keep them.
 - **Crawlers.** `public/robots.txt` allows everyone except `/styleguide/` and declares [content signals](https://contentsignals.org/): `search=yes, ai-input=yes, ai-train=yes`, so search engines and AI assistants may index, quote and learn from the site (`ai-input` is what lets assistants use it in answers; set `ai-train=no` there to opt out of model training only). Cloudflare can still block AI crawlers before robots.txt is read (Security → Bots → "Block AI bots" / AI Crawl Control); since 9 October 2026 every search and AI crawler is allowed. Keep Cloudflare's managed robots.txt off, or it adds its own `Content-Signal` and `Disallow` lines on top of these.
 
@@ -227,7 +229,7 @@ src/
   layouts/Base.astro       head (SEO, OG, Twitter, icons), motion decision, font preloads, scripts
   pages/                   index, volunteer (the volunteer guide), privacy (renders src/content/privacy.md), thanks (after
                            a donation), 404, styleguide,
-                           llms.txt (for AI agents)
+                           llms.txt and index.md.ts endpoints (Markdown for AI agents)
   components/
     sections/              Header, PhoneMenu, ProgrammeIndex, Hero, Marquee, ProgrammesIntro, ProgrammeBand,
                            Kalakriti, Volunteer, Donate, Reports, Trustees, ReportsDrawer, Closing, Footer,
@@ -248,8 +250,9 @@ src/
                            nudge, pause, events refresh (entry: main.ts)
   styles/                  global.css (entry: package CSS + site CSS), sections/, base.css (site-only), images.css
 scripts/                   check-css.ts (style lint), check-design.ts (package check, design:sync),
-                           qa/ (behaviour, doodles, events, mock-events, perf)
-public/                    _headers, _redirects (old site URLs), robots.txt, site.webmanifest, favicons and og.png (copies of package files),
+                           qa/ (behaviour, doodles, events, markdown, mock-events, perf)
+functions/                 _middleware.ts: the Cloudflare Pages Function that serves the Markdown to agents
+public/                    _headers, _redirects (old site URLs), _routes.json (what runs the Pages Function), robots.txt, site.webmanifest, favicons and og.png (copies of package files),
                            reports/ (the report PDFs)
 ```
 
@@ -316,6 +319,7 @@ bun run build && bun run preview                # serves the site at http://loca
 bun run qa:behaviour   # motion on: reveals, loops, Pause, reduced motion, wobble, hash links, rail, menu, drawer,
                        # donate deep links, coins, swipe, plane, the drawer and menu scroll lock; exits 1 on a failure
 bun run qa:doodles     # margin doodles clear of content at 390-2560px (needs a build, or SITE=...)
+bun run qa:markdown    # Accept: text/markdown gets Markdown, browsers get HTML (needs a build, or SITE=...)
 ```
 
 ## TODO
