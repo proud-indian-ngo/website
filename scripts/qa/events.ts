@@ -13,9 +13,9 @@ const SITE = process.env.SITE ?? "http://127.0.0.1:4330/";
 const SITE_EMPTY = process.env.SITE_EMPTY ?? "http://127.0.0.1:4331/";
 const SITE_ONE = process.env.SITE_ONE ?? "http://127.0.0.1:4332/";
 const MOCK = "http://127.0.0.1:8788";
-const mode = (m) => fetch(`${MOCK}/mode/${m}`, { method: "POST" });
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const results = {};
+const mode = (m: string) => fetch(`${MOCK}/mode/${m}`, { method: "POST" });
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+const results: Record<string, boolean | string> = {};
 const EMPTY_LABEL = "No upcoming sessions";
 const A_LABEL = "Next session: Story hour, Sat 17 Oct";
 const B_LABEL = "Next session: Science fair prep, Sun 18 Oct";
@@ -62,7 +62,12 @@ results["build one: ticket row hidden"] = rowHidden.test(htmlO);
 
 // ---- browser refresh ----
 const browser = await chromium.launch();
-const look = async (site, m, wait, opts = {}) => {
+const look = async (
+  site: string,
+  m: string,
+  wait: number,
+  opts: { reduced?: boolean; paused?: boolean } = {}
+) => {
   await mode(m);
   const ctx = await browser.newContext({
     viewport: { width: 1440, height: 900 },
@@ -73,7 +78,7 @@ const look = async (site, m, wait, opts = {}) => {
       localStorage.setItem("pi-motion-paused", "1")
     );
   const page = await ctx.newPage();
-  const errors = [];
+  const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(String(e)));
   // the 500 itself is logged by the browser as a failed resource; that one is expected
   page.on(
@@ -98,7 +103,7 @@ const look = async (site, m, wait, opts = {}) => {
     const cmore = document.querySelector(".cmore");
     return {
       poster: poster?.getAttribute("aria-label"),
-      empty: poster?.classList.contains("is-empty"),
+      empty: !!poster?.classList.contains("is-empty"),
       prog: document.querySelector(".pprog")?.textContent ?? null,
       heading: poster?.querySelector(".pnone")?.textContent ?? null,
       tickets: [...document.querySelectorAll("[data-events-list] h4")].map(
@@ -125,9 +130,11 @@ const look = async (site, m, wait, opts = {}) => {
   await ctx.close();
   return { state, errors };
 };
-const isA = (s) =>
+type Look = Awaited<ReturnType<typeof look>>;
+type State = Look["state"];
+const isA = (s: State) =>
   s.poster === A_LABEL && !s.empty && s.tickets.length === 2 && s.cmoreShown;
-const isEmpty = (s) =>
+const isEmpty = (s: State) =>
   s.poster === EMPTY_LABEL &&
   s.empty &&
   s.heading === "Nothing on the calendar yet." &&
@@ -137,7 +144,7 @@ const isEmpty = (s) =>
   !s.note &&
   s.kid &&
   s.clockShown;
-const isB = (s) =>
+const isB = (s: State) =>
   s.poster === B_LABEL &&
   !s.empty &&
   s.prog === "Education" &&
@@ -149,7 +156,7 @@ const isB = (s) =>
   s.cmoreShown &&
   s.kid &&
   !s.clockShown;
-const noErrors = (name, r) => {
+const noErrors = (name: string, r: Look) => {
   if (r.errors.length) results[`${name}: console`] = r.errors.join(" | ");
 };
 

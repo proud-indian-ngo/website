@@ -13,11 +13,110 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 
 import { chromium } from "playwright";
+import type { Browser, CDPSession, Page } from "playwright";
 
 let URL_ = "";
 let OUT = "/tmp/pi-perf-qa";
 let KEEP = false;
-let ONLY = null;
+let ONLY: string[] | null = null;
+
+/** cc PipelineReporter's frame args (the fields read here). */
+interface FrameReporter {
+  state: string;
+  frame_source?: number;
+  frame_sequence?: number;
+  affects_smoothness?: boolean;
+  has_main_animation?: boolean;
+  has_compositor_animation?: boolean;
+}
+
+/** One Chrome trace event (the fields read here). */
+interface TraceEvent {
+  name: string;
+  ph: string;
+  pid: number;
+  tid: number;
+  ts: number;
+  dur?: number;
+  args?: {
+    name?: string;
+    frame_reporter?: FrameReporter;
+    chrome_frame_reporter?: FrameReporter;
+    data?: {
+      name?: string;
+      displayName?: string;
+      compositeFailed?: number;
+      unsupportedProperties?: string[];
+    };
+  };
+}
+
+/** A complete ("X") event: it always carries a duration. */
+type CompleteEvent = TraceEvent & { dur: number };
+
+export interface FrameStats {
+  expected: number;
+  bad: number;
+  mainAnim: number;
+  dropped: number;
+  badPct: number;
+  states?: Record<string, number>;
+}
+
+export interface MainStats {
+  busyPct?: number;
+  style: number;
+  layout: number;
+  paint: number;
+  commit: number;
+  script: number;
+  mainFrames: number;
+  tasksOver16: number;
+  longTasks: number;
+  longDuringAnim: number;
+  maxTask: number;
+}
+
+/** One traced scenario (or several merged). */
+export interface TraceStats {
+  secs: number;
+  frames: FrameStats;
+  main: MainStats;
+  rasterMs: number;
+  nonComposited: Record<string, number>;
+}
+
+export type IdleStats = TraceStats & { running: string[] };
+
+/** A LayerTree layer (the fields read here). */
+interface LayerLite {
+  layerId: string;
+  drawsContent: boolean;
+  width: number;
+  height: number;
+}
+
+export interface LayerSnap {
+  total: number;
+  drawing: number;
+  areaMpx: number;
+  reasons: Record<string, number>;
+}
+
+/** Everything measured at one width and throttling rate. */
+export interface ConfigResult {
+  load?: TraceStats | null;
+  planeIn?: TraceStats | null;
+  plane?: TraceStats | null;
+  scroll?: TraceStats | null;
+  idle?: Record<string, IdleStats>;
+  wobble?: (TraceStats & { count?: number }) | null;
+  coins?: TraceStats | null;
+  menu?: TraceStats | null;
+  drawer?: TraceStats | null;
+  layersTop?: LayerSnap | null;
+  layersMid?: LayerSnap | null;
+}
 
 const CATS = [
   "devtools.timeline",
@@ -29,13 +128,13 @@ const CATS = [
 ];
 
 // ---------- trace analysis ----------
-function analyse(events) {
-  const tn = {};
+function analyse(events: TraceEvent[]): TraceStats | null {
+  const tn: Record<string, string | undefined> = {};
   for (const e of events)
     if (e.ph === "M" && e.name === "thread_name")
-      tn[`${e.pid}:${e.tid}`] = e.args.name;
+      tn[`${e.pid}:${e.tid}`] = e.args!.name;
   // the page's renderer main thread: the CrRendererMain with the most RunTask time
-  const busy = {};
+  const busy: Record<string, number> = {};
   for (const e of events)
     if (
       e.name === "RunTask" &&
@@ -46,7 +145,7 @@ function analyse(events) {
         (busy[`${e.pid}:${e.tid}`] || 0) + (e.dur || 0);
   const main = Object.entries(busy).sort((a, b) => b[1] - a[1])[0]?.[0];
   if (!main) return null;
-  const [pid, tid] = main.split(":").map(Number);
+  const [pid, tid] = main.split(":").map(Number) as [number, number];
   const ts = events.filter((e) => e.ts && e.pid === pid).map((e) => e.ts);
   let t0 = Infinity,
     t1 = -Infinity;
@@ -59,10 +158,15 @@ function analyse(events) {
   // frames (cc PipelineReporter). One BeginFrame can be reported twice (a pipelined main-thread update shows up as
   // ALL + PARTIAL for the same sequence), so dedupe by (source, sequence). A frame is "bad" (dropped / over 16.7ms) the
   // way Chrome's smoothness metric counts it: DROPPED or PARTIAL with affects_smoothness.
-  const seqs = new Map();
+  const seqs = new Map<
+    string,
+    { states: string[]; bad: boolean; main: boolean; anim?: number }
+  >();
   for (const e of events)
     if (e.name === "PipelineReporter" && e.ph === "b" && e.pid === pid) {
-      const a = e.args?.frame_reporter || e.args?.chrome_frame_reporter || {};
+      const a = (e.args?.frame_reporter ||
+        e.args?.chrome_frame_reporter ||
+        {}) as FrameReporter;
       const k = `${a.frame_source}:${a.frame_sequence}`;
       const s = seqs.get(k) || { states: [], bad: false, main: false };
       s.states.push(a.state);
@@ -75,7 +179,7 @@ function analyse(events) {
       if (a.has_main_animation || a.has_compositor_animation) s.anim = e.ts;
       seqs.set(k, s);
     }
-  const st = {};
+  const st: Record<string, number> = {};
   let expected = 0,
     badN = 0,
     mainAnimFrames = 0,
@@ -96,8 +200,8 @@ function analyse(events) {
   // main thread work
   const mt = events.filter(
     (e) => e.pid === pid && e.tid === tid && e.ph === "X"
-  );
-  const sum = (names) =>
+  ) as CompleteEvent[];
+  const sum = (names: string[]) =>
     mt
       .filter((e) => names.includes(e.name))
       .reduce((a, e) => a + (e.dur || 0), 0) / 1000;
@@ -106,7 +210,7 @@ function analyse(events) {
   const over = tasks.filter((e) => e.dur > 16.7e3);
   // a long task "during animation" starts while an animation is already running (an animated frame in the 50ms before
   // it) and overlaps another animated frame; the task that produces the very first frames doesn't count
-  const animTs = [...seqs.values()].filter((s) => s.anim).map((s) => s.anim);
+  const animTs = [...seqs.values()].filter((s) => s.anim).map((s) => s.anim!);
   const longDuringAnim = long.filter(
     (t) =>
       animTs.some((ts) => ts < t.ts && ts >= t.ts - 50e3) &&
@@ -120,12 +224,14 @@ function analyse(events) {
         (e.name === "BeginFrame" && e.ph !== "X"))
   ).length;
   const raster =
-    events
-      .filter((e) => e.pid === pid && e.ph === "X" && e.name === "RasterTask")
-      .reduce((a, e) => a + e.dur, 0) / 1000;
+    (
+      events.filter(
+        (e) => e.pid === pid && e.ph === "X" && e.name === "RasterTask"
+      ) as CompleteEvent[]
+    ).reduce((a, e) => a + e.dur, 0) / 1000;
 
   // animations Blink could not composite
-  const anims = {};
+  const anims: Record<string, number> = {};
   for (const e of events) {
     if (e.name !== "Animation" || e.pid !== pid) continue;
     const d = e.args?.data || {};
@@ -134,7 +240,7 @@ function analyse(events) {
       anims[k] = (anims[k] || 0) + 1;
     }
   }
-  const r1 = (x) => Math.round(x * 10) / 10;
+  const r1 = (x: number) => Math.round(x * 10) / 10;
   return {
     secs: r1(secs),
     frames: {
@@ -164,9 +270,16 @@ function analyse(events) {
 }
 
 // ---------- scenarios ----------
-async function trace(cdp, fn, name, label) {
-  const events = [];
-  const onData = (e) => events.push(...e.value);
+async function trace(
+  cdp: CDPSession,
+  fn: () => Promise<unknown>,
+  name: string,
+  label: string
+) {
+  const events: TraceEvent[] = [];
+  // the protocol types trace events as string maps; they are JSON objects
+  const onData = (e: { value: object[] }) =>
+    events.push(...(e.value as TraceEvent[]));
   cdp.on("Tracing.dataCollected", onData);
   const done = new Promise((r) => cdp.once("Tracing.tracingComplete", r));
   await cdp.send("Tracing.start", {
@@ -185,10 +298,10 @@ async function trace(cdp, fn, name, label) {
   return analyse(events);
 }
 
-const sleep = (p, ms) => p.waitForTimeout(ms);
-const jump = (p, y) =>
+const sleep = (p: Page, ms: number) => p.waitForTimeout(ms);
+const jump = (p: Page, y: number) =>
   p.evaluate((y) => window.scrollTo({ top: y, behavior: "instant" }), y);
-const jumpTo = (p, sel) =>
+const jumpTo = (p: Page, sel: string) =>
   p.evaluate((s) => {
     const el = document.querySelector(s);
     if (!el) return false;
@@ -201,7 +314,11 @@ const jumpTo = (p, sel) =>
     return true;
   }, sel);
 
-async function runConfig(browser, width, rate) {
+async function runConfig(
+  browser: Browser,
+  width: number,
+  rate: number
+): Promise<ConfigResult> {
   const mobile = width < 700;
   const ctx = await browser.newContext({
     viewport: { width, height: mobile ? 844 : 900 },
@@ -211,8 +328,8 @@ async function runConfig(browser, width, rate) {
   const cdp = await ctx.newCDPSession(page);
   await cdp.send("Emulation.setCPUThrottlingRate", { rate });
   const label = `w${width}-x${rate}`;
-  const res = {};
-  const want = (k) => !ONLY || ONLY.includes(k);
+  const res: ConfigResult = {};
+  const want = (k: string) => !ONLY || ONLY.includes(k);
   const fresh = async () => {
     await page.goto("about:blank");
     await page.goto(URL_, { waitUntil: "load" });
@@ -245,7 +362,7 @@ async function runConfig(browser, width, rate) {
             .some(
               (a) =>
                 a.playState === "running" &&
-                a.effect.getTiming().duration === 2000
+                a.effect!.getTiming().duration === 2000
             )
         )
       );
@@ -290,10 +407,10 @@ async function runConfig(browser, width, rate) {
         .filter(
           (s) =>
             s.getBoundingClientRect().height > 200 &&
-            !s.parentElement.closest("section")
+            !s.parentElement!.closest("section")
         )
         .map((s, i) => {
-          s.dataset.perfIdx = i;
+          (s as HTMLElement).dataset.perfIdx = String(i);
           return {
             i,
             id: s.id || s.className.split(" ").slice(0, 2).join("."),
@@ -302,25 +419,54 @@ async function runConfig(browser, width, rate) {
     );
     res.idle = {};
     for (const s of secs) {
-      await page.evaluate((i) => {
+      await page.evaluate((i: number) => {
         const el = document.querySelector(`[data-perf-idx="${i}"]`);
         window.scrollTo({
-          top: scrollY + el.getBoundingClientRect().top,
+          top: scrollY + el!.getBoundingClientRect().top,
           behavior: "instant",
         });
       }, s.i);
       await sleep(page, 1500);
+      // Chrome reports every frame of a compositor animation as dropped while its element straddles the bottom edge
+      // of the viewport, though the screen updates at full rate (a screencast shows it). With the section's top at
+      // the top of a phone screen, the volunteer clock and the donate pot sit right there: scroll them fully in view.
+      // An animated SVG child moves with its whole <svg>, so that is the box to check; one taller than the screen
+      // (the plane's overlay) can't fit and is left alone.
+      const nudged = await page.evaluate(() => {
+        let over = 0;
+        for (const a of document.getAnimations()) {
+          const t = (a.effect as KeyframeEffect | null)?.target;
+          if (a.playState !== "running" || !t) continue;
+          const box =
+            t instanceof SVGElement && !(t instanceof SVGSVGElement)
+              ? (t.ownerSVGElement ?? t)
+              : t;
+          const q = box.getBoundingClientRect();
+          if (
+            q.height < innerHeight &&
+            q.top < innerHeight &&
+            q.bottom > innerHeight
+          )
+            over = Math.max(over, q.bottom - innerHeight + 8);
+        }
+        if (over) scrollBy({ top: over, behavior: "instant" });
+        return Math.round(over);
+      });
+      if (nudged) await sleep(page, 300);
       const running = await page.evaluate(() =>
         document
           .getAnimations()
           .filter(
             (a) =>
               a.playState === "running" &&
-              !a.effect?.target?.closest?.(".is-paused")
+              !(a.effect as KeyframeEffect | null)?.target?.closest?.(
+                ".is-paused"
+              )
           )
           .map((a) => {
-            const t = a.effect.target;
-            const kf = a.effect.getKeyframes();
+            const effect = a.effect as KeyframeEffect;
+            const t = effect.target!;
+            const kf = effect.getKeyframes();
             const props = [
               ...new Set(
                 kf.flatMap((k) =>
@@ -336,7 +482,7 @@ async function runConfig(browser, width, rate) {
                 )
               ),
             ];
-            return `${a.animationName || "WAAPI"}:${t.tagName.toLowerCase()}${t.classList.length ? "." + [...t.classList].slice(0, 2).join(".") : ""}(${props.join(",")})${t instanceof SVGElement && t.tagName !== "svg" ? " [svg-child]" : ""}`;
+            return `${(a as CSSAnimation).animationName || "WAAPI"}:${t.tagName.toLowerCase()}${t.classList.length ? "." + [...t.classList].slice(0, 2).join(".") : ""}(${props.join(",")})${t instanceof SVGElement && t.tagName !== "svg" ? " [svg-child]" : ""}`;
           })
       );
       const r = await trace(
@@ -345,7 +491,8 @@ async function runConfig(browser, width, rate) {
         `idle-${s.id}`,
         label
       );
-      res.idle[s.id || s.i] = { ...r, running };
+      // a scenario without a trace keeps only `running`; table() and the gates skip it
+      res.idle[s.id || s.i] = { ...r, running } as IdleStats;
     }
   }
 
@@ -359,9 +506,10 @@ async function runConfig(browser, width, rate) {
               w.getClientRects().length &&
               getComputedStyle(w).visibility !== "hidden"
           )
-          .map((w, i) => (w.dataset.perfWob = i)).length
+          .map((w, i) => ((w as HTMLElement).dataset.perfWob = String(i)))
+          .length
     );
-    const agg = [];
+    const agg: (TraceStats | null)[] = [];
     for (let i = 0; i < n; i++) {
       await jumpTo(page, `[data-perf-wob="${i}"]`);
       await page.mouse.move(2, 2);
@@ -391,7 +539,7 @@ async function runConfig(browser, width, rate) {
       );
     }
     res.wobble = merge(agg);
-    res.wobble.count = agg.length;
+    res.wobble!.count = agg.length;
   }
 
   // 6. coin drop: pick each preset amount
@@ -399,7 +547,7 @@ async function runConfig(browser, width, rate) {
     await jumpTo(page, ".matka");
     await sleep(page, 1200);
     const amts = await page.locator("button[data-amt]").count();
-    const agg = [];
+    const agg: (TraceStats | null)[] = [];
     for (let i = 0; i < amts; i++) {
       const b = page.locator("button[data-amt]").nth(i);
       if (!(await b.isVisible())) continue;
@@ -455,8 +603,8 @@ async function runConfig(browser, width, rate) {
   // layers at the top of the page and mid-page
   await cdp.send("LayerTree.enable");
   const layerSnap = async () => {
-    let layers = null;
-    const h = (e) => {
+    let layers: LayerLite[] | null = null as LayerLite[] | null;
+    const h = (e: { layers?: LayerLite[] }) => {
       if (e.layers) layers = e.layers;
     };
     cdp.on("LayerTree.layerTreeDidChange", h);
@@ -465,7 +613,7 @@ async function runConfig(browser, width, rate) {
     cdp.off("LayerTree.layerTreeDidChange", h);
     if (!layers) return null;
     const drawn = layers.filter((l) => l.drawsContent);
-    const reasons = {};
+    const reasons: Record<string, number> = {};
     for (const l of drawn.slice(0, 200)) {
       try {
         const r = await cdp.send("LayerTree.compositingReasons", {
@@ -494,11 +642,18 @@ async function runConfig(browser, width, rate) {
   return res;
 }
 
-function merge(list) {
-  const ok = list.filter(Boolean);
+type FrameCount = "expected" | "bad" | "mainAnim" | "dropped";
+
+function merge(list: (TraceStats | null)[]): TraceStats | null {
+  const ok = list.filter(Boolean) as TraceStats[];
   if (!ok.length) return null;
-  const f = { expected: 0, bad: 0, mainAnim: 0, dropped: 0 };
-  const m = {
+  const f: Pick<FrameStats, FrameCount> & { badPct?: number } = {
+    expected: 0,
+    bad: 0,
+    mainAnim: 0,
+    dropped: 0,
+  };
+  const m: MainStats = {
     style: 0,
     layout: 0,
     paint: 0,
@@ -510,24 +665,30 @@ function merge(list) {
     maxTask: 0,
     mainFrames: 0,
   };
-  const nc = {};
+  const nc: Record<string, number> = {};
   let secs = 0,
     raster = 0;
   for (const r of ok) {
     secs += r.secs;
     raster += r.rasterMs;
-    for (const k in f) f[k] += r.frames[k];
-    for (const k in m)
-      m[k] = k === "maxTask" ? Math.max(m[k], r.main[k]) : m[k] + r.main[k];
+    for (const k in f) {
+      const key = k as FrameCount;
+      f[key] += r.frames[key];
+    }
+    for (const k in m) {
+      const key = k as Exclude<keyof MainStats, "busyPct">;
+      m[key] =
+        k === "maxTask" ? Math.max(m[key], r.main[key]) : m[key] + r.main[key];
+    }
     for (const [k, v] of Object.entries(r.nonComposited))
       nc[k] = (nc[k] || 0) + v;
   }
   f.badPct = f.expected ? Math.round((f.bad / f.expected) * 1000) / 10 : 0;
-  for (const k of ["style", "layout", "paint", "commit", "script"])
+  for (const k of ["style", "layout", "paint", "commit", "script"] as const)
     m[k] = Math.round(m[k] * 10) / 10;
   return {
     secs: Math.round(secs * 10) / 10,
-    frames: f,
+    frames: f as FrameStats,
     main: m,
     rasterMs: Math.round(raster),
     nonComposited: nc,
@@ -536,22 +697,28 @@ function merge(list) {
 
 // ---------- run ----------
 export async function runFrames(
-  url,
+  url: string,
   {
     rates = [4, 6],
     widths = [390, 1440],
     only = null,
     out = OUT,
     keepTraces = false,
+  }: {
+    rates?: number[];
+    widths?: number[];
+    only?: string[] | null;
+    out?: string;
+    keepTraces?: boolean;
   } = {}
-) {
+): Promise<Record<string, ConfigResult>> {
   URL_ = url;
   OUT = out;
   KEEP = keepTraces;
   ONLY = only;
   mkdirSync(`${OUT}/traces`, { recursive: true });
   const browser = await chromium.launch({ channel: "chromium" });
-  const all = {};
+  const all: Record<string, ConfigResult> = {};
   try {
     for (const w of widths)
       for (const r of rates) {
@@ -567,8 +734,8 @@ export async function runFrames(
 }
 
 // ---------- report ----------
-export function table(all) {
-  const row = (name, r) =>
+export function table(all: Record<string, ConfigResult>) {
+  const row = (name: string, r: TraceStats | null | undefined) =>
     r
       ? `${name.padEnd(26)} ${String(r.frames.expected).padStart(5)} ${String(r.frames.bad).padStart(5)} ${String(r.frames.mainAnim).padStart(5)} ${String(r.frames.badPct + "%").padStart(7)} | ${String(r.main.mainFrames).padStart(5)} ${String(r.main.style).padStart(7)} ${String(r.main.layout).padStart(7)} ${String(r.main.paint).padStart(7)} ${String(r.main.script).padStart(7)} ${String(r.rasterMs).padStart(6)} | ${String(r.main.tasksOver16).padStart(4)} ${String(r.main.longTasks).padStart(4)} ${String(r.main.longDuringAnim).padStart(4)} ${String(r.main.maxTask).padStart(6)}`
       : `${name.padEnd(26)} n/a`;
@@ -587,7 +754,7 @@ export function table(all) {
       "coins",
       "menu",
       "drawer",
-    ])
+    ] as const)
       if (res[k] !== undefined) lines.push(row(k, res[k]));
     for (const [s, r] of Object.entries(res.idle || {}))
       lines.push(row(`idle:${s}`.slice(0, 26), r));

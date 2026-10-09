@@ -17,10 +17,12 @@
  * Exits non-zero on any overlap.
  */
 import { existsSync } from "node:fs";
+import type { Server } from "node:http";
+import type { AddressInfo } from "node:net";
 
-import { chromium } from "playwright";
+import { type Browser, chromium } from "playwright";
 
-import { serve } from "./perf/serve.mjs";
+import { serve } from "./perf/serve.ts";
 
 const WIDTHS = (
   process.env.WIDTHS ??
@@ -28,7 +30,7 @@ const WIDTHS = (
 )
   .split(",")
   .map(Number);
-let server = null;
+let server: Server | null = null;
 let SITE = process.env.SITE;
 if (!SITE) {
   if (!existsSync("dist/index.html")) {
@@ -38,18 +40,29 @@ if (!SITE) {
     process.exit(1);
   }
   server = await serve("dist", 0);
-  SITE = `http://127.0.0.1:${server.address().port}/`;
+  SITE = `http://127.0.0.1:${(server.address() as AddressInfo).port}/`;
 }
 
 const JOBS = Number(process.env.JOBS ?? 4);
 const PAGES = (process.env.PAGES ?? ",volunteer/").split(",");
 
-async function check(browser, path, w) {
+interface Check {
+  n: number;
+  obs: number;
+  out: string[];
+  aligned: number;
+}
+
+async function check(
+  browser: Browser,
+  path: string,
+  w: number
+): Promise<Check> {
   const page = await browser.newPage({
     viewport: { width: w, height: 1000 },
     reducedMotion: "reduce",
   });
-  await page.goto(new URL(path, SITE).href, { waitUntil: "networkidle" });
+  await page.goto(new URL(path, SITE!).href, { waitUntil: "networkidle" });
   // walk the page so every lazy image has its size
   await page.evaluate(async () => {
     for (let y = 0; y < document.body.scrollHeight; y += 600) {
@@ -66,13 +79,14 @@ async function check(browser, path, w) {
   const r = await page.evaluate(() => {
     const sy = scrollY;
     const sx = scrollX;
-    const box = (q) => ({
+    type Box = { x: number; y: number; w: number; h: number };
+    const box = (q: DOMRect): Box => ({
       x: q.left + sx,
       y: q.top + sy,
       w: q.width,
       h: q.height,
     });
-    const vis = (el) => {
+    const vis = (el: Element) => {
       const cs = getComputedStyle(el);
       return (
         cs.display !== "none" && cs.visibility !== "hidden" && +cs.opacity !== 0
@@ -83,11 +97,11 @@ async function check(browser, path, w) {
         (e) => e.getClientRects().length && e.getBoundingClientRect().width > 0
       )
       .map((e) => ({
-        id: `${e.closest(".mg").classList[1]}:${e.querySelector("use").getAttribute("href")}`,
+        id: `${e.closest(".mg")!.classList[1]}:${e.querySelector("use")!.getAttribute("href")}`,
         ...box(e.getBoundingClientRect()),
       }));
-    const obs = [];
-    const skip = (el) =>
+    const obs: (Box & { k: string })[] = [];
+    const skip = (el: Element) =>
       el.closest(
         ".mg, .site-hd, .pidx, script, style, .mg-sprite, [data-sbar], #menu, dialog, .cDrawer, .cScrim, .skip"
       );
@@ -95,9 +109,9 @@ async function check(browser, path, w) {
     const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
     for (let n; (n = tw.nextNode());) {
       if (
-        !n.textContent.trim() ||
-        skip(n.parentElement) ||
-        !vis(n.parentElement)
+        !n.textContent!.trim() ||
+        skip(n.parentElement!) ||
+        !vis(n.parentElement!)
       )
         continue;
       const rg = document.createRange();
@@ -105,7 +119,7 @@ async function check(browser, path, w) {
       for (const q of rg.getClientRects())
         if (q.width)
           obs.push({
-            k: `text:${n.textContent.trim().slice(0, 20)}`,
+            k: `text:${n.textContent!.trim().slice(0, 20)}`,
             ...box(q),
           });
     }
@@ -150,7 +164,7 @@ async function check(browser, path, w) {
       const wasShown = rail.classList.contains("show");
       rail.classList.add("show");
       railLeft = rail.getBoundingClientRect().left;
-      for (const lb of rail.querySelectorAll(".lb")) {
+      for (const lb of rail.querySelectorAll<HTMLElement>(".lb")) {
         const o = lb.style.display;
         lb.style.display = "block";
         railLeft = Math.min(railLeft, lb.getBoundingClientRect().left);
@@ -174,9 +188,9 @@ async function check(browser, path, w) {
         w: q.width,
         h: q.height,
       }));
-    const hit = (a, c) =>
+    const hit = (a: Box, c: Box) =>
       a.x < c.x + c.w && c.x < a.x + a.w && a.y < c.y + c.h && c.y < a.y + a.h;
-    const out = [];
+    const out: string[] = [];
     for (const dd of doodles) {
       for (const o of obs) if (hit(dd, o)) out.push(`${dd.id} x ${o.k}`);
       // the rail is fixed: any vertical position, so test the column against doodles where the rail can show
@@ -194,19 +208,19 @@ async function check(browser, path, w) {
     }
     // straight-line stat: pairs on the same side of a section within 30px of the same x
     let aligned = 0;
-    const bySide = {};
+    const bySide: Record<string, number[]> = {};
     for (const e of document.querySelectorAll(".mg-d")) {
       if (!e.getClientRects().length) continue;
       const q = e.getBoundingClientRect();
       const k =
-        e.closest(".mg").classList[1] +
+        e.closest(".mg")!.classList[1] +
         (e.classList.contains("mg-l") ? "l" : "r");
       (bySide[k] ||= []).push(q.left + q.width / 2);
     }
     for (const xs of Object.values(bySide))
       for (let i = 0; i < xs.length; i++)
         for (let j = i + 1; j < xs.length; j++)
-          if (Math.abs(xs[i] - xs[j]) < 30) aligned++;
+          if (Math.abs(xs[i]! - xs[j]!) < 30) aligned++;
     return { n: doodles.length, obs: obs.length, out, aligned };
   });
   await page.close();
@@ -216,7 +230,7 @@ async function check(browser, path, w) {
 // JOBS page widths at a time, each in its own page; the rows print in PAGES, then WIDTHS order
 const tasks = PAGES.flatMap((path) => WIDTHS.map((w) => ({ path, w })));
 const browser = await chromium.launch();
-const results = [];
+const results: Check[] = [];
 let next = 0;
 await Promise.all(
   Array.from({ length: Math.min(JOBS, tasks.length) }, async () => {
