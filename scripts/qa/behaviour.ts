@@ -29,12 +29,14 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 async function open(
   browser: Browser,
   url: string,
-  opts: BrowserContextOptions = {}
+  opts: BrowserContextOptions = {},
+  init?: () => void
 ) {
   const ctx = await browser.newContext({
     viewport: { width: 1440, height: 900 },
     ...opts,
   });
+  if (init) await ctx.addInitScript(init);
   const page = await ctx.newPage();
   const errors: string[] = [];
   // only the site's own errors: a third-party request the page can't control (the events feed refusing CORS from
@@ -628,6 +630,89 @@ async function guide(browser: Browser, url: string) {
   return r;
 }
 
+// ---------- WebMCP: with a stand-in document.modelContext, the pages register their tools and the tools work
+interface FakeTool {
+  name: string;
+  annotations?: { readOnlyHint?: boolean };
+  execute: (input: Record<string, unknown>) => Promise<{
+    content: { text: string }[];
+    isError?: boolean;
+  }>;
+}
+declare global {
+  interface Window {
+    __tools: Record<string, FakeTool>;
+  }
+}
+function fakeModelContext() {
+  window.__tools = {};
+  Object.defineProperty(document, "modelContext", {
+    value: {
+      registerTool: async (tool: FakeTool) => {
+        window.__tools[tool.name] = tool;
+      },
+    },
+  });
+}
+const call = (page: Page, name: string, input: Record<string, unknown> = {}) =>
+  page.evaluate(
+    async ([n, i]) => {
+      const res = await window.__tools[n as string]!.execute(
+        i as Record<string, unknown>
+      );
+      return { text: res.content[0]!.text, isError: !!res.isError };
+    },
+    [name, input] as const
+  );
+
+async function webmcp(browser: Browser, url: string) {
+  const r: Record<string, boolean | string> = {};
+  const { ctx, page, errors } = await open(browser, url, {}, fakeModelContext);
+  const names = () => page.evaluate(() => Object.keys(window.__tools).sort());
+  r["webmcp: home registers its tools"] =
+    (await names()).join() ===
+    "fill-donation-amount,list-volunteer-sessions,start-volunteer-sign-up";
+  r["webmcp: list is read-only"] = await page.evaluate(
+    () =>
+      window.__tools["list-volunteer-sessions"]!.annotations?.readOnlyHint ===
+      true
+  );
+  const list = await call(page, "list-volunteer-sessions");
+  r["webmcp: list-volunteer-sessions"] = list.text.startsWith("{")
+    ? (
+        JSON.parse(list.text) as { sessions: { signUpUrl: string }[] }
+      ).sessions.every((x) => x.signUpUrl.startsWith("https://"))
+    : list.text.includes("No sessions") || list.text.includes("could not");
+  r["webmcp: sign-up refuses an unknown session"] = (
+    await call(page, "start-volunteer-sign-up", { sessionId: "nope" })
+  ).isError;
+  const low = await call(page, "fill-donation-amount", { amount: 50 });
+  const ok = await call(page, "fill-donation-amount", { amount: "₹2,500" });
+  r["webmcp: fill-donation-amount"] =
+    low.isError &&
+    !ok.isError &&
+    (await until(page, () =>
+      document
+        .querySelector("#donate [data-donate]")!
+        .textContent.includes("Donate ₹2,500")
+    ));
+  r["webmcp: no console errors"] = errors.length === 0;
+  if (errors.length) console.log(errors);
+  await ctx.close();
+  const guidePage = await open(
+    browser,
+    new URL("volunteer/", url).href,
+    {},
+    fakeModelContext
+  );
+  r["webmcp: guide registers the session tools only"] =
+    (
+      await guidePage.page.evaluate(() => Object.keys(window.__tools).sort())
+    ).join() === "list-volunteer-sessions,start-volunteer-sign-up";
+  await guidePage.ctx.close();
+  return r;
+}
+
 // the sessions share nothing (each has its own browser context), so JOBS of them run at once; the table keeps
 // this order
 const SESSIONS = [
@@ -641,6 +726,7 @@ const SESSIONS = [
   lockTablet,
   lockPhoneMenu,
   guide,
+  webmcp,
 ];
 const JOBS = Number(process.env.JOBS ?? 4);
 const browser = await chromium.launch();

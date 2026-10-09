@@ -17,6 +17,7 @@ import { initRail, onScroll } from "./rail";
 import { initReportsDrawer } from "./reports-drawer";
 import { fireLoadTriggers, initReveal, sweep } from "./reveal";
 import { initSwipe } from "./swipe";
+import { initWebMcp } from "./webmcp";
 import { initWobble } from "./wobble";
 
 const relayout = () => {
@@ -32,7 +33,7 @@ const relayout = () => {
 initLite();
 initRail();
 initMenu();
-initDonate();
+const donate = initDonate();
 initReportsDrawer();
 initLoops();
 initWobble();
@@ -42,6 +43,8 @@ initReveal();
 initPlane();
 initNudge();
 initPause();
+// tools for a browser's AI agent (WebMCP), where the browser has the API
+initWebMcp(donate);
 
 // boot: the header and hero load sequence is CSS and is already playing from the first paint; mark it as played. The
 // below-the-fold measuring (verb fitting, the plane path, scroll-spy) waits one frame so it does not hold up the

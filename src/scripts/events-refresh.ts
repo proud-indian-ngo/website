@@ -19,6 +19,30 @@ interface State {
   events: PublicEvent[];
 }
 
+/** The state the page was built with, then whatever the refresh last rendered (see `sessions`). */
+let current: State | null = null;
+const readState = () => {
+  if (current) return current;
+  const el = document.getElementById("events-state");
+  if (el?.textContent) current = JSON.parse(el.textContent) as State;
+  return current;
+};
+
+/** The sessions on the page right now, for the WebMCP tools: null on a page without the list, `unavailable` when the
+ *  build could not load them and no refresh has since, plus the dashboard links the poster uses. */
+export function sessions() {
+  const state = readState();
+  if (!state) return null;
+  const source = document.querySelector<HTMLElement>("[data-events-source]")
+    ?.dataset.eventsSource;
+  return {
+    events: state.events,
+    unavailable: source === "unavailable",
+    eventsUrl: state.labels.unavailable.href,
+    registerUrl: state.labels.empty.href,
+  };
+}
+
 /** Children of the poster that never change: the cut-out child and the empty-state clock. */
 const KEEP = ["kid", "pclock"];
 
@@ -45,10 +69,8 @@ function render(events: PublicEvent[], labels: EventLabels) {
 }
 
 export async function refreshEvents(onChange: () => void) {
-  const el = document.getElementById("events-state");
-  if (!el?.textContent) return;
-  const state = JSON.parse(el.textContent) as State;
-  if (!state.url) return;
+  const state = readState();
+  if (!state?.url) return;
   // the production feed only allows the live site and its previews (CORS): from a local server (dev, preview, CI)
   // the request can only fail, with a console error, so it isn't made. A local mock feed (http) still refreshes.
   if (
