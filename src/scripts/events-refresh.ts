@@ -71,8 +71,8 @@ function render(events: PublicEvent[], labels: EventLabels) {
 export async function refreshEvents(onChange: () => void) {
   const state = readState();
   if (!state?.url) return;
-  // the production feed only allows the live site and its previews (CORS): from a local server (dev, preview, CI)
-  // the request can only fail, with a console error, so it isn't made. A local mock feed (http) still refreshes.
+  // on a local server (dev, preview, CI) the page keeps what the build fetched rather than the production feed, so
+  // local runs and the QA don't change with the live sessions. A local mock feed (http) still refreshes.
   if (
     /^(localhost|127\.0\.0\.1)$/.test(location.hostname) &&
     state.url.startsWith("https:")

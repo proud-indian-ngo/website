@@ -39,8 +39,8 @@ async function open(
   if (init) await ctx.addInitScript(init);
   const page = await ctx.newPage();
   const errors: string[] = [];
-  // only the site's own errors: a third-party request the page can't control (the events feed refusing CORS from
-  // 127.0.0.1, an analytics beacon) is not a site bug
+  // only the site's own errors: a third-party request the page can't control (the events feed failing, an analytics
+  // beacon) is not a site bug
   const origin = new URL(url).origin;
   page.on("console", (m) => {
     if (m.type() !== "error") return;
