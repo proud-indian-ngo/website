@@ -165,7 +165,7 @@ The tokens, primitive CSS, fonts, generic reset, custom utilities, favicons and 
 **Installing.** The package is not published to npm; it installs from its public GitHub repo, pinned to a tag:
 
 ```jsonc
-"@proudindian/design": "github:proud-indian-ngo/design#v0.2.3"
+"@proudindian/design": "github:proud-indian-ngo/design#v0.2.4"
 ```
 
 The package commits its built `dist/`, so the install needs no build step and no token. bun blocks the package's `prepare` script (`lefthook install`), which is expected.
