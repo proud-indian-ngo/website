@@ -259,7 +259,7 @@ Motion is built to stay on the compositor (performance pass, 2026-10-08):
 
 ## Scrollbars
 
-Brand scrollbars come from `@proudindian/design/scrollbar.css` (imported in `global.css`), on every desktop platform, macOS included: for mouse and trackpad users the page gets a 12px paper track with a hairline ink edge and an ink pill, deep sky on hover and solid ink while dragged (Firefox: the same colours at its thin width). Touch screens keep the native overlay scrollbar. Scrollers on ink use `.pi-scroll-dark`.
+Brand scrollbars are the site's own (`src/styles/scrollbar.css`, imported unlayered in `global.css`), on every desktop platform, macOS included: for mouse and trackpad users the page and any scroller get a 12px paper track with a 1px ink line on the side facing the content and a solid ink pill, sky on hover and deep sky while dragged (Firefox: the same colours at its thin width). Touch screens keep the native overlay scrollbar. The swipe rows and the footer photo strip show none.
 
 **Swipe rows have arrows, not scrollbars.** The "More weekends" tickets and the Kalakriti line (`data-swipe`, `src/scripts/swipe.ts`, `src/styles/sections/swipe.css`) hide their scrollbar on every device. A round button at each end scrolls by about a card and only shows while there is more that way, so at widths where everything fits there are none. Touch swiping, the trackpad and the keyboard (the rows are focusable) work as before; the button labels are in `copy.yaml` (`volunteer.more.prev`/`next`) and `kalakriti.yaml` (`line.prev`/`next`).
 

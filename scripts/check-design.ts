@@ -37,7 +37,6 @@ const USED = [
   "dist/tokens/index.js",
   "css/fonts.css",
   "css/base.css",
-  "css/scrollbar.css",
   "css/utilities.css",
   ...[
     "doodle",
