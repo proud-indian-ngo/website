@@ -11,6 +11,7 @@
  *   bun run build && bun run qa:doodles               # serves dist/ itself on a free port
  *   SITE=http://127.0.0.1:4321/ bun run qa:doodles   # or check a running server
  *   WIDTHS=1440,2560 bun run qa:doodles
+ *   JOBS=1 bun run qa:doodles                         # widths checked at once (default 4)
  *
  * Exits non-zero on any overlap.
  */
@@ -39,9 +40,9 @@ if (!SITE) {
   SITE = `http://127.0.0.1:${server.address().port}/`;
 }
 
-const browser = await chromium.launch();
-let total = 0;
-for (const w of WIDTHS) {
+const JOBS = Number(process.env.JOBS ?? 4);
+
+async function check(browser, w) {
   const page = await browser.newPage({
     viewport: { width: w, height: 1000 },
     reducedMotion: "reduce",
@@ -202,13 +203,31 @@ for (const w of WIDTHS) {
           if (Math.abs(xs[i] - xs[j]) < 30) aligned++;
     return { n: doodles.length, obs: obs.length, out, aligned };
   });
+  await page.close();
+  return r;
+}
+
+// JOBS widths at a time, each in its own page; the rows print in WIDTHS order
+const browser = await chromium.launch();
+const results = [];
+let next = 0;
+await Promise.all(
+  Array.from({ length: Math.min(JOBS, WIDTHS.length) }, async () => {
+    while (next < WIDTHS.length) {
+      const i = next++;
+      results[i] = await check(browser, WIDTHS[i]);
+    }
+  })
+);
+await browser.close();
+let total = 0;
+WIDTHS.forEach((w, i) => {
+  const r = results[i];
   total += r.out.length;
   console.log(
     `${String(w).padStart(4)}  doodles=${String(r.n).padStart(2)}  obstacles=${r.obs}  aligned<30px=${r.aligned}  overlaps=${r.out.length}${r.out.length ? `  ${[...new Set(r.out)].join("; ")}` : ""}`
   );
-  await page.close();
-}
-await browser.close();
+});
 server?.close();
 console.log(
   total ? `qa:doodles FAIL: ${total} overlaps` : "qa:doodles PASS: no overlaps"
