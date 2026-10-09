@@ -3,7 +3,8 @@ import { dropCoins } from "./coins";
  * Donate amount picker: the preset chips and the "Or enter another amount" field update the total, the
  * button label and the Razorpay deep link. Focusing or typing in the field deselects the presets. Below the minimum
  * the total dims and the button reads "Enter ₹100 or more" (aria-disabled, clicks do nothing). Razorpay settings
- * come from data attributes rendered from src/content/site.yaml.
+ * come from data attributes rendered from src/content/site.yaml. Returns what the WebMCP donate tool needs (null without
+ * the picker): the minimum, and a way to set the amount as if typed into the field.
  */
 import { $, $$ } from "./dom";
 
@@ -12,7 +13,7 @@ const inr = (n: number) => Math.round(n).toLocaleString("en-IN");
 export function initDonate() {
   const form = $<HTMLFormElement>("[data-donate-form]");
   const scope = $("#donate");
-  if (!form || !scope) return;
+  if (!form || !scope) return null;
   const {
     rzpBase = "",
     rzpParam = "",
@@ -80,4 +81,14 @@ export function initDonate() {
     });
   // the card is a <form> for grouping only; Enter in the amount field must not reload the page
   form.addEventListener("submit", (e) => e.preventDefault());
+
+  return {
+    min,
+    form,
+    setAmount(n: number) {
+      deselect();
+      setAmt(n);
+      return payUrl(n);
+    },
+  };
 }

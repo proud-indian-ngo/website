@@ -4,7 +4,8 @@ pre-commit:
     format:
       priority: 1
       glob: "*.{js,mjs,ts,css,json}"
-      run: bunx oxfmt {staged_files}
+      # files oxfmt ignores (public/_routes.json) leave it nothing to check: not an error
+      run: bunx oxfmt --no-error-on-unmatched-pattern {staged_files}
       stage_fixed: true
     # oxlint fails when none of the files it is given are scripts, so it only gets scripts
     lint:

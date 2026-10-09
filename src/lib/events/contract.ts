@@ -1,7 +1,8 @@
 /**
  * pi-dash public events API, GET https://dash.proudindian.ngo/api/public/events (proud-indian-ngo/dash#150).
  * Public, upcoming, not cancelled, never Kalakriti, no personal data; sorted by startTime, then id. Defaults: city
- * bangalore, the next 30 days, at most 20 events. CORS allows https://proudindian.ngo and https://*.pages.dev only.
+ * bangalore, the next 30 days, at most 20 events. CORS allows any origin. OpenAPI description:
+ * https://dash.proudindian.ngo/api/public/openapi.json.
  * Shared by the build (src/lib/events/load.ts) and the browser refresh (src/scripts/events-refresh.ts), so it has no
  * dependencies.
  */
