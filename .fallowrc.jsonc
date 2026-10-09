@@ -1,0 +1,4 @@
+{
+  // only CI runs it (cloudflare/wrangler-action uses the installed copy instead of downloading its own)
+  "ignoreDependencies": ["wrangler"],
+}

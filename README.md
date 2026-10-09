@@ -33,7 +33,7 @@ bun run preview    # serve dist/ at http://localhost:4321
 | `bun run qa:behaviour` | Motion-on behaviour checks against a running site (reveals, loops, Pause, menu, drawer, donate, scroll lock); see [Quality checks](#quality-checks) |
 | `bun run qa:doodles` | The margin doodles touch no content, rail, header pill or viewport edge, at 390 to 2560px, on the home page and the volunteer guide (serves `dist/` itself; run `bun run build` first, or set `SITE`; `PAGES` picks pages). See [Margin doodles](#margin-doodles) |
 | `bun run qa:events` | The events flow end to end against the mock feed (`bun run qa:events:mock`); see [Events](#events-volunteer-section) |
-| `bun run qa:lighthouse` | Lighthouse ×3 on mobile and desktop, for the home page and the volunteer guide, against `dist/` served like Cloudflare Pages; fails if accessibility, best practices or SEO drop below 100, or performance below 90, CLS above 0.1 or TBT above 200ms. CI runs it on pull requests and pushes (the `lighthouse` job, not required) |
+| `bun run qa:lighthouse` | Lighthouse ×3 on mobile and desktop, for the home page and the volunteer guide (`PAGES` picks pages), against `dist/` served like Cloudflare Pages; fails if accessibility, best practices or SEO drop below 100, or performance below 90, CLS above 0.1 or TBT above 200ms. CI runs it on pull requests and pushes (the `lighthouse` job, not required), mobile and desktop on separate runners; `FORMS=desktop` runs one |
 | `bun run qa:perf` | Build, serve like Cloudflare Pages (brotli, `_headers`), Lighthouse ×5 on mobile and desktop, and the frame profiler at 4× and 6× CPU throttling (see [Performance](#performance)) |
 | `bun run motion:load` | Regenerate `src/styles/sections/load-motion.css` (the header and hero load sequence) from `scripts/load-motion.ts`; `bun run check` fails if it is out of date |
 
@@ -44,7 +44,7 @@ Lint and format match proud-indian-ngo/dash: oxlint (correctness rules as errors
 These follow proud-indian-ngo/dash.
 - **Hooks.** Lefthook (`bun install` sets it up) formats and lints staged files, runs the design and style checks and the type check on commit, and checks the commit message.
 - **Commits and PR titles** are [Conventional Commits](https://www.conventionalcommits.org) (`feat: …`, `fix(events): …`, `chore(deps): …`; lower-case subject, at most 100 characters), checked by commitlint (`commitlint.config.js`). Pull requests are squash-merged with the PR title as the commit message, so the title is what lands on `main`.
-- **CI.** `.github/workflows/ci.yml` runs the `lighthouse` job beside `checks` on pull requests and pushes, with the scores in the run summary; it isn't required, because performance scores on shared runners vary, so the 100 target stays a manual check (`qa:perf`). It also runs the `checks` job (lint, types, fallow, build, `qa:behaviour`, `qa:doodles`, and the Razorpay check as a warning) on every pull request and push. `checks` is required on `main`, which also needs a pull request with one approval (admins can push directly).
+- **CI.** `.github/workflows/ci.yml` runs the `lighthouse` job beside `checks` on pull requests and pushes, with the scores in the run summary; it isn't required, because performance scores on shared runners vary, so the 100 target stays a manual check (`qa:perf`). It also runs the `checks` job (lint, types, fallow, build, `qa:behaviour`, `qa:doodles`, and the Razorpay check as a warning, then the deploy) on every pull request and push. A change that only touches Markdown outside `src/` skips the browser checks and Lighthouse (`.github/docs-only.sh`), and the `events-changed` and nightly rebuilds skip lint, types and fallow, since the code is `main`'s and already checked. `checks` is required on `main`, which also needs a pull request with one approval (admins can push directly).
 - **Dependencies.** [Renovate](https://docs.renovatebot.com) (`renovate.json`) opens update PRs on weekday mornings (IST): patches are grouped and automerged once `checks` passes, minor updates are grouped into one PR, and `@proudindian/design` releases get their own PR. Dependabot security updates and secret scanning (with push protection) are on.
 
 ## Environment
@@ -113,17 +113,17 @@ Buttons deep-link to Razorpay: `https://pages.razorpay.com/proud-indian-ngo-dona
 
 ## Deploying to Cloudflare Pages
 
-GitHub Actions checks, builds and deploys (`.github/workflows/ci.yml`; the `deploy` job runs after `checks`) with `wrangler pages deploy` to the Cloudflare Pages project `proudindian` (<https://proudindian.pages.dev>) in the **Proud Indian** Cloudflare account. Cloudflare's own Git integration is not used.
+GitHub Actions checks, builds and deploys (`.github/workflows/ci.yml`, all in the `checks` job) with `wrangler pages deploy` (Wrangler is a devDependency) to the Cloudflare Pages project `proudindian` (<https://proudindian.pages.dev>) in the **Proud Indian** Cloudflare account. Cloudflare's own Git integration is not used.
 
 | Trigger | Result |
 |---|---|
 | Push to `main` | Production deployment |
-| Pull request | Preview deployment at `https://<branch>.proudindian.pages.dev`, posted as a comment on the PR (one comment, updated on every push) and in the run summary. Pull requests from forks build and check but don't deploy. |
+| Pull request | Preview deployment at `https://<branch>.proudindian.pages.dev` as soon as the site builds (the browser checks run after it), posted as a comment on the PR (one comment, updated on every push) and in the run summary. Pull requests from forks build and check but don't deploy. |
 | `repository_dispatch` of type `events-changed` | Rebuild with fresh sessions (for pi-dash to call when an event changes) |
 | Nightly at 06:00 IST | Rebuild, only once `PUBLIC_EVENTS_URL` is set |
 | Run workflow (Actions tab) | Manual rebuild |
 
-Every run installs with the frozen lockfile and deploys only after the `checks` job passes (see [Conventions](#conventions)); the deploy job uploads the exact `dist/` that `checks` built and tested. The image cache (`node_modules/.astro`) is kept between runs, so a build takes about 2 seconds instead of 11.
+Every run installs with the frozen lockfile. Production deploys only once every check in `checks` has passed (see [Conventions](#conventions)), and uploads the exact `dist/` those checks tested; a pull request's preview goes up right after the build. The image cache (`node_modules/.astro`) is kept between runs, so a build takes about 2 seconds instead of 11.
 
 **Secrets and variables** (repository settings → Secrets and variables → Actions):
 - Secret `CLOUDFLARE_API_TOKEN`: an account-owned API token in the Proud Indian account ("GitHub Actions: proud-indian-ngo/website (Pages deploy)"), with Pages Write only. Replace it there if it leaks.
