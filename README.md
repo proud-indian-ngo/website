@@ -93,7 +93,7 @@ Buttons deep-link to Razorpay: `https://pages.razorpay.com/proud-indian-ngo-dona
 
 ## Deploying to Cloudflare Pages
 
-GitHub Actions builds and deploys (`.github/workflows/deploy.yml`) with `wrangler pages deploy` to the Cloudflare Pages project `proudindian`. Cloudflare's own Git integration is not used.
+GitHub Actions builds and deploys (`.github/workflows/deploy.yml`) with `wrangler pages deploy` to the Cloudflare Pages project `proudindian` (<https://proudindian.pages.dev>) in the **Proud Indian** Cloudflare account. Cloudflare's own Git integration is not used.
 
 | Trigger | Result |
 |---|---|
@@ -103,14 +103,12 @@ GitHub Actions builds and deploys (`.github/workflows/deploy.yml`) with `wrangle
 | Nightly at 06:00 IST | Rebuild, only once `PUBLIC_EVENTS_URL` is set |
 | Run workflow (Actions tab) | Manual rebuild |
 
-Every run installs with the frozen lockfile and runs `bun run check`, `bun run check:types` and `bun run build` before deploying. The image cache (`node_modules/.astro`) is kept between runs, so a build takes about 2 seconds instead of 11. The first run creates the Pages project.
+Every run installs with the frozen lockfile and runs `bun run check`, `bun run check:types` and `bun run build` before deploying. The image cache (`node_modules/.astro`) is kept between runs, so a build takes about 2 seconds instead of 11.
 
-**One-time setup** (repository settings → Secrets and variables → Actions):
-- Secret `CLOUDFLARE_API_TOKEN`: a Cloudflare API token with **Account → Cloudflare Pages → Edit**.
-- Secret `CLOUDFLARE_ACCOUNT_ID`: the account ID from the Cloudflare dashboard.
+**Secrets and variables** (repository settings → Secrets and variables → Actions):
+- Secret `CLOUDFLARE_API_TOKEN`: an account-owned API token in the Proud Indian account ("GitHub Actions: proud-indian-ngo/website (Pages deploy)"), with Pages Write only. Replace it there if it leaks.
+- Secret `CLOUDFLARE_ACCOUNT_ID`: the Proud Indian account ID.
 - Variable `PUBLIC_EVENTS_URL`: set it once the pi-dash endpoint ships (see [Events](#events-volunteer-section)).
-
-**Old URLs.** `public/_redirects` sends the old PHP site's pages (`/donate-now.php`, `/annual-reports.php`, `/kalakriti.php`, …), its `/pdf/` reports and `/blog/` to the matching section or report with a 301. The old server endpoints (payment callbacks, webhooks, admin) are left to 404.
 
 **Going live** is done in the Cloudflare dashboard, after the first deployment: add `proudindian.ngo` (and `www`) as custom domains of the Pages project, and redirect `www` to the bare domain.
 
@@ -290,7 +288,7 @@ bun run qa:doodles     # margin doodles clear of content at 390-2560px (needs a 
   - set `PUBLIC_EVENTS_URL` in Cloudflare Pages;
   - have pi-dash send CORS headers for `https://proudindian.ngo` (plus preview origins), GET only;
   - keep `connect-src` in `public/_headers` in step.
-- [ ] **Cloudflare setup.** Add the two secrets (see [Deploying](#deploying-to-cloudflare-pages)), then add the custom domains once the redirects and Razorpay URLs are checked.
+- [ ] **Custom domains.** Add `proudindian.ngo` and `www` to the Pages project once the Razorpay URLs are checked.
 - [ ] **Real-device check.** The safe-area insets (notch, home indicator) for the sticky donate bar, the menu and the drawer are only verified in CSS; check them on an iPhone.
 - [ ] **Razorpay redirects and webhooks.** Before moving DNS, check the Razorpay dashboard for a redirect URL or webhook pointing at the old site (`payment_success.php`, `verify-razorpay-payment.php`, `webhooks-verify.php`). The new site has no server, so those stop working.
 - [ ] **Razorpay page copy.** The payment page still has the old site's text (design-decisions.md, "Facts update: donations").
