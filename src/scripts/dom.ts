@@ -1,6 +1,6 @@
 /**
- * Shared helpers for the site scripts (ported from prototypes/final/site.js).
- * Contract (decision 11): the resting DOM is the finished state. Every one-shot animates FROM a start frame TO it
+ * Shared helpers for the site scripts.
+ * Contract: the resting DOM is the finished state. Every one-shot animates FROM a start frame TO it
  * (fill: "backwards"), so motion off, reduced motion, a cancelled animation or a JS failure all show finished content.
  */
 import { PHONE_MAX, motion } from "@proudindian/design/tokens";

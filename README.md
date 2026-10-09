@@ -2,9 +2,11 @@
 
 The Proud Indian website: a fully prerendered [Astro](https://astro.build) site, styled with Tailwind CSS v4 on a token system, deployed to Cloudflare Pages.
 
-- Repo: <https://github.com/proud-indian-ngo/website>. The local folder is `~/Code/pi-website`.
-- Approved design: `proud-indian-design/prototypes/final/` (`index.html`, `site.css`, `site.js`). This site started as a pixel-for-pixel port of it (see [Quality checks](#quality-checks)). The 2026-10-09 design audit then changed a few areas on purpose: the tablet layouts (701–1239px), the donate card, the volunteer poster's fallback and the repeated stats. Expect `qa:parity` diffs there. Design decisions are recorded in `proud-indian-design/research/design-decisions.md`.
-- Volunteer sign-up and events live in **pi-dash** (`dash.proudindian.ngo`). Donations go to a **Razorpay** payment page.
+One page for the Proud Indian NGO in Bengaluru: the programmes (Teach, Feed, Paint, Gather), the Kalakriti festival, upcoming volunteer sessions, donations, reports and trustees, plus a privacy policy and an internal style guide.
+
+- Repo: <https://github.com/proud-indian-ngo/website>. Pushes to `main` deploy to Cloudflare Pages (see [Deploying](#deploying-to-cloudflare-pages)).
+- Brand tokens, primitive CSS, fonts and logo artwork come from [proud-indian-ngo/design](https://github.com/proud-indian-ngo/design) (`@proudindian/design`; see [Design package](#design-package-proudindiandesign)).
+- Volunteer sign-up and events live in **pi-dash** ([proud-indian-ngo/dash](https://github.com/proud-indian-ngo/dash), `dash.proudindian.ngo`). Donations go to a **Razorpay** payment page.
 
 ## Run
 
@@ -25,13 +27,12 @@ bun run preview    # serve dist/ at http://localhost:4321
 | `bun run check:design` | The installed `@proudindian/design` matches the version the site expects; a `file:` install is not stale; the `public/` brand files are byte-identical to the package's |
 | `bun run check:razorpay` | The live Razorpay page still pre-fills the amount from `site.yaml` → `links.razorpay` (item name and minimum; see [Donations](#donations)) |
 | `bun run design:sync` | Copy the favicons and `og.png` from the package into `public/` (after a package update) |
-| `bun run qa:parity` | Screenshot the prototype and the site and diff them per section (see below) |
-| `bun run qa:behaviour` | Motion-on behaviour checks against the prototype and the site, plus site-only scroll-lock checks for the reports drawer and the phone menu |
+| `bun run qa:behaviour` | Motion-on behaviour checks against a running site (reveals, loops, Pause, menu, drawer, donate, scroll lock); see [Quality checks](#quality-checks) |
 | `bun run qa:doodles` | The margin doodles touch no content, rail, header pill or viewport edge, at 390 to 2560px (serves `dist/` itself; run `bun run build` first, or set `SITE`). See [Margin doodles](#margin-doodles) |
 | `bun run qa:perf` | Build, serve like Cloudflare Pages (brotli, `_headers`), Lighthouse ×5 on mobile and desktop, and the frame profiler at 4× and 6× CPU throttling (see [Performance](#performance)) |
 | `bun run motion:load` | Regenerate `src/styles/sections/load-motion.css` (the header and hero load sequence) from `scripts/load-motion.ts`; `bun run check` fails if it is out of date |
 
-Lint and format follow pi-dash: oxlint (correctness rules as errors) and oxfmt (pi-dash's ultracite settings, inlined). Lefthook runs them on commit (`bun install` sets up the hooks). oxfmt can sort Tailwind classes, but it does not format `.astro` files, so classes in markup are not auto-sorted.
+Lint and format match proud-indian-ngo/dash: oxlint (correctness rules as errors) and oxfmt (ultracite settings, inlined). Lefthook runs them on commit (`bun install` sets up the hooks). oxfmt can sort Tailwind classes, but it does not format `.astro` files, so classes in markup are not auto-sorted.
 
 ## Environment
 
@@ -41,7 +42,6 @@ Copy `.env.example` to `.env` for local overrides.
 |---|---|---|
 | `PUBLIC_EVENTS_URL` | unset | The pi-dash public events API. When unset, the poster points to the dashboard and no sessions are shown (see [Events](#events-volunteer-section)). |
 | `PUBLIC_SITE_URL` | `https://proudindian.ngo` | Canonical origin for canonical links, Open Graph and the sitemap |
-| `MARGIN_DOODLES` | unset | QA only: `off` builds the page without the margin doodles (no layers, no sprite), for parity diffs against the prototype at 1440px and up. Never set it in Cloudflare Pages. |
 
 ## Editing content
 
@@ -59,7 +59,7 @@ All content is YAML in `src/content/`, validated against typed schemas in `src/c
 | The poster when sessions cannot be loaded | `copy.yaml` → `volunteer.unavailable` |
 | The privacy policy | `src/content/privacy.md` (Markdown with front matter: `draft`, `draftNote`, `effectiveDate`, `lede`) |
 
-The copy was finalised on 2026-10-08 from the prototype, with small edits in the 2026-10-09 audit (donate fine print and labels, the volunteer fallback, fewer repeated stats). Change it deliberately.
+The copy was finalised on 2026-10-08, with small edits on 2026-10-09 (donate fine print and labels, the volunteer fallback, fewer repeated stats). Change it deliberately.
 
 The YAML is plain files in git, so a git-backed CMS (Keystatic or Sveltia CMS) can be pointed at `src/content/` later without changing the site.
 
@@ -127,7 +127,7 @@ The output is fully static, with no adapter and no functions. `public/_headers` 
 - **Tokens** come from the package: its `tokens/*.ts` generate `theme.css` and `tokens.css`, and `src/styles/global.css` imports both.
   - `theme.css` is a Tailwind `@theme static` block. It gives you `bg-sky`, `text-ink`, `bg-surface-paper`, `text-text-muted`, `text-accent-ink`, `font-pi-display`, `font-pi-sans`, `text-15`, `text-optimist`, `leading-lede`, `tracking-heading`, `rounded-pill`, `rounded-14`, `shadow-ink-sm`, `shadow-photo`, `max-w-section`, `ease-spring` and the breakpoints.
   - `tokens.css` holds plain custom properties for things Tailwind has no namespace for: z-index layers, durations, loop timings, the spacing steps used by hand-written CSS, the sticker and accent treatments, and the component knobs.
-  - The brand fonts are `font-pi-display` (Bricolage Grotesque) and `font-pi-sans` (Geist). `font-display` and `font-sans` are not brand tokens: `font-sans` is Tailwind's default stack. `bun run lint:css` fails on the old names.
+  - The brand fonts are `font-pi-display` (Bricolage Grotesque) and `font-pi-sans` (Geist). `font-display` and `font-sans` are not brand tokens: `font-sans` is Tailwind's default stack. `bun run lint:css` fails on `font-display`/`font-sans` and other retired token names.
 - **Breakpoints** are `--breakpoint-*`. The design is desktop-first, so overrides mostly use `max-*`:
   - `max-tab:` is phones (700px and below).
   - `max-nav:` is 1180px and below, `max-lap:` 1100px and below, and `max-pad:` 600px and below.
@@ -141,14 +141,14 @@ The output is fully static, with no adapter and no functions. `public/_headers` 
   - art-directed positions (the collage, stickers and seal);
   - complex grids (the hero, bands and bento);
   - JS-state styles (`.on`, `.show`, `[aria-pressed]`).
-- **Order.** `src/styles/global.css` imports everything in one order, and that order is the prototype's cascade. Tailwind's preflight is deliberately left out, because the design was built on the prototype's own reset: the package's `base.css`, then the site-only `src/styles/base.css` and `images.css`. `global.css` keeps `README.md` and `scripts/` out of Tailwind's class scan, because they mention utilities the site does not use.
+- **Order.** `src/styles/global.css` imports everything in one order, and later files win on equal specificity, so the order matters. Tailwind's preflight is deliberately left out, because the design is built on its own reset: the package's `base.css`, then the site-only `src/styles/base.css` and `images.css`. `global.css` keeps `README.md` and `scripts/` out of Tailwind's class scan, because they mention utilities the site does not use.
 - **Raw colours.** Hex colours are only allowed in the package's token files (`node_modules/@proudindian/design/tokens/`). `bun run lint:css` fails on a hex anywhere in `src/` (stylesheets and `.astro` `<style>` blocks). Inline SVG doodles keep their original fills.
-- **Adding a token** happens in pi-design, not here. See its README ("Adding a token"); then bump the package and reinstall.
+- **Adding a token** happens in the design repo, not here. See its README ("Adding a token"); then bump the package and reinstall.
 - **Style guide:** `/styleguide/` (noindex, not in the sitemap). It shows the swatches with contrast ratios, the type scale, space, radii, lines, shadows, breakpoints and motion demos (they respect Pause), and every primitive in every variant.
 
 ## Design package (`@proudindian/design`)
 
-The tokens, primitive CSS, fonts, generic reset, custom utilities, favicons and logo artwork come from the shared design system [`@proudindian/design`](https://github.com/proud-indian-ngo/design) (local folder `~/Code/pi-design`). pi-dash uses the same package.
+The tokens, primitive CSS, fonts, generic reset, custom utilities, favicons and logo artwork come from the shared design system [`@proudindian/design`](https://github.com/proud-indian-ngo/design). pi-dash uses the same package.
 
 **Installing.** The package is not published to npm; it installs from its public GitHub repo, pinned to a tag:
 
@@ -159,12 +159,12 @@ The tokens, primitive CSS, fonts, generic reset, custom utilities, favicons and 
 The package commits its built `dist/`, so the install needs no build step and no token. bun blocks the package's `prepare` script (`lefthook install`), which is expected.
 
 **Updating.**
-1. Change pi-design, run `bun run build` there, bump its version, commit, tag and push (`git tag -a v0.2.4 -m v0.2.4 && git push --follow-tags`).
+1. Change the design repo, run `bun run build` there, bump its version, commit, tag and push (`git tag -a v0.2.4 -m v0.2.4 && git push --follow-tags`).
 2. Point the dependency at the new tag and run `bun install`.
 3. Run `bun run design:sync` if the favicons or the share card changed.
 4. Run `bun run check`. `check:design` fails on a version outside `^0.2.3` (`COMPATIBLE` in `scripts/check-design.ts`) or a `public/` brand file that differs from the package.
 
-To try unreleased pi-design changes locally, link the folder (`"file:../pi-design"`) and reinstall with `rm -rf node_modules/@proudindian && bun install --force` after every change there (bun copies the folder at install time). Switch back to the tag before committing: CI can't see `../pi-design`.
+To try unreleased design-package changes, point the dependency at a local checkout of the design repo (`"file:<path>"`) and reinstall with `rm -rf node_modules/@proudindian && bun install --force` after every change there (bun copies the folder at install time). Switch back to the tag before committing: CI can't see the checkout.
 
 **What comes from the package:**
 
@@ -172,7 +172,7 @@ To try unreleased pi-design changes locally, link the folder (`"file:../pi-desig
 |---|---|
 | `theme.css`, `tokens.css` | `src/styles/global.css` |
 | `base.css` (generic reset) | `global.css`, before the site-only `src/styles/base.css` |
-| `css/primitives/*.css` | `global.css`, one import per primitive, in the prototype's cascade order |
+| `css/primitives/*.css` | `global.css`, one import per primitive, in cascade order |
 | `css/utilities.css` | `global.css` |
 | `fonts.css` and `fonts/*.woff2` | `global.css`. `src/layouts/Base.astro` preloads the files the page uses (`bricolage-grotesque-800-latin.woff2`, the static 800 display face, and `geist-latin-wght-normal.woff2`) via `@proudindian/design/fonts/*.woff2?url`, so Vite fingerprints them once and the preload URLs match the `@font-face` URLs. The variable Bricolage file is declared too, but only downloads if a page asks for another weight or width |
 | `tokens` (TS) | `src/scripts/` (breakpoints, motion) and the style guide. The package's `dist/tokens` is split per module, so the client bundle gets only what it imports |
@@ -182,11 +182,11 @@ To try unreleased pi-design changes locally, link the folder (`"file:../pi-desig
 
 `global.css` imports these pieces separately rather than the package's `css/index.css`. That entry also carries the optional `.pi-brand` scope and the React-only `defaults.css`, which the site does not use.
 
-**Favicons and the share card stay committed in `public/`.** They are `favicon.svg`, `favicon-16.png`, `favicon-32.png`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png` and `og.png`. Each is a byte-identical copy of a package file, which `check:design` enforces, and `design:sync` re-copies them. Committed copies keep `public/` complete for `astro build` run directly and for Cloudflare Pages, without a prebuild step. `public/site.webmanifest` is the site's own (description, `start_url`, absolute icon paths). The share card is rendered in pi-design (`bun run og`).
+**Favicons and the share card stay committed in `public/`.** They are `favicon.svg`, `favicon-16.png`, `favicon-32.png`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png` and `og.png`. Each is a byte-identical copy of a package file, which `check:design` enforces, and `design:sync` re-copies them. Committed copies keep `public/` complete for `astro build` run directly and for Cloudflare Pages, without a prebuild step. `public/site.webmanifest` is the site's own (description, `start_url`, absolute icon paths). The share card is rendered in the design repo (`bun run og`).
 
 **What stays here, and why:**
 - **Photos, cut-outs and scenes** (`src/assets/`, `src/components/scenes/`), the section markup and CSS, the progress ring, and the site-only base rules (`src/styles/base.css`, `images.css`). They belong to this site only.
-- **The generic doodles** (`src/components/doodles/`) keep the prototype's inline SVG. The package's `illustrations/*.svg` draw the same doodles, and its `manifest.json` maps each one to these components. But the package files were optimised with svgo: relative path data, stroke and fill set on the root `<svg>`, and the styling classes (`pi-ln`, `f2`, `ink`, `glow`, …) removed. The section CSS styles doodle internals through exactly those classes, for example `.pidx a.on .f2`, `.s-tr .gl-bird .pi-ln { stroke-width: 6 }` and `.s-don .matka .ink`. Inlining the package files, as components or at build time, would break those hooks and risk pixel drift. Edit a doodle's shape in pi-design first, then mirror it here.
+- **The generic doodles** (`src/components/doodles/`) keep their own inline SVG. The package's `illustrations/*.svg` draw the same doodles, and its `manifest.json` maps each one to these components. But the package files were optimised with svgo: relative path data, stroke and fill set on the root `<svg>`, and the styling classes (`pi-ln`, `f2`, `ink`, `glow`, …) removed. The section CSS styles doodle internals through exactly those classes, for example `.pidx a.on .f2`, `.s-tr .gl-bird .pi-ln { stroke-width: 6 }` and `.s-don .matka .ink`. Inlining the package files, as components or at build time, would break those hooks. Edit a doodle's shape in the design repo first, then mirror it here.
 - **The logo sprite** (`src/components/brand/LogoSprite.astro`, used by `Lockup.astro`). Its two `<symbol>`s are the package's `pi-lockup-compact-mono` and `pi-lockup-reversed` artwork, but the head dot is themable (`style="fill:var(--pi-accent,…)"`), and no package file has that.
 
 ## Structure
@@ -205,7 +205,7 @@ src/
     ui/                    primitives (Button, Chip, Sticker, Polaroid, Peg, Ticket, Card, SectionLabel, AccentWord,
                            Doodle, Img)
     doodles/               generic brand doodles (sun, book, bowl, heart, star, sparkle, clock, notepad, bird, ...),
-                           inline prototype SVG (see Design package)
+                           inline SVG (see Design package)
     brand/                 logo sprite, lockup, seal (seal artwork from the package)
     scenes/                site-only SVG scenes (street scenes, bunting, clothesline, footer margins, plane path)
     margins/               margin doodles: placements.ts (seeded scatter), MarginDoodles (one layer per section),
@@ -215,14 +215,14 @@ src/
                            nudge, pause, events refresh (entry: main.ts)
   styles/                  global.css (entry: package CSS + site CSS), sections/, base.css (site-only), images.css
 scripts/                   check-css.ts (style lint), check-design.ts (package check, design:sync),
-                           qa/ (parity, behaviour, doodles, events, mock-events, perf)
+                           qa/ (behaviour, doodles, events, mock-events, perf)
 public/                    _headers, robots.txt, site.webmanifest, favicons and og.png (copies of package files),
                            reports/ (the report PDFs)
 ```
 
 ## Motion
 
-Motion is ported from `site.js` (decision 11) as small modules in `src/scripts/`:
+Motion is small modules in `src/scripts/`:
 - the reveal system (`data-reveal`, `data-stagger`);
 - `.loop` elements that pause off-screen;
 - the wobble on stickers, the paper plane, the coin drop and the nudge hand;
@@ -255,14 +255,14 @@ Brand scrollbars come from `@proudindian/design/scrollbar.css` (imported in `glo
 
 ## Margin doodles
 
-Light outline doodles in both side gutters of every section, the closing section and the footer, on wide screens only (design-decisions.md, decisions 10 and 11, "Margin doodles"). They are static, `aria-hidden`, and never on tablets or phones.
+Light outline doodles in both side gutters of every section, the closing section and the footer, on wide screens only. They are static, `aria-hidden`, and never on tablets or phones.
 
 - **Artwork** comes from the package: `@proudindian/design/illustrations/outline-sprite.svg`, 18 `pi-outline-*` symbols. `src/components/margins/MarginSprite.astro` inlines it once at the top of the page, keeping only the symbols the scatter uses. Each doodle is `<svg class="mg-d"><use href="#pi-outline-NAME"/></svg>`.
 - **Placement** is a seeded scatter (`src/components/margins/placements.ts`), with one seed per section, so every build is identical. It is checked at a 2304px reference: a minimum distance between doodles on a side, never two on the same vertical line, no left/right mirroring, and uneven vertical gaps. Each doodle has its own position across the gutter, height, size (0.7 to 1.3×) and tilt (±25°). `MarginDoodles.astro` renders one layer per section (`set`, and `tone` for the background: paper, sky or ink).
 - **When they show** (`src/styles/sections/margins.css`): Volunteer, Donate, Reports, Trustees and the footer from 1440px; the programme intro, Teach, Feed, Kalakriti, Gather and the closing section from 1800px; the hero from 1920px. The second half of each side's doodles appears from 1600px. Below 1440px there are none. From 1440px the footer's own scatter replaces its fixed margin set (`FooterMargins.astro`, still used below 1440px).
 - **The rail column.** Four ways, Teach, Feed, Gather and Kalakriti keep a 212px no-go column at the right edge (`--mg-rail`: the programme rail and its widest label, 184px, plus air). The right-hand doodles there only appear once the strip beside the rail is wide enough.
 - **Contrast** is matched to the footer's margin doodles (paper at 0.3 on ink, 2.56:1) through the package tokens: ink at `--doodle-outline-on-paper` (0.42, 2.61:1), ink at `--doodle-outline-on-sky` (0.47, 2.57:1), paper at `--doodle-outline-on-ink` (0.3). The stroke is `--doodle-outline-stroke`, 1.4px at any size.
-- **Checks.** `bun run qa:doodles` loads the page at 390, 768, 1100, 1280, 1440, 1600, 1800, 1920, 2048, 2124, 2304 and 2560px. It fails if a visible doodle's box touches text, an image, a button or link, a sticker, polaroid, poster or card, any other SVG (the volunteer plane's flight included), the rail column, the header pills over the hero, or the viewport edge. Use `SABOTAGE=1` to see it fail. `MARGIN_DOODLES=off bun run build` builds without them, for parity diffs against the prototype at 1440px and up.
+- **Checks.** `bun run qa:doodles` loads the page at 390, 768, 1100, 1280, 1440, 1600, 1800, 1920, 2048, 2124, 2304 and 2560px. It fails if a visible doodle's box touches text, an image, a button or link, a sticker, polaroid, poster or card, any other SVG (the volunteer plane's flight included), the rail column, the header pills over the hero, or the viewport edge. Use `SABOTAGE=1` to see it fail.
 
 ## Performance
 
@@ -276,12 +276,12 @@ It exits non-zero unless Lighthouse is 100 in all four categories on both form f
 
 ## Quality checks
 
+`bun run check`, `bun run check:types`, `bun run qa:behaviour` and `bun run qa:doodles` are the bar for a change.
+
 ```sh
-python3 -m http.server 63782 --bind 127.0.0.1   # from proud-indian-design, serves the prototype
-bun run build && bun run preview                # serves the site
-bun run qa:parity      # reduced motion, 1440 / 2048 / 390, full page and per section, to /tmp/pi-astro/
+bun run build && bun run preview                # serves the site at http://localhost:4321 (or set SITE)
 bun run qa:behaviour   # motion on: reveals, loops, Pause, reduced motion, wobble, hash links, rail, menu, drawer,
-                       # donate deep links, coins, swipe, plane; the drawer and menu scroll lock (site-only)
+                       # donate deep links, coins, swipe, plane, the drawer and menu scroll lock; exits 1 on a failure
 bun run qa:doodles     # margin doodles clear of content at 390-2560px (needs a build, or SITE=...)
 ```
 
@@ -294,4 +294,4 @@ bun run qa:doodles     # margin doodles clear of content at 390-2560px (needs a 
   - keep `connect-src` in `public/_headers` in step.
 - [ ] **Custom domains.** Add `proudindian.ngo` and `www` to the Pages project once the Razorpay URLs are checked.
 - [ ] **Real-device check.** The safe-area insets (notch, home indicator) for the sticky donate bar, the menu and the drawer are only verified in CSS; check them on an iPhone.
-- [ ] **Razorpay redirects and webhooks.** Before moving DNS, check the Razorpay dashboard for a redirect URL or webhook pointing at the old site (`payment_success.php`, `verify-razorpay-payment.php`, `webhooks-verify.php`). The new site has no server, so those stop working.
+- [ ] **Razorpay redirects and webhooks.** Before moving DNS, check the Razorpay dashboard for a redirect URL or webhook pointing at the current PHP site (`payment_success.php`, `verify-razorpay-payment.php`, `webhooks-verify.php`). The new site has no server, so those stop working.

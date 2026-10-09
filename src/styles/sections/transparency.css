@@ -1,4 +1,4 @@
-/* Transparency (decision 9). The section shell, headings, trustees and the "At a glance" ticket are utilities in
+/* Transparency. The section shell, headings, trustees and the "At a glance" ticket are utilities in
    Reports.astro and Trustees.astro. This keeps the bento wall (a spanning grid whose tiles restyle their shared
    label/number classes), the 95% ring, the document fan, the reports drawer and its tabs, the trustee cut-out
    placement, the ticket notches and the taped awards polaroid. */
@@ -884,7 +884,7 @@
     padding-right: var(--space-30);
   }
 }
-/* fixes-3 · "At a glance" ticket beside the two trustees: balances the row on desktop, stacks under them on phones */
+/* "At a glance" ticket beside the two trustees: balances the row on desktop, stacks under them on phones */
 .s-tr .gl-card {
   transform: rotate(1.2deg);
 }

@@ -1,6 +1,6 @@
 /**
- * Site scripts entry (bundled by Astro). Ported from prototypes/final/site.js and split by concern; the boot order
- * below is the prototype's. Every module tolerates missing markup, so the same bundle runs on every page.
+ * Site scripts entry (bundled by Astro). Split by concern; the boot order below
+ * matters (see the comments). Every module tolerates missing markup, so the same bundle runs on every page.
  */
 import { initBento } from "./bento";
 import { PHONE } from "./dom";

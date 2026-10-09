@@ -1,5 +1,5 @@
 # Trustees shown under "Our trustees." Portraits are cut-outs in src/assets/board/.
-# `fit` positions the cut-out inside its tile, in container units (cqw), exactly as in the prototype.
+# `fit` positions the cut-out inside its tile, in container units (cqw).
 - id: sarjun
   name: Sarjun H
   role: Co-founder, Treasurer

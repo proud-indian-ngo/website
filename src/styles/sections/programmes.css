@@ -1,4 +1,4 @@
-/* "Four ways" collage (decisions 5 and 6) and the verb colours of the programme bands. Type and colour are
+/* "Four ways" collage and the verb colours of the programme bands. Type and colour are
    utilities in ProgrammesIntro.astro and ProgrammeBand.astro; this keeps the art-directed collage (photo positions,
    the torn title card, the sun and the loop) and the outlined verbs. */
 .s-prog .sky .verb {
@@ -158,7 +158,7 @@
   top: 110px;
   z-index: 4;
 }
-/* fixes-3 · "Four ways" sun: in clear paper, never on a photo. >=1440 it sits in the gap between the two top-centre
+/* "Four ways" sun: in clear paper, never on a photo. >=1440 it sits in the gap between the two top-centre
    photos; below that those photos meet, so a smaller sun peeks above the top-left photo instead */
 @media (width >= --theme(--breakpoint-tab)) {
   .s-prog .csun {
@@ -199,7 +199,7 @@
   .s-prog .cloop {
     display: none;
   }
-  /* fixes-3 · phones: the whole collage fits the screen: two photos above the card, two below, the sun between the
+  /* Phones: the whole collage fits the screen: two photos above the card, two below, the sun between the
     top pair. flow-root: the card's margins must not collapse through the collage */
   .s-prog .collage {
     display: flow-root;

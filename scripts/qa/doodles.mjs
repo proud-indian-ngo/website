@@ -12,7 +12,7 @@
  *   SITE=http://127.0.0.1:4321/ bun run qa:doodles   # or check a running server
  *   WIDTHS=1440,2560 bun run qa:doodles
  *
- * Exits non-zero on any overlap. Ported from the approved mock's tools/overlap.mjs (/tmp/pi-doodles).
+ * Exits non-zero on any overlap.
  */
 import { existsSync } from "node:fs";
 

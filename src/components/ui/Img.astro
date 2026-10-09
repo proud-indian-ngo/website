@@ -4,8 +4,8 @@
  * lazy loading by default. (No WebP: every browser that has WebP but not AVIF is old enough to take the fallback, and
  * the extra <source> cost HTML bytes on every image.) `phone` is the image's width on phones (700px and below) as a
  * CSS length, e.g. "41vw" or "216px", so phones fetch the right file instead of the desktop size. <picture> is
- * display:contents (base.css), so the prototype CSS that targets the
- * <img> keeps working unchanged.
+ * display:contents (base.css), so the section CSS that targets the
+ * <img> applies unchanged.
  */
 import type { ImageMetadata } from "astro";
 import { PHONE_MAX } from "@proudindian/design/tokens";

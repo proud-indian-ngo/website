@@ -1,4 +1,4 @@
-/* Donate (decision 8). Type, colour and spacing are utilities in Donate.astro. This keeps the two-column grid (on
+/* Donate. Type, colour and spacing are utilities in Donate.astro. This keeps the two-column grid (on
    phones the copy column dissolves so the card can sit between the facts and the child), the outlined accent word,
    the tilted fact stickers and card, the amount pills and their pressed state, the field reset, and the matka. */
 .s-don .bgrid {

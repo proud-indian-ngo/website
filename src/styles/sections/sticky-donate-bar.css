@@ -1,4 +1,4 @@
-/* Phone sticky donate bar (decision 8). The bar itself is utilities in StickyDonateBar.astro; this keeps the
+/* Phone sticky donate bar. The bar itself is utilities in StickyDonateBar.astro; this keeps the
    slide-in (src/scripts/rail.ts toggles .show) and the two-layer shadow. */
 @media (width < --theme(--breakpoint-tab)) {
   .sbar {

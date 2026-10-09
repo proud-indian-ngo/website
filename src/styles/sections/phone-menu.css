@@ -1,4 +1,4 @@
-/* Phone and tablet poster menu (decision 3). Layout and type are utilities in PhoneMenu.astro; this keeps the tilted
+/* Phone and tablet poster menu. Layout and type are utilities in PhoneMenu.astro; this keeps the tilted
    cut-out child and the page scroll lock. */
 .menu .kid {
   position: absolute;

@@ -1,4 +1,4 @@
-/* Programme marquee (motion 10). The band, link type and stars are utilities in Marquee.astro; this keeps the
+/* Programme marquee. The band, link type and stars are utilities in Marquee.astro; this keeps the
    track that loops (see motion.css) and the link hover. */
 .marquee__track {
   display: flex;

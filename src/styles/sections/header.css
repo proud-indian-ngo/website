@@ -1,4 +1,4 @@
-/* Header: split sticker pills (decision 3). Layout, colour and type are utilities in Header.astro; this keeps the
+/* Header: split sticker pills. Layout, colour and type are utilities in Header.astro; this keeps the
    tilt, the link states the scroll-spy toggles, and the burger's three bars. */
 .hd .pill.l {
   transform: rotate(-1.2deg);

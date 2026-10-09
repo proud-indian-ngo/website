@@ -1,6 +1,6 @@
-# Reports and disclosures (decision 9), shown in the Reports bento and drawer, newest first within each kind.
+# Reports and disclosures, shown in the Reports bento and drawer, newest first within each kind.
 # kind: annual | audited | disclosure. `year` is the financial year (2023-24); `date` is the month a disclosure was
-# issued (2025-09). The PDFs are in public/reports/, copied unaltered from the old site (pdf/ and pdf/latest/).
+# issued (2025-09). The PDFs are in public/reports/, unaltered.
 # The bento counts, the drawer tab counts and the year ranges are all derived from this list.
 - id: annual-2023-24
   kind: annual

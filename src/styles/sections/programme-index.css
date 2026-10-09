@@ -1,5 +1,5 @@
-/* Programme index rail (decision 5) */
-/* ---------- 3e. programme index: sticky doodle icons (decision 5) ---------- */
+/* Programme index rail */
+/* ---------- 3e. programme index: sticky doodle icons ---------- */
 .pidx {
   position: fixed;
   right: 34px;
@@ -45,7 +45,7 @@
   display: block;
   width: auto;
   height: auto;
-} /* fixes-3: the shared .ic rule (16px box) pushed the 36px icon 10px right and down */
+} /* The shared .ic rule (16px box) pushed the 36px icon 10px right and down */
 .pidx .ic svg {
   display: block;
   width: 36px;

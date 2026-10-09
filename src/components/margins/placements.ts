@@ -1,4 +1,4 @@
-/** Margin doodles (design-decisions.md, decisions 10 and 11, "Margin doodles"): the package's outline doodles
+/** Margin doodles: the package's outline doodles
  *  (@proudindian/design/illustrations/outline/) scattered in both side gutters of every section, the closing section
  *  and the footer, from 1440px up.
  *
@@ -8,10 +8,7 @@
  *  (f: 0 = content edge, 1 = outer edge of the free strip), its own y (% of the layer), size (0.7-1.3x) and rotation
  *  (-25 to 25 degrees). The first ~half of each side shows from 1440px; the rest (`wide`) from 1600px, where the
  *  gutters have room for them. `tier` marks right-side doodles beside the programme rail, which need a wider strip
- *  (margins.css). `bun run qa:doodles` checks the result in the browser at every width.
- *
- *  MARGIN_DOODLES=off at build time renders none of it (no layers, no sprite): for parity checks against the
- *  prototype, which has no margin doodles. Production builds leave it unset. */
+ *  (margins.css). `bun run qa:doodles` checks the result in the browser at every width. */
 export type Motif =
   | "pencil"
   | "brush"
@@ -279,10 +276,6 @@ export const spots = Object.fromEntries(
   (Object.keys(plans) as SetName[]).map((k) => [k, scatter(k)])
 ) as Record<SetName, Spot[]>;
 
-/** MARGIN_DOODLES=off (build time, QA only) drops every margin doodle */
-export const enabled = process.env.MARGIN_DOODLES !== "off";
 /** the motifs any section uses, so the page inlines only those symbols */
 export const usedMotifs = () =>
-  new Set(
-    enabled ? Object.values(spots).flatMap((v) => v.map((d) => d.m)) : []
-  );
+  new Set(Object.values(spots).flatMap((v) => v.map((d) => d.m)));

@@ -1,4 +1,4 @@
-# One programme band (decision 5). Images are paths under src/assets/.
+# One programme band. Images are paths under src/assets/.
 order: 1
 kind: band
 anchor: b0

@@ -1,6 +1,6 @@
-/* Ambient doodle loops, one per section (decision 11), and the motion-off kill switch */
-/* ---------- 7. ambient doodles (decision 11, ambient round) ----------
-   One small, slow, hand-drawn loop per section, in the spirit of the hero sun. Each is a .loop, so site.js pauses it
+/* Ambient doodle loops, one per section, and the motion-off kill switch */
+/* ---------- 7. ambient doodles ----------
+   One small, slow, hand-drawn loop per section, in the spirit of the hero sun. Each is a .loop, so loops.ts pauses it
    whenever it is off screen; all of it runs only under html[data-motion=on], and the resting DOM is a complete doodle.
    Only transform, opacity and stroke-dashoffset move. */
 .s-prog .heart,

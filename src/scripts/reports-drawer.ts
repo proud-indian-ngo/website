@@ -1,4 +1,4 @@
-/** Reports drawer and its tabs (decision 9). */
+/** Reports drawer and its tabs. */
 import { $, $$ } from "./dom";
 import { lockScroll, modal, prewarm } from "./modal";
 

@@ -1,4 +1,4 @@
-/* Margin doodles (design-decisions.md, decisions 10 and 11). The package's outline doodles scattered in both side
+/* Margin doodles. The package's outline doodles scattered in both side
    gutters of every section, the closing section and the footer; never on tablets or phones (from 1440px up, once a
    gutter is wide enough). Static: no motion, no hover. Positions come from the seeded scatter in
    src/components/margins/placements.ts; `bun run qa:doodles` checks them against the content at every width.

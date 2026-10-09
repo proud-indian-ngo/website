@@ -1,4 +1,4 @@
-/* Hero (decision 4, option B; fixes-1: nothing sits on the letters). Type, spacing and colour are utilities in
+/* Hero: nothing sits on the letters. Type, spacing and colour are utilities in
    Hero.astro. This keeps the two-area grid, the outlined giant word, and the art-directed stickers and seal.
    Content lives in a centred 1600px .hwrap so very wide screens keep the composition. The girl stands on the ticker
    beside the intro copy (in flow, so she can never ride up onto "Optimist."); the seal sits past the full stop. */

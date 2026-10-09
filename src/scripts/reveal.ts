@@ -1,5 +1,5 @@
 /**
- * Scroll-in reveal: one system for every section (decision 11, "Scroll-in reveal on every section").
+ * Scroll-in reveal: one system for every section.
  *
  * Markup. data-reveal="rise|slap|hang|draw|wipe" on an element. data-stagger="<step ms>" (default 75) on a parent
  * makes it one group: the [data-reveal] elements inside it play in DOM order, step ms apart, after data-base ms;

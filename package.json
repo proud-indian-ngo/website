@@ -14,7 +14,6 @@
     "check": "oxfmt --check . && oxlint . --max-warnings=0 && bun run check:design && bun run lint:css && bun run motion:load --check",
     "check:types": "astro check",
     "fix": "oxfmt . && oxlint --fix .",
-    "qa:parity": "node scripts/qa/parity.mjs",
     "qa:perf": "node scripts/qa/perf.mjs",
     "qa:behaviour": "node scripts/qa/behaviour.mjs",
     "qa:doodles": "node scripts/qa/doodles.mjs",

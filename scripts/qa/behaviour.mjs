@@ -1,10 +1,11 @@
 /**
- * Behaviour parity with motion on: runs the same checks against the prototype and the built site and prints a table.
- *   PROTO=... SITE=http://127.0.0.1:4321/ node scripts/qa/behaviour.mjs
- * Also saves open-menu and open-drawer screenshots to /tmp/pi-astro/ for a visual comparison.
+ * Behaviour checks with motion on, against a built and served site: prints one pass/fail row per check and exits 1 if
+ * any fails. A row that reports "skipped: ..." (the session tickets swipe, when the build shows no sessions) is not a
+ * failure.
+ *   SITE=http://127.0.0.1:4321/ node scripts/qa/behaviour.mjs
+ * Also saves open-menu and open-drawer screenshots to /tmp/pi-astro/ (OUT overrides the folder).
  *
- * The "lock:" checks are site-only (the prototype's lock leaks, so they are not compared): with the reports drawer or
- * the phone menu open, the page behind must not move under wheel, trackpad or touch drags over the dialog or its
+ * The "lock:" checks: with the reports drawer or the phone menu open, the page behind must not move under wheel, trackpad or touch drags over the dialog or its
  * scrim, nor under Space, PageDown, arrows or End with focus inside the dialog; the drawer's own list scrolls without
  * chaining to the page; and closing restores the exact scroll position.
  */
@@ -12,8 +13,6 @@ import { mkdirSync } from "node:fs";
 
 import { chromium } from "playwright";
 
-const PROTO =
-  process.env.PROTO ?? "http://127.0.0.1:63782/prototypes/final/index.html";
 const SITE = process.env.SITE ?? "http://127.0.0.1:4321/";
 const OUT = process.env.OUT ?? "/tmp/pi-astro";
 mkdirSync(OUT, { recursive: true });
@@ -131,7 +130,7 @@ async function run(browser, url, tag) {
     await sleep(150);
     r["donate pick: deep link"] = await page.evaluate(() => {
       const a = document.querySelector("#donate [data-donate]");
-      // the parameter is the Razorpay item name (the prototype predates its rename), so only its value is compared
+      // the parameter name is the Razorpay item name, configured in site.yaml (links.razorpay), so only its value is checked
       const u = new URL(a.href);
       return (
         u.origin + u.pathname ===
@@ -143,10 +142,7 @@ async function run(browser, url, tag) {
     r["coins drop"] = await page.evaluate(
       () => document.querySelectorAll("#donate .coins .coin").length > 0
     );
-    // the prototype opens the amount field with an "Other" pill; the site's field is always there
-    const other = page.locator("#donate .amt[data-other]");
-    if (await other.count()) await other.click();
-    else await page.click("#donate .amt-in");
+    await page.click("#donate .amt-in");
     await page.keyboard.type("50");
     r["below minimum: note + base link"] = await page.evaluate(() => {
       const a = document.querySelector("#donate [data-donate]");
@@ -314,7 +310,7 @@ async function run(browser, url, tag) {
   return r;
 }
 
-/** the page's scroll lock while a dialog is open (site-only checks, see the header) */
+/** the page's scroll lock while a dialog is open (see the header) */
 async function lockChecks(browser, url) {
   const r = {};
   const y = (page) => page.evaluate(() => scrollY);
@@ -385,7 +381,7 @@ async function lockChecks(browser, url) {
       viewport: { width: 1280, height: 560 },
     });
     const y0 = await openDrawer(page);
-    // the site lists every disclosure ("See all"), so the list is long enough to scroll (the prototype has no such row)
+    // "See all" lists every disclosure, so the list is long enough to scroll
     if (await page.locator("[data-see-all]").count())
       await page.locator("[data-see-all]").click();
     const dr = await page.locator(".cDrawer").boundingBox();
@@ -452,33 +448,21 @@ async function lockChecks(browser, url) {
 }
 
 const browser = await chromium.launch();
-const p = {
-  ...(await run(browser, PROTO, "proto")),
-  ...(await lockChecks(browser, PROTO)),
-};
 const s = {
   ...(await run(browser, SITE, "site")),
   ...(await lockChecks(browser, SITE)),
 };
 await browser.close();
-const rows = Object.keys(p).map((k) => ({
-  check: k,
-  prototype: p[k],
-  site: s[k],
-  same: p[k] === s[k],
+const skipped = (v) => String(v).startsWith("skipped");
+const rows = Object.entries(s).map(([check, v]) => ({
+  check,
+  result: skipped(v) ? v : v === true ? "pass" : "FAIL",
 }));
 console.table(rows);
-// "lock:" checks are site-only: the prototype's scroll lock leaks, so only the site has to pass them
-const bad = rows.filter(
-  (x) =>
-    !x.site ||
-    (!x.same &&
-      !x.check.startsWith("lock:") &&
-      !String(x.site).startsWith("skipped"))
-);
+const bad = rows.filter((x) => x.result === "FAIL");
 if (bad.length) {
   console.log(
-    "needs attention:",
+    "failed:",
     bad.map((b) => b.check)
   );
   process.exitCode = 1;

@@ -1,7 +1,7 @@
-/* Motion (decision 11): loops, reveal hiding, bento hover, wobble */
-/* ---------- 6. motion (decision 11) ----------
+/* Motion: loops, reveal hiding, bento hover, wobble */
+/* ---------- 6. motion ----------
    The un-animated DOM is always the finished state. Loops (sun, marquee) run only with html[data-motion=on];
-   one-shots are Web Animations with fill:backwards (see site.js), so cancelling always lands on finished content. */
+   one-shots are Web Animations with fill:backwards (see src/scripts/dom.ts), so cancelling always lands on finished content. */
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -79,7 +79,7 @@ html[data-motion="off"] .marquee__group[aria-hidden] {
 .js[data-motion="on"] .nudge.is-waiting {
   opacity: 0;
 }
-/* Scroll-in reveal (decision 11): site.js sets html.js-reveal once the reveal system is wired, and marks each element
+/* Scroll-in reveal: reveal.ts sets html.js-reveal once the reveal system is wired, and marks each element
    .rv-in the moment its group plays (or is flushed by Pause, reduced motion, or being scrolled past). Without JS, or with
    motion off, nothing here applies and every element is simply in place. Only opacity is touched: no layout shift.
    Hiding never transitions (the bento tiles' hover transition would otherwise fade them out on the main thread, off

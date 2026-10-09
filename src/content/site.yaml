@@ -37,7 +37,7 @@ contacts:
     label: Registered office
     text: "#206, 8th A Main Rd, LBS Nagar, Kaggadasapura, Bengaluru 560017"
 
-# Social profiles (from the old site's footer), in footer order. The phone menu's Instagram pill uses the instagram URL.
+# Social profiles, in footer order. The phone menu's Instagram pill uses the instagram URL.
 social:
   - network: instagram
     label: Instagram @proudindian_ngo

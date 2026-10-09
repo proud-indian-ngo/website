@@ -1,6 +1,6 @@
 import { dropCoins } from "./coins";
 /**
- * Donate amount picker (decision 8): the preset chips and the "Or enter another amount" field update the total, the
+ * Donate amount picker: the preset chips and the "Or enter another amount" field update the total, the
  * button label and the Razorpay deep link. Focusing or typing in the field deselects the presets. Below the minimum
  * the total dims and the button reads "Enter ₹100 or more" (aria-disabled, clicks do nothing). Razorpay settings
  * come from data attributes rendered from src/content/site.yaml.

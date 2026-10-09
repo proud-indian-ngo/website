@@ -1,11 +1,10 @@
 /**
- * The design package check, run by `bun run check` (replaces the old tokens-up-to-date check; the tokens now live in
- * @proudindian/design).
+ * The design package check, run by `bun run check`. The brand tokens live in @proudindian/design.
  *
  * 1. The installed @proudindian/design is the version the site is written for (`COMPATIBLE`, a caret range), and the
  *    version the dependency pins: `github:proud-indian-ngo/design#vX.Y.Z` must install X.Y.Z.
- * 2. With `file:../pi-design`, the copy in node_modules must not be stale: bun copies the folder at install time, so
- *    after changing pi-design run `rm -rf node_modules/@proudindian && bun install --force`. Skipped when the folder
+ * 2. With a `file:` dependency on a local checkout of the design repo, the copy in node_modules must not be stale: bun
+ *    copies the folder at install time, so after changing the checkout run `rm -rf node_modules/@proudindian && bun install --force`. Skipped when the folder
  *    is absent (CI).
  * 3. The brand files served from public/ are byte-identical to the package's. They are committed (so `astro build`
  *    alone, and Cloudflare Pages, need no copy step); `bun run design:sync` re-copies them after a package update.

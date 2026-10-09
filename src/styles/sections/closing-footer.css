@@ -1,4 +1,4 @@
-/* Closing call to action and footer (decision 10). Layout and type are utilities in Closing.astro and Footer.astro.
+/* Closing call to action and footer. Layout and type are utilities in Closing.astro and Footer.astro.
    This keeps the bird, plane and squiggle doodles, the taped photo strip, the two street scenes, the road, the
    registration stamps, the notebook-margin doodles, link hovers and focus, and the Pause motion switch states. */
 .s-ft .ft-ln {
@@ -216,7 +216,7 @@
 .s-ft .fC-strip li {
   position: relative;
 }
-/* Decision 10, option A: the refined monoline street. Two drawings, switched at the phone breakpoint. Desktop: the
+/* The monoline street. Two drawings, switched at the phone breakpoint. Desktop: the
    1440x250 street at its own aspect ratio, capped at 1600px and centred, while the road below runs full width. Phone: a
    recomposed 560x244 scene (kite, walk to school, gate, tiffin) drawn whole. One 2.25px line (1.75px on phones),
    paper-2 fills, one sky accent per object. */
@@ -362,7 +362,7 @@
   }
   .s-ft .fC-strip {
     display: none;
-  } /* fixes-3: the polaroid strip is desktop-only */
+  } /* The polaroid strip is desktop-only */
   .s-ft .fC-scene.dk {
     display: none;
   }

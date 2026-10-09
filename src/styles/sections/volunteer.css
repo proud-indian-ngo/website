@@ -1,4 +1,4 @@
-/* Volunteer (decision 7). The copy column is utilities in Volunteer.astro. This keeps the paper plane, the step
+/* Volunteer. The copy column is utilities in Volunteer.astro. This keeps the paper plane, the step
    arrows, and the "Next up" poster and session tickets, whose markup comes from src/lib/events/render.ts (shared by
    the build and the browser refresh): the punched holes, the dotted date lozenge, the stub masks and the scroller. */
 .s-vol .pg {

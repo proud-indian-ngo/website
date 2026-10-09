@@ -1,6 +1,6 @@
 ## Project
 
-See README.md for commands, content editing, events, styling (Tailwind v4 + the brand tokens and primitives from @proudindian/design, the ../pi-design package) and the QA scripts. Package manager: bun. Visual parity with proud-indian-design/prototypes/final is the bar for any styling change (`bun run qa:parity`), except where the README lists deliberate differences.
+See README.md for commands, content editing, events, styling (Tailwind v4 + the brand tokens and primitives from @proudindian/design, the proud-indian-ngo/design package) and the QA scripts. Package manager: bun. `bun run check`, `bun run check:types`, `bun run qa:behaviour` and `bun run qa:doodles` are the bar for any change (qa:behaviour needs a built site served at http://localhost:4321; see README "Quality checks").
 
 ## Development
 

@@ -43,7 +43,7 @@ for await (const file of new Glob("src/**/*.{css,astro,ts}").scan(".")) {
     }
   }
   if (file.endsWith(".ts")) continue;
-  // in .astro files only <style> blocks count (inline SVG attributes keep the prototype's hex fills)
+  // in .astro files only <style> blocks count (inline SVG attributes keep their hex fills)
   const text = file.endsWith(".astro")
     ? [...source.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)]
         .map((m) => m[1])

@@ -4,7 +4,7 @@
                  is deliberately not used: the approved design was built on this reset, and preflight changes
                  svg/img display, button and heading defaults
      components  the .pi-* primitives from @proudindian/design, then the section CSS that utilities express badly
-                 (motion, masks, strokes, art-directed positions, complex grids), in the prototype's cascade order
+                 (motion, masks, strokes, art-directed positions, complex grids), in cascade order (later files win)
      utilities   Tailwind utilities used in the markup, plus the package's custom @utility rules
    The package's css/index.css is not imported whole: it also carries the optional .pi-brand scope and the React-only
    defaults (defaults.css), which the site does not use. */
