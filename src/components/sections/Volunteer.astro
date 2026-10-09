@@ -78,7 +78,7 @@ const state = {
             {v.lede}
           </p>
           <ol
-            class="hand relative mt-7.5 flex flex-wrap items-center gap-x-2.5 gap-y-2 font-pi-display text-21 leading-[1.1] font-extrabold tracking-label text-ink max-tab:flex-col max-tab:items-start max-tab:gap-2.5 max-tab:text-18"
+            class="hand relative mt-7.5 flex flex-wrap items-center gap-x-2.5 gap-y-2 font-pi-display text-21 leading-[1.1] font-extrabold tracking-label text-ink max-tab:flex-col max-tab:items-start max-tab:gap-2.5 max-tab:text-18 tab:max-lap:max-w-[460px]"
             aria-label={v.stepsLabel}
           >
             {
@@ -130,7 +130,7 @@ const state = {
           >
             <Fragment set:html={p.body} />
             <Sticker
-              class="kid wob"
+              class="kid wob max-[374px]:w-[120px] max-[339px]:w-[92px]"
               src={asset(v.posterKid.image)}
               alt={v.posterKid.label}
               crop={v.posterKid.crop}

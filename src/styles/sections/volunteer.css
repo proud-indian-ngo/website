@@ -131,6 +131,14 @@
   border-radius: var(--radius-pill);
   padding: var(--space-6) var(--space-14);
   border: var(--line-paper);
+  white-space: nowrap;
+}
+/* the narrowest phones: both pills still fit on one line */
+@media (width < 340px) {
+  .s-vol .nx,
+  .s-vol .ga {
+    padding-inline: var(--space-10);
+  }
 }
 .s-vol .nx {
   background: var(--color-surface-sky);
