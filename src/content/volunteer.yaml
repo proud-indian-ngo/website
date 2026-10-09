@@ -15,7 +15,7 @@ meta:
 nav:
   links:
     - { label: Sessions, href: "#volunteer", spy: volunteer }
-    - { label: What you’ll do, href: "#programmes", spy: do }
+    - { label: What you’ll do, href: "#do", spy: do }
     - { label: Where, href: "#where", spy: where }
     - { label: Internships, href: "#internships", spy: internships }
     - { label: FAQ, href: "#faq", spy: faq }

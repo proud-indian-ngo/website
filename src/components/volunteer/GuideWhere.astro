@@ -6,6 +6,7 @@
  */
 import { getSite, getVolunteerPage, postalAddress } from "../../lib/content";
 import type { PublicEvent } from "../../lib/events/contract";
+import { neighbourhood } from "../../lib/events/format";
 import { asset } from "../../lib/images";
 import PerchedBird from "../doodles/PerchedBird.astro";
 import MarginDoodles from "../margins/MarginDoodles.astro";
@@ -22,7 +23,7 @@ const { where: w } = await getVolunteerPage();
 const site = await getSite();
 const centre = site.contacts.addresses.find((a) => a.name);
 // "Bellandur, Bangalore" -> "Bellandur", once each, in the order the sessions come
-const areas = [...new Set(events.map((e) => e.area.split(",")[0]!.trim()))];
+const areas = [...new Set(events.map((e) => neighbourhood(e.area) ?? e.area))];
 const PIN =
   '<path d="M10 18.2C6.4 14 4.3 10.8 4.3 8A5.7 5.7 0 0 1 15.7 8C15.7 10.8 13.6 14 10 18.2Z"></path><circle cx="10" cy="8" r="2"></circle>';
 ---

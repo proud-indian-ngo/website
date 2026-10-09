@@ -9,15 +9,22 @@ import { esc } from "./escape";
 const LINK_RE = /\[([^\]]+)\]\(([^)\s]+)\)/g;
 const EMAIL_RE = /(^|[\s(])([\w.+-]+@[\w-]+(?:\.[\w-]+)+)/g;
 
-export function inline(text: string, values: Record<string, string>): string {
+/** `href` as written, or resolved against `base` (structured data and plain-text files need absolute links) */
+const resolve = (href: string, base?: string) =>
+  base ? new URL(href, base).href : href;
+
+export function inline(
+  text: string,
+  values: Record<string, string>,
+  base?: string
+): string {
   const links: string[] = [];
-  // links first (their text may hold an email), parked as tokens so the email pass leaves them alone
-  const html = esc(fill(text, values)).replace(
-    LINK_RE,
-    (_, label: string, href: string) => {
-      links.push(`<a href="${href}">${label}</a>`);
+  // links first (their text may hold an email), parked as tokens so escaping and the email pass leave them alone
+  const html = esc(
+    fill(text, values).replace(LINK_RE, (_, label: string, href: string) => {
+      links.push(`<a href="${esc(resolve(href, base))}">${esc(label)}</a>`);
       return `\uE000${links.length - 1}\uE001`;
-    }
+    })
   );
   return html
     .replace(
@@ -28,9 +35,16 @@ export function inline(text: string, values: Record<string, string>): string {
     .replace(/\uE000(\d+)\uE001/g, (_, i: string) => links[Number(i)]!);
 }
 
-/** The same text without markup, for structured data and plain-text files: links keep their text only. */
-export const plain = (text: string, values: Record<string, string>) =>
-  fill(text, values).replace(LINK_RE, "$1");
+/** The same text as Markdown for plain-text files (/llms.txt): placeholders filled, links made absolute. */
+export const markdown = (
+  text: string,
+  values: Record<string, string>,
+  base: string
+) =>
+  fill(text, values).replace(
+    LINK_RE,
+    (_, label: string, href: string) => `[${label}](${resolve(href, base)})`
+  );
 
 type Site = Awaited<ReturnType<typeof getSite>>;
 

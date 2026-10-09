@@ -13,6 +13,7 @@ import { color } from "@proudindian/design/tokens";
 import { chromium } from "playwright";
 
 import cards from "../src/content/og.yaml";
+import { esc } from "../src/lib/escape";
 
 interface Card {
   pre: string;
@@ -25,7 +26,6 @@ interface Card {
 const pkg = (p: string) =>
   Bun.resolveSync(`@proudindian/design/${p}`, import.meta.dir);
 const b64 = (path: string) => readFileSync(path).toString("base64");
-const esc = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
 const lockup = readFileSync(pkg("logo/svg/pi-lockup-mono.svg"), "utf8");
 const brico = b64(pkg("fonts/bricolage-grotesque-latin-wdth-normal.woff2"));
 const geist = b64(pkg("fonts/geist-latin-wght-normal.woff2"));

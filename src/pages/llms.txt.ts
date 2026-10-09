@@ -16,7 +16,7 @@ import {
 } from "../lib/content";
 import { dateLabel, timeRange } from "../lib/events/format";
 import { loadEvents } from "../lib/events/load";
-import { guideValues, plain } from "../lib/inline";
+import { guideValues, markdown } from "../lib/inline";
 
 export const GET: APIRoute = async ({ site: origin }) => {
   const [site, copy, programmes, kalakriti, reports, events] =
@@ -52,7 +52,7 @@ export const GET: APIRoute = async ({ site: origin }) => {
     `- [Register as a volunteer](${site.links.register}): create an account on the Proud Indian dashboard, then show interest in a session.`,
     `- [Every upcoming session](${site.links.events}): the dashboard's list, after signing in.`,
     `- [Volunteer guide](${abs("/volunteer/")}): what you'd do, where we meet, internships and the FAQ.`,
-    `- Questions about volunteering or internships: ${site.contacts.emails.find((e) => /volunteer/i.test(e.label))?.address ?? site.contacts.emails[0]?.address}, or call or WhatsApp ${site.contacts.phone.display}.`,
+    `- Questions about volunteering or internships: ${values.hr}, or call or WhatsApp ${site.contacts.phone.display}.`,
     "",
     "## Upcoming sessions",
     "",
@@ -81,7 +81,7 @@ export const GET: APIRoute = async ({ site: origin }) => {
     ...guide.faq.items.flatMap((f) => [
       `### ${f.q}`,
       "",
-      plain(f.a, values),
+      markdown(f.a, values, abs("/volunteer/")),
       "",
     ]),
     "## Programmes",

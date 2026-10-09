@@ -31,16 +31,17 @@ const events = await loadEvents();
 const values = guideValues(site);
 const faq = page.faq.items.map((f) => ({ q: f.q, a: inline(f.a, values) }));
 const origin = (Astro.site ?? new URL("https://proudindian.ngo/")).href;
+const pageUrl = new URL(Astro.url.pathname, origin).href;
 const structured = volunteerStructuredData(
-  { url: new URL(Astro.url.pathname, origin).href, title: page.meta.title, description: page.meta.description },
-  // in structured data, in-page links ("#volunteer") point at this page
-  faq.map((f) => ({ ...f, a: f.a.replace(/href="#/g, `href="${new URL(Astro.url.pathname, origin).href}#`) })),
+  { url: pageUrl, title: page.meta.title, description: page.meta.description },
+  // structured data is read away from the page, so its links are absolute ("#volunteer", "/#donate")
+  page.faq.items.map((f) => ({ q: f.q, a: inline(f.a, values, pageUrl) })),
   events.data.events,
   origin
 );
 /** the sections on this page: header, menu and footer links to them stay here, the rest (and the logo, "#top") go to
  *  the home page */
-const anchors = ["#volunteer", "#programmes", "#where", "#internships", "#faq", "#closing"];
+const anchors = ["#volunteer", "#do", "#where", "#internships", "#faq", "#closing"];
 // the guide's own nav: its sections, and the phone menu adds a way home
 const navLinks = page.nav.links;
 const menuLinks = [{ label: page.nav.home, href: "/" }, ...navLinks];

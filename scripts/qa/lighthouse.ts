@@ -34,12 +34,13 @@ const failures = [];
 const rows = [];
 try {
   for (const path of PAGES) {
-    const lh = await runLighthouse(`http://127.0.0.1:${PORT}/${path}`, {
+    const url = new URL(path, `http://127.0.0.1:${PORT}/`);
+    const lh = await runLighthouse(url.href, {
       runs: Number(process.env.RUNS ?? 3),
       forms: FORMS,
     });
     for (const [device, r] of Object.entries(lh)) {
-      const form = `/${path} ${device}`;
+      const form = `${url.pathname} ${device}`;
       const m = r.median;
       const { LCP, TBT, CLS, FCP } = r.metrics;
       for (const c of ["accessibility", "best-practices", "seo"])

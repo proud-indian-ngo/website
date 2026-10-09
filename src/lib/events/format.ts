@@ -48,3 +48,10 @@ export const timeRange = (start: string, end: string) =>
   Date.parse(end) > Date.parse(start)
     ? `${timeLabel(start)} – ${timeLabel(end)}`
     : timeLabel(start);
+
+/** "Bellandur, Bangalore" -> "Bellandur"; null when the area is only the city (the feed sends just the city when a
+ *  session has no area) */
+export function neighbourhood(area: string): string | null {
+  const i = area.indexOf(",");
+  return i < 0 ? null : area.slice(0, i).trim() || null;
+}

@@ -6,6 +6,7 @@
  */
 import type { getCopy, getSite } from "./content";
 import type { PublicEvent } from "./events/contract";
+import { neighbourhood } from "./events/format";
 
 type Site = Awaited<ReturnType<typeof getSite>>;
 type Copy = Awaited<ReturnType<typeof getCopy>>;
@@ -19,7 +20,7 @@ const CITY = {
 } as const;
 
 function sessionEvent(e: PublicEvent, origin: string, orgId: string) {
-  const [area] = e.area.split(",");
+  const area = neighbourhood(e.area);
   return {
     "@type": "Event",
     name: e.name,
@@ -38,7 +39,7 @@ function sessionEvent(e: PublicEvent, origin: string, orgId: string) {
       name: e.area,
       address: {
         "@type": "PostalAddress",
-        ...(area && area !== e.area && { streetAddress: area.trim() }),
+        ...(area && { streetAddress: area }),
         addressLocality: "Bengaluru",
         addressRegion: "Karnataka",
         addressCountry: "IN",

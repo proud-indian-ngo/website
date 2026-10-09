@@ -593,7 +593,7 @@ async function guide(browser: Browser, url: string) {
     () =>
       [...document.querySelectorAll(".site-hd [data-spy-link]")]
         .map((a) => a.getAttribute("href"))
-        .join() === "#volunteer,#programmes,#where,#internships,#faq" &&
+        .join() === "#volunteer,#do,#where,#internships,#faq" &&
       document.querySelector('.site-hd a[href="/#donate"]') !== null &&
       document.querySelector(
         '.site-hd a[href^="https://dash.proudindian.ngo/register"]'
