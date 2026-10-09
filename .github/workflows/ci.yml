@@ -46,7 +46,11 @@ jobs:
       CODE_CHECKS: ${{ github.event_name != 'repository_dispatch' && github.event_name != 'schedule' }}
       DEPLOY: pages deploy dist --project-name=proudindian --branch=${{ github.head_ref || github.ref_name }} --commit-hash=${{ github.event.pull_request.head.sha || github.sha }} --commit-dirty=true
     steps:
+      # on a pull request the checkout is GitHub's merge commit: depth 2 brings its parents too, so wrangler finds the
+      # pull request's own commit (--commit-hash) and gives the preview its commit message
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
       - id: changes
         run: .github/docs-only.sh >> "$GITHUB_OUTPUT"
         env:
