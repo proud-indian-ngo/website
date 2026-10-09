@@ -16,7 +16,7 @@
 import { copyFileSync, existsSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
-const COMPATIBLE = "^0.2.3";
+const COMPATIBLE = "^0.3.0";
 const PKG = "node_modules/@proudindian/design";
 
 /** public/ file <- package file */

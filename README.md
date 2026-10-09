@@ -166,16 +166,16 @@ The tokens, primitive CSS, fonts, generic reset, custom utilities, favicons and 
 **Installing.** The package is not published to npm; it installs from its public GitHub repo, pinned to a tag:
 
 ```jsonc
-"@proudindian/design": "github:proud-indian-ngo/design#v0.2.4"
+"@proudindian/design": "github:proud-indian-ngo/design#v0.3.0"
 ```
 
 The package commits its built `dist/`, so the install needs no build step and no token. bun blocks the package's `prepare` script (`lefthook install`), which is expected.
 
 **Updating.**
-1. Change the design repo, run `bun run build` there, bump its version, commit, tag and push (`git tag -a v0.2.4 -m v0.2.4 && git push --follow-tags`).
+1. In the design repo, open a PR that bumps `version` in `package.json`, adds the CHANGELOG section and commits the rebuilt `dist/`. Merging it tags `vX.Y.Z` and publishes the release automatically.
 2. Point the dependency at the new tag and run `bun install`.
 3. Run `bun run design:sync` if the favicons or the share card changed.
-4. Run `bun run check`. `check:design` fails on a version outside `^0.2.3` (`COMPATIBLE` in `scripts/check-design.ts`) or a `public/` brand file that differs from the package.
+4. Run `bun run check`. `check:design` fails on a version outside `^0.3.0` (`COMPATIBLE` in `scripts/check-design.ts`) or a `public/` brand file that differs from the package.
 
 To try unreleased design-package changes, point the dependency at a local checkout of the design repo (`"file:<path>"`) and reinstall with `rm -rf node_modules/@proudindian && bun install --force` after every change there (bun copies the folder at install time). Switch back to the tag before committing: CI can't see the checkout.
 
