@@ -17,6 +17,7 @@
     "report:health": "fallow health",
     "fix": "oxfmt . && oxlint --fix .",
     "qa:perf": "node scripts/qa/perf.mjs",
+    "qa:lighthouse": "node scripts/qa/lighthouse.mjs",
     "qa:behaviour": "node scripts/qa/behaviour.mjs",
     "qa:doodles": "node scripts/qa/doodles.mjs",
     "prepare": "lefthook install || true",

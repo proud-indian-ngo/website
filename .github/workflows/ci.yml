@@ -101,6 +101,48 @@ jobs:
           path: dist/
           retention-days: 1
 
+  # Lighthouse on the built site, beside `checks` (not required, so it never holds back a deploy); see
+  # scripts/qa/lighthouse.mjs for the gates. Pull requests and pushes to main only.
+  lighthouse:
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.2"
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+      - run: bun install --frozen-lockfile
+      - uses: actions/cache@v6
+        with:
+          path: node_modules/.astro
+          key: astro-${{ hashFiles('src/assets/**', 'bun.lock') }}
+          restore-keys: astro-
+      - name: Build
+        run: bun run build
+        env:
+          PUBLIC_SITE_URL: https://proudindian.ngo
+          PUBLIC_EVENTS_URL: ${{ vars.PUBLIC_EVENTS_URL }}
+      - name: Restore Playwright cache
+        id: playwright-cache
+        uses: actions/cache/restore@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: bunx playwright install --with-deps chromium
+      - name: Lighthouse
+        run: bun run qa:lighthouse
+
   deploy:
     needs: checks
     runs-on: ubuntu-latest
