@@ -65,7 +65,7 @@ We ask for your date of birth so we can check that you are 18 or over. We ask fo
 
 We use your phone number for WhatsApp messages and for adding you to the WhatsApp groups of your teams and events. We check whether the number you gave is registered on WhatsApp so we know whether to message you there.
 
-<!-- NOTE: the dashboard does not yet check the 18+ rule from the date of birth at sign-up; the team checks it. If the dashboard ever stops needing date of birth or gender, stop collecting them and update this section (DPDP data minimisation). -->
+<!-- NOTE: the dashboard's sign-up check for the 18+ rule is in progress (a pi-dash pull request); until it ships, the team checks it. If the dashboard ever stops needing date of birth or gender, stop collecting them and update this section (DPDP data minimisation). -->
 
 While you use the dashboard, we also keep:
 
@@ -97,7 +97,7 @@ Children are registered by their partner centre, school or care home, which we a
 
 ### If you contact us
 
-If you email us (connect@, hr@ or finance@proudindian.ngo), call or WhatsApp us, or message us on social media, we receive your name, contact details and whatever you choose to tell us. We use it to reply. Messages on social media are also handled by those platforms under their own policies.
+If you email us (connect@, hr@ or finance@proudindian.ngo), call or WhatsApp us, or message us on social media, we receive your name, contact details and whatever you choose to tell us. We use it to reply. Our email is hosted by Purelymail. Messages on social media are also handled by those platforms under their own policies.
 
 ### Vendors and suppliers
 
@@ -133,25 +133,24 @@ We share personal data only with the services that help us run Proud Indian, and
 | Who | What they receive | Why |
 |---|---|---|
 | Razorpay and its payment partners | Donor details and payment details | To process donations |
+| Our hosting provider (Germany) | Everything the dashboard stores, our photo library, and files kept on our server | Renting us the server they run on |
 | Cloudflare | Website requests and page-view analytics; files uploaded to the dashboard (photos, bills, receipts, music) | Website hosting, visit counts (Cloudflare Web Analytics) and file storage (Cloudflare R2) |
-| Our email provider | Your email address and the content of emails we send you | Sign-up, password reset and notification emails |
+| Purelymail (United States) | Your email address, the emails we send you, and emails you send to our proudindian.ngo addresses | Our email: sign-up, password reset and notification emails, and our connect@, hr@ and finance@ mailboxes |
 | WhatsApp (Meta) | Your phone number and the messages and polls we send | WhatsApp notifications and team groups |
 | PostHog (United States) | Account ID, role, page views and error reports from the dashboard | Fixing problems and understanding use |
 | Gravatar and DiceBear | A hashed form of your email address | Showing a default profile picture |
 | Income Tax Department | Donor name, address, PAN and donation amount | 80G reporting (Form 10BD) |
 | Courts, police or regulators | Only what a lawful order or the law requires | Legal compliance |
 
-<!-- NOTE: name the dashboard's email (SMTP) provider in the table above once it is settled. -->
-
-We store event photos in Immich, a photo library that we run ourselves, so photos uploaded there are not shared with an outside company. Our WhatsApp messages go out through a WhatsApp account we connect ourselves, so they pass through WhatsApp's own systems.
+We store event photos in Immich, a photo library that we run ourselves on our own server, so no photo-sharing company receives them. Our WhatsApp messages go out through a WhatsApp account we connect ourselves, so they pass through WhatsApp's own systems.
 
 Inside Proud Indian, volunteers see only what their role needs. For example, event leads see the people signed up for their events, and the finance team sees reimbursement claims.
 
 ## Where your data is stored
 
-The dashboard, its database and our Immich photo library run on a server in Germany. Uploaded files are stored in Cloudflare R2 object storage. Donation records are held by Razorpay and in our accounts.
+The dashboard, its database and our Immich photo library run on a server we rent from a hosting provider in Germany. Uploaded files are stored either on that server or in Cloudflare R2 object storage. Our email, including the emails the dashboard sends, is hosted by Purelymail in the United States. Donation records are held by Razorpay and in our accounts.
 
-This means some of your data leaves India. The dashboard data and event photos are stored in Germany. PostHog stores dashboard analytics and error reports in the United States. Cloudflare may process website and file requests in data centres outside India. The DPDP Act allows this except to countries the Government of India restricts. We will stop using a service if the law no longer allows the transfer.
+This means some of your data leaves India. The dashboard data and event photos are stored in Germany. Purelymail stores our email, and PostHog stores dashboard analytics and error reports, in the United States. Cloudflare may process website and file requests in data centres outside India. The DPDP Act allows this except to countries the Government of India restricts. We will stop using a service if the law no longer allows the transfer.
 
 ## How long we keep it
 

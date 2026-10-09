@@ -318,7 +318,7 @@ bun run qa:doodles     # margin doodles clear of content at 390-2560px (needs a 
 
 ## TODO
 
-- [ ] **Privacy policy follow-ups.** Published on 2026-10-09 after an internal review (no lawyer). The `<!-- NOTE: ... -->` comments in `src/content/privacy.md` list what is still open: a verifiable parental-consent process for photos and Kalakriti before the DPDP Rules on it apply (13 May 2027), the dashboard's email provider, the R2 private-storage cutover, and the dashboard checking the 18+ rule at sign-up. A legal review is still worth doing when it becomes possible.
+- [ ] **Privacy policy follow-ups.** Published on 2026-10-09 after an internal review (no lawyer). The `<!-- NOTE: ... -->` comments in `src/content/privacy.md` list what is still open: a verifiable parental-consent process for photos and Kalakriti before the DPDP Rules on it apply (13 May 2027), the R2 private-storage cutover, and the dashboard checking the 18+ rule at sign-up (a pi-dash pull request is in progress). A legal review is still worth doing when it becomes possible.
 - [ ] **pi-dash events endpoint.** `GET /api/public/events` is not implemented yet. When it ships:
   - set `PUBLIC_EVENTS_URL` in Cloudflare Pages;
   - have pi-dash send CORS headers for `https://proudindian.ngo` (plus preview origins), GET only;
