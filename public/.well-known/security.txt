@@ -1,0 +1,4 @@
+Contact: mailto:connect@proudindian.ngo
+Expires: 2027-10-01T19:53:00Z
+Canonical: https://proudindian.ngo/.well-known/security.txt
+Preferred-Languages: en
