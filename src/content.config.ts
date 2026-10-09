@@ -66,6 +66,7 @@ const site = defineCollection({
     ),
     links: z.object({
       register: z.url(),
+      events: z.url(),
       dashboardHost: z.string(),
       razorpay: z.object({
         base: z.url(),

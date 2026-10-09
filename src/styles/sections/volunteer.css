@@ -205,13 +205,6 @@
   transform: rotate(2deg);
   transform-origin: bottom;
 }
-.s-vol .psp {
-  position: absolute;
-  width: 40px;
-  right: 330px;
-  bottom: 250px;
-  z-index: 3;
-}
 .s-vol .stks {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -331,11 +324,6 @@
     width: 150px;
     right: 8px;
   }
-  .s-vol .psp {
-    right: 150px;
-    bottom: 120px;
-    width: 30px;
-  }
   .s-vol .stks {
     display: flex;
     overflow-x: auto;
@@ -403,15 +391,6 @@
   /* three lines, "Nothing on / the calendar / yet.", clear of the cut-out's head */
   max-width: 6.3em;
 }
-/* the sparkle moves up beside the clock, away from the button */
-.s-vol .poster.is-empty > .psp {
-  bottom: auto;
-  top: 132px;
-  right: 30px;
-}
-.s-vol .poster.is-empty > .psp .pi-ln {
-  stroke: var(--color-sky);
-}
 .s-vol .poster.is-empty .preg {
   margin-top: var(--space-24);
 }
@@ -435,10 +414,6 @@
   .s-vol .pnone {
     font-size: var(--text-40);
     text-shadow: 3px 3px 0 var(--color-sky-deep);
-  }
-  .s-vol .poster.is-empty > .psp {
-    top: 84px;
-    right: 22px;
   }
   .s-vol .pline {
     font-size: var(--text-14-5);
