@@ -5,9 +5,10 @@
  * (`bun run qa:perf`).
  *   accessibility, best-practices, seo   median must be 100
  *   performance                          median at least PERF_MIN (90), CLS at most 0.1, TBT at most 200ms
- * Writes a Markdown table to $GITHUB_STEP_SUMMARY when it is set. Run `bun run build` first.
+ * Writes a Markdown table to $GITHUB_STEP_SUMMARY when it is set. Run `bun run build` first. FORMS picks the form
+ * factors (CI runs each on its own runner, so one doesn't slow the other's measurements).
  *
- *   bun run qa:lighthouse              RUNS=1 bun run qa:lighthouse
+ *   bun run qa:lighthouse              RUNS=1 bun run qa:lighthouse              FORMS=desktop bun run qa:lighthouse
  */
 import { appendFileSync, existsSync } from "node:fs";
 
@@ -23,6 +24,7 @@ const PERF_MIN = Number(process.env.PERF_MIN ?? 90);
 const CLS_MAX = 0.1;
 const TBT_MAX = 200;
 const PORT = 4401;
+const FORMS = (process.env.FORMS ?? "mobile,desktop").split(",");
 
 const server = await serve(DIST, PORT);
 const failures = [];
@@ -30,6 +32,7 @@ const rows = [];
 try {
   const lh = await runLighthouse(`http://127.0.0.1:${PORT}/`, {
     runs: Number(process.env.RUNS ?? 3),
+    forms: FORMS,
   });
   for (const [form, r] of Object.entries(lh)) {
     const m = r.median;
@@ -55,7 +58,7 @@ try {
 }
 
 const summary = [
-  "### Lighthouse (median of " + (process.env.RUNS ?? 3) + " runs)",
+  `### Lighthouse, ${FORMS.join(" and ")} (median of ${process.env.RUNS ?? 3} runs)`,
   "",
   "| | Performance (runs) | Accessibility | Best practices | SEO | FCP | LCP | TBT | CLS |",
   "|---|---|---|---|---|---|---|---|---|",
