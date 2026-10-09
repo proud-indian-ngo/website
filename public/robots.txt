@@ -1,4 +1,11 @@
+# Content signals (https://contentsignals.org/): how Proud Indian's content may be used after it is crawled.
+#   search    building a search index and showing links and excerpts
+#   ai-input  using the content in AI answers (retrieval, grounding, AI search summaries)
+#   ai-train  training or fine-tuning AI models
+# All yes: we want people, and the assistants answering for them, to find weekend volunteering with us in Bengaluru.
+
 User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 Disallow: /styleguide/
 
