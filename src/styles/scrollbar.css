@@ -1,6 +1,6 @@
-/* Brand scrollbars, for mouse and trackpad users on every desktop platform (macOS included): a 12px paper track with
-   a 1px ink line on the side facing the content, like the site's outlines, and a solid ink pill with 2px of inset;
-   sky on hover, deep sky while dragged. Touch screens keep their native overlay scrollbars, which custom styling would
+/* Brand scrollbars, for mouse and trackpad users on every desktop platform (macOS included): a thin 8px bar on a
+   transparent track (the page shows through), with a solid ink pill and 1px of inset; sky on hover, deep sky while
+   dragged. Touch screens keep their native overlay scrollbars, which custom styling would
    turn into permanent bars. Swipe rows hide theirs and use arrow buttons instead (sections/swipe.css).
 
    Which mechanism where. Chromium 121+ honours scrollbar-color/scrollbar-width, but once either is set on a scroller
@@ -13,10 +13,8 @@
    the selector. html::-webkit-scrollbar is the page's own (viewport) bar; html ::-webkit-scrollbar is every scroller
    inside it. The file is unlayered, so it wins over the layered section CSS. */
 :root {
-  --sb-size: 12px;
-  --sb-inset: 2px;
-  --sb-track: var(--color-paper-2);
-  --sb-edge: var(--color-ink);
+  --sb-size: 8px;
+  --sb-inset: 1px;
   --sb-thumb: var(--color-ink);
   --sb-thumb-hover: var(--color-sky);
   --sb-thumb-active: var(--color-sky-deep);
@@ -27,22 +25,13 @@
     html ::-webkit-scrollbar {
       width: var(--sb-size);
       height: var(--sb-size);
-      background: var(--sb-track);
+      background: transparent;
     }
-    /* the ink line sits on the edge facing the content: left of a vertical bar, above a horizontal one */
-    html::-webkit-scrollbar-track:vertical,
-    html ::-webkit-scrollbar-track:vertical {
-      background: var(--sb-track);
-      box-shadow: inset 1px 0 0 var(--sb-edge);
-    }
-    html::-webkit-scrollbar-track:horizontal,
-    html ::-webkit-scrollbar-track:horizontal {
-      background: var(--sb-track);
-      box-shadow: inset 0 1px 0 var(--sb-edge);
-    }
+    html::-webkit-scrollbar-track,
+    html ::-webkit-scrollbar-track,
     html::-webkit-scrollbar-corner,
     html ::-webkit-scrollbar-corner {
-      background: var(--sb-track);
+      background: transparent;
     }
     /* the inset is a transparent border, with the colour clipped to the padding box */
     html::-webkit-scrollbar-thumb,
@@ -64,7 +53,7 @@
   @supports not selector(::-webkit-scrollbar) {
     html {
       scrollbar-width: thin;
-      scrollbar-color: var(--sb-thumb) var(--sb-track);
+      scrollbar-color: var(--sb-thumb) transparent;
     }
   }
 }
