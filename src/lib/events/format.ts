@@ -36,7 +36,7 @@ export function dateLabel(iso: string) {
 }
 
 /** "9:30 am" */
-export function timeLabel(iso: string) {
+function timeLabel(iso: string) {
   const d = ist(iso);
   const h = d.getUTCHours();
   const m = String(d.getUTCMinutes()).padStart(2, "0");

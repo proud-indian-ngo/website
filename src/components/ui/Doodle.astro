@@ -58,7 +58,7 @@ export const doodles = {
   "underline-loop": UnderlineLoop,
 } as const;
 
-export type DoodleName = keyof typeof doodles;
+type DoodleName = keyof typeof doodles;
 
 type Props = HTMLAttributes<"svg"> & {
   name: DoodleName;

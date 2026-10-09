@@ -264,13 +264,17 @@ function fire(t: HTMLElement, still = false) {
 /** show everything still pending, at rest (Pause, reduced motion) */
 export const flushReveals = () => [...pending].forEach((t) => fire(t, true));
 
+/** the pending targets rendered at this breakpoint (the rest wait), measured all at once before any of them fires */
+const measurePending = () =>
+  [...pending]
+    .map((t) => [t, t.getBoundingClientRect()] as const)
+    .filter(([, r]) => r.width || r.height);
+
 export function sweep() {
   if (!pending.size) return;
   const H = innerHeight;
   const end = scrollY + H >= D.scrollHeight - 4;
-  const rs = [...pending].map((t) => [t, t.getBoundingClientRect()] as const);
-  for (const [t, r] of rs) {
-    if (!r.width && !r.height) continue; // not rendered at this breakpoint; it waits
+  for (const [t, r] of measurePending()) {
     if (r.bottom <= 0) fire(t, true); // already scrolled past: show it at rest
     else if (r.top < H * 0.9 || (end && r.top < H)) fire(t);
   }
@@ -345,11 +349,8 @@ function initJumps() {
     if (Math.abs(to - y) <= H * JUMP) return;
     const lo = Math.min(y, to);
     const hi = Math.max(y, to) + H;
-    const rs = [...pending].map((t) => [t, t.getBoundingClientRect()] as const);
-    for (const [t, r] of rs) {
-      if (!r.width && !r.height) continue; // not rendered at this breakpoint
+    for (const [t, r] of measurePending())
       if (r.top + y < hi && r.bottom + y > lo) fire(t, true);
-    }
     // the fragment navigation is the click's default action, right after this; put smooth back once it has scrolled
     D.style.scrollBehavior = "auto";
     clearTimeout(restoreT);

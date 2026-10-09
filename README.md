@@ -10,7 +10,7 @@ One page for the Proud Indian NGO in Bengaluru: the programmes (Teach, Feed, Pai
 
 ## Run
 
-Needs [Bun](https://bun.sh) 1.4+ and Node 22.12+.
+Needs [Bun](https://bun.sh) 1.4.2+ (`packageManager` in `package.json`) and Node 22.12+.
 
 ```sh
 bun install
@@ -24,15 +24,27 @@ bun run preview    # serve dist/ at http://localhost:4321
 | `bun run check` | Formatting (oxfmt), lint (oxlint), the design package check and the style lint (raw hex, retired token names) |
 | `bun run check:types` | `astro check` (TypeScript 6; `astro check` does not support TypeScript 7 yet) |
 | `bun run fix` | Format and auto-fix lint |
+| `bun run check:fallow` | [fallow](https://fallow.tools): unused files, exports and dependencies, and duplicated code (both must be clean) |
+| `bun run report:health` | fallow's complexity and maintainability report, with refactoring targets (advisory, not a gate) |
+| `bun run check:updates` | List outdated dependencies interactively ([taze](https://github.com/antfu-collective/taze)); Renovate opens the PRs anyway |
 | `bun run check:design` | The installed `@proudindian/design` matches the version the site expects; a `file:` install is not stale; the `public/` brand files are byte-identical to the package's |
 | `bun run check:razorpay` | The live Razorpay page still pre-fills the amount from `site.yaml` → `links.razorpay` (item name and minimum; see [Donations](#donations)) |
 | `bun run design:sync` | Copy the favicons and `og.png` from the package into `public/` (after a package update) |
 | `bun run qa:behaviour` | Motion-on behaviour checks against a running site (reveals, loops, Pause, menu, drawer, donate, scroll lock); see [Quality checks](#quality-checks) |
 | `bun run qa:doodles` | The margin doodles touch no content, rail, header pill or viewport edge, at 390 to 2560px (serves `dist/` itself; run `bun run build` first, or set `SITE`). See [Margin doodles](#margin-doodles) |
+| `bun run qa:events` | The events flow end to end against the mock feed (`bun run qa:events:mock`); see [Events](#events-volunteer-section) |
 | `bun run qa:perf` | Build, serve like Cloudflare Pages (brotli, `_headers`), Lighthouse ×5 on mobile and desktop, and the frame profiler at 4× and 6× CPU throttling (see [Performance](#performance)) |
 | `bun run motion:load` | Regenerate `src/styles/sections/load-motion.css` (the header and hero load sequence) from `scripts/load-motion.ts`; `bun run check` fails if it is out of date |
 
-Lint and format match proud-indian-ngo/dash: oxlint (correctness rules as errors) and oxfmt (ultracite settings, inlined). Lefthook runs them on commit (`bun install` sets up the hooks). oxfmt can sort Tailwind classes, but it does not format `.astro` files, so classes in markup are not auto-sorted.
+Lint and format match proud-indian-ngo/dash: oxlint (correctness rules as errors) and oxfmt (ultracite settings, inlined). oxfmt can sort Tailwind classes, but it does not format `.astro` files, so classes in markup are not auto-sorted.
+
+### Conventions
+
+These follow proud-indian-ngo/dash.
+- **Hooks.** Lefthook (`bun install` sets it up) formats and lints staged files, runs the design and style checks and the type check on commit, and checks the commit message.
+- **Commits and PR titles** are [Conventional Commits](https://www.conventionalcommits.org) (`feat: …`, `fix(events): …`, `chore(deps): …`; lower-case subject, at most 100 characters), checked by commitlint (`commitlint.config.js`). Pull requests are squash-merged with the PR title as the commit message, so the title is what lands on `main`.
+- **CI.** `.github/workflows/ci.yml` runs the `checks` job (lint, types, fallow, build, `qa:behaviour`, `qa:doodles`, and the Razorpay check as a warning) on every pull request and push. `checks` is required on `main`, which also needs a pull request with one approval (admins can push directly).
+- **Dependencies.** [Renovate](https://docs.renovatebot.com) (`renovate.json`) opens update PRs on weekday mornings (IST): patches are grouped and automerged once `checks` passes, minor updates are grouped into one PR, and `@proudindian/design` releases get their own PR. Dependabot security updates and secret scanning (with push protection) are on.
 
 ## Environment
 
@@ -97,7 +109,7 @@ Buttons deep-link to Razorpay: `https://pages.razorpay.com/proud-indian-ngo-dona
 
 ## Deploying to Cloudflare Pages
 
-GitHub Actions builds and deploys (`.github/workflows/deploy.yml`) with `wrangler pages deploy` to the Cloudflare Pages project `proudindian` (<https://proudindian.pages.dev>) in the **Proud Indian** Cloudflare account. Cloudflare's own Git integration is not used.
+GitHub Actions checks, builds and deploys (`.github/workflows/ci.yml`; the `deploy` job runs after `checks`) with `wrangler pages deploy` to the Cloudflare Pages project `proudindian` (<https://proudindian.pages.dev>) in the **Proud Indian** Cloudflare account. Cloudflare's own Git integration is not used.
 
 | Trigger | Result |
 |---|---|
@@ -107,7 +119,7 @@ GitHub Actions builds and deploys (`.github/workflows/deploy.yml`) with `wrangle
 | Nightly at 06:00 IST | Rebuild, only once `PUBLIC_EVENTS_URL` is set |
 | Run workflow (Actions tab) | Manual rebuild |
 
-Every run installs with the frozen lockfile and runs `bun run check`, `bun run check:types` and `bun run build` before deploying. The image cache (`node_modules/.astro`) is kept between runs, so a build takes about 2 seconds instead of 11.
+Every run installs with the frozen lockfile and deploys only after the `checks` job passes (see [Conventions](#conventions)); the deploy job uploads the exact `dist/` that `checks` built and tested. The image cache (`node_modules/.astro`) is kept between runs, so a build takes about 2 seconds instead of 11.
 
 **Secrets and variables** (repository settings → Secrets and variables → Actions):
 - Secret `CLOUDFLARE_API_TOKEN`: an account-owned API token in the Proud Indian account ("GitHub Actions: proud-indian-ngo/website (Pages deploy)"), with Pages Write only. Replace it there if it leaks.
