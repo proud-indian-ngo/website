@@ -25,7 +25,22 @@ async function open(browser, url, opts = {}) {
   });
   const page = await ctx.newPage();
   const errors = [];
-  page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
+  // only the site's own errors: a third-party request the page can't control (the events feed refusing CORS from
+  // 127.0.0.1, an analytics beacon) is not a site bug
+  const origin = new URL(url).origin;
+  page.on("console", (m) => {
+    if (m.type() !== "error") return;
+    const src = m.location().url;
+    if (src && !src.startsWith(origin)) return;
+    // CORS and network errors are reported against the page, but name the request's URL
+    const target = /https?:\/\/[^\s'"]+/.exec(m.text())?.[0];
+    if (target && !target.startsWith(origin)) return;
+    errors.push(m.text());
+  });
+  page.on("requestfailed", (req) => {
+    if (req.url().startsWith(origin))
+      errors.push(`request failed: ${req.url()}`);
+  });
   page.on("pageerror", (e) => errors.push(String(e)));
   await page.goto(url, { waitUntil: "networkidle" });
   await page.evaluate(() => document.fonts.ready);
@@ -291,16 +306,30 @@ async function run(browser, url, tag) {
       const box = await el.boundingBox();
       const before = await el.evaluate((n) => n.scrollLeft);
       const cdp = await ctx.newCDPSession(page);
-      await cdp.send("Input.synthesizeScrollGesture", {
-        x: box.x + box.width * 0.8,
-        y: box.y + Math.min(box.height / 2, 150),
-        xDistance: -260,
-        yDistance: 0,
-        gestureSourceType: "touch",
-        speed: 1200,
-      });
-      await sleep(500);
-      return (await el.evaluate((n) => n.scrollLeft)) > before + 50;
+      const moved = () =>
+        el.evaluate((n, b) => n.scrollLeft > b + 50, before).catch(() => false);
+      // a real touch drag (finger down, moves, up): the same on every platform, unlike a synthesized scroll gesture.
+      // a slow runner can need a second drag and some time for the scroll to settle
+      const y = box.y + Math.min(box.height / 2, 150);
+      const x0 = box.x + box.width * 0.8;
+      const touch = (type, x) =>
+        cdp.send("Input.dispatchTouchEvent", {
+          type,
+          touchPoints: type === "touchEnd" ? [] : [{ x, y }],
+        });
+      for (let attempt = 0; attempt < 2; attempt++) {
+        await touch("touchStart", x0);
+        for (let i = 1; i <= 12; i++) {
+          await touch("touchMove", x0 - (260 * i) / 12);
+          await sleep(16);
+        }
+        await touch("touchEnd", x0 - 260);
+        for (let t = 0; t < 25; t++) {
+          if (await moved()) return true;
+          await sleep(100);
+        }
+      }
+      return false;
     };
     r["swipe Kalakriti line"] = await swipe(".kl-scroll");
     r["swipe session tickets"] = await swipe(".s-vol .stks");

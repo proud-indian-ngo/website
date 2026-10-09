@@ -1,0 +1,42 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "schedule": ["before 9am every weekday"],
+  "timezone": "Asia/Kolkata",
+  "platformAutomerge": true,
+  "rebaseWhen": "behind-base-branch",
+  "packageRules": [
+    {
+      "description": "Automerge patch updates",
+      "matchUpdateTypes": ["patch", "pin", "digest"],
+      "groupName": "patch updates",
+      "automerge": true
+    },
+    {
+      "description": "Group minor updates into a single PR",
+      "matchUpdateTypes": ["minor"],
+      "groupName": "minor updates"
+    },
+    {
+      "description": "Keep Astro and its integrations in sync",
+      "matchPackageNames": ["astro", "/^@astrojs//"],
+      "groupName": "astro"
+    },
+    {
+      "description": "Keep Tailwind CSS and its Vite plugin in sync",
+      "matchPackageNames": ["tailwindcss", "/^@tailwindcss//"],
+      "groupName": "tailwind"
+    },
+    {
+      "description": "The design system ships as git tags: one PR per release, never automerged, so the site is checked against it",
+      "matchPackageNames": ["@proudindian/design"],
+      "groupName": "design system",
+      "automerge": false
+    },
+    {
+      "description": "Keep Bun in package.json and the workflows in sync",
+      "matchPackageNames": ["bun", "oven-sh/setup-bun"],
+      "groupName": "bun"
+    }
+  ]
+}

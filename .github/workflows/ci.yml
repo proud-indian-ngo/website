@@ -1,0 +1,128 @@
+# Checks, builds and deploys the site to Cloudflare Pages (project "proudindian" in the Proud Indian account).
+#   push to main      → checks, then a production deployment
+#   pull request      → checks, then a preview deployment (https://<branch>.proudindian.pages.dev)
+#   events-changed    → rebuild with fresh sessions (pi-dash sends this repository_dispatch when the feed changes)
+#   schedule          → nightly rebuild, only while PUBLIC_EVENTS_URL is set
+# `checks` is the required status check on main. Secrets: CLOUDFLARE_API_TOKEN (account-owned, Pages Write only) and
+# CLOUDFLARE_ACCOUNT_ID. Variable: PUBLIC_EVENTS_URL (the pi-dash public events feed).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [events-changed]
+  schedule:
+    - cron: "30 0 * * *" # 06:00 IST
+
+concurrency:
+  group: ci-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+  deployments: write
+
+env:
+  PROJECT: proudindian
+  # no deploy without the Cloudflare secrets (a pull request from a fork gets no secrets)
+  CAN_DEPLOY: ${{ secrets.CLOUDFLARE_API_TOKEN != '' && secrets.CLOUDFLARE_ACCOUNT_ID != '' }}
+
+jobs:
+  checks:
+    if: github.event_name != 'schedule' || vars.PUBLIC_EVENTS_URL != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.4.2"
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: actions/cache@v6
+        with:
+          path: ~/.bun/install/cache
+          key: bun-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+          restore-keys: bun-${{ runner.os }}-
+      - run: bun install --frozen-lockfile
+
+      - name: Lint
+        run: bun run check
+      - name: Type check
+        run: bun run check:types
+      - name: Unused code and duplication (fallow)
+        run: bun run check:fallow
+      # a renamed Razorpay item breaks the amount pre-fill: warn, but don't hold back the deploy
+      - name: Razorpay pre-fill
+        run: bun run check:razorpay || echo "::warning title=Razorpay::The donate page no longer pre-fills the amount; see the step log and update site.yaml → links.razorpay"
+
+      # optimised images (AVIF and fallbacks): the cache cuts the build from about 11s to 2s
+      - uses: actions/cache@v6
+        with:
+          path: node_modules/.astro
+          key: astro-${{ hashFiles('src/assets/**', 'bun.lock') }}
+          restore-keys: astro-
+      - name: Build
+        run: bun run build
+        env:
+          PUBLIC_SITE_URL: https://proudindian.ngo
+          PUBLIC_EVENTS_URL: ${{ vars.PUBLIC_EVENTS_URL }}
+
+      - name: Restore Playwright cache
+        id: playwright-cache
+        uses: actions/cache/restore@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: bunx playwright install --with-deps chromium
+      - name: Save Playwright cache
+        if: always() && steps.playwright-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+      - name: Behaviour
+        run: |
+          node node_modules/astro/bin/astro.mjs preview --port 4321 --host 127.0.0.1 &
+          for _ in $(seq 1 30); do curl -sf http://127.0.0.1:4321/ >/dev/null && break; sleep 1; done
+          bun run qa:behaviour
+      - name: Margin doodles
+        run: bun run qa:doodles
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: site
+          path: dist/
+          retention-days: 1
+
+  deploy:
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: site
+          path: dist/
+      - name: Deploy to Cloudflare Pages
+        id: deploy
+        if: env.CAN_DEPLOY == 'true'
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4"
+          command: pages deploy dist --project-name=${{ env.PROJECT }} --branch=${{ github.head_ref || github.ref_name }} --commit-hash=${{ github.event.pull_request.head.sha || github.sha }} --commit-dirty=true
+      - name: Summary
+        run: |
+          if [ "${{ steps.deploy.outcome }}" = success ]; then
+            echo "Deployed to ${{ steps.deploy.outputs.deployment-url }}" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "Checked and built; not deployed (no Cloudflare secrets)." >> "$GITHUB_STEP_SUMMARY"
+          fi

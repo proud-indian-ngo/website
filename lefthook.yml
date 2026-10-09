@@ -12,3 +12,8 @@ pre-commit:
     types:
       glob: "*.{ts,astro}"
       run: bun run check:types
+
+commit-msg:
+  commands:
+    commitlint:
+      run: bunx commitlint --edit {1}

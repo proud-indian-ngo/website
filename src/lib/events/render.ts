@@ -49,7 +49,7 @@ const esc = (s: string) =>
   );
 
 /** Programme label shown on the poster and ticket chip. */
-export const programmeName = (e: PublicEvent) =>
+const programmeName = (e: PublicEvent) =>
   e.programme ? NAMES[e.programme]! : e.team;
 
 const PIN =
@@ -61,11 +61,11 @@ const meta = (e: PublicEvent, cls: string) =>
   `<p class="${cls}"><span class="mi">${PIN}${esc(e.area)}</span><span class="mi">${CLOCK}${esc(timeRange(e.startTime, e.endTime))}</span></p>`;
 
 /** aria-label of the poster article */
-export const posterLabel = (e: PublicEvent) =>
+const posterLabel = (e: PublicEvent) =>
   `Next session: ${e.name}, ${dateLabel(e.startTime)}`;
 
 /** Everything inside the poster except the cut-out child and the sparkle, which never change. */
-export function posterBody(e: PublicEvent, l: EventLabels): string {
+function posterBody(e: PublicEvent, l: EventLabels): string {
   return (
     `<div class="ptop"><span class="nx">${esc(l.kicker)}</span><span class="ga">${esc(l.open)}</span></div>` +
     `<div class="holes" aria-hidden="true"></div>` +
@@ -78,7 +78,7 @@ export function posterBody(e: PublicEvent, l: EventLabels): string {
 }
 
 /** The poster body when there is nothing to show. Keeps the "Next up" pill and the punched holes. */
-export function emptyBody(l: EventLabels, e: EmptyLabels = l.empty): string {
+function emptyBody(l: EventLabels, e: EmptyLabels = l.empty): string {
   return (
     `<div class="ptop"><span class="nx">${esc(l.kicker)}</span></div>` +
     `<div class="holes" aria-hidden="true"></div>` +
@@ -110,7 +110,7 @@ export function poster(
 }
 
 /** One "More weekends" ticket, as an <li>. */
-export function ticket(e: PublicEvent, l: EventLabels): string {
+function ticket(e: PublicEvent, l: EventLabels): string {
   const p = dateParts(e.startTime);
   const cls =
     e.programme && e.programme !== "education" ? ` ${e.programme}` : "";
@@ -125,7 +125,7 @@ export function ticket(e: PublicEvent, l: EventLabels): string {
 }
 
 /** The poster shows the next session; the tickets show the three after it (none: the row hides). */
-export const split = (events: PublicEvent[]) => ({
+const split = (events: PublicEvent[]) => ({
   next: events[0],
   more: events.slice(1, 4),
 });

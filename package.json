@@ -13,6 +13,8 @@
     "motion:load": "bun scripts/load-motion.ts",
     "check": "oxfmt --check . && oxlint . --max-warnings=0 && bun run check:design && bun run lint:css && bun run motion:load --check",
     "check:types": "astro check",
+    "check:fallow": "fallow dead-code && fallow dupes",
+    "report:health": "fallow health",
     "fix": "oxfmt . && oxlint --fix .",
     "qa:perf": "node scripts/qa/perf.mjs",
     "qa:behaviour": "node scripts/qa/behaviour.mjs",
@@ -20,7 +22,10 @@
     "prepare": "lefthook install || true",
     "check:design": "bun scripts/check-design.ts",
     "check:razorpay": "bun scripts/check-razorpay.ts",
-    "design:sync": "bun scripts/check-design.ts --sync"
+    "design:sync": "bun scripts/check-design.ts --sync",
+    "qa:events": "node scripts/qa/events.mjs",
+    "qa:events:mock": "bun scripts/qa/mock-events.ts",
+    "check:updates": "bunx taze -I"
   },
   "dependencies": {
     "@proudindian/design": "github:proud-indian-ngo/design#v0.2.3",
@@ -29,19 +34,25 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
     "@astrojs/sitemap": "^3.7.4",
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
     "@tailwindcss/vite": "^4",
     "@types/bun": "^1.4.2",
+    "chrome-launcher": "^1.2.1",
+    "fallow": "^3.32.0",
     "lefthook": "^2.2.0",
     "lighthouse": "13.4.1",
     "oxfmt": "^0.72.0",
     "oxlint": "^1.87.0",
     "playwright": "1.63.0",
     "tailwindcss": "^4",
-    "typescript": "^6"
+    "typescript": "^6",
+    "vite": "^8.3.1"
   },
   "engines": {
     "node": ">=22.12.0"
   },
+  "packageManager": "bun@1.4.2",
   "allowScripts": {
     "esbuild": true
   }
