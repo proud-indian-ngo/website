@@ -133,7 +133,7 @@ We share personal data only with the services that help us run Proud Indian, and
 | Who | What they receive | Why |
 |---|---|---|
 | Razorpay and its payment partners | Donor details and payment details | To process donations |
-| Our hosting provider (Germany) | Everything the dashboard stores, our photo library, and files kept on our server | Renting us the server they run on |
+| netcup (Germany) | Everything the dashboard stores, our photo library, and files kept on our server | Renting us the server they run on |
 | Cloudflare | Website requests and page-view analytics; files uploaded to the dashboard (photos, bills, receipts, music) | Website hosting, visit counts (Cloudflare Web Analytics) and file storage (Cloudflare R2) |
 | Purelymail (United States) | Your email address, the emails we send you, and emails you send to our proudindian.ngo addresses | Our email: sign-up, password reset and notification emails, and our connect@, hr@ and finance@ mailboxes |
 | WhatsApp (Meta) | Your phone number and the messages and polls we send | WhatsApp notifications and team groups |
@@ -148,7 +148,7 @@ Inside Proud Indian, volunteers see only what their role needs. For example, eve
 
 ## Where your data is stored
 
-The dashboard, its database and our Immich photo library run on a server we rent from a hosting provider in Germany. Uploaded files are stored either on that server or in Cloudflare R2 object storage. Our email, including the emails the dashboard sends, is hosted by Purelymail in the United States. Donation records are held by Razorpay and in our accounts.
+The dashboard, its database and our Immich photo library run on a server we rent from netcup, a hosting provider in Germany. Uploaded files are stored either on that server or in Cloudflare R2 object storage. Our email, including the emails the dashboard sends, is hosted by Purelymail in the United States. Donation records are held by Razorpay and in our accounts.
 
 This means some of your data leaves India. The dashboard data and event photos are stored in Germany. Purelymail stores our email, and PostHog stores dashboard analytics and error reports, in the United States. Cloudflare may process website and file requests in data centres outside India. The DPDP Act allows this except to countries the Government of India restricts. We will stop using a service if the law no longer allows the transfer.
 
