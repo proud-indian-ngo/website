@@ -1,0 +1,9 @@
+---
+/** Kalakriti clothesline string with bunting flags.
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0 0 1000 96" preserveAspectRatio="none" {...Astro.props}><path class="pi-ln" d="M0 10C250 70 750 70 1000 10"></path><path class="fl f1" d="M228 43.6L272 47.4L248 92Z"></path><path class="fl f2" d="M478 55L522 55L500 98Z"></path><path class="fl f3" d="M728 47.4L772 43.6L752 92Z"></path><path class="fl f2 fs" d="M14 13.6L44 20.6L26 50Z"></path><path class="fl f3 fs" d="M956 20.6L986 13.6L974 50Z"></path><circle class="nl" cx="3" cy="10" r="4"></circle><circle class="nl" cx="997" cy="10" r="4"></circle></svg>

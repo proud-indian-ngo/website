@@ -1,0 +1,67 @@
+# Organisation facts. Change a number here and it updates everywhere it is shown (hero seal, Donate and the
+# Reports bento).
+name: Proud Indian
+url: https://proudindian.ngo
+city: Bengaluru
+founded:
+  long: 26 January 2019
+  short: 26 Jan 2019
+
+stats:
+  optimists: 3.6k+
+  hours: 14k+
+  reached: 23k+
+  # share of funds that go to programmes, in percent (drives the 95% ring)
+  programmesPercent: 95
+
+registrations:
+  taxExemption: 80G
+  registered: 12A
+  darpan: KA/2019/0234065
+  pan: AAETP0762C
+  registrationNo: INT-4-00864-2018-19
+
+contacts:
+  emails:
+    - label: General
+      address: connect@proudindian.ngo
+    - label: Volunteering and internships
+      address: hr@proudindian.ngo
+    - label: Donations
+      address: finance@proudindian.ngo
+  phone:
+    label: Call or WhatsApp
+    display: +91 99864 31321
+    tel: "+919986431321"
+  address:
+    label: Registered office
+    text: "#206, 8th A Main Rd, LBS Nagar, Kaggadasapura, Bengaluru 560017"
+
+# Social profiles (from the old site's footer), in footer order. The phone menu's Instagram pill uses the instagram URL.
+social:
+  - network: instagram
+    label: Instagram @proudindian_ngo
+    url: https://www.instagram.com/proudindian_ngo/
+  - network: linkedin
+    label: LinkedIn proud-indian
+    url: https://www.linkedin.com/company/proud-indian
+  - network: youtube
+    label: YouTube Proud Indian
+    url: https://www.youtube.com/channel/UCK8HGod_5TYSwDEgp7iFpPg
+  - network: facebook
+    label: Facebook proudIndianbengaluru
+    url: https://www.facebook.com/proudIndianbengaluru/
+  - network: x
+    label: X @ProudIndianNGO
+    url: https://x.com/ProudIndianNGO
+
+links:
+  # every "Become an Optimist" / "Volunteer for this" button
+  register: https://dash.proudindian.ngo/register
+  dashboardHost: dash.proudindian.ngo
+  # Razorpay Payment Page. The pre-fill parameter is the item name lower-cased with underscores; the value is whole
+  # rupees. If the item is renamed in Razorpay, this parameter changes and the amount silently stops pre-filling.
+  razorpay:
+    base: https://pages.razorpay.com/proud-indian-ngo-donate
+    param: donate_an_amount_of_your_choice
+    min: 100

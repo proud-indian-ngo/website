@@ -1,0 +1,29 @@
+---
+/** Programme index (decision 5): a sticky doodle-icon rail on desktop, a chip row on phones. Shown while the
+ *  programme bands are in view (src/scripts/rail.ts). */
+import { getCopy, getProgrammes } from "../../lib/content";
+import IndexBook from "../doodles/IndexBook.astro";
+import IndexBowl from "../doodles/IndexBowl.astro";
+import IndexBrush from "../doodles/IndexBrush.astro";
+import IndexHands from "../doodles/IndexHands.astro";
+
+const copy = await getCopy();
+const programmes = await getProgrammes();
+const icons = { b0: IndexBook, b1: IndexBowl, kalakriti: IndexBrush, b3: IndexHands } as const;
+---
+
+<nav class="pidx" aria-label={copy.programmeIndexLabel} data-pidx>
+  {
+    programmes.map((p) => {
+      const Icon = icons[p.anchor as keyof typeof icons];
+      return (
+        <a href={`#${p.anchor}`} data-k={p.anchor}>
+          <span class="ic">
+            <Icon aria-hidden="true" />
+          </span>
+          <span class="lb">{p.name}</span>
+        </a>
+      );
+    })
+  }
+</nav>

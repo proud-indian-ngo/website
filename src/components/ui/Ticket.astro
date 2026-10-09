@@ -1,0 +1,32 @@
+---
+/**
+ * Ticket: the "Admit one" stub ticket with punched corners and a perforated stub (@proudindian/design css/primitives/ticket.css).
+ * The whole ticket is one link.
+ */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"a"> & {
+  href: string;
+  variant?: "paper" | "marigold";
+  kicker: string;
+  title: string;
+  arrow?: boolean;
+  /** the three small cells along the bottom */
+  rail: string[];
+  /** vertical text on the tear-off stub */
+  stub: string;
+} & Record<`data-${string}`, string | boolean | undefined>;
+
+const { href, variant = "paper", kicker, title, arrow = false, rail, stub, class: cls, ...rest } = Astro.props;
+---
+
+<a class:list={["pi-ticket", `pi-ticket--${variant}`, cls]} href={href} {...rest}
+  ><span class="pi-ticket__body">
+    <span class="pi-ticket__main"
+      ><span class="pi-ticket__kicker">{kicker}</span><span class="pi-ticket__title"
+        >{title}{arrow && <Fragment>{" "}<span aria-hidden="true">→</span></Fragment>}</span
+      ><span class="pi-ticket__rail">{rail.map((r) => <span>{r}</span>)}</span></span
+    >
+    <span class="pi-ticket__stub" aria-hidden="true"><span>{stub}</span></span></span
+  >
+</a>

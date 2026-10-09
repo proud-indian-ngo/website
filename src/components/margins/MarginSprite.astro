@@ -1,0 +1,20 @@
+---
+/** The outline doodle symbols the margin doodles use, inlined once per page (index.astro). The sprite is the
+ *  package's built illustrations/outline-sprite.svg (svgo, precision 2); only the symbols a section uses are kept. */
+import sprite from "@proudindian/design/illustrations/outline-sprite.svg?raw";
+
+import { type Motif, usedMotifs } from "./placements";
+
+const used = usedMotifs();
+const body = (sprite.match(/<symbol id="pi-outline-[a-z]+".*?<\/symbol>/g) ?? [])
+  .filter((x) => used.has(x.match(/pi-outline-([a-z]+)/)![1]! as Motif))
+  .join("");
+---
+
+{
+  body && (
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false" class="mg-sprite">
+      <Fragment set:html={body} />
+    </svg>
+  )
+}

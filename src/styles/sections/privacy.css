@@ -1,0 +1,213 @@
+/* Privacy policy page (/privacy/): the draft note, a sticky table of contents beside the text on wide screens (a
+   collapsible list above it on phones), and the Markdown body from src/content/privacy.md. */
+.pp-draft {
+  display: block;
+  max-width: 68ch;
+  margin-bottom: var(--space-32);
+  padding: var(--space-12) var(--space-16);
+  font-family: var(--font-pi-sans);
+  font-size: var(--text-15);
+  line-height: var(--leading-copy);
+  background: var(--color-donate);
+  border: var(--line-ink);
+  border-radius: var(--radius-14);
+  box-shadow: var(--shadow-ink-sm);
+}
+
+.pp-layout {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 68ch);
+  gap: var(--space-64);
+  align-items: start;
+  margin-top: var(--space-64);
+}
+
+.pp-toc {
+  position: sticky;
+  top: var(--space-24);
+  font-family: var(--font-pi-sans);
+  font-size: var(--text-15);
+}
+.pp-toc summary {
+  margin-bottom: var(--space-12);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-13);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  list-style: none;
+}
+.pp-toc summary::-webkit-details-marker {
+  display: none;
+}
+.pp-toc ol {
+  display: grid;
+  gap: var(--space-2);
+  padding-left: var(--space-14);
+  border-left: var(--line-ink);
+  list-style: none;
+}
+.pp-toc a {
+  display: block;
+  padding: var(--space-4) 0;
+  line-height: var(--leading-body);
+  color: var(--color-ink);
+  text-decoration: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .pp-toc a:hover {
+    color: var(--color-link);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+.pp-body {
+  max-width: 66ch;
+  font-family: var(--font-pi-sans);
+  font-size: var(--text-17);
+  line-height: var(--leading-copy);
+  color: var(--color-ink);
+}
+.pp-body > :first-child {
+  margin-top: 0;
+}
+.pp-body h2 {
+  margin: var(--space-64) 0 var(--space-16);
+  font-family: var(--font-pi-display);
+  font-size: var(--text-40);
+  font-weight: var(--font-weight-extrabold);
+  line-height: var(--leading-title);
+  letter-spacing: var(--tracking-title);
+  scroll-margin-top: var(--space-24);
+}
+.pp-body h3 {
+  margin: var(--space-40) 0 var(--space-10);
+  font-family: var(--font-pi-display);
+  font-size: var(--text-22);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--leading-title);
+  letter-spacing: var(--tracking-subtitle);
+  scroll-margin-top: var(--space-24);
+}
+.pp-body p,
+.pp-body ul,
+.pp-body ol,
+.pp-body table {
+  margin: 0 0 var(--space-16);
+}
+.pp-body ul,
+.pp-body ol {
+  padding-left: var(--space-24);
+}
+.pp-body ul {
+  list-style: disc;
+}
+.pp-body li {
+  margin-bottom: var(--space-6);
+}
+.pp-body li::marker {
+  color: var(--color-accent-ink);
+}
+.pp-body a {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.pp-body code {
+  padding: 0 var(--space-4);
+  font-size: 0.9em;
+  background: var(--color-surface-card);
+  border-radius: var(--radius-4);
+}
+.pp-body table {
+  width: 100%;
+  font-size: var(--text-15);
+  line-height: var(--leading-body);
+  border-collapse: collapse;
+  background: var(--color-surface-card);
+  border: var(--line-ink);
+}
+.pp-body th,
+.pp-body td {
+  padding: var(--space-10) var(--space-12);
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--color-sky-tint);
+}
+.pp-body th {
+  font-weight: var(--font-weight-semibold);
+  background: var(--color-sky-wash);
+  border-bottom: var(--line-ink);
+}
+
+/* "#" link after each heading: shown on hover or focus, always visible on touch screens */
+.pp-body .pp-anchor {
+  margin-left: 0.3em;
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  opacity: 0;
+}
+.pp-body .pp-anchor:focus-visible {
+  opacity: 1;
+}
+@media (hover: hover) and (pointer: fine) {
+  .pp-body h2:hover .pp-anchor,
+  .pp-body h3:hover .pp-anchor {
+    opacity: 1;
+  }
+}
+@media (hover: none), (pointer: coarse) {
+  .pp-body .pp-anchor {
+    opacity: 0.5;
+  }
+}
+
+@media (width < --theme(--breakpoint-nav)) {
+  .pp-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-32);
+    margin-top: var(--space-40);
+  }
+  .pp-toc {
+    position: static;
+    padding: var(--space-16) var(--space-18);
+    background: var(--color-surface-card);
+    border: var(--line-ink);
+    border-radius: var(--radius-14);
+  }
+  .pp-toc summary {
+    margin-bottom: 0;
+  }
+  .pp-toc details[open] summary {
+    margin-bottom: var(--space-12);
+  }
+  .pp-toc summary::after {
+    content: " +";
+  }
+  .pp-toc details[open] summary::after {
+    content: " −";
+  }
+}
+
+@media (width < --theme(--breakpoint-tab)) {
+  .pp-body {
+    font-size: var(--text-16-5);
+  }
+  .pp-body h2 {
+    margin-top: var(--space-48);
+    font-size: var(--text-30);
+  }
+  .pp-body h3 {
+    font-size: var(--text-20);
+  }
+  /* wide tables scroll sideways instead of squeezing the columns */
+  .pp-body table {
+    display: block;
+    overflow-x: auto;
+    font-size: var(--text-14);
+  }
+}

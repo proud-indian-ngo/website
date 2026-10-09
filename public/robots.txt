@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /styleguide/
+
+Sitemap: https://proudindian.ngo/sitemap-index.xml

@@ -1,0 +1,9 @@
+---
+/** Heart in the closing "Weekend sessions" chip.
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0 0 100 100" {...Astro.props}><path class="ft-ln" style="fill:#4CC0EC;stroke-width:6" d="M50 86C30 72 10 58 11 36C12 22 26 14.5 37.5 19C44 21.5 48 27 50 32C52.5 25 58 19.5 66 18C79 16 90 25.5 89 40C87.5 60 68 74 50 86Z"></path></svg>

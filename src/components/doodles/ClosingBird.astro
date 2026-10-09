@@ -1,0 +1,9 @@
+---
+/** Closing section bird (drawn on scroll).
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0 0 150 110" {...Astro.props}><path class="ft-ln" d="M34 68L12 58L20 72L8 82L34 78"></path><path class="ft-ln" style="fill:#4CC0EC" d="M32 72C32 52 50 42 70 46C78 32 100 30 106 46L122 50L106 56C106 74 90 88 68 88C48 88 32 84 32 72Z"></path><path class="ft-ln" style="fill:#F6F2EA" d="M52 64C60 46 82 46 86 60C76 72 62 74 52 64Z"></path><circle cx="95" cy="46" r="3" fill="#0F1B24"></circle><path class="ft-ln" d="M62 88L58 100M74 88L74 100"></path></svg>

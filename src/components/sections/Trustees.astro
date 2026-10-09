@@ -1,0 +1,106 @@
+---
+/** Trustees and "At a glance" (decision 9): the two trustee portraits beside the ticket card and the awards polaroid.
+ *  Rendered inside the Reports section. People: src/content/trustees.yaml. */
+import { facts, fill, getCopy, getSite, getTrustees } from "../../lib/content";
+import { asset } from "../../lib/images";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import PerchedBird from "../doodles/PerchedBird.astro";
+import AccentWord from "../ui/AccentWord.astro";
+import Img from "../ui/Img.astro";
+import Polaroid from "../ui/Polaroid.astro";
+
+const { trustees: t } = await getCopy();
+const site = await getSite();
+const values = facts(site);
+const people = await getTrustees();
+const g = t.glance;
+const cq = (n: number) => `${n.toFixed(2)}cqw`;
+---
+
+<div class="tr-board relative mt-28 max-tab:mt-20" id="about" data-spy="about">
+  <MarginDoodles set="tr" />
+  <div
+    class="tr-bhead mb-10 grid grid-cols-[minmax(0,1fr)_minmax(0,400px)] items-end gap-14 max-tab:mb-9 max-tab:grid-cols-1 max-tab:gap-4.5"
+    data-stagger="70"
+  >
+    <div>
+      <h3
+        class="tr-h3 font-pi-display text-56 leading-[.95] font-extrabold tracking-heavy text-balance max-tab:text-40"
+        data-reveal="wipe"
+      >
+        {t.heading.before} <AccentWord class="relative inline-block">{t.heading.accent}</AccentWord>
+      </h3>
+    </div>
+    <p class="tr-blede pb-1.5 font-pi-sans text-17 leading-[1.45] font-normal text-pretty" data-reveal="rise">
+      {t.lede}
+    </p>
+  </div>
+  <div class="tr-brow grid grid-cols-[auto_minmax(0,1fr)] items-start gap-14 max-lap:grid-cols-1 max-lap:gap-11">
+    <ul
+      class="tr-people grid grid-cols-[repeat(2,minmax(0,340px))] gap-7 max-pad:grid-cols-2 max-pad:gap-4"
+    >
+      {
+        people.map((p) => (
+          <li class="tr-p">
+            <figure class="flex flex-col">
+              <span
+                class:list={[
+                  "tr-face relative block @container aspect-[1/1.12] overflow-hidden rounded-22 border-line border-ink",
+                  p.tile === "sky" ? "bg-sky" : "bg-surface-wash",
+                ]}
+                role="img" aria-label={`Portrait of ${p.name}`}>
+                <Img
+                  src={asset(p.image)}
+                  alt=""
+                  width={410}
+                  phone="54vw"
+                  style={`width:${cq(p.fit.width)};bottom:${cq(p.fit.bottom)};margin-left:${cq(p.fit.marginLeft)}`}
+                />
+              </span>
+              <figcaption class="flex flex-col gap-1 px-0.5 pt-3.5">
+                <b class="font-pi-display text-30 leading-[1.04] font-extrabold tracking-heading text-balance max-tab:text-19">
+                  {p.name}
+                </b>
+                <span class="role font-pi-sans text-16 leading-body font-medium text-text-muted max-pad:text-14">{p.role}</span>
+              </figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
+    <aside
+      class="tr-glance relative w-full max-w-[440px] justify-self-end pb-5 max-lap:max-w-[520px] max-lap:justify-self-start max-tab:pr-1.5 max-tab:pb-2.5"
+      aria-labelledby="glance-h"
+    >
+      <div
+        class="gl-card relative rounded-20 border-line border-ink bg-white px-6.5 pt-6.5 pb-5.5 shadow-photo max-tab:px-5 max-tab:pt-5.5"
+      >
+        <PerchedBird class="pi-doodle gl-bird loop" aria-hidden="true" />
+        <p
+          class="gl-stamp mb-3.5 inline-block rounded-3 bg-ink px-[11px] pt-[5px] pb-1 font-pi-sans text-13 font-bold tracking-stamp text-paper uppercase"
+          id="glance-h"
+        >{g.stamp}</p>
+        <dl class="gl-facts">
+          {
+            g.facts.map((f) => (
+              <div class="flex items-baseline justify-between gap-4 border-b-line border-ink-a14 py-2.5 last:border-b-0">
+                <dt class="font-pi-sans text-13 font-semibold tracking-caption whitespace-nowrap text-sky-ink">{f.label}</dt>
+                <dd class="text-right font-pi-sans text-16 leading-[1.25] font-bold max-tab:text-15">{fill(f.value, values)}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+      <Polaroid
+        class="gl-pol wob"
+        variant="tape"
+        frame={false}
+        src={asset(g.photo.image)}
+        alt={g.photo.alt}
+        width={350}
+        phone="64vw"
+        caption={g.photo.caption}
+      />
+    </aside>
+  </div>
+</div>

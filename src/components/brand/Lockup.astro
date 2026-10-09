@@ -1,0 +1,10 @@
+---
+/** The logo, drawn from the <LogoSprite /> symbols. "lockup": header and menu; "full": footer. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & { variant?: "lockup" | "full" };
+const { variant = "lockup", ...rest } = Astro.props;
+const box = variant === "full" ? "0 0 376.41 58.91" : "0 0 370.41 58.91";
+---
+
+<svg viewBox={box} aria-hidden="true" focusable="false" {...rest}><use href={`#pi-${variant}`}></use></svg>

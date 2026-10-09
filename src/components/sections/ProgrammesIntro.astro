@@ -1,0 +1,44 @@
+---
+/** "Four ways we show up." (decisions 5 and 6): the title card on a real-photo collage. */
+import { getCopy } from "../../lib/content";
+import { asset } from "../../lib/images";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import CollageSun from "../doodles/CollageSun.astro";
+import UnderlineLoop from "../doodles/UnderlineLoop.astro";
+import AccentWord from "../ui/AccentWord.astro";
+import Polaroid from "../ui/Polaroid.astro";
+
+const { programmesIntro: p } = await getCopy();
+---
+
+<section class="bC relative overflow-hidden bg-paper pb-6 max-tab:pb-2" id="programmes" data-spy="programmes" aria-labelledby="prog-h">
+  <MarginDoodles set="prog" />
+  <div class="collage relative mx-auto h-[700px] max-w-collage max-tab:h-auto" data-stagger="60">
+    {
+      p.collage.map((src, i) => (
+        <Polaroid
+          class={`ph p${i + 1} wob`}
+          src={asset(src)}
+          alt=""
+          width={320}
+          phone="41vw"
+          frame={false}
+          position="50% 50%"
+        />
+      ))
+    }
+    <div class="title">
+      <p class="eyb mb-2.5 font-pi-sans text-15 font-semibold text-sky-ink" data-reveal="rise">{p.eyebrow}</p>
+      <h2
+        id="prog-h"
+        class="font-pi-display text-92 leading-display font-extrabold tracking-poster max-tab:text-52"
+        data-reveal="wipe"
+      >
+        {p.heading.line1}<br />{p.heading.line2} <AccentWord>{p.heading.accent}</AccentWord>
+      </h2>
+      <p class="sub mx-auto mt-4 max-w-[36ch] text-18 leading-[1.4] max-tab:text-16" data-reveal="rise">{p.sub}</p>
+    </div>
+    <UnderlineLoop class="pi-doodle cloop draw" data-reveal="draw" data-at="560" aria-hidden="true" />
+    <CollageSun class="pi-doodle csun loop" aria-hidden="true" />
+  </div>
+</section>

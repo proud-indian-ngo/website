@@ -1,0 +1,85 @@
+---
+/**
+ * One programme band (decision 5, B1 "clothesline"), reused for Teach, Feed and Gather and driven by
+ * src/content/programmes/*.yaml: the giant verb, the line, chips and call to action, three polaroids pegged on a
+ * string, the cut-out child on the band floor and the band's ambient doodle.
+ */
+import type { CollectionEntry } from "astro:content";
+import { getSite } from "../../lib/content";
+import { asset } from "../../lib/images";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import Book from "../doodles/Book.astro";
+import Bowl from "../doodles/Bowl.astro";
+import Clothesline from "../scenes/Clothesline.astro";
+import HeartBeat from "../doodles/HeartBeat.astro";
+import Button from "../ui/Button.astro";
+import Chip from "../ui/Chip.astro";
+import Peg from "../ui/Peg.astro";
+import Polaroid from "../ui/Polaroid.astro";
+import SectionLabel from "../ui/SectionLabel.astro";
+import Sticker from "../ui/Sticker.astro";
+
+type Band = Extract<CollectionEntry<"programmes">["data"], { kind: "band" }>;
+interface Props {
+  band: Band;
+}
+
+const { band: b } = Astro.props;
+const site = await getSite();
+const verbReveal = b.verbReveal === "wipe" ? { "data-reveal": "wipe" } : { "data-reveal": "rise", "data-y": "56" };
+// widest the floor sticker is shown, per band (its height is --kh)
+const mgSet = ({ b0: "teach", b1: "feed", b3: "gather" } as const)[b.anchor as "b0" | "b1" | "b3"];
+const stickerWidth = { book: 270, bowl: 420, heart: 300 }[b.doodle];
+---
+
+<section
+  class:list={["bB relative overflow-hidden max-tab:px-5", b.surface, b.surface === "sky" ? "bg-sky" : "bg-paper"]} id={b.anchor} data-spy="programmes" aria-label={b.name}>
+  {mgSet && <MarginDoodles set={mgSet} tone={b.surface === "sky" ? "sky" : "paper"} />}
+  <div class="inner relative z-1 w-full max-tab:pt-[34px]" data-stagger="70">
+    <SectionLabel num={b.num} data-reveal="rise">{b.name}</SectionLabel>
+    <h2
+      class="verb -ml-[.05em] inline-block font-pi-display text-verb leading-[.8] font-extrabold tracking-tightest whitespace-nowrap max-tab:text-verb-phone"
+      {...verbReveal}
+    >{b.verb}<span class="dot">.</span></h2>
+    <p
+      class="line mt-7 mb-5.5 max-w-[30ch] font-pi-sans text-24 leading-body font-medium tracking-body max-tab:mt-5.5 max-tab:mb-4 max-tab:text-19 max-tab:tracking-normal tab:max-lap:text-20"
+      data-reveal="rise"
+    >{b.line}</p>
+    <ul class="pi-chips mb-5.5">{b.chips.map((c) => <Chip>{c}</Chip>)}</ul>
+    <div class="ctas">
+      <Button href={site.links.register} arrow>{b.cta}</Button>
+    </div>
+    <div class="bside">
+      <div class="bpics loop">
+        <Clothesline class="pi-doodle bline" aria-hidden="true" />
+        {
+          b.polaroids.map((p, i) => (
+            <div class={`hg g${i + 1}`}>
+              <Peg />
+              <Polaroid
+                class={`q${i + 1} wob`}
+                variant="peg"
+                src={asset(p.image)}
+                alt={p.alt}
+                width={230}
+                phone="38vw"
+                caption={p.caption}
+                position={p.position}
+              />
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+  <Sticker
+    class="stB wob"
+    src={asset(b.sticker.image)}
+    alt={b.sticker.alt}
+    width={stickerWidth}
+    phone={`${Math.round(stickerWidth * 0.8)}px`}
+  />
+  {b.doodle === "book" && <Book class="pi-doodle dB1 book loop draw" aria-hidden="true" />}
+  {b.doodle === "bowl" && <Bowl class="pi-doodle dB1 bowl loop draw" aria-hidden="true" />}
+  {b.doodle === "heart" && <HeartBeat class="pi-doodle dB1 heart loop" aria-hidden="true" />}
+</section>

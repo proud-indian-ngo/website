@@ -1,0 +1,171 @@
+/* Margin doodles (design-decisions.md, decisions 10 and 11). The package's outline doodles scattered in both side
+   gutters of every section, the closing section and the footer; never on tablets or phones (from 1440px up, once a
+   gutter is wide enough). Static: no motion, no hover. Positions come from the seeded scatter in
+   src/components/margins/placements.ts; `bun run qa:doodles` checks them against the content at every width.
+
+   Contrast is matched to the footer's own margin doodles (paper at 0.3 over ink, 2.56:1). The package tokens hold
+   the smallest alpha that reaches the same ratio on each background (@proudindian/design tokens/components.ts):
+     ink over paper  --doodle-outline-on-paper  0.42 -> 2.61:1
+     ink over sky    --doodle-outline-on-sky    0.47 -> 2.57:1   (paper over sky tops out at 1.87:1, so sky uses ink)
+     paper over ink  --doodle-outline-on-ink    0.30 -> 2.56:1   (the footer's own value)
+   Stroke: --doodle-outline-stroke, 1.4px at any size (the symbols use vector-effect: non-scaling-stroke).
+
+   Geometry: the left strip runs from the viewport edge to the content's left edge (--lx1); the right strip from the
+   content's right edge (--rx0) to --rx1 (the viewport edge, or the programme rail's column where the rail can show:
+   the rail and its widest label take the right 184px, plus 28px of air). A doodle sits at fraction --f across its
+   strip measured from the content edge (the distance stops growing at 440px), and is never wider than 0.3 of the
+   strip, so with f in 0.15-0.85 it always stays inside it. */
+:root {
+  --mg-rail: 212px; /* the programme rail's no-go column from the right edge: rail + widest label 184px, plus air */
+}
+.mg {
+  --cl: 600px; /* content half-width from the centre (overhang included) */
+  --cr: 600px;
+  --lx1: calc(50% - var(--cl));
+  --rx0: calc(50% + var(--cr));
+  --rx1: 100%;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: none;
+  z-index: 0;
+  color: var(--color-ink);
+  --mg-a: var(--doodle-outline-on-paper);
+}
+.mg.sky {
+  --mg-a: var(--doodle-outline-on-sky);
+}
+.mg.ink {
+  color: var(--color-paper);
+  --mg-a: var(--doodle-outline-on-ink);
+}
+/* per-section content edges */
+.mg.hero {
+  --cl: 800px; /* the 1600px .hwrap */
+  --cr: 850px; /* plus the boy's tilt */
+}
+.mg.prog {
+  --cl: 742px; /* the 1440px collage plus polaroid overhang */
+  --cr: 742px;
+  --rx1: calc(100% - var(--mg-rail));
+}
+.mg.teach,
+.mg.feed,
+.mg.gather {
+  /* the band's padding: max(88px, (100% - 1520px) / 2) left, max(226px, ...) right */
+  --lx1: calc(
+    max(88px, (100% - 1520px) / 2) - 28px
+  ); /* the giant verb overhangs a little */
+  --rx0: calc(100% - max(226px, (100% - 1520px) / 2) + 10px);
+  --rx1: calc(100% - var(--mg-rail));
+}
+.mg.kala {
+  /* 88px / 150px padding around the centred 1320px stage */
+  --lx1: calc(88px + max(0px, (100% - 1558px) / 2) - 10px);
+  --rx0: calc(100% - 150px - max(0px, (100% - 1558px) / 2) + 10px);
+  --rx1: calc(100% - var(--mg-rail));
+}
+.mg.cl {
+  --cl: 780px; /* the street scene is wider than the closing copy */
+  --cr: 780px;
+}
+.mg.ft {
+  --cl: 620px; /* the 1328px footer */
+  --cr: 620px;
+}
+/* layers that sit inside a content-width block: span the viewport so the gutter maths matches */
+.mg.tr,
+.mg.rp {
+  left: calc(50% - 50vw);
+  right: auto;
+  width: 100vw;
+}
+.mg-d {
+  --g: var(--lx1);
+  position: absolute;
+  /* at most 0.3 of the strip, and narrow enough that even rotated (up to about 1.5x wider) it keeps 8px clear of
+     both strip edges */
+  width: min(
+    calc(var(--s) * 1px),
+    calc(min(var(--g), 440px) * 0.3),
+    calc(min(var(--g), 440px) * min(var(--f), 1 - var(--f)) * 1.33 - 11px)
+  );
+  aspect-ratio: var(--a, 1);
+  height: auto;
+  overflow: visible;
+  opacity: var(--mg-a);
+  transform: translate(-50%, -50%) rotate(var(--r));
+  /* inherited into the <use> clones (selectors do not reach inside them; vector-effect is set in the sprite) */
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--doodle-outline-stroke);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.mg-d.mg-l {
+  left: calc(var(--lx1) - min(var(--lx1), 440px) * var(--f));
+}
+.mg-d.mg-r {
+  --g: calc(var(--rx1) - var(--rx0));
+  left: calc(var(--rx0) + min(var(--g), 440px) * var(--f));
+}
+/* the second half of each side (placements.ts "wide") needs the room the gutters have from 1600px */
+.mg-d.mg-w {
+  display: none;
+}
+@media (width >= 1600px) {
+  .mg-d.mg-w {
+    display: block;
+  }
+}
+/* when each layer appears: once its gutter is wide enough */
+@media (width >= 1440px) {
+  :is(.mg.vol, .mg.don, .mg.tr, .mg.rp, .mg.ft) {
+    display: block;
+  }
+  /* the footer's own scatter replaces its fixed margin set (FooterMargins.astro, kept below 1440px) */
+  .s-ft .ft-margin.dk {
+    display: none;
+  }
+}
+@media (width >= 1800px) {
+  :is(.mg.teach, .mg.feed, .mg.gather, .mg.kala, .mg.prog, .mg.cl) {
+    display: block;
+  }
+}
+@media (width >= 1920px) {
+  .mg.hero {
+    display: block;
+  }
+}
+/* right strips next to the rail: the first doodle needs 90px of strip, any more need 180px */
+@media (width < 2124px) {
+  :is(.mg.teach, .mg.feed, .mg.gather) .mg-d.mg-t1 {
+    display: none !important;
+  }
+}
+@media (width < 2304px) {
+  :is(.mg.teach, .mg.feed, .mg.gather) .mg-d.mg-t2 {
+    display: none !important;
+  }
+}
+@media (width < 1864px) {
+  .mg.kala .mg-d.mg-t1 {
+    display: none !important;
+  }
+}
+@media (width < 2044px) {
+  .mg.kala .mg-d.mg-t2 {
+    display: none !important;
+  }
+}
+@media (width < 2088px) {
+  .mg.prog .mg-d.mg-t1 {
+    display: none !important;
+  }
+}
+@media (width < 2268px) {
+  .mg.prog .mg-d.mg-t2 {
+    display: none !important;
+  }
+}

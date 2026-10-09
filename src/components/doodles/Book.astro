@@ -1,0 +1,9 @@
+---
+/** Teach doodle: open book whose page (.leaf) turns over.
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0 0 100 100" {...Astro.props}><path class="pi-ln" fill="#F6F2EA" d="M50 30C40 22.5 25 21 9.5 25.5L11 80C26 75.5 39 77 50.5 84C62 76.5 75 75 90 79L91.5 24C75.5 20 60 22 50 30Z"></path><path class="pi-ln" d="M50 30.5L50.5 83"></path><path class="pi-ln" d="M19 39C26 37 33 37.5 40 40M19 51C26 49.5 33 50 40.5 52.5M60 40C67 37.5 74 37 81.5 38.5M60 52.5C67.5 50 74 49.5 81 50.5"></path><g class="leaf"><path class="pi-ln" style="fill:#F6F2EA" d="M50 30.5C60 22.5 75.5 20.5 91.5 24L90 79C75 75 62 76.5 50.5 83Z"></path><path class="pi-ln" d="M60 40C67 37.5 74 37 81.5 38.5M60 52.5C67.5 50 74 49.5 81 50.5M60 65C67 62.5 73 62 79 63"></path></g></svg>

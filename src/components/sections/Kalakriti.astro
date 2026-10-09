@@ -1,0 +1,206 @@
+---
+/** Kalakriti (decision 6): the festival poster, two tear-off tickets, and all 8 events on a bunting clothesline.
+ *  Content: src/content/kalakriti.yaml. */
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import { getKalakriti, getSite } from "../../lib/content";
+import { asset } from "../../lib/images";
+import BuntingString from "../scenes/BuntingString.astro";
+import KalaSparkle from "../doodles/KalaSparkle.astro";
+import PosterStar from "../doodles/PosterStar.astro";
+import SwipeArrow from "../doodles/SwipeArrow.astro";
+import TicketArrow from "../doodles/TicketArrow.astro";
+import AccentWord from "../ui/AccentWord.astro";
+import Peg from "../ui/Peg.astro";
+import Polaroid from "../ui/Polaroid.astro";
+import SectionLabel from "../ui/SectionLabel.astro";
+import Sticker from "../ui/Sticker.astro";
+import Ticket from "../ui/Ticket.astro";
+
+const k = await getKalakriti();
+const site = await getSite();
+const e = k.edition;
+const rows = [k.line.photos.slice(0, 4), k.line.photos.slice(4, 8)];
+const troupeClass = ["t-fd", "t-dn", "t-pt"];
+const troupeWidth = [240, 300, 230];
+/** their widths on phones (measured: 35vw, 45vw and 34vw of the viewport) */
+const troupePhone = ["35vw", "46vw", "35vw"];
+---
+
+<section
+  class="kala kC relative z-3 overflow-hidden bg-ink pt-26 pr-[150px] pb-[100px] pl-22 text-paper max-tab:px-5 max-tab:pt-16 max-tab:pb-[70px] tab:max-desk:pl-14"
+  id="kalakriti"
+  data-spy="kalakriti"
+  aria-label="Kalakriti"
+>
+  <MarginDoodles set="kala" tone="ink" />
+  <div class="chead mx-auto mb-10 flex max-w-kalakriti flex-col max-tab:mb-6" data-stagger="80">
+    <SectionLabel num="03" class="mb-4 text-marigold" data-reveal="rise">{k.label}</SectionLabel>
+    <KalaSparkle class="pi-doodle kspark loop" data-reveal="slap" data-at="520" aria-hidden="true" />
+    <h2
+      class="kh font-pi-display text-96 leading-[.86] font-extrabold tracking-tighter text-paper max-tab:text-84"
+      data-reveal="wipe"
+    >
+      {k.heading.word}<span class="dot text-marigold">.</span>{" "}
+      <span
+        class="walk ml-4.5 inline-block text-44 leading-[.86] tracking-heading max-tab:mt-2 max-tab:ml-0 max-tab:block max-tab:text-34"
+        >{k.heading.walk} <AccentWord variant="marigold">{k.heading.accent}</AccentWord></span
+      >
+    </h2>
+  </div>
+  <div
+    class="stage mx-auto grid max-w-kalakriti grid-cols-[minmax(0,1fr)_340px] items-center gap-18 max-tab:grid-cols-[minmax(0,1fr)] max-tab:gap-13.5 tab:max-desk:grid-cols-[minmax(0,1fr)] tab:max-desk:gap-16"
+  >
+    <article
+      class="poster @container relative mt-6 bg-paper px-11 pt-[34px] text-ink max-tab:mx-1 max-tab:mt-2.5 max-tab:px-5 max-tab:pt-6 tab:max-desk:mx-auto tab:max-desk:w-full tab:max-desk:max-w-[760px]"
+      aria-label={`${e.name} ${e.version} festival poster`}
+    >
+      <span class="tape t1" aria-hidden="true"></span><span class="tape t2" aria-hidden="true"></span>
+      <div
+        class="pre relative z-1 flex items-baseline justify-between border-b-line border-ink pb-3 font-pi-sans text-15 font-semibold max-tab:text-13"
+      >
+        <span>{e.presents}</span><span class="font-pi-sans text-15 font-semibold">{e.ordinal}</span>
+      </div>
+      <p
+        class="ptitle relative z-1 mt-4 font-pi-display text-92 leading-display font-extrabold tracking-tighter max-tab:text-56 tab:max-desk:text-[clamp(64px,8.4vw,92px)]"
+      >
+        {e.name} <span class="v text-sky-ink">{e.version}</span>
+      </p>
+      <p
+        class="pdate relative z-1 mt-3 flex items-baseline gap-3.5 text-15 max-tab:flex-col max-tab:gap-1.5 max-tab:text-13-5"
+      >
+        <b
+          class="rounded-4 bg-ink px-3 pt-[5px] pb-1.5 font-pi-display text-22 font-extrabold tracking-label text-paper"
+          >{e.date}</b
+        ><span>{e.dateNote}</span>
+      </p>
+      <ol class="lineup relative z-1 mt-4.5 max-w-[50%] max-tab:max-w-none" aria-label={`${e.name} ${e.version} in numbers`}>
+        {
+          e.lineup.map((l) => (
+            <li
+              class:list={[
+                "flex items-baseline gap-3 border-t-line border-ink pt-0.5 pb-1.5 text-ink max-tab:pt-1 max-tab:pb-[5px] max-tab:text-46",
+                l.highlight && "on",
+              ]}
+            >
+              <span
+                class:list={[
+                  "nb min-w-[3ch] text-right font-pi-display text-[74px] leading-none font-extrabold tracking-tighter tabular-nums max-tab:text-52 tab:max-desk:text-[clamp(52px,6.8vw,74px)]",
+                  l.highlight ? "text-sky-ink" : "text-ink",
+                ]}
+              >
+                {l.number}
+              </span>
+              <span class="wd font-pi-display text-[28px] leading-none font-extrabold tracking-title max-tab:text-[23px] tab:max-desk:text-[clamp(22px,2.6vw,28px)]">
+                {l.word}
+              </span>
+              <span
+                class="blt ml-[.04em] inline-block size-3.5 self-center rounded-round border-line border-ink bg-marigold"
+                aria-hidden="true"
+              />
+            </li>
+          ))
+        }
+      </ol>
+
+      <div
+        class="bill relative z-3 -mx-11 mt-[34px] flex min-h-[150px] flex-col items-start gap-2.5 bg-ink px-11 pt-6 pb-7.5 text-paper max-tab:-mx-5 max-tab:mt-[calc(80cqw+18px)] max-tab:min-h-[84px] max-tab:flex-wrap max-tab:px-5 max-tab:pt-4.5 max-tab:pb-5.5"
+      >
+        <div class="troupe">
+          {
+            e.troupe.map((t, i) => (
+              <Sticker
+                class={`tp ${troupeClass[i]} wob`}
+                src={asset(t.image)}
+                alt={t.alt}
+                width={troupeWidth[i]!}
+                phone={troupePhone[i]}
+              />
+            ))
+          }
+        </div>
+        <p class="st font-pi-sans text-14 font-semibold text-marigold max-tab:w-full">{e.billing}</p>
+        <ul
+          class="evr flex max-w-[88%] flex-wrap gap-x-0 gap-y-1 font-pi-display text-[25px] leading-[1.15] font-extrabold tracking-subtitle max-tab:max-w-none max-tab:text-19"
+        >
+          {e.events.map((ev) => <li>{ev}</li>)}
+        </ul>
+        <PosterStar class="pi-doodle bstar loop draw" aria-hidden="true" />
+      </div>
+    </article>
+    <div class="tickets relative flex min-w-0 flex-col gap-6.5 max-tab:gap-5.5 tab:max-desk:mx-auto tab:max-desk:grid tab:max-desk:w-full tab:max-desk:max-w-[760px] tab:max-desk:grid-cols-[repeat(auto-fit,minmax(300px,1fr))] tab:max-desk:gap-x-8 tab:max-desk:*:max-w-[420px]">
+      <div
+        class="band relative mb-1.5 flex h-[46px] items-center justify-between overflow-hidden rounded-10 border-line border-ink bg-sky text-ink max-tab:mb-0 tab:max-desk:col-span-full tab:max-desk:w-[340px]"
+        aria-hidden="true"
+      >
+        <span class="pl-4.5 font-pi-display text-16 font-extrabold tracking-body whitespace-nowrap">{k.tickets.band}</span><i
+          class="mr-3.5 size-5 rounded-round border-line border-ink bg-paper"></i>
+      </div>
+      <p
+        class="pick ml-5 flex items-end gap-1 font-pi-display text-24 font-extrabold tracking-label text-marigold max-tab:ml-1.5 max-tab:text-21 tab:max-desk:col-span-full"
+        aria-hidden="true"
+      >
+        {k.tickets.pick}
+        <TicketArrow class="pi-doodle parr" aria-hidden="true" />
+      </p>
+      <Ticket
+        variant="paper"
+        href={site.links.register}
+        kicker={k.tickets.volunteer.kicker}
+        title={k.tickets.volunteer.title}
+        arrow
+        rail={k.tickets.volunteer.rail}
+        stub={k.tickets.volunteer.stub}
+      />
+      <Ticket
+        variant="marigold"
+        href="#donate"
+        kicker={k.tickets.sponsor.kicker}
+        title={k.tickets.sponsor.title}
+        rail={k.tickets.sponsor.rail}
+        stub={k.tickets.sponsor.stub}
+      />
+      <p class="tn mt-2 text-16 leading-[1.45] text-paper tab:max-desk:col-span-full tab:max-desk:max-w-[52ch]">{k.tickets.note}</p>
+    </div>
+  </div>
+  <div class="kline relative mx-auto mt-26 max-w-kalakriti max-tab:-mx-5 max-tab:mt-16">
+    <p
+      class="klh mb-6.5 flex flex-wrap items-baseline gap-x-3.5 gap-y-1.5 font-pi-display text-30 leading-none font-extrabold tracking-title text-paper max-tab:mb-4.5 max-tab:px-5 max-tab:text-24"
+    >
+      {k.line.heading} <span class="font-pi-sans text-14 font-semibold tracking-normal text-marigold">{k.line.stamp}</span>
+    </p>
+    <div class="kl-scroll pi-scroll-thin pi-scroll-dark" role="region" aria-label={k.line.regionLabel} tabindex="0">
+      {
+        rows.map((row) => (
+          <div class="kl-row loop">
+            <BuntingString class="kl-str" aria-hidden="true" />
+            <ul class="kl-hang">
+              {row.map((p, i) => (
+                <li class={`hg h${i + 1}`}>
+                  <Peg />
+                  <Polaroid
+                    class="wob"
+                    variant="peg"
+                    tag={p.event}
+                    src={asset(p.image)}
+                    alt={p.alt}
+                    width={260}
+                    phone="120px"
+                    caption={p.caption}
+                    position={p.position}
+                  />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+    <p
+      class="klswipe hidden items-center gap-1.5 px-5 font-pi-display text-19 font-extrabold tracking-label text-marigold max-tab:flex"
+      aria-hidden="true"
+    >
+      {k.line.swipe}
+      <SwipeArrow class="pi-doodle" />
+    </p>
+  </div>
+</section>

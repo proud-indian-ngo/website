@@ -1,0 +1,9 @@
+---
+/** Programme index icon: paintbrush (Kalakriti).
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="1.4 -1 100 100" {...Astro.props}><path class="pi-ln f" d="M78 7.5C84 6.5 90.5 12 89 18L58 53.5L48 44.5Z"/><path class="pi-ln" d="M48 44.5L58 53.5"/><path class="pi-ln f2" d="M47 46C38 44 30 50 28.5 59C27.5 66 22 71 13.5 72.5C24 81.5 41 81 50.5 71C56 65 57 58.5 56.5 54.5Z"/><path class="pi-ln" d="M20 82C19 87 21.5 91 25.5 90.5"/></svg>

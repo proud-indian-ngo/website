@@ -1,0 +1,138 @@
+---
+/**
+ * Transparency (decision 9): the bento wall. The document tiles open the reports drawer (ReportsDrawer.astro,
+ * src/scripts/reports-drawer.ts). Trustees and "At a glance" render inside this section through the slot.
+ */
+import { facts, fill, getCopy, getReports, getSite } from "../../lib/content";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import HeartBadge from "../doodles/HeartBadge.astro";
+import Notepad from "../doodles/Notepad.astro";
+import Ring from "../doodles/Ring.astro";
+import Sparkle from "../doodles/Sparkle.astro";
+import Squiggle from "../doodles/Squiggle.astro";
+import AccentWord from "../ui/AccentWord.astro";
+import Card from "../ui/Card.astro";
+
+const { reports: r } = await getCopy();
+const site = await getSite();
+const values = facts(site);
+const docs = await getReports();
+const annual = docs.filter((d) => d.kind === "annual");
+const audited = docs.filter((d) => d.kind === "audited");
+const disclosures = docs.filter((d) => d.kind === "disclosure");
+const featured = disclosures.find((d) => d.featured);
+/** "2019-20 to 2023-24" from the oldest and newest year of a kind */
+const span = (list: typeof docs) => {
+  const ys = list.map((d) => d.year!).toSorted();
+  return `${ys[0]} to ${ys.at(-1)}`;
+};
+---
+
+<div class="s-tr">
+  <section
+    class="tr-sec tC relative z-3 border-t-line border-ink bg-paper pt-30 pb-32 max-tab:pt-18 max-tab:pb-20"
+    id="reports" data-spy="reports" aria-label="Transparency">
+    <div class="tr-wrap relative mx-auto max-w-section px-14 max-tab:px-5">
+      <div class="tr-rp relative">
+      <MarginDoodles set="rp" />
+      <header
+        class="tr-head mb-16 grid grid-cols-[minmax(0,1fr)_minmax(0,400px)] items-end gap-14 max-tab:mb-9 max-tab:grid-cols-1 max-tab:gap-4.5 tab:max-lap:grid-cols-1 tab:max-lap:gap-6"
+        data-stagger="80"
+      >
+        <div>
+          <p
+            class="mb-5.5 inline-flex items-center gap-2 rounded-pill border-line border-ink bg-paper py-1 pr-3.5 pl-1.5 font-pi-sans text-15 font-semibold"
+            data-reveal="rise"
+          >
+            <HeartBadge class="pi-doodle w-6" aria-hidden="true" />{r.eyebrow}
+          </p>
+          <h2
+            class="tr-h2 font-pi-display text-104 leading-display font-extrabold tracking-poster text-balance max-tab:text-56 max-tab:leading-[.92] tab:max-lap:text-[clamp(72px,9vw,96px)]"
+            data-reveal="rise"
+          >
+            {r.heading.line1}<br />{r.heading.line2}{" "}
+            <AccentWord class="sq relative inline-block"
+              >{r.heading.accent}<Squiggle
+                class="pi-doodle tr-squig"
+                data-reveal="draw"
+                data-at="440"
+                aria-hidden="true"
+              /></AccentWord
+            >
+          </h2>
+        </div>
+        <div class="tr-side" data-reveal="rise">
+          <Notepad class="pi-doodle tr-list loop" aria-hidden="true" /><p class="tr-lede pb-2 font-pi-sans text-19 leading-lede font-normal text-pretty max-tab:text-17">
+            {r.lede}
+          </p>
+        </div>
+      </header>
+      <div class="cBento" data-stagger="70" data-then="ring">
+        <Card class="c95">
+          <div class="rw">
+            <Ring class="tr-ring dark" percent={site.stats.programmesPercent} aria-hidden="true" />
+            <p class="rv"><span>{site.stats.programmesPercent}</span><sup>%</sup></p>
+          </div>
+          <p class="cl">{r.ring}</p>
+          <Sparkle class="pi-doodle c95s" fill="#4CC0EC" aria-hidden="true" />
+        </Card>
+        <Card class="s1" variant="sky">
+          <p class="cl">{r.tiles.reached}</p>
+          <p class="cn">{site.stats.reached}</p>
+        </Card>
+        <Card class="s2 paper">
+          <p class="cl">{r.tiles.optimists}</p>
+          <p class="cn">{site.stats.optimists}</p>
+        </Card>
+        <Card class="s3" variant="wash">
+          <p class="cl">{r.tiles.hours}</p>
+          <p class="cn">{site.stats.hours}</p>
+        </Card>
+        <Card class="s4" variant="deep">
+          <p class="cl"><span class="kchip">{r.kalakriti.chip}</span></p>
+          <p class="cn">{r.kalakriti.value}</p>
+          <p class="cs">{r.kalakriti.note}</p>
+        </Card>
+        <Card as="button" class="cDis" data-open="dis" aria-haspopup="dialog">
+          <span class="fan" aria-hidden="true"
+            ><span class="fd f0"><i></i></span><span class="fd f1"><i></i></span><span class="fd f2"
+              ><i></i><b>{featured?.title}</b></span
+            ></span
+          >
+          <span class="cdT"
+            ><span class="cl">{r.disclosures.readAll}</span><b>{disclosures.length}</b><span
+              >{r.disclosures.label}&nbsp;<span class="ar" aria-hidden="true">→</span></span
+            ></span
+          >
+        </Card>
+        <Card as="button" class="cAnn paper" data-open="ann" aria-haspopup="dialog"
+          ><span class="go" aria-hidden="true">→</span>
+          <p class="cl">{r.annualLabel}</p>
+          <p class="cn">{annual.length}</p>
+          <p class="cs">{span(annual)}</p></Card
+        >
+        <Card as="button" class="cAud" variant="paper-2" data-open="aud" aria-haspopup="dialog"
+          ><span class="go" aria-hidden="true">→</span>
+          <p class="cl">{r.auditedLabel}</p>
+          <p class="cn">{audited.length}</p>
+          <p class="cs">{span(audited)}</p></Card
+        >
+        <Card class="cReg">
+          <p class="cl">{r.registered.heading}</p>
+          <ul>
+            {
+              r.registered.items.map((i) => (
+                <li>
+                  <span>{i.label}</span>
+                  <b>{fill(i.value, values)}</b>
+                </li>
+              ))
+            }
+          </ul>
+        </Card>
+      </div>
+      </div>
+      <slot />
+    </div>
+  </section>
+</div>

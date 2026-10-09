@@ -1,0 +1,67 @@
+---
+/** Hero (decision 4): giant "Optimist." with the kids stuck beside it, the 3.6k+ seal, and the programme marquee. */
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import { getCopy, getSite } from "../../lib/content";
+import { asset } from "../../lib/images";
+import HeroSun from "../doodles/HeroSun.astro";
+import NudgeHand from "../doodles/NudgeHand.astro";
+import Seal from "../brand/Seal.astro";
+import Sparkle from "../doodles/Sparkle.astro";
+import Button from "../ui/Button.astro";
+import Sticker from "../ui/Sticker.astro";
+import Marquee from "./Marquee.astro";
+
+const copy = await getCopy();
+const site = await getSite();
+const h = copy.hero;
+const girl = asset(h.kids.girl.image);
+const boy = asset(h.kids.boy.image);
+---
+
+<div class="s-hero relative" id="top" data-stagger data-load>
+  <section
+    class="hero relative flex min-h-[780px] overflow-hidden bg-sky px-14 pt-[118px] max-tab:block max-tab:min-h-0 max-tab:px-4.5 max-tab:pt-[92px]"
+    aria-labelledby="hero-h"
+  >
+    <MarginDoodles set="hero" tone="sky" />
+    <div class="hwrap relative mx-auto w-full max-w-hero">
+      <Sparkle class="spark" data-reveal="slap" data-at="900" aria-hidden="true" />
+      <h1 id="hero-h">
+        <span
+          class="pre ml-2 flex items-center gap-5.5 font-pi-display text-64 leading-none font-extrabold tracking-title max-tab:mr-1 max-tab:justify-between max-tab:text-40"
+          data-reveal="rise"
+          data-at="0"
+          ><span>{h.pre}</span><HeroSun
+            class="sun loop -mt-[26px] -mb-[18px] w-[112px] flex-none overflow-visible max-tab:-mt-[18px] max-tab:-mb-[14px] max-tab:w-[78px]"
+            aria-hidden="true"
+          /></span
+        >
+        <span
+          class="giant relative z-2 mt-1.5 block font-pi-display text-optimist leading-[.82] font-extrabold tracking-tighter whitespace-nowrap text-white max-tab:text-optimist-phone"
+          data-reveal="wipe"
+          data-at="70">{h.word}</span>
+      </h1>
+      <Sticker
+        class="k1 dk slap wob"
+        src={girl}
+        alt={h.kids.girl.label}
+        crop={h.kids.girl.crop}
+        width={260}
+      />
+      <Sticker class="k2 slap wob" src={boy} alt={h.kids.boy.label} crop={h.kids.boy.crop} width={320} />
+      <div class="seal slap wob" aria-hidden="true">
+        <Seal /><b>{site.stats.optimists}</b>
+      </div>
+      <div class="row relative z-4 mt-10 flex flex-col items-start gap-5 self-start pb-[110px] max-tab:mt-5.5 max-tab:gap-4 max-tab:pb-0">
+        <p class="lede max-w-[38ch] text-19 leading-[1.4] max-tab:text-16-5" data-reveal="rise" data-at="380">{h.lede}</p>
+        <div class="ctas relative gap-2.5" data-nudge-stage data-reveal="rise" data-at="280">
+          <Button href={site.links.register} class="px-5 py-3 text-15" data-nudge-target arrow>{h.join}</Button>
+          <Button href="#donate" variant="donate" class="px-5 py-3 text-15">{h.donate}</Button>
+          <span class="nudge is-waiting" aria-hidden="true"><NudgeHand /></span>
+        </div>
+      </div>
+      <Sticker class="k1m slap wob" src={girl} alt={h.kids.girl.label} crop={h.kids.girl.crop} width={190} />
+    </div>
+  </section>
+  <Marquee />
+</div>

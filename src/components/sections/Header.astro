@@ -1,0 +1,56 @@
+---
+/** Header (decision 3): split sticker pills on desktop, a burger that opens the poster menu below 1180px. */
+import { getCopy, getSite } from "../../lib/content";
+import Lockup from "../brand/Lockup.astro";
+import Button from "../ui/Button.astro";
+
+const copy = await getCopy();
+const site = await getSite();
+const nav = copy.nav;
+---
+
+<a class="skip" href="#main">{nav.skip}</a>
+
+<header
+  class="site-hd pointer-events-none fixed top-[18px] right-[max(--spacing(6),env(safe-area-inset-right))] left-[max(--spacing(6),env(safe-area-inset-left))] z-(--z-header) max-tab:top-3 max-tab:right-3 max-tab:left-3"
+  data-hd data-stagger="90" data-load>
+  <nav class="hd flex items-center justify-between gap-2.5" aria-label="Main">
+    <div
+      class="pill l pointer-events-auto flex items-center gap-1.5 rounded-pill border-line border-ink py-[7px] pr-[7px] pl-[18px] shadow-ink max-nav:px-4 max-nav:py-[9px] max-tab:px-3.5 max-[359px]:px-3"
+      data-reveal="rise"
+      data-y="-16"
+    >
+      <a class="logo tap-44 flex items-center text-ink" href="#top" aria-label={nav.logoLabel}
+        ><Lockup class="lk block aspect-[6.2877] h-7 w-auto max-tab:h-6 max-[359px]:h-[18px]" /></a
+      >
+      <ul class="links ml-3 flex gap-0.5 font-pi-sans text-14 font-medium max-nav:hidden">
+        {
+          nav.links.map((l) => (
+            <li>
+              <a href={l.href} data-spy-link={l.spy} class="flex items-center gap-[7px] rounded-pill px-3 py-[9px]">
+                <i aria-hidden="true" class="size-2 rounded-round border-line border-ink" />
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div
+      class="pill r pointer-events-auto flex items-center gap-1.5 rounded-pill border-line border-ink p-1.5 shadow-ink"
+      data-reveal="rise"
+      data-y="-16"
+    >
+      <Button href={site.links.register} class="px-[18px] py-[11px] text-14 max-tab:hidden">{nav.join}</Button>
+      <Button href="#donate" variant="donate" class="px-[18px] py-[11px] text-14 max-[359px]:px-3.5">{nav.donate}</Button>
+      <button
+        class="burger hidden size-11 cursor-pointer place-items-center rounded-round border-line border-ink bg-ink max-nav:grid"
+        type="button"
+        aria-expanded="false"
+        aria-controls="menu"
+        aria-label={nav.openMenu}
+        data-menu-open><span></span></button
+      >
+    </div>
+  </nav>
+</header>

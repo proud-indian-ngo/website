@@ -1,0 +1,48 @@
+{
+  "name": "@proudindian/website",
+  "version": "0.0.1",
+  "private": true,
+  "description": "proudindian.ngo: the Proud Indian website (Astro, static, Cloudflare Pages)",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "lint:css": "bun scripts/check-css.ts",
+    "motion:load": "bun scripts/load-motion.ts",
+    "check": "oxfmt --check . && oxlint . --max-warnings=0 && bun run check:design && bun run lint:css && bun run motion:load --check",
+    "check:types": "astro check",
+    "fix": "oxfmt . && oxlint --fix .",
+    "qa:parity": "node scripts/qa/parity.mjs",
+    "qa:perf": "node scripts/qa/perf.mjs",
+    "qa:behaviour": "node scripts/qa/behaviour.mjs",
+    "qa:doodles": "node scripts/qa/doodles.mjs",
+    "prepare": "lefthook install || true",
+    "check:design": "bun scripts/check-design.ts",
+    "design:sync": "bun scripts/check-design.ts --sync"
+  },
+  "dependencies": {
+    "@proudindian/design": "github:proud-indian-ngo/design#v0.2.3",
+    "astro": "^7.3.7"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/sitemap": "^3.7.4",
+    "@tailwindcss/vite": "^4",
+    "@types/bun": "^1.4.2",
+    "lefthook": "^2.2.0",
+    "lighthouse": "13.4.1",
+    "oxfmt": "^0.72.0",
+    "oxlint": "^1.87.0",
+    "playwright": "1.63.0",
+    "tailwindcss": "^4",
+    "typescript": "^6"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "allowScripts": {
+    "esbuild": true
+  }
+}

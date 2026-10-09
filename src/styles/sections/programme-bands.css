@@ -1,0 +1,250 @@
+/* Programme bands: B1 clothesline (decision 5) */
+/* ---------- 5b. programme bands: B1 "clothesline" (decision 5) ----------
+   Verb across the top, copy + chips + CTA left, three captioned event polaroids pegged on an ink string right (they
+   sway from the peg while motion is on), and the sticker child standing on the band floor under the copy.
+   Content height, centred in a 1520px container. The right column is a size container, so the clothesline is laid
+   out in cqw and keeps its proportions from 1024 to 2560. Photos in photos/ are cropped clear of the watermarks. */
+.s-prog .bside {
+  position: relative;
+  container-type: inline-size;
+}
+.s-prog .pi-polaroid figcaption {
+  font: var(--font-weight-extrabold)
+    clamp(14px, 2.6cqw, 18px)/var(--leading-none) var(--font-pi-display);
+  letter-spacing: var(--tracking-label);
+  padding: var(--space-10) var(--space-2) var(--space-12);
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.s-prog .bpics {
+  position: relative;
+  height: calc(39cqw + 128px);
+}
+.s-prog .bline {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 90px;
+  overflow: visible;
+}
+.s-prog .bline .pi-ln {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 2.5;
+}
+.s-prog .bline .nl {
+  fill: var(--color-ink);
+}
+.s-prog .hg {
+  position: absolute;
+  width: 30.5cqw;
+  transform-origin: 50% 0;
+}
+.s-prog .g1 {
+  left: calc(16.7% - 15.25cqw);
+  top: 40px;
+}
+.s-prog .g2 {
+  left: calc(50% - 15.25cqw);
+  top: 56px;
+}
+.s-prog .g3 {
+  left: calc(83.3% - 15.25cqw);
+  top: 34px;
+}
+.s-prog .hg .pi-polaroid,
+.s-kala .hg .pi-polaroid {
+  margin-top: var(--space-10);
+}
+.s-prog .q1 {
+  transform: rotate(-4deg);
+}
+.s-prog .q2 {
+  transform: rotate(2.5deg);
+}
+.s-prog .q3 {
+  transform: rotate(-2.5deg);
+}
+@keyframes sway {
+  from {
+    transform: rotate(-1.4deg);
+  }
+  to {
+    transform: rotate(1.4deg);
+  }
+}
+html[data-motion="on"] .s-prog .hg,
+html[data-motion="on"] .s-kala .hg {
+  animation: sway var(--loop-sway) ease-in-out infinite alternate;
+}
+html[data-motion="on"] .s-prog .g2 {
+  animation-duration: 3.9s;
+  animation-delay: -1.3s;
+}
+html[data-motion="on"] .s-prog .g3 {
+  animation-duration: 3.1s;
+  animation-delay: -2.2s;
+}
+/* the floor sticker: flush on the band floor; the per-band crop hides each cut-out's old watermark below it.
+   Teach's girl stands on her own feet (a small crop); Feed's girl with her nutrition pack is cropped at the floor; Gather's cut-out ends at a photo edge, which sits below the floor */
+.s-prog .bB {
+  --crop: 0;
+}
+.s-prog #b0 {
+  --crop: 0.03;
+}
+.s-prog #b1 {
+  --crop: 0.08;
+}
+.s-prog #b3 {
+  --crop: 0.13;
+}
+.s-prog .stB {
+  position: absolute;
+  z-index: 2;
+  bottom: calc(var(--kh) * var(--crop) * -1);
+  height: var(--kh);
+  transform: rotate(-2deg);
+  transform-origin: 50% 100%;
+}
+.s-prog .dB1 {
+  position: absolute;
+  z-index: 3;
+  transform: rotate(-12deg);
+}
+
+@media (width >= --theme(--breakpoint-tab)) {
+  .s-prog .bB {
+    padding: clamp(var(--space-110), 9vw, 150px) var(--pr)
+      clamp(var(--space-96), 8vw, 130px) var(--pl);
+    --pl: max(88px, calc((100% - var(--container-band)) / 2));
+    --pr: max(226px, calc((100% - var(--container-band)) / 2));
+    --g: clamp(40px, 5vw, 90px);
+    --kh: clamp(290px, 21vw, 440px);
+  }
+  .s-prog #b0 {
+    --kh: clamp(380px, 27vw, 560px);
+  }
+  /* leave the floor clear for the sticker under the copy */
+  .s-prog .inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    grid-template-areas: "lab lab" "verb verb" "line side" "chips side" "ctas side" ". side";
+    grid-template-rows: auto auto auto auto auto 1fr;
+    column-gap: var(--g);
+    align-items: start;
+    min-height: calc(var(--kh) * (1 - var(--crop)) + 280px);
+  }
+  .s-prog .pi-label {
+    grid-area: lab;
+  }
+  .s-prog .verb {
+    grid-area: verb;
+    justify-self: start;
+    --verb-cap: 340;
+  }
+  .s-prog .line {
+    grid-area: line;
+  }
+  .s-prog .pi-chips {
+    grid-area: chips;
+  }
+  .s-prog .inner > .ctas {
+    grid-area: ctas;
+  }
+  .s-prog .bside {
+    grid-area: side;
+    margin-top: -14px;
+  }
+  /* sticker: its right edge sits just inside the gutter, so it never reaches the photo column */
+  .s-prog .stB {
+    right: calc(
+      100% - var(--pl) - (100% - var(--pl) - var(--pr) - var(--g)) / 2.05 -
+        var(--g) + 14px
+    );
+  }
+  .s-prog .dB1 {
+    width: 110px;
+    right: max(214px, calc((100% - var(--container-band)) / 2 + 74px));
+    top: clamp(90px, 8vw, 130px);
+  }
+  .s-prog #b3 .dB1 {
+    width: 90px;
+    right: max(230px, calc((100% - var(--container-band)) / 2 + 90px));
+    top: 130px;
+  }
+}
+/* tablets and small laptops (701 to 1239px): the copy column is narrow, so the copy ran down into the floor sticker.
+   A smaller sticker below ~1080px, and the last grid row keeps the sticker's height (less the band's bottom padding)
+   clear under the call to action */
+@media (width >= --theme(--breakpoint-tab)) and (width < --theme(--breakpoint-desk)) {
+  .s-prog .bB {
+    --kh: clamp(250px, 27vw, 290px);
+  }
+  .s-prog #b0 {
+    --kh: clamp(300px, 32vw, 380px);
+  }
+  .s-prog .inner {
+    grid-template-rows: auto auto auto auto auto minmax(
+        calc(var(--kh) * (1 - var(--crop)) - 76px),
+        1fr
+      );
+    min-height: 0;
+  }
+}
+@media (width < --theme(--breakpoint-tab)) {
+  .s-prog .bB {
+    --kh: 360px;
+  }
+  .s-prog #b0 {
+    --kh: 460px;
+  }
+  .s-prog .bB::after {
+    content: "";
+    display: block;
+    height: calc(var(--kh) * (1 - var(--crop)) + 16px);
+  }
+  .s-prog .bside {
+    margin-top: var(--space-30);
+  }
+  .s-prog .pi-polaroid {
+    padding: var(--space-6) var(--space-6) 0;
+    box-shadow: var(--shadow-photo-sm);
+  }
+  .s-prog .pi-polaroid figcaption {
+    font-size: var(--text-14);
+    padding: var(--space-8) var(--space-2) var(--space-10);
+  }
+  .s-prog .stB {
+    right: 6%;
+  }
+  .s-prog .dB1 {
+    left: 8%;
+    bottom: calc(var(--kh) * 0.45);
+    width: 76px;
+  }
+  .s-prog #b3 .dB1 {
+    bottom: 200px;
+  }
+  /* two polaroids on the string */
+  .s-prog .bpics {
+    height: calc(56cqw + 84px);
+  }
+  .s-prog .hg {
+    width: 42cqw;
+  }
+  .s-prog .g1 {
+    left: calc(24% - 21cqw);
+    top: 44px;
+  }
+  .s-prog .g2 {
+    left: calc(75% - 21cqw);
+    top: 44px;
+  }
+  .s-prog .g3 {
+    display: none;
+  }
+}

@@ -1,0 +1,202 @@
+/* Donate (decision 8). Type, colour and spacing are utilities in Donate.astro. This keeps the two-column grid (on
+   phones the copy column dissolves so the card can sit between the facts and the child), the outlined accent word,
+   the tilted fact stickers and card, the amount pills and their pressed state, the field reset, and the matka. */
+.s-don .bgrid {
+  display: grid;
+  grid-template-columns: 1fr 520px;
+  gap: var(--space-64);
+  align-items: start;
+}
+.s-don .dB .dh .pi-accent {
+  color: var(--color-white);
+  -webkit-text-stroke: 2px var(--color-ink);
+  paint-order: stroke fill;
+  text-shadow: 4px 4px 0 var(--color-ink);
+}
+.s-don .facts li:nth-child(1) {
+  transform: rotate(-1.5deg);
+}
+.s-don .facts li:nth-child(2) {
+  transform: rotate(1deg);
+}
+.s-don .facts li:nth-child(3) {
+  transform: rotate(-0.6deg);
+}
+.s-don .bkid {
+  width: 290px;
+  margin-bottom: -6px;
+  transform: rotate(-2.5deg);
+  transform-origin: bottom;
+}
+.s-don .bsp {
+  position: absolute;
+  width: 42px;
+  right: -40px;
+  top: 70px;
+}
+.s-don .bcard {
+  transform: rotate(1deg);
+  box-shadow: var(--shadow-card-paper);
+}
+.s-don .plab span {
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-14);
+  opacity: 0.82;
+}
+.s-don .pill {
+  font: var(--font-weight-semibold) var(--text-16) var(--font-pi-sans);
+  background: var(--color-surface-paper);
+  border: var(--line-ink);
+  border-radius: var(--radius-pill);
+  padding: 11px var(--space-16);
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 0 0 1.5px var(--color-paper-a0);
+}
+.s-don .pill[aria-pressed="true"] {
+  background: var(--color-surface-sky);
+  box-shadow: var(--shadow-paper);
+}
+.s-don .amt {
+  cursor: pointer;
+  color: var(--color-ink);
+  transition:
+    background-color 150ms ease-out,
+    color 150ms ease-out,
+    scale 160ms var(--ease-settle);
+}
+/* press: the separate scale property, so any rotate on the pill is kept */
+.s-don .amt:active {
+  scale: 0.97;
+}
+.s-don .amt:focus-visible,
+.s-don .pi-btn:focus-visible {
+  outline: var(--focus-ring-on-dark);
+  outline-offset: var(--focus-offset);
+}
+/* the ring goes round the whole rounded field, not the bare input inside it */
+.s-don .bf:focus-within {
+  outline: var(--focus-ring-on-dark);
+  outline-offset: var(--focus-offset);
+}
+.s-don .amt-in:focus-visible {
+  outline: none;
+}
+.s-don .amt-in {
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  background: none;
+  border: 0;
+  outline: 0;
+  min-width: 0;
+  padding: 0;
+  font-variant-numeric: tabular-nums;
+  caret-color: var(--color-sky);
+}
+.s-don .amt-in::placeholder {
+  color: inherit;
+  opacity: 0.3;
+}
+.s-don .bf .amt-in::placeholder {
+  opacity: 0.45;
+  font-weight: var(--font-weight-medium);
+}
+.s-don .tl span {
+  color: var(--color-paper);
+  opacity: 0.75;
+  font-weight: var(--font-weight-medium);
+}
+.s-don .tv sup {
+  font-size: 0.38em;
+  line-height: 1;
+  margin: 0.1em var(--space-6) 0 0;
+  color: var(--color-sky);
+  letter-spacing: var(--tracking-normal);
+}
+/* below the minimum (src/scripts/donate.ts): the total dims and the button says "Enter ₹100 or more" */
+.s-don .btotal.is-low .tv {
+  opacity: 0.4;
+}
+.s-don [data-donate][aria-disabled="true"] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.s-don .mirror[hidden] {
+  display: none;
+}
+.s-don .mirror b {
+  font-weight: var(--font-weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+.s-don [data-donate] {
+  margin-top: var(--space-22);
+}
+.s-don .dB .pi-btn--donate {
+  box-shadow: var(--shadow-paper-md);
+}
+.s-don .matka svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.s-don .matka .ink {
+  fill: none;
+  stroke: var(--color-ink);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.s-don .matka.dark {
+  filter: drop-shadow(4px 0 0 var(--color-paper))
+    drop-shadow(-4px 0 0 var(--color-paper))
+    drop-shadow(0 -4px 0 var(--color-paper))
+    drop-shadow(0 4px 0 var(--color-paper));
+}
+.s-don .coin {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.s-don .bmatka {
+  transform: rotate(5deg);
+}
+/* tablets (701 to 1100px): the copy column was too narrow beside the 520px card, so the grid stacks: the copy, then
+   the card (520px at most), then the kid and the facts standing on the band floor (.bl dissolves, as on phones) */
+@media (width >= --theme(--breakpoint-tab)) and (width < --theme(--breakpoint-lap)) {
+  .s-don .bgrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .s-don .bcard {
+    width: 100%;
+    max-width: 520px;
+  }
+}
+@media (width < --theme(--breakpoint-tab)) {
+  .s-don .bgrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  .s-don .bl > * {
+    order: 0;
+  }
+  .s-don .dB .dh .pi-accent {
+    -webkit-text-stroke-width: 1.5px;
+    text-shadow: var(--accent-shadow);
+  }
+  .s-don .bcard {
+    transform: rotate(0.6deg);
+    box-shadow: var(--shadow-card-paper-sm);
+  }
+  .s-don .bkid {
+    width: 260px;
+  }
+  .s-don .bsp {
+    right: -34px;
+    top: 60px;
+  }
+  .s-don .pill {
+    font-size: var(--text-15);
+    padding: var(--space-10) 4px;
+  }
+}

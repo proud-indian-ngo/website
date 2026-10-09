@@ -1,0 +1,8 @@
+# "Paint." is the Kalakriti festival spotlight, not a band: its content lives in src/content/kalakriti.yaml.
+# This entry places it in the programme order (03) and the programme index rail.
+order: 3
+kind: festival
+anchor: kalakriti
+num: "03"
+name: Kalakriti
+verb: Paint

@@ -1,0 +1,9 @@
+---
+/** Squiggle under "weekend?" in the closing headline.
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0 0 300 30" preserveAspectRatio="none" {...Astro.props}><path class="ft-ln" d="M4 18C30 6 50 28 78 16S128 6 152 18 200 28 226 15 272 8 296 17"></path></svg>

@@ -1,0 +1,9 @@
+---
+/** Reports checklist: a pencil ticks three boxes, then the ticks fade.
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0 0 130 110" {...Astro.props}><path class="pi-ln" style="fill:#fff" d="M14 10C40 8 70 8 96 10L98 98C70 100 42 100 16 98Z"></path><path class="pi-ln" d="M28 28H40V40H28ZM28 50H40V62H28ZM28 72H40V84H28Z" style="stroke-width:2.5"></path><path class="pi-ln" style="stroke-width:2.5;stroke:#4CC0EC" d="M50 34H84M50 56H80M50 78H76"></path><path class="pi-ln tk t1" pathLength="1" d="M29 33L33.5 38L43 25"></path><path class="pi-ln tk t2" pathLength="1" d="M29 55L33.5 60L43 47"></path><path class="pi-ln tk t3" pathLength="1" d="M29 77L33.5 82L43 69"></path><g class="pencil"><g transform="translate(112 74) rotate(35)"><path class="pi-ln" style="fill:#F4A62A" d="M-5-34H5V6L0 15L-5 6Z"></path><path class="pi-ln" d="M-5 6H5M-5-28H5"></path><path d="M-1.6 11.5L0 15L1.6 11.5Z" fill="#0F1B24"></path></g></g></svg>

@@ -1,0 +1,84 @@
+---
+/** Closing call to action (decision 10): "See you this weekend?", the taped photo strip and the street scene. */
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import { getCopy, getSite } from "../../lib/content";
+import { asset } from "../../lib/images";
+import ClosingBird from "../doodles/ClosingBird.astro";
+import ClosingPlane from "../doodles/ClosingPlane.astro";
+import ClosingSquiggle from "../doodles/ClosingSquiggle.astro";
+import HeartChip from "../doodles/HeartChip.astro";
+import StreetScene from "../scenes/StreetScene.astro";
+import StreetScenePhone from "../scenes/StreetScenePhone.astro";
+import AccentWord from "../ui/AccentWord.astro";
+import Button from "../ui/Button.astro";
+import Polaroid from "../ui/Polaroid.astro";
+
+const { closing: c } = await getCopy();
+const site = await getSite();
+const cta = "min-h-12 max-tab:px-5.5 max-tab:py-3.5 max-tab:text-16-5";
+---
+
+<div class="s-ft">
+  <section
+    class="fC-sec relative overflow-hidden border-t-line border-ink bg-paper pt-30 max-tab:pt-18"
+    id="closing" data-spy="closing" aria-labelledby="fC-h">
+    <MarginDoodles set="cl" />
+    <div class="ft-wrap fC-top relative z-2 mx-auto max-w-footer px-14 text-center max-tab:px-5" data-stagger="80">
+      <ClosingBird class="fC-bird" aria-hidden="true" /><ClosingPlane
+        class="fC-plane"
+        aria-hidden="true"
+      />
+      <p
+        class="ft-chip mb-6.5 inline-flex items-center gap-2 rounded-pill border-line border-ink bg-paper py-[5px] pr-3.5 pl-[7px] font-pi-sans text-14 font-semibold"
+        data-reveal="rise"
+      >
+        <HeartChip class="size-6" aria-hidden="true" />{c.chip}
+      </p><br />
+      <h2
+        id="fC-h"
+        class="ft-h inline-block font-pi-display text-128 leading-[.86] font-extrabold tracking-tighter text-balance max-tab:text-60 max-tab:leading-display max-tab:tracking-poster"
+        data-reveal="wipe"
+      >
+        {c.heading.before}{" "}
+        <AccentWord class="accw relative inline-block"
+          >{c.heading.accent}<ClosingSquiggle
+            class="fC-sq"
+            data-reveal="draw"
+            data-at="640"
+            aria-hidden="true"
+          /></AccentWord
+        >
+      </h2>
+      <p
+        class="ft-lede mx-auto mt-[34px] max-w-[40ch] font-pi-sans text-20 leading-lede font-normal text-pretty max-tab:text-18"
+        data-reveal="rise"
+      >
+        {c.lede}
+      </p>
+      <div
+        class="ft-ctas mt-8 flex flex-wrap items-center justify-center gap-3.5 max-tab:mt-6.5 max-tab:gap-3"
+      >
+        <Button href={site.links.register} size="lg" class={cta} arrow>{c.join}</Button><Button
+          class={cta}
+          href={site.links.razorpay.base}
+          variant="donate"
+          size="lg"
+          target="_blank"
+          rel="noopener">{c.donate}</Button
+        >
+      </div>
+    </div>
+    <ul class="fC-strip pi-scroll-thin" aria-label={c.stripLabel}>
+      {
+        c.strip.map((p) => (
+          <li class="wob">
+            <span class="pi-tape tape" aria-hidden="true" />
+            <Polaroid src={asset(p.image)} alt={p.alt} width={224} caption={p.caption} frame={false} />
+          </li>
+        ))
+      }
+    </ul>
+    <StreetScene class="fC-scene loop dk" data-lr aria-hidden="true" />
+    <StreetScenePhone class="fC-scene loop ph" data-lr aria-hidden="true" />
+  </section>
+</div>

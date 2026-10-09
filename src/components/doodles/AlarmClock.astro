@@ -1,0 +1,9 @@
+---
+/** Volunteer clock beside "More weekends": the minute hand (.hand) ticks, the bells (.bells) ring.
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0 0 64 64" {...Astro.props}><g class="bells"><path class="pi-ln" style="fill:#4CC0EC" d="M10 19C8 12 13 6 20 7C17 9 13 14 10 19Z"></path><path class="pi-ln" style="fill:#4CC0EC" d="M54 19C56 12 51 6 44 7C47 9 51 14 54 19Z"></path></g><path class="pi-ln" d="M18 54L14 60M46 54L50 60"></path><path class="pi-ln" style="fill:#fff" d="M32 12C45 12 54 22 54 35C54 47 45 57 32 57C19 57 10 48 10 35C10 22 19.5 12.5 30 12"></path><path class="pi-ln" d="M32 17.5V20.5M49 35H46M32 52V49M15 35H18"></path><path class="pi-ln" d="M32 35L25 29"></path><path class="pi-ln hand" d="M32 35V21.5"></path><circle cx="32" cy="35" r="2.6" fill="#0F1B24"></circle></svg>

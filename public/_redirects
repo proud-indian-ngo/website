@@ -1,0 +1,147 @@
+# Old proudindian.ngo URLs (the PHP site) → the new one-page site. https://developers.cloudflare.com/pages/configuration/redirects/
+# Pages that no longer exist go to the closest section; server endpoints of the old site (payment callbacks, admin) are left to 404.
+# More specific rules first: the first match wins.
+
+# Home
+/index.php / 301
+/blog.php / 301
+/comingsoon.php / 301
+/manual.php / 301
+/know_your_benefits.php / 301
+/proud-indian-awards.php / 301
+/proud-indian-awards-nomination.php / 301
+/COVID19-Guidline-Aawareness.php / 301
+/COVID19-Vaccination.php / 301
+/COVID19_Emergency_Pass_Application.php / 301
+/Covid19-helpline.php / 301
+/covid19-awareness-1.php / 301
+/covid19-awareness-2.php / 301
+/join-the-war-against-covid19.php / 301
+/kyb-atal-pension-yojana-scheme.php / 301
+/kyb-kisan-vikas-patra.php / 301
+/kyb-pradhan-mantri-awas-yojana.php / 301
+/kyb-pradhan-mantri-jan-dhan-yojana.php / 301
+/kyb-pradhan-mantri-jeevan-jyoti-bima-yojana.php / 301
+/kyb-pradhan_mantri_suraksha_bima-yojana.php / 301
+/kyb-sukanya-samriddhi-scheme.php / 301
+/kyb-urban-women-self-help-programme.php / 301
+/kyb-vajpayee_arogyashree.php / 301
+/article-my-journey-of-KYB.php / 301
+/article-nutrition.php / 301
+/article-the-silver-lining-in-every-storm.php / 301
+/article-the_gem_of_indian_pride.php / 301
+/article-volunteering-and-happiness.php / 301
+/article-volunteering-helps.php / 301
+/article-volunteering.php / 301
+/article_concept_of_volunteering.php / 301
+/article_lets_break_our_plastic_water_bottle_habit.php / 301
+/article_proud_indian_ngo_believe_in_making_a_difference.php / 301
+/article_reduce_the_dependency_on_the_fast_fashion_industry.php / 301
+/article_soldiers_on_the_frontlines_of_a_pandemic.php / 301
+/article_the_backbone_of_any_organization.php / 301
+/article_volunteering_because_doing_good_does_you_good.php / 301
+/optimist-testimonial-anuka.php / 301
+/optimist-testimonial-ashwini.php / 301
+/optimist-testimonial-bala.php / 301
+/optimist-testimonial-chrispin.php / 301
+/optimist-testimonial-husna.php / 301
+/optimist-testimonial-ila.php / 301
+/optimist-testimonial-imon.php / 301
+/optimist-testimonial-khushboo.php / 301
+/optimist-testimonial-kiran.php / 301
+/optimist-testimonial-shilpa.php / 301
+/optimist-testimonial-shiva.php / 301
+/optimist-testimonial_Beni.php / 301
+/optimist-testimonial_ayush.php / 301
+/optimist-testimonial_jyotsna_kher.php / 301
+/optimist-testimonial_kanda.php / 301
+/optimist-testimonial_pavish.php / 301
+/optimist-testimonial_sanjana.php / 301
+/optimist-testimonial_zara.php / 301
+
+# About
+/about-us.php /#about 301
+
+# Programmes
+/initiatives.php /#programmes 301
+/services.php /#programmes 301
+/environmental.php /#programmes 301
+/green-energy.php /#programmes 301
+/solar.php /#programmes 301
+/animal_welfare.php /#programmes 301
+/livelihood.php /#programmes 301
+
+# Education
+/education.php /#b0 301
+
+# Nutrition
+/nutrition.php /#b1 301
+
+# Community
+/gift_a_smile.php /#b3 301
+
+# Kalakriti
+/kalakriti.php /#kalakriti 301
+/kalakriti-registration.php /#kalakriti 301
+/art-for-a-cause.php /#kalakriti 301
+
+# Volunteering and events
+/get-involved.php /#volunteer 301
+/optimist-join-now.php /#volunteer 301
+/optimist-join-now-blr.php /#volunteer 301
+/optimist-join-now-mum.php /#volunteer 301
+/new-volunteer-registration.php /#volunteer 301
+/add-volunteer.php /#volunteer 301
+/add-existing-volunteer.php /#volunteer 301
+/lead-optimist.php /#volunteer 301
+/lead-optimist-apply.php /#volunteer 301
+/internships.php /#volunteer 301
+/events.php /#volunteer 301
+/event-calendar.php /#volunteer 301
+/event-calender2.php /#volunteer 301
+/event-blr.php /#volunteer 301
+/event_mum.php /#volunteer 301
+/event-registration-success.php /#volunteer 301
+/event-registration-failure.php /#volunteer 301
+
+# Donations
+/donate-now.php /#donate 301
+/donate-now-new.php /#donate 301
+/pay.php /#donate 301
+/pay-automatic.php /#donate 301
+/payment_success.php /#donate 301
+/payment_failure.php /#donate 301
+
+# Reports
+/annual-reports.php /#reports 301
+/audit-reports.php /#reports 301
+/project-financial-disclosures.php /#reports 301
+/report.php /#reports 301
+/project-family-care-kit-covid19.php /#reports 301
+
+# Contact
+/contact-us.php /#contact 301
+/faq.php /#contact 301
+
+# Privacy
+/privacy-policy.php /privacy/ 301
+
+# Reports and disclosures (old /pdf/ folder). Numbered project disclosures and the old guideline PDFs go to the Reports section.
+/pdf/Annual_Report_2022-23.pdf /reports/annual-report-2022-23.pdf 301
+/pdf/Annual_report_2020-21.pdf /reports/annual-report-2020-21.pdf 301
+/pdf/Annual_report_2021-22.pdf /reports/annual-report-2021-22.pdf 301
+/pdf/Annual_report_2023-24.pdf /reports/annual-report-2023-24.pdf 301
+/pdf/Proud_Indian_NGO_Annual_Report_2019_20.pdf /reports/annual-report-2019-20.pdf 301
+/pdf/Proud_Indian_Financials_Report_2019-20.pdf /reports/audited-financials-2019-20.pdf 301
+/pdf/Proud_Indian_Financials_Report_2020-21.pdf /reports/audited-financials-2020-21.pdf 301
+/pdf/Proud%20Indian_Financials_Report_2021-22.pdf /reports/audited-financials-2021-22.pdf 301
+/pdf/Proud_Indian_Financials_Report_2022-23.pdf /reports/audited-financials-2022-23.pdf 301
+/pdf/Proud_Indian_Financials_Report_2023-24.pdf /reports/audited-financials-2023-24.pdf 301
+/pdf/Proud_Indian_Financials_Report_2024-25.pdf /reports/audited-financials-2024-25.pdf 301
+/pdf/Proud_Indian_Kalakriti_24_Financial%20Disclosure.pdf /reports/disclosure-kalakriti-24-2024-11.pdf 301
+/pdf/Proud_Indian_Kalakriti_2_0_Financial%20Disclosure.pdf /reports/disclosure-kalakriti-2-0.pdf 301
+/pdf/* /#reports 301
+
+# The old blog
+/blog / 301
+/blog/* / 301

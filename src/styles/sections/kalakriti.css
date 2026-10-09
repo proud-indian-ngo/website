@@ -1,0 +1,351 @@
+/* Kalakriti (decision 6). Type, colour and spacing are utilities in Kalakriti.astro; this keeps the poster's tilt,
+   paper shadow and tape, the outlined line-up, the troupe of cut-outs on the billing strip, the event dots, the
+   ticket band, and the festival clothesline (desktop: two strings of four; phone: one swipeable line). */
+.s-kala .poster {
+  transform: rotate(-1.5deg);
+  box-shadow:
+    0 30px 40px -20px var(--color-black-a80),
+    inset 0 0 60px var(--color-tan-a25);
+}
+.s-kala .tape {
+  position: absolute;
+  z-index: 6;
+  top: -20px;
+  width: 136px;
+  height: 40px;
+  background: var(--color-paper-2-a82);
+  box-shadow: 0 2px 4px var(--color-black-a25);
+  clip-path: polygon(
+    0 8%,
+    4% 0,
+    9% 10%,
+    14% 2%,
+    86% 0,
+    91% 9%,
+    96% 1%,
+    100% 10%,
+    100% 92%,
+    95% 100%,
+    90% 90%,
+    85% 99%,
+    15% 100%,
+    10% 91%,
+    5% 100%,
+    0 90%
+  );
+}
+.s-kala .t1 {
+  left: -30px;
+  transform: rotate(-24deg);
+}
+.s-kala .t2 {
+  right: -30px;
+  transform: rotate(22deg);
+}
+.s-kala .bill .pi-ln {
+  stroke: var(--color-paper);
+}
+.s-kala .bstar {
+  position: absolute;
+  right: 30px;
+  bottom: 22px;
+  width: 58px;
+  transform: rotate(12deg);
+}
+.s-kala .evr li:not(:last-child)::after {
+  content: "";
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: var(--radius-round);
+  background: var(--color-marigold);
+  margin: 0 var(--space-12) var(--space-4);
+}
+.s-kala .band {
+  transform: rotate(-5deg);
+  box-shadow: 0 10px 14px -8px var(--color-black-a60);
+}
+.s-kala .band i {
+  box-shadow: inset 0 0 0 4px var(--color-paper-2);
+}
+.s-kala .pick {
+  transform: rotate(-4deg);
+}
+.s-kala .pick .parr {
+  width: 66px;
+  transform: rotate(70deg) translate(10px, -6px);
+}
+.s-kala .pick .pi-ln {
+  stroke: var(--color-marigold);
+}
+.s-kala .pi-ticket--paper {
+  transform: rotate(2deg);
+}
+.s-kala .pi-ticket--marigold {
+  transform: rotate(-2.2deg);
+  margin-left: var(--space-14);
+}
+.s-kala .mt {
+  position: absolute;
+  z-index: 2;
+  top: 20px;
+  left: 20px;
+  font: var(--font-weight-extrabold) var(--text-13) var(--font-pi-display);
+  background: var(--color-marigold);
+  color: var(--color-ink);
+  border: var(--line-ink);
+  border-radius: var(--radius-pill);
+  padding: var(--space-4) var(--space-10);
+}
+/* fixes-3 · a troupe of three Kalakriti 3.0 cut-outs standing on the ink billing strip (flat-cropped bottoms sit flush
+   on it), overlapping the poster edge */
+.s-kala .troupe {
+  position: absolute;
+  z-index: 2;
+  right: -34px;
+  bottom: 100%;
+  width: 62cqw;
+  height: 70cqw;
+  pointer-events: none;
+}
+.s-kala .tp {
+  position: absolute;
+  bottom: 0;
+  height: auto;
+  pointer-events: auto;
+  transform-origin: 50% 100%;
+}
+.s-kala .t-fd {
+  left: 0;
+  width: 26.5cqw;
+  transform: rotate(-4deg);
+}
+.s-kala .t-dn {
+  left: 18.5cqw;
+  width: 33cqw;
+  z-index: 1;
+  transform: rotate(1.5deg);
+}
+.s-kala .t-pt {
+  right: 0;
+  width: 25cqw;
+  bottom: -3.4cqw;
+  z-index: 2;
+  transform: rotate(3deg);
+}
+/* on the paper poster the paper outline needs an ink hairline to read as a sticker */
+.s-kala .tp {
+  filter: var(--sticker-outline) drop-shadow(1.5px 0 0 var(--color-ink))
+    drop-shadow(-1.5px 0 0 var(--color-ink))
+    drop-shadow(0 -1.5px 0 var(--color-ink))
+    drop-shadow(0 12px 16px var(--color-ink-a30));
+}
+/* fixes-3 · the festival clothesline: the B1 string, pegs, polaroids and sway, plus bunting flags */
+.s-kala .kl-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-30);
+}
+.s-kala .kl-scroll:focus-visible {
+  outline: 3px solid var(--color-marigold);
+  outline-offset: 6px;
+}
+.s-kala .kl-row {
+  position: relative;
+  flex: none;
+}
+.s-kala .kl-str {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 96px;
+  overflow: visible;
+}
+.s-kala .kl-str .pi-ln {
+  stroke: var(--color-paper);
+  stroke-width: 2.5;
+  vector-effect: non-scaling-stroke;
+}
+.s-kala .kl-str .nl {
+  fill: var(--color-paper);
+}
+.s-kala .fl {
+  stroke: var(--color-ink);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.s-kala .f1 {
+  fill: var(--color-marigold);
+}
+.s-kala .f2 {
+  fill: var(--color-sky);
+}
+.s-kala .f3 {
+  fill: var(--color-paper);
+}
+.s-kala .kl-hang {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 0 3.5%;
+  column-gap: 7%;
+}
+.s-kala .hg {
+  position: relative;
+  transform-origin: 50% 0;
+}
+.s-kala .h1 {
+  margin-top: var(--space-26);
+}
+.s-kala .h2 {
+  margin-top: var(--space-44);
+}
+.s-kala .h3 {
+  margin-top: var(--space-44);
+}
+.s-kala .h4 {
+  margin-top: var(--space-26);
+}
+.s-kala .h1 .pi-polaroid {
+  transform: rotate(-3deg);
+}
+.s-kala .h2 .pi-polaroid {
+  transform: rotate(2deg);
+}
+.s-kala .h3 .pi-polaroid {
+  transform: rotate(-1.5deg);
+}
+.s-kala .h4 .pi-polaroid {
+  transform: rotate(3deg);
+}
+.s-kala .pi-polaroid figcaption {
+  font: var(--font-weight-extrabold) var(--text-17)/var(--leading-title)
+    var(--font-pi-display);
+  letter-spacing: var(--tracking-label);
+  padding: var(--space-10) var(--space-2) var(--space-12);
+  color: var(--color-ink);
+}
+.s-kala .pi-polaroid .mt {
+  top: 18px;
+  left: 18px;
+  font-size: var(--text-12-5);
+}
+.s-kala .kl-row + .kl-row .kl-str {
+  transform: scaleX(-1);
+}
+html[data-motion="on"] .s-kala .h2 {
+  animation-duration: 3.9s;
+  animation-delay: -1.3s;
+}
+html[data-motion="on"] .s-kala .h3 {
+  animation-duration: 3.1s;
+  animation-delay: -2.2s;
+}
+html[data-motion="on"] .s-kala .h4 {
+  animation-duration: 3.6s;
+  animation-delay: -0.7s;
+}
+html[data-motion="on"] .s-kala .kl-row + .kl-row .hg {
+  animation-delay: -1.8s;
+}
+@media (width < --theme(--breakpoint-tab)) {
+  .s-kala .poster {
+    transform: rotate(-1deg);
+  }
+  .s-kala .t1 {
+    left: -18px;
+    width: 100px;
+  }
+  .s-kala .t2 {
+    right: -18px;
+    width: 100px;
+  }
+  /* inherited by the line-up words (not the numbers, which reset it) */
+  .s-kala .lineup li {
+    -webkit-text-stroke-width: 1.2px;
+  }
+  .s-kala .lineup li .nb,
+  .s-kala .lineup li.on {
+    -webkit-text-stroke: 0;
+  }
+  .s-kala .bstar {
+    display: none;
+  }
+  .s-kala .pi-ticket--marigold {
+    margin-left: 0;
+  }
+  .s-kala .evr li:not(:last-child)::after {
+    margin: 0 var(--space-8) var(--space-3);
+    width: 7px;
+    height: 7px;
+  }
+  .s-kala .troupe {
+    right: -14px;
+    left: -8px;
+    width: auto;
+    height: 80cqw;
+  }
+  .s-kala .t-fd {
+    left: 0;
+    width: 40cqw;
+  }
+  .s-kala .t-dn {
+    left: 29%;
+    width: 52cqw;
+  }
+  .s-kala .t-pt {
+    right: 0;
+    width: 39cqw;
+    bottom: -4cqw;
+  }
+  /* one swipeable line: both strings end to end */
+  .s-kala .kl-scroll {
+    flex-direction: row;
+    gap: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x pan-y;
+    scroll-padding: 0 var(--space-20);
+    scroll-snap-type: x proximity;
+    padding: 0 var(--space-20) var(--space-18);
+  }
+  .s-kala .kl-row {
+    width: 760px;
+  }
+  .s-kala .kl-row + .kl-row {
+    margin-left: -2px;
+  }
+  .s-kala .hg {
+    scroll-snap-align: center;
+  }
+  .s-kala .pi-polaroid figcaption {
+    font-size: var(--text-15);
+    padding: var(--space-8) var(--space-2) var(--space-10);
+  }
+  .s-kala .pi-polaroid .mt {
+    top: 12px;
+    left: 12px;
+    font-size: var(--text-11-5);
+    padding: var(--space-3) var(--space-8);
+  }
+  .s-kala .klswipe svg {
+    width: 44px;
+  }
+  .s-kala .klswipe .pi-ln {
+    stroke: var(--color-marigold);
+  }
+}
+/* the swipe row hides its scrollbar on touch screens; mouse and trackpad users get the thin brand bar
+   (.pi-scroll-thin, @proudindian/design/scrollbar.css) so they can see it scrolls */
+@media (hover: none), (pointer: coarse) {
+  .s-kala .kl-scroll {
+    scrollbar-width: none;
+  }
+  .s-kala .kl-scroll::-webkit-scrollbar {
+    display: none;
+  }
+}

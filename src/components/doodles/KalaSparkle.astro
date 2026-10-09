@@ -1,0 +1,9 @@
+---
+/** Kalakriti phone sparkle beside "Paint." (.tw twinkles, .glint flashes).
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0 0 40 40" {...Astro.props}><path class="pi-ln tw" d="M20 3C21 14 26 19 37 20C26 21 21 26 20 37C19 26 14 21 3 20C14 19 19 14 20 3Z"></path><g class="glint"><path class="pi-ln" d="M38 2V8M35 5H41"></path></g></svg>

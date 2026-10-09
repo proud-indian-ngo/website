@@ -1,0 +1,57 @@
+/* Proud Indian site stylesheet: one ordered entry point, compiled by Tailwind v4 (@tailwindcss/vite).
+     theme       Tailwind's default theme, then the brand theme and tokens from @proudindian/design
+     base        the brand reset (@proudindian/design/base.css), then the site-only base rules. Tailwind's preflight
+                 is deliberately not used: the approved design was built on this reset, and preflight changes
+                 svg/img display, button and heading defaults
+     components  the .pi-* primitives from @proudindian/design, then the section CSS that utilities express badly
+                 (motion, masks, strokes, art-directed positions, complex grids), in the prototype's cascade order
+     utilities   Tailwind utilities used in the markup, plus the package's custom @utility rules
+   The package's css/index.css is not imported whole: it also carries the optional .pi-brand scope and the React-only
+   defaults (defaults.css), which the site does not use. */
+@layer theme, base, components, utilities;
+
+/* Tailwind scans the whole project for class names. The README and the check and QA scripts mention utilities the
+   site does not use (old token names among them), so they are left out. */
+@source not "../../README.md";
+@source not "../../scripts";
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "@proudindian/design/theme.css";
+@import "@proudindian/design/tokens.css" layer(theme);
+@import "@proudindian/design/fonts.css";
+
+@import "@proudindian/design/base.css" layer(base);
+/* brand scrollbars (mouse and trackpad only): an ink pill on a transparent track, sky on hover */
+@import "@proudindian/design/scrollbar.css";
+@import "./base.css" layer(base);
+@import "./images.css" layer(base);
+
+@import "@proudindian/design/css/primitives/doodle.css" layer(components);
+@import "@proudindian/design/css/primitives/sticker.css" layer(components);
+@import "@proudindian/design/css/primitives/button.css" layer(components);
+@import "@proudindian/design/css/primitives/chip.css" layer(components);
+@import "@proudindian/design/css/primitives/section-label.css" layer(components);
+@import "@proudindian/design/css/primitives/accent-word.css" layer(components);
+@import "@proudindian/design/css/primitives/polaroid.css" layer(components);
+@import "@proudindian/design/css/primitives/ticket.css" layer(components);
+@import "@proudindian/design/css/primitives/card.css" layer(components);
+@import "./sections/header.css" layer(components);
+@import "./sections/phone-menu.css" layer(components);
+@import "./sections/hero.css" layer(components);
+@import "./sections/marquee.css" layer(components);
+@import "./sections/programme-index.css" layer(components);
+@import "./sections/sticky-donate-bar.css" layer(components);
+@import "./sections/programmes.css" layer(components);
+@import "./sections/kalakriti.css" layer(components);
+@import "./sections/volunteer.css" layer(components);
+@import "./sections/donate.css" layer(components);
+@import "./sections/transparency.css" layer(components);
+@import "./sections/closing-footer.css" layer(components);
+@import "./sections/margins.css" layer(components);
+@import "./sections/programme-bands.css" layer(components);
+@import "./sections/motion.css" layer(components);
+@import "./sections/load-motion.css" layer(components);
+@import "./sections/ambient.css" layer(components);
+
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "@proudindian/design/css/utilities.css";

@@ -1,0 +1,9 @@
+---
+/** Programme index icon: steaming bowl (Nutrition).
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0.3 1.2 100 100" {...Astro.props}><path class="pi-ln f" d="M9 50C30 54 70 54.5 91.5 49C90 70 74 84.5 50 85C27 84.5 11 71 9 50Z"/><path class="pi-ln" d="M37 86.5L35 93.5C45 95.5 56 95.5 65.5 93L63 86.5"/><path class="pi-ln" d="M36 40C31 34 31.5 28.5 36 24S40 14 35.5 9M51 38.5C46.5 32 47.5 26.5 51.5 22.5S55 13 50.5 7.5M66 40C61.5 34.5 62 29 66.5 25S70.5 16 66 11"/></svg>

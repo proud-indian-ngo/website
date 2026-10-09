@@ -1,0 +1,14 @@
+pre-commit:
+  parallel: false
+  commands:
+    fix:
+      priority: 1
+      glob: "*.{js,mjs,ts,css,json}"
+      run: bunx oxfmt {staged_files} && bunx oxlint --fix {staged_files}
+      stage_fixed: true
+    styles:
+      glob: "{src/**/*.{css,astro,ts},package.json,public/*}"
+      run: bun run check:design && bun run lint:css
+    types:
+      glob: "*.{ts,astro}"
+      run: bun run check:types

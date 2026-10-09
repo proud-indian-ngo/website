@@ -1,0 +1,729 @@
+/* Ambient doodle loops, one per section (decision 11), and the motion-off kill switch */
+/* ---------- 7. ambient doodles (decision 11, ambient round) ----------
+   One small, slow, hand-drawn loop per section, in the spirit of the hero sun. Each is a .loop, so site.js pauses it
+   whenever it is off screen; all of it runs only under html[data-motion=on], and the resting DOM is a complete doodle.
+   Only transform, opacity and stroke-dashoffset move. */
+.s-prog .heart,
+.s-kala .bstar,
+.s-kala .kspark,
+.s-vol .vclock,
+.s-tr .tr-list,
+.s-tr .gl-bird {
+  overflow: visible;
+}
+.s-prog .book .leaf {
+  opacity: 0;
+}
+/* collage sun: rays breathe and rock a few degrees, and it winks (the hero sun spins; this one doesn't) */
+@keyframes csun-rays {
+  0%,
+  100% {
+    transform: scale(1) rotate(0);
+  }
+  50% {
+    transform: scale(1.08) rotate(9deg);
+  }
+}
+@keyframes wink {
+  0%,
+  62%,
+  70%,
+  100% {
+    transform: scaleY(1);
+  }
+  66% {
+    transform: scaleY(0.12);
+  }
+}
+html[data-motion="on"] .s-prog .csun .rays {
+  transform-box: view-box;
+  transform-origin: 60px 60px;
+  animation: csun-rays var(--loop-csun-rays) ease-in-out infinite;
+}
+html[data-motion="on"] .s-prog .csun .wink {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: wink var(--loop-wink) ease-in-out infinite;
+}
+/* Teach: a page lifts and turns over */
+@keyframes leaf {
+  0% {
+    opacity: 0;
+    transform: scaleX(1) skewY(0);
+  }
+  6% {
+    opacity: 1;
+    transform: scaleX(1) skewY(0);
+  }
+  14% {
+    transform: scaleX(1) skewY(0);
+  }
+  27% {
+    transform: scaleX(0.06) skewY(-10deg);
+  }
+  40% {
+    opacity: 1;
+    transform: scaleX(-1) skewY(0);
+  }
+  48%,
+  100% {
+    opacity: 0;
+    transform: scaleX(-1) skewY(0);
+  }
+}
+html[data-motion="on"] .s-prog .book .leaf {
+  transform-box: view-box;
+  transform-origin: 50px 57px;
+  animation: leaf var(--loop-leaf) ease-in-out infinite;
+}
+/* Feed: the steam rises and fades, one wisp after another */
+@keyframes steam {
+  0% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  25% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  65% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-9px);
+  }
+}
+html[data-motion="on"] .s-prog .bowl .steam {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: steam var(--loop-steam) ease-in-out infinite;
+}
+html[data-motion="on"] .s-prog .bowl .s2 {
+  animation-delay: -1.6s;
+}
+html[data-motion="on"] .s-prog .bowl .s3 {
+  animation-delay: -3.2s;
+}
+/* Gather: a heartbeat, and a tiny heart floats off */
+.s-prog .heart .mini {
+  opacity: 0;
+}
+@keyframes beat {
+  0%,
+  32%,
+  100% {
+    transform: scale(1);
+  }
+  7% {
+    transform: scale(1.09);
+  }
+  14% {
+    transform: scale(1);
+  }
+  21% {
+    transform: scale(1.06);
+  }
+}
+@keyframes mini {
+  0%,
+  12% {
+    opacity: 0;
+    transform: translate(-4px, 8px) scale(0.6) rotate(0);
+  }
+  24% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1) rotate(0);
+  }
+  52%,
+  100% {
+    opacity: 0;
+    transform: translate(6px, -16px) scale(1.05) rotate(12deg);
+  }
+}
+html[data-motion="on"] .s-prog .heart .beat {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: beat var(--loop-beat) ease-in-out infinite;
+}
+html[data-motion="on"] .s-prog .heart .mini {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: mini var(--loop-mini) ease-in-out infinite;
+}
+/* Kalakriti: the poster star twinkles (phones: a sparkle beside "Paint.") */
+@keyframes twinkle {
+  0%,
+  100% {
+    transform: rotate(0) scale(1);
+  }
+  50% {
+    transform: rotate(10deg) scale(1.08);
+  }
+}
+@keyframes glint {
+  0%,
+  20%,
+  80%,
+  100% {
+    opacity: 0;
+  }
+  45%,
+  55% {
+    opacity: 1;
+  }
+}
+.s-kala .kspark {
+  display: none;
+}
+.s-kala .kspark .pi-ln {
+  stroke: var(--color-marigold);
+}
+html[data-motion="on"] .s-kala .bstar .tw,
+html[data-motion="on"] .s-kala .kspark .tw {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: twinkle var(--loop-twinkle) ease-in-out infinite;
+}
+html[data-motion="on"] .s-kala .bstar .glint,
+html[data-motion="on"] .s-kala .kspark .glint {
+  animation: glint var(--loop-glint) ease-in-out infinite;
+}
+@media (width < --theme(--breakpoint-tab)) {
+  .s-kala .chead {
+    position: relative;
+  }
+  .s-kala .kspark {
+    display: block;
+    position: absolute;
+    right: 30px;
+    top: 58px;
+    width: 40px;
+    transform: rotate(8deg);
+  }
+}
+/* Volunteer: an alarm clock beside "More weekends"; the minute hand ticks round, the bells give a little ring on the hour */
+.s-vol .vclock {
+  display: inline-block;
+  width: 0.96em;
+  height: 0.96em;
+  margin-left: 0.22em;
+  vertical-align: -0.1em;
+}
+.s-vol .vclock .pi-ln {
+  stroke-width: 3;
+}
+@keyframes tick {
+  0% {
+    transform: rotate(0deg);
+  }
+  6.13% {
+    transform: rotate(0deg);
+  }
+  8.33% {
+    transform: rotate(30deg);
+  }
+  14.47% {
+    transform: rotate(30deg);
+  }
+  16.67% {
+    transform: rotate(60deg);
+  }
+  22.8% {
+    transform: rotate(60deg);
+  }
+  25% {
+    transform: rotate(90deg);
+  }
+  31.13% {
+    transform: rotate(90deg);
+  }
+  33.33% {
+    transform: rotate(120deg);
+  }
+  39.47% {
+    transform: rotate(120deg);
+  }
+  41.67% {
+    transform: rotate(150deg);
+  }
+  47.8% {
+    transform: rotate(150deg);
+  }
+  50% {
+    transform: rotate(180deg);
+  }
+  56.13% {
+    transform: rotate(180deg);
+  }
+  58.33% {
+    transform: rotate(210deg);
+  }
+  64.47% {
+    transform: rotate(210deg);
+  }
+  66.67% {
+    transform: rotate(240deg);
+  }
+  72.8% {
+    transform: rotate(240deg);
+  }
+  75% {
+    transform: rotate(270deg);
+  }
+  81.13% {
+    transform: rotate(270deg);
+  }
+  83.33% {
+    transform: rotate(300deg);
+  }
+  89.47% {
+    transform: rotate(300deg);
+  }
+  91.67% {
+    transform: rotate(330deg);
+  }
+  97.8% {
+    transform: rotate(330deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes ring {
+  0%,
+  86%,
+  100% {
+    transform: rotate(0);
+  }
+  89% {
+    transform: rotate(-6deg);
+  }
+  92% {
+    transform: rotate(6deg);
+  }
+  95% {
+    transform: rotate(-4deg);
+  }
+  98% {
+    transform: rotate(0);
+  }
+}
+html[data-motion="on"] .s-vol .vclock .hand {
+  transform-box: view-box;
+  transform-origin: 32px 35px;
+  animation: tick var(--loop-tick) ease-in-out infinite;
+}
+html[data-motion="on"] .s-vol .vclock .bells {
+  transform-box: view-box;
+  transform-origin: 32px 14px;
+  animation: ring var(--loop-ring) ease-in-out infinite;
+}
+/* Donate: the matka bobs gently (the coin drop still plays on top) */
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  50% {
+    transform: translateY(-4px) rotate(-2.5deg);
+  }
+}
+html[data-motion="on"] .s-don .bmatka svg {
+  transform-origin: 50% 100%;
+  animation: bob var(--loop-bob) ease-in-out infinite;
+}
+/* Reports: a pencil ticks a three-line checklist, then the ticks fade and it starts again */
+.s-tr .tr-head {
+  position: relative;
+}
+.s-tr .tr-list {
+  width: 118px;
+  margin: 0 0 var(--space-26) var(--space-6);
+  transform: rotate(-4deg);
+}
+@media (width < --theme(--breakpoint-tab)) {
+  .s-tr .tr-list {
+    position: absolute;
+    width: 80px;
+    right: 4px;
+    top: 112px;
+    margin: 0;
+  }
+}
+@keyframes pencil {
+  0%,
+  54%,
+  100% {
+    transform: translate(0, 0);
+  }
+  8% {
+    transform: translate(-70px, -51px);
+  }
+  16% {
+    transform: translate(-56px, -59px);
+  }
+  22% {
+    transform: translate(-70px, -29px);
+  }
+  30% {
+    transform: translate(-56px, -37px);
+  }
+  36% {
+    transform: translate(-70px, -7px);
+  }
+  44% {
+    transform: translate(-56px, -15px);
+  }
+}
+@keyframes tk1 {
+  0%,
+  7.9% {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+  8% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  16%,
+  84% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  92%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+@keyframes tk2 {
+  0%,
+  21.9% {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+  22% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  30%,
+  84% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  92%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+@keyframes tk3 {
+  0%,
+  35.9% {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+  36% {
+    stroke-dashoffset: 1;
+    opacity: 1;
+  }
+  44%,
+  84% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  92%,
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+html[data-motion="on"] .s-tr .tr-list .tk {
+  stroke-dasharray: 1 1;
+}
+html[data-motion="on"] .s-tr .tr-list .t1 {
+  animation: tk1 var(--loop-pencil) ease-in-out infinite;
+}
+html[data-motion="on"] .s-tr .tr-list .t2 {
+  animation: tk2 var(--loop-pencil) ease-in-out infinite;
+}
+html[data-motion="on"] .s-tr .tr-list .t3 {
+  animation: tk3 var(--loop-pencil) ease-in-out infinite;
+}
+html[data-motion="on"] .s-tr .tr-list .pencil {
+  animation: pencil var(--loop-pencil) ease-in-out infinite;
+}
+/* Slow devices (html.lite-draw, see src/scripts/lite.ts): the ticks grow in left to right with a transform, on the
+   compositor, on the same timeline, instead of being drawn along the stroke */
+@keyframes tk1-lite {
+  0%,
+  7.9% {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  8% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  16%,
+  84% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  92%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+@keyframes tk2-lite {
+  0%,
+  21.9% {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  22% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  30%,
+  84% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  92%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+@keyframes tk3-lite {
+  0%,
+  35.9% {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  36% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  44%,
+  84% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  92%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+html.lite-draw[data-motion="on"] .s-tr .tr-list .tk {
+  stroke-dasharray: none;
+  transform-box: fill-box;
+  transform-origin: 0 50%;
+}
+html.lite-draw[data-motion="on"] .s-tr .tr-list .t1 {
+  animation-name: tk1-lite;
+}
+html.lite-draw[data-motion="on"] .s-tr .tr-list .t2 {
+  animation-name: tk2-lite;
+}
+html.lite-draw[data-motion="on"] .s-tr .tr-list .t3 {
+  animation-name: tk3-lite;
+}
+/* At a glance: a small bird perched on the ticket hops twice now and then */
+.s-tr .gl-bird {
+  position: absolute;
+  z-index: 2;
+  width: 66px;
+  right: 44px;
+  top: -44px;
+}
+@media (width < --theme(--breakpoint-tab)) {
+  .s-tr .gl-bird {
+    width: 54px;
+    top: -36px;
+    right: 36px;
+  }
+}
+.s-tr .gl-bird .pi-ln {
+  stroke-width: 6;
+}
+@keyframes hop {
+  0%,
+  56%,
+  92%,
+  100% {
+    transform: translateY(0) scale(1, 1) rotate(0);
+  }
+  28% {
+    transform: translateY(0) scale(1, 1) rotate(-5deg);
+  }
+  60% {
+    transform: translateY(0) scale(1.06, 0.92) rotate(0);
+  }
+  66% {
+    transform: translateY(-12px) scale(0.96, 1.05) rotate(0);
+  }
+  72% {
+    transform: translateY(0) scale(1.05, 0.94) rotate(0);
+  }
+  76% {
+    transform: translateY(0) scale(1, 1) rotate(0);
+  }
+  81% {
+    transform: translateY(-8px) scale(0.98, 1.03) rotate(0);
+  }
+  87% {
+    transform: translateY(0) scale(1.04, 0.95) rotate(0);
+  }
+}
+html[data-motion="on"] .s-tr .gl-bird .hop {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: hop var(--loop-hop) ease-in-out infinite;
+}
+/* Closing street scene: the kite sways from the child's hand, the birds flap, the bird on the school gate hops,
+   the lamp-post birds turn their heads, the tiffin steams. Both scenes are .loop, so they pause off-screen and under Pause. */
+@keyframes kite {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-3px) rotate(3deg);
+  }
+}
+@keyframes flap {
+  0%,
+  40%,
+  64%,
+  100% {
+    transform: scaleY(1);
+  }
+  46%,
+  58% {
+    transform: scaleY(0.5);
+  }
+  52% {
+    transform: scaleY(1);
+  }
+}
+@keyframes gbird {
+  0%,
+  70%,
+  86%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  35% {
+    transform: translateY(0) rotate(-7deg);
+  }
+  74% {
+    transform: translateY(-6px) rotate(-6deg);
+  }
+  78% {
+    transform: translateY(0) rotate(0);
+  }
+  82% {
+    transform: translateY(-4px) rotate(-3deg);
+  }
+}
+@keyframes look {
+  0%,
+  60%,
+  100% {
+    transform: rotate(0);
+  }
+  66%,
+  80% {
+    transform: rotate(-12deg);
+  }
+  86% {
+    transform: rotate(4deg);
+  }
+}
+@keyframes wisp {
+  0% {
+    transform: translateY(4px);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+}
+html[data-motion="on"] .s-ft .fC-scene .kite {
+  transform-box: fill-box;
+  transform-origin: 0 100%;
+  animation: kite var(--loop-kite) ease-in-out infinite;
+}
+html[data-motion="on"] .s-ft .fC-scene .birds path {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: flap var(--loop-flap) ease-in-out infinite;
+}
+html[data-motion="on"] .s-ft .fC-scene .birds .b2 {
+  animation-delay: -2.1s;
+}
+html[data-motion="on"] .s-ft .fC-scene .gbird {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: gbird var(--loop-gbird) ease-in-out infinite;
+}
+html[data-motion="on"] .s-ft .fC-scene .pb1,
+html[data-motion="on"] .s-ft .fC-scene .pb2 {
+  transform-box: fill-box;
+  transform-origin: 40% 100%;
+  animation: look var(--loop-look) ease-in-out infinite;
+}
+html[data-motion="on"] .s-ft .fC-scene .pb2 {
+  animation-delay: -4s;
+}
+html[data-motion="on"] .s-ft .fC-scene .steam path {
+  transform-box: fill-box;
+  animation: wisp var(--loop-wisp) ease-in-out infinite;
+}
+html[data-motion="on"] .s-ft .fC-scene .steam .w2 {
+  animation-delay: -2.4s;
+}
+/* motion off or reduced: no transitions either */
+html[data-motion="off"] *,
+html[data-motion="off"] *::before,
+html[data-motion="off"] *::after {
+  transition: none !important;
+  animation: none !important;
+}
+/* except the Pause switch itself: its knob slides the same 150ms both ways, so pausing doesn't snap while resuming
+   slides (reduced motion still turns it off, below) */
+@media (prefers-reduced-motion: no-preference) {
+  html[data-motion="off"] .s-ft .ft-pmb .sw i {
+    transition: transform 150ms var(--ease-settle) !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* round 6 logo preview */
+.menu .slogo {
+  --pi-accent: currentColor;
+} /* on cyan: the one-colour rule */
+.s-hero .seal {
+  box-shadow: var(--shadow-photo);
+}
+.s-hero .seal b {
+  position: relative;
+  z-index: 1;
+}

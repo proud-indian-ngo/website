@@ -1,0 +1,16 @@
+# Trustees shown under "Our trustees." Portraits are cut-outs in src/assets/board/.
+# `fit` positions the cut-out inside its tile, in container units (cqw), exactly as in the prototype.
+- id: sarjun
+  name: Sarjun H
+  role: Co-founder, Treasurer
+  image: board/sarjun.png
+  tile: sky
+  tilt: -4
+  fit: { width: 120.26, bottom: -25.6, marginLeft: -60.13 }
+- id: somasundaram
+  name: Somasundaram A
+  role: Secretary
+  image: board/somu.png
+  tile: wash
+  tilt: 4
+  fit: { width: 113.15, bottom: -25.6, marginLeft: -56.58 }

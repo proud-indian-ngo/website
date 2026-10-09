@@ -1,0 +1,10 @@
+/* astro:assets output. <picture> takes no box, so the prototype rules that size the <img> against its parent keep
+   working. The width/height attributes stay on <img> for layout stability (they set the aspect ratio before load),
+   but must not set the size: the prototype's <img>s had no attributes and were sized by CSS or by their own ratio. */
+picture {
+  display: contents;
+}
+img {
+  width: auto;
+  height: auto;
+}

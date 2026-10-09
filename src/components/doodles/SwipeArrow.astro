@@ -1,0 +1,9 @@
+---
+/** "swipe the line" arrow (phones).
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0 0 120 40" {...Astro.props}><path class="pi-ln" d="M5 24C30 16 60 28 88 20S120 14 132 20"></path><path class="pi-ln" d="M100 8L114 20L100 33"></path></svg>

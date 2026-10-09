@@ -1,0 +1,38 @@
+---
+/**
+ * Sticker: a cut-out photo with a die-cut paper outline and a soft lift (@proudindian/design css/primitives/sticker.css).
+ * With `crop` ("617/950") the cut-out sits in a box of that aspect ratio that flat-crops its bottom (hides old
+ * watermarks); the box then carries the accessible name (`alt`) as role="img".
+ */
+import type { ImageMetadata } from "astro";
+import type { HTMLAttributes } from "astro/types";
+import Img from "./Img.astro";
+
+type Props = Omit<HTMLAttributes<"span">, "src"> & {
+  src: ImageMetadata;
+  alt: string;
+  width: number;
+  /** the width on phones, as a CSS length (see Img) */
+  phone?: string;
+  crop?: string;
+  eager?: boolean;
+} & Record<`data-${string}`, string | boolean | undefined>;
+
+const { src, alt, width, phone, crop, eager, class: cls, style, ...rest } = Astro.props;
+---
+
+{
+  crop ? (
+    <span
+      class:list={["pi-sticker", "pi-sticker--crop", cls]}
+      role="img"
+      aria-label={alt}
+      style={`aspect-ratio:${crop}${style ? `;${style}` : ""}`}
+      {...rest}
+    >
+      <Img src={src} alt="" width={width} phone={phone} eager={eager} />
+    </span>
+  ) : (
+    <Img src={src} alt={alt} width={width} phone={phone} eager={eager} class:list={["pi-sticker", cls]} style={style} {...rest} />
+  )
+}

@@ -1,0 +1,9 @@
+---
+/** SectionLabel: the numbered eyebrow, e.g. "01 Education" (@proudindian/design css/primitives/section-label.css). */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"p"> & { num: string } & Record<`data-${string}`, string | boolean | undefined>;
+const { num, class: cls, ...rest } = Astro.props;
+---
+
+<p class:list={["pi-label", cls]} {...rest}><span class="pi-label__num">{num}</span><slot /></p>

@@ -1,0 +1,14 @@
+---
+/**
+ * AccentWord: the one highlighted word of a headline (@proudindian/design css/primitives/accent-word.css).
+ *   "paper"    deep cyan, on paper (default)
+ *   "outline"  white with an ink outline and offset, on cyan bands (decision 1B)
+ *   "marigold" on ink
+ */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"span"> & { variant?: "paper" | "outline" | "marigold" };
+const { variant = "paper", class: cls, ...rest } = Astro.props;
+---
+
+<span class:list={["pi-accent", variant !== "paper" && `pi-accent--${variant}`, cls]} {...rest}><slot /></span>

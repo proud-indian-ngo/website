@@ -1,0 +1,9 @@
+---
+/** Chip: a small outlined pill. Put chips in a <ul class="pi-chips">. Styles: @proudindian/design css/primitives/chip.css */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"li"> & Record<`data-${string}`, string | boolean | undefined>;
+const { class: cls, ...rest } = Astro.props;
+---
+
+<li class:list={["pi-chip", cls]} {...rest}><slot /></li>

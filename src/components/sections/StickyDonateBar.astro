@@ -1,0 +1,16 @@
+---
+/** Phone sticky donate bar (decision 8): after the hero, never over Donate, the closing section or the footer. */
+import { getCopy } from "../../lib/content";
+import Button from "../ui/Button.astro";
+
+const { stickyBar: s } = await getCopy();
+---
+
+<div
+  class="sbar fixed right-[max(10px,env(safe-area-inset-right))] bottom-[max(10px,env(safe-area-inset-bottom))] left-[max(10px,env(safe-area-inset-left))] z-(--z-sticky-bar) hidden items-center justify-between gap-2.5 rounded-pill border-line border-ink bg-ink py-[7px] pr-[7px] pl-5 font-pi-sans text-14 font-medium text-paper max-tab:flex"
+  data-sbar
+  inert
+>
+  <span class="sbt"><b class="font-bold">{s.lead}</b>{s.rest}</span>
+  <Button class="sbb px-5 py-2.5 text-15 shadow-none" href="#donate" variant="donate">{s.donate}</Button>
+</div>

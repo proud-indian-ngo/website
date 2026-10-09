@@ -1,0 +1,9 @@
+---
+/** "Four ways" hand-drawn underline loop.
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0 0 220 60" preserveAspectRatio="none" {...Astro.props}><path class="pi-ln" d="M4 40C30 38 52 30 66 18C78 7 64 2 58 14C50 32 82 46 110 40S156 18 176 28 200 44 216 34"></path></svg>

@@ -1,0 +1,112 @@
+/* Site-only base rules. The generic reset (box-sizing and margins, body font and colours, links, lists, buttons,
+   [hidden], :focus-visible) comes first from @proudindian/design/base.css (see global.css). */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--header-h);
+}
+html[data-motion="off"] {
+  scroll-behavior: auto;
+}
+html,
+body {
+  overflow-x: clip;
+}
+img {
+  max-width: none;
+}
+.skip {
+  position: fixed;
+  left: 12px;
+  top: -60px;
+  z-index: var(--z-skip-link);
+  background: var(--color-surface-ink);
+  color: var(--color-white);
+  font: var(--font-weight-semibold) var(--text-15) var(--font-pi-sans);
+  padding: var(--space-10) var(--space-16);
+  border-radius: var(--radius-pill);
+}
+.skip:focus {
+  top: 12px;
+}
+.ic {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ctas {
+  display: flex;
+  gap: var(--space-12);
+  flex-wrap: wrap;
+}
+/* touch: no grey tap flash (every control has its own pressed state) and no double-tap-zoom delay */
+a,
+button,
+[role="button"],
+summary,
+label {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+/* text selection: ink on paper, inverted on the ink surfaces */
+::selection {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.kala ::selection,
+.ft-foot ::selection,
+.bcard ::selection {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+/* focus on sky surfaces: the default sky-deep ring is 2.16:1 on sky, ink is 8.36:1 */
+.hero :focus-visible,
+.bB.sky :focus-visible,
+.dB :focus-visible,
+.menu :focus-visible {
+  outline: var(--focus-ring-on-sky);
+}
+/* landscape phones: viewport-fit=cover lets the page run under the notch, so keep the content clear of it (the
+   backgrounds then stop at the safe area, as they did before) */
+body {
+  padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
+}
+/* a 44px-tall hit area for small text links (footer, logo, "See every session"): an invisible box centred on the link,
+   so neither the layout nor the focus ring changes */
+.tap-44 {
+  position: relative;
+}
+.tap-44::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: max(100%, 44px);
+  translate: 0 -50%;
+}
+/* phones: the same for the controls that draw at 41-43px (pills and small buttons) */
+@media (width < --theme(--breakpoint-tab)) {
+  .hd .pi-btn,
+  .bB .ctas .pi-btn,
+  .s-don .amt,
+  .sbar .pi-btn {
+    position: relative;
+  }
+  .hd .pi-btn::after,
+  .bB .ctas .pi-btn::after,
+  .s-don .amt::after,
+  .sbar .pi-btn::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: max(100%, 44px);
+    translate: 0 -50%;
+  }
+}

@@ -1,0 +1,9 @@
+---
+/** Hero "3.6k+ Optimists · Bengaluru" seal ring (the number itself is HTML).
+ *  The artwork is @proudindian/design logo/seals/pi-seal-optimists-ring.svg, served as a file rather than inlined: it
+ *  is 10 KB of paths, the seal only shows above the phone breakpoint, and a lazy image inside a display:none box is
+ *  never fetched, so phones don't pay for it. The file's own color (#0F1B24, ink) colours its currentColor strokes. */
+import ring from "@proudindian/design/logo/seals/pi-seal-optimists-ring.svg?url";
+---
+
+<img src={ring} alt="" width="120" height="120" loading="lazy" decoding="async" />

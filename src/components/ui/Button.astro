@@ -1,0 +1,33 @@
+---
+/**
+ * Button: a pill with a 1.5px ink outline and a hard offset shadow (styles: @proudindian/design css/primitives/button.css).
+ * Renders <a> when `href` is set, otherwise <button>.
+ */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = Omit<HTMLAttributes<"a"> & HTMLAttributes<"button">, "type"> & {
+  href?: string;
+  variant?: "ink" | "sky" | "donate" | "ghost";
+  size?: "md" | "lg" | "xl";
+  /** full width */
+  block?: boolean;
+  /** trailing "→" (hidden from screen readers) */
+  arrow?: boolean;
+  type?: "button" | "submit";
+} & Record<`data-${string}`, string | boolean | undefined>;
+
+const { href, variant = "ink", size = "md", block = false, arrow = false, type = "button", class: cls, ...rest } =
+  Astro.props;
+const classes = [
+  "pi-btn",
+  `pi-btn--${variant}`,
+  size !== "md" && `pi-btn--${size}`,
+  block && "pi-btn--block",
+  cls,
+];
+const Tag = href ? "a" : "button";
+---
+
+<Tag class:list={classes} href={href} type={href ? undefined : type} {...rest}
+  ><slot />{arrow && <Fragment>{" "}<span aria-hidden="true">→</span></Fragment>}</Tag
+>

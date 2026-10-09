@@ -1,0 +1,30 @@
+# One programme band (decision 5). Images are paths under src/assets/.
+order: 1
+kind: band
+anchor: b0
+num: "01"
+name: Education
+verb: Teach
+# how the big verb arrives: neighbouring bands differ (wipe on Teach, a deeper rise on Feed and Gather)
+verbReveal: wipe
+surface: sky
+doodle: book
+line: Weekend maths and Spoken English classes, and art & craft that gets children talking about their world.
+chips: [Maths classes, Spoken English, Art & craft]
+cta: Volunteer for this
+polaroids:
+  - image: photos/teach-postmaster.jpg
+    alt: A girl writing a letter at the Learning with Postmaster session
+    caption: Postmaster day
+    position: 50% 50%
+  - image: photos/teach-maths-class.jpg
+    alt: A volunteer teaching multiplication at a maths class
+    caption: Maths class
+    position: 40% 40%
+  - image: photos/teach-art-craft.jpg
+    alt: A girl holding up the bookmark she made in art and craft class
+    caption: Art & craft
+    position: 50% 50%
+sticker:
+  image: cutouts/ArtCraft_May2026_1000381054.png
+  alt: A girl holding up the painting she made in art and craft class

@@ -1,0 +1,281 @@
+# Section copy for the one-page site, in page order. Text here was finalised with the user on 2026-10-08
+# (prototypes/final/index.html); change it deliberately. Numbers, registrations and contacts live in site.yaml;
+# programme bands in programmes/; Kalakriti in kalakriti.yaml; documents in reports.yaml; people in trustees.yaml.
+# "accent" is the one highlighted word of a headline.
+
+meta:
+  title: Proud Indian · Be an Optimist
+  description: Proud Indian is a volunteer-run NGO in Bengaluru. Optimists, our volunteers, run maths and English classes, art & craft, shared meals, Kalakriti and community days, mostly at weekends.
+
+nav:
+  skip: Skip to content
+  logoLabel: Proud Indian, back to top
+  links:
+    - { label: Programmes, href: "#programmes", spy: programmes }
+    - { label: Kalakriti, href: "#kalakriti", spy: kalakriti }
+    - { label: Volunteer, href: "#volunteer", spy: volunteer }
+    - { label: Reports, href: "#reports", spy: reports }
+    - { label: About, href: "#about", spy: about }
+  join: Become an Optimist
+  donate: Donate
+  openMenu: Open menu
+
+menu:
+  label: Menu
+  close: Close
+  links:
+    - { label: Programmes, href: "#programmes" }
+    - { label: Kalakriti, href: "#kalakriti" }
+    - { label: Volunteer, href: "#volunteer" }
+    - { label: Donate, href: "#donate" }
+    - { label: Reports, href: "#reports" }
+  # the social pills, in this order; URLs and accessible labels come from site.yaml → social
+  social:
+    - { network: instagram, label: Instagram }
+    - { network: facebook, label: Facebook }
+    - { network: x, label: X }
+    - { network: linkedin, label: LinkedIn }
+    - { network: youtube, label: YouTube }
+  kid: cutouts/GiftASmile2026_DSC_000106.png
+
+programmeIndexLabel: Programmes
+
+hero:
+  pre: Be an
+  word: Optimist.
+  lede: "Proud Indian is run by volunteers we call Optimists. Most weekends we’re with children in Bengaluru’s low-income communities: maths and English classes, art, shared meals, and one big festival a year."
+  join: Become an Optimist
+  donate: Donate
+  kids:
+    girl:
+      image: cutouts/GiftASmile2026_DSC_000106.png
+      label: A girl laughing with the badminton set she got at Gift a Smile
+      crop: 617/950
+    boy:
+      image: cutouts/Kalakriti3_DSC01748.png
+      label: A boy giving a thumbs up at Kalakriti 3.0
+      crop: 821/960
+
+marquee:
+  label: Our programmes
+  items:
+    - { label: Maths classes, href: "#b0" }
+    - { label: Spoken English, href: "#b0" }
+    - { label: Art & craft, href: "#b0" }
+    - { label: Shared meals, href: "#b1" }
+    - { label: Kalakriti, href: "#kalakriti" }
+    - { label: Gift a Smile, href: "#b3" }
+    - { label: Outings, href: "#b3" }
+    - { label: Volunteering days, href: "#b3" }
+
+programmesIntro:
+  eyebrow: What we do
+  heading: { line1: Four ways, line2: we, accent: show up. }
+  sub: Every programme is planned and run by Optimists, our volunteers.
+  # the eight photos of the "Four ways" collage, in slot order p1 to p8
+  collage:
+    - photos/collage-art-craft.jpg
+    - photos/collage-gift-day.jpg
+    - photos/collage-kalakriti-dance.jpg
+    - photos/collage-playground.jpg
+    - photos/collage-maths.jpg
+    - photos/collage-fancy-dress.jpg
+    - photos/collage-prani.jpg
+    - photos/collage-craft-flower.jpg
+
+volunteer:
+  eyebrow: Volunteer
+  heading: { before: "Your next weekend,", accent: sorted. }
+  lede: Bring a few free hours and some patience; the children bring the rest. Most sessions are at weekends, and no experience is needed.
+  stepsLabel: How to join
+  steps:
+    [Register on the dashboard, Tap “I’m interested”, "Get approved, show up"]
+  join: Become an Optimist
+  joinNote: Opens dash.proudindian.ngo
+  poster:
+    { kicker: Next up, open: Open to everyone, register: Register to join }
+  posterKid:
+    image: cutouts/ArtCraft_Jun2026_IMG_114811.png
+    label: A boy holding up the bookmark he made in art and craft class
+    crop: 507/600
+  more: { heading: More weekends, link: See every session on the dashboard }
+  ticketRegister: Register to join
+  # the poster when the dashboard has no upcoming sessions (the "More weekends" row hides); the button links to links.register
+  empty:
+    label: No upcoming sessions
+    heading: Nothing on the calendar yet.
+    line: New sessions go up on the dashboard first. Register now and you can sign up the moment one is posted.
+    register: Register on the dashboard
+  # the poster when the build could not load the sessions (PUBLIC_EVENTS_URL unset, down or malformed); same layout
+  # as the empty state, no sessions shown; the button links to links.register. The browser refresh replaces it.
+  unavailable:
+    label: Upcoming sessions are on the dashboard
+    heading: Pick a weekend.
+    line: Every session goes up on the dashboard first, with the date, the place and a sign-up button.
+    register: See this week’s sessions
+
+donate:
+  eyebrow: Donate
+  heading: { before: Fund a, accent: weekend. }
+  lede: Your gift buys class materials and art supplies, food for our drives and festival lunches, and Gift a Smile gifts and outings. It also helps put on Kalakriti each year.
+  kid:
+    image: cutouts/Kalakriti3_IMG_4417.png
+    label: A boy painting his clay pot at Kalakriti 3.0
+    crop: 684/850
+  facts:
+    - { value: "{programmesPercent}%", label: of funds go to programmes }
+    - {
+        value: "{taxExemption} · {registered}",
+        label: registered · receipt by email,
+      }
+  card:
+    label: Donation amount
+    choose: Choose an amount
+    once: One-time
+    presetsLabel: Preset amounts
+    # amounts in rupees; `coins` is how many coins drop into the matka; `selected` is the default pick
+    presets:
+      - { amount: 500, coins: 2 }
+      - { amount: 1000, coins: 3, selected: true }
+      - { amount: 2500, coins: 4 }
+      - { amount: 5000, coins: 5 }
+    otherField: Or enter another amount
+    otherPlaceholder: Any amount from 100
+    otherLabel: Other amount in rupees
+    total: Your gift
+    minimum: Razorpay’s minimum gift is <b>₹100</b>.
+    button: Donate
+    # the button below the minimum (it is aria-disabled then); {min} is site.yaml → links.razorpay.min
+    buttonLow: Enter ₹{min} or more
+    fine: Secure payment via Razorpay · 80G receipt by email (add your PAN)
+
+reports:
+  eyebrow: Transparency
+  heading: { line1: "Every rupee,", line2: on the, accent: record. }
+  lede: Our numbers, registrations and reports are all here.
+  ring: of funds go to programmes
+  tiles:
+    reached: People reached
+    optimists: Optimists, our volunteers
+    hours: Volunteer hours
+  kalakriti:
+    chip: Kalakriti 3.0
+    value: "500"
+    note: children took part · 8 events · 200 volunteers
+  # the disclosure count is the number of disclosures in reports.yaml
+  disclosures:
+    readAll: Read every one
+    label: project disclosures
+    # the drawer lists this many, then a "See all" row that reveals the rest in place
+    preview: 5
+    more: "+ {n} more disclosures"
+    inAll: "{total} project disclosures in all"
+  annualLabel: Annual reports
+  auditedLabel: Audited financials
+  registered:
+    heading: Registered and verifiable
+    items:
+      - { label: Tax exemption, value: "{taxExemption}" }
+      - { label: Registered, value: "{registered}" }
+      - { label: NGO Darpan, value: "{darpan}" }
+      - { label: PAN, value: "{pan}" }
+      - { label: Registration no., value: "{registrationNo}" }
+      - { label: Founded, value: "{foundedShort} · {city}" }
+  drawer:
+    eyebrow: Reports
+    heading: Reports and disclosures
+    close: Close
+    tabsLabel: Report type
+    tabs:
+      annual: { long: Annual reports, short: Annual }
+      audited: { long: Audited financials, short: Audited }
+      disclosure: { long: Project disclosures, short: Disclosures }
+    meta:
+      annual: Annual report
+      audited: Audited statement of accounts
+      disclosure: Project disclosure
+    pdf: PDF
+    seeAll: See all
+    foot: Registered {taxExemption} · {registered} · NGO Darpan {darpan} · PAN {pan}
+
+trustees:
+  heading: { before: Our, accent: trustees. }
+  lede: Proud Indian was founded in Bengaluru on 26 January 2019. These are its trustees.
+  glance:
+    stamp: At a glance
+    facts:
+      - { label: Founded, value: "{city}, {foundedLong}" }
+      - { label: NGO Darpan, value: "{darpan}" }
+      - { label: Registered, value: "{taxExemption} and {registered}" }
+      - { label: Audited, value: Every year since 2019–20 }
+    photo:
+      image: photos/about-awards-2024-25.jpg
+      alt: Optimists holding their trophies and certificates at the Proud Indian Awards 2024–25
+      caption: Proud Indian Awards 2024–25
+
+closing:
+  chip: Weekend sessions · Bengaluru
+  heading: { before: See you this, accent: weekend? }
+  lede: Volunteer for a weekend or give once. You don't need any experience to start.
+  join: Become an Optimist
+  donate: Fund a weekend
+  stripLabel: Recent sessions
+  strip:
+    - {
+        image: photos/strip-maths.jpg,
+        alt: Children working at their desks in maths class,
+        caption: Maths class,
+      }
+    - {
+        image: photos/strip-gift-a-smile.jpg,
+        alt: A boy smiling with his Gift a Smile present,
+        caption: Gift a Smile,
+      }
+    - {
+        image: photos/strip-kalakriti-pot.jpg,
+        alt: A boy painting a clay pot at Kalakriti 3.0,
+        caption: "Pot painting, Kalakriti",
+      }
+    - {
+        image: photos/strip-spoken-english.jpg,
+        alt: A boy speaking in front of the class at Spoken English,
+        caption: Spoken English,
+      }
+    - {
+        image: photos/strip-dance.jpg,
+        alt: Children in red T-shirts holding their dance trophies,
+        caption: Dance completion,
+      }
+
+footer:
+  logoLabel: "Proud Indian: connect, enlighten, empower. Home"
+  mission: A volunteer-run NGO in Bengaluru since 2019. Optimists, our volunteers, run classes, shared meals, Kalakriti and community days, mostly at weekends.
+  explore: Explore
+  navLabel: Footer
+  links:
+    - { label: Programmes, href: "#programmes" }
+    - { label: Kalakriti, href: "#kalakriti" }
+    - { label: Volunteer, href: "#volunteer" }
+    - { label: Donate, href: "#donate" }
+    - { label: Reports, href: "#reports" }
+    - { label: About, href: "#about" }
+    - { label: Privacy policy, href: /privacy/ }
+  write: Write to us
+  call: Call
+  visit: Visit
+  follow: Follow
+  stampsLabel: Registrations
+  stampsHeading: Registered and verifiable
+  copyright: © 2026 Proud Indian, Bengaluru
+  privacy: Privacy policy
+  pause:
+    label: Pause motion
+    on: Motion paused
+    idle: Stops the moving banner and animations across the site.
+    paused: Motion is paused on every page. Press again to resume.
+    reduced: Motion is off because your device asks for reduced motion.
+
+stickyBar:
+  lead: Fund a weekend
+  rest: " · 80G tax receipt"
+  donate: Donate

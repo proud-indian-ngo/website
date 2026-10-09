@@ -1,0 +1,164 @@
+---
+/**
+ * Volunteer (decision 7): how to join, the paper plane to "Become an Optimist", the "Next up" poster and the
+ * "More weekends" tickets (with no sessions, the empty-state poster and no tickets). Sessions come from the pi-dash
+ * public events API at build time (src/lib/events/load.ts) and are refreshed in the browser
+ * (src/scripts/events-refresh.ts); both render with src/lib/events/render.ts.
+ */
+import { getCopy, getSite } from "../../lib/content";
+import type { LoadedEvents } from "../../lib/events/load";
+import { type EventLabels, poster, tickets } from "../../lib/events/render";
+import { asset } from "../../lib/images";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import AlarmClock from "../doodles/AlarmClock.astro";
+import HandsUp from "../doodles/HandsUp.astro";
+import PlaneFlight from "../scenes/PlaneFlight.astro";
+import Sparkle from "../doodles/Sparkle.astro";
+import StepArrow from "../doodles/StepArrow.astro";
+import AccentWord from "../ui/AccentWord.astro";
+import Button from "../ui/Button.astro";
+import Sticker from "../ui/Sticker.astro";
+
+interface Props {
+  events: LoadedEvents;
+}
+
+const { events } = Astro.props;
+const { volunteer: v } = await getCopy();
+const site = await getSite();
+const labels: EventLabels = {
+  kicker: v.poster.kicker,
+  open: v.poster.open,
+  register: v.poster.register,
+  ticketRegister: v.ticketRegister,
+  empty: { ...v.empty, href: site.links.register },
+  unavailable: { ...v.unavailable, href: site.links.register },
+};
+// no sessions: the poster shows its empty state and the "More weekends" row hides (also with just one session).
+// If the build could not load the sessions, the same poster points to the dashboard; no sample sessions are shown.
+const p = poster(events.data.events, labels, events.source === "unavailable");
+const more = tickets(events.data.events, labels);
+// what the refresh script needs: the labels, what was built, and where to look for newer sessions
+const state = {
+  labels,
+  url: events.url,
+  events: events.data.events,
+};
+---
+
+<div class="s-vol">
+  <section
+    class="vol vC relative z-3 border-t-line border-ink bg-paper pt-28 pb-32 max-tab:pt-18 max-tab:pb-12"
+    id="volunteer"
+    data-spy="volunteer"
+    aria-label="Volunteer"
+    data-plane-stage=""
+    data-plane-mode="right"
+  >
+    <MarginDoodles set="vol" />
+    <PlaneFlight class="fly" aria-hidden="true" />
+    <div class="wrap relative mx-auto max-w-section px-14 max-tab:px-5">
+      <div class="ctop grid grid-cols-[.92fr_1.08fr] items-center gap-18 *:min-w-0 max-tab:grid-cols-1 max-tab:gap-16 tab:max-lap:grid-cols-1 tab:max-lap:gap-20">
+        <div class="cl" data-stagger="75">
+          <p
+            class="eb mb-5.5 inline-flex items-center gap-2 rounded-pill border-line border-ink bg-white py-1 pr-3.5 pl-1.5 font-pi-sans text-15 font-semibold"
+            data-reveal="rise"
+          >
+            <HandsUp class="pi-doodle w-[26px]" aria-hidden="true" />{v.eyebrow}
+          </p>
+          <h2
+            class="vh font-pi-display text-[100px] leading-[.88] font-extrabold tracking-poster text-balance max-tab:text-[58px] max-tab:leading-[.92] tab:max-lap:text-[clamp(72px,9vw,100px)]"
+            data-reveal="wipe"
+          >
+            {v.heading.before} <AccentWord class="relative inline-block">{v.heading.accent}</AccentWord>
+          </h2>
+          <p
+            class="lede mt-6.5 max-w-[44ch] font-pi-sans text-19 leading-lede font-normal text-pretty max-tab:mt-5 max-tab:text-17"
+            data-reveal="rise"
+          >
+            {v.lede}
+          </p>
+          <ol
+            class="hand relative mt-7.5 flex flex-wrap items-center gap-x-2.5 gap-y-2 font-pi-display text-21 leading-[1.1] font-extrabold tracking-label text-ink max-tab:flex-col max-tab:items-start max-tab:gap-2.5 max-tab:text-18"
+            aria-label={v.stepsLabel}
+          >
+            {
+              v.steps.map((s, i) => (
+                <Fragment>
+                  {i > 0 && (
+                    <li class="ha flex items-center gap-2 max-tab:hidden" aria-hidden="true">
+                      <StepArrow class="pi-doodle" aria-hidden="true" />
+                    </li>
+                  )}
+                  <li class="flex items-center gap-2">
+                    <span
+                      class="hn grid size-[30px] flex-none place-items-center rounded-round border-line border-ink bg-white font-pi-display text-16 font-extrabold text-ink"
+                      >{i + 1}</span
+                    >
+                    {/* step 1 is the one action: a real link to the dashboard; the other steps are plain text */}
+                    {i === 0 ? (
+                      <a
+                        class="tap-44 text-sky-ink underline decoration-[1.5px] underline-offset-4"
+                        href={site.links.register}
+                      >
+                        {s}
+                      </a>
+                    ) : (
+                      s
+                    )}
+                    {/* the paper plane's start point (positioned against the list; inside an <li> so the list is valid) */}
+                    {i === v.steps.length - 1 && <span class="pfrom" data-plane-from="" />}
+                  </li>
+                </Fragment>
+              ))
+            }
+          </ol>
+          <div class="ccta relative mt-[34px] flex flex-col items-start gap-3 max-tab:mt-24">
+            <span class="pfrom" data-plane-from-m=""></span><Button
+              href={site.links.register}
+              size="lg"
+              data-plane-target=""
+              arrow>{v.join}</Button
+            >
+            <p class="cnote font-pi-sans text-13 font-semibold tracking-caption text-text-muted">{v.joinNote}</p>
+          </div>
+        </div>
+        <div class="cr relative pt-1" data-events-source={events.source}>
+          <article
+            class:list={["poster", { "is-empty": p.empty }]}
+            aria-label={p.label}
+            data-events-poster
+          >
+            <Fragment set:html={p.body} />
+            <Sticker
+              class="kid"
+              src={asset(v.posterKid.image)}
+              alt={v.posterKid.label}
+              crop={v.posterKid.crop}
+              width={300}
+              phone="150px"
+            />
+            <Sparkle class="pi-doodle psp" fill="#4CC0EC" aria-hidden="true" />
+            {/* empty state only (CSS shows it under .is-empty); kept across refreshes so the loop system knows it */}
+            <AlarmClock class="pi-doodle vclock pclock loop" aria-hidden="true" />
+          </article>
+        </div>
+      </div>
+      <div class="cmore mt-[110px] max-tab:mt-20" hidden={!more}>
+        <div
+          class="mh mb-7 flex items-end justify-between gap-6 max-tab:flex-col max-tab:items-start max-tab:gap-3.5"
+        >
+          <h3 class="sh font-pi-display text-52 leading-[.95] font-extrabold tracking-heavy max-tab:text-40">
+            {v.more.heading}<AlarmClock class="pi-doodle vclock loop" aria-hidden="true" />
+          </h3>
+          <a
+            class="more tap-44 font-pi-sans text-15 font-semibold whitespace-nowrap text-sky-ink underline decoration-[1.5px] underline-offset-4"
+            href={site.links.register}
+            >{v.more.link} <span aria-hidden="true">→</span></a>
+        </div>
+        <ol class="stks pi-scroll-thin" data-events-list set:html={more} />
+      </div>
+    </div>
+    <script is:inline type="application/json" id="events-state" set:html={JSON.stringify(state).replace(/</g, "\\u003c")} />
+  </section>
+</div>

@@ -1,0 +1,84 @@
+/* Header: split sticker pills (decision 3). Layout, colour and type are utilities in Header.astro; this keeps the
+   tilt, the link states the scroll-spy toggles, and the burger's three bars. */
+.hd .pill.l {
+  transform: rotate(-1.2deg);
+}
+.hd .pill.r {
+  transform: rotate(1deg);
+}
+/* frosted paper where the browser can blur behind it; solid paper for reduced transparency and on slow devices
+   (html.lite-draw). Only the two small pills blur, never a full-width bar. */
+.hd .pill {
+  background: var(--color-paper-a94);
+}
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .hd .pill {
+    background: var(--color-paper-a82);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    backdrop-filter: blur(12px) saturate(180%);
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .hd .pill {
+    background: var(--color-surface-paper);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+html.lite-draw .hd .pill {
+  background: var(--color-surface-paper);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.hd .links a {
+  transition: background var(--dur-base);
+}
+@media (hover: hover) and (pointer: fine) {
+  .hd .links a:hover {
+    background: var(--color-ink-a5);
+  }
+}
+.hd .links i {
+  transition: background var(--dur-base);
+}
+.hd .links a.on {
+  background: var(--color-ink-a7);
+}
+.hd .links a.on i {
+  background: var(--color-surface-sky);
+}
+/* the header buttons sit flush in their pill (no resting shadow); hover lifts them onto a small hard shadow like the
+   body buttons, and a press sinks them back */
+.hd .pi-btn {
+  box-shadow: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .hd .pi-btn:hover {
+    transform: var(--btn-lift);
+    box-shadow: var(--shadow-ink-sm);
+  }
+}
+.hd .pi-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+.hd .logo:active,
+.burger:active {
+  scale: 0.97;
+}
+.burger {
+  transition: scale 160ms var(--ease-settle);
+}
+.burger span {
+  width: 16px;
+  height: 2px;
+  background: var(--color-white);
+  box-shadow:
+    0 -5px 0 var(--color-white),
+    0 5px 0 var(--color-white);
+}
+@media (width < --theme(--breakpoint-tab)) {
+  :root {
+    --header-h: var(--header-h-phone);
+  }
+}

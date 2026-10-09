@@ -1,0 +1,154 @@
+---
+/**
+ * Donate (decision 8): cyan headline and the ink gift card. Picking an amount updates the Razorpay deep link
+ * (src/scripts/donate.ts) and drops coins into the matka; the link works without JS at the default amount.
+ */
+import { facts, fill, getCopy, getSite } from "../../lib/content";
+import { asset } from "../../lib/images";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import HeartBadge from "../doodles/HeartBadge.astro";
+import Matka from "../doodles/Matka.astro";
+import Sparkle from "../doodles/Sparkle.astro";
+import AccentWord from "../ui/AccentWord.astro";
+import Button from "../ui/Button.astro";
+import Sticker from "../ui/Sticker.astro";
+
+const { donate: d } = await getCopy();
+const site = await getSite();
+const values = facts(site);
+const rzp = site.links.razorpay;
+const c = d.card;
+const preset = c.presets.find((p) => p.selected) ?? c.presets[0]!;
+const inr = (n: number) => n.toLocaleString("en-IN");
+const payUrl = `${rzp.base}?${rzp.param}=${preset.amount}`;
+---
+
+<div class="s-don">
+  <section
+    class="dsec dB relative z-3 overflow-hidden border-t-line border-ink bg-sky pt-[110px] max-tab:pt-16"
+    id="donate" data-spy="donate" aria-label="Donate">
+    <MarginDoodles set="don" tone="sky" />
+    <div class="dwrap bgrid relative mx-auto max-w-section px-14 max-tab:px-5" data-stagger="80">
+      <div class="bl flex min-w-0 flex-col items-start self-stretch max-tab:contents tab:max-lap:contents">
+        <p
+          class="deb mb-6 inline-flex items-center gap-2 self-start justify-self-start rounded-pill border-line border-ink bg-paper py-1 pr-3.5 pl-1.5 font-pi-sans text-15 font-semibold text-ink"
+          data-reveal="rise"
+        >
+          <HeartBadge class="pi-doodle w-6" aria-hidden="true" />{d.eyebrow}
+        </p>
+        <h2
+          class="dh font-pi-display text-96 leading-display font-extrabold tracking-poster text-balance max-tab:text-60 max-tab:leading-[.92]"
+          data-reveal="wipe"
+        >
+          {d.heading.before} <AccentWord variant="outline">{d.heading.accent}</AccentWord></h2>
+        <p
+          class="dlede mt-6 max-w-[40ch] font-pi-sans text-19 leading-lede font-normal text-pretty max-tab:mt-4.5 max-tab:text-17"
+          data-reveal="rise"
+        >
+          {d.lede}
+        </p>
+        <div class="brow mt-auto flex w-full items-end gap-[34px] pt-[34px] max-tab:contents tab:max-lap:order-2">
+          <div class="bstick relative flex-none max-tab:order-2 max-tab:mx-auto max-tab:pt-10">
+            <Sticker
+              class="bkid"
+              src={asset(d.kid.image)}
+              alt={d.kid.label}
+              crop={d.kid.crop}
+              width={290}
+              phone="260px"
+            />
+            <Sparkle class="pi-doodle bsp" aria-hidden="true" />
+          </div>
+          <ul
+            class="facts flex flex-col items-start gap-3.5 pb-16 max-tab:mt-6 max-tab:flex-row max-tab:flex-wrap max-tab:gap-2.5 max-tab:pb-0"
+          >
+            {
+              d.facts.map((f) => (
+                <li
+                  class="flex flex-col rounded-18 border-line border-ink bg-paper px-4.5 py-3 shadow-ink max-tab:px-3.5 max-tab:py-2.5"
+                >
+                  <b class="font-pi-display text-32 leading-none font-extrabold tracking-heading max-tab:text-26">
+                    {fill(f.value, values)}
+                  </b>
+                  <span class="mt-1 font-pi-sans text-13 font-semibold max-tab:text-12">{f.label}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+      <form
+        class="bcard relative mb-[110px] rounded-28 border-line border-ink bg-ink px-8 pt-8 pb-7 text-paper max-tab:order-1 max-tab:mx-0 max-tab:mt-10 max-tab:mb-0 max-tab:rounded-24 max-tab:px-4.5 max-tab:pt-6 max-tab:pb-5.5 tab:max-lap:order-1 tab:max-lap:mt-12 tab:max-lap:mb-0"
+        aria-label={c.label}
+        novalidate
+        data-donate-form
+        data-rzp-base={rzp.base}
+        data-rzp-param={rzp.param}
+        data-rzp-min={rzp.min}
+        data-label-donate={c.button}
+        data-label-low={fill(c.buttonLow, { min: inr(rzp.min) })}
+      >
+        <div class="bc-top mb-4 flex items-start justify-between gap-3">
+          <p class="plab flex flex-col gap-[3px] font-pi-sans text-15 font-semibold">{c.choose}</p><span
+            class="once rounded-pill border-line border-ink bg-paper px-[11px] py-1 font-pi-sans text-13 font-semibold whitespace-nowrap text-ink"
+            >{c.once}</span
+          >
+        </div>
+        <div class="bchips flex flex-wrap gap-2 max-tab:grid max-tab:w-full max-tab:grid-cols-[repeat(4,minmax(0,1fr))] max-tab:gap-1.5" role="group" aria-label={c.presetsLabel}>
+          {
+            c.presets.map((p) => (
+              <button
+                class="amt pill"
+                type="button"
+                aria-pressed={p === preset ? "true" : "false"}
+                data-amt={p.amount}
+                data-coins={p.coins}
+              >
+                ₹{inr(p.amount)}
+              </button>
+            ))
+          }
+        </div>
+        <label class="bfield mt-4.5 flex cursor-text flex-col gap-1.5 font-pi-sans text-13-5 font-medium"
+          ><span>{c.otherField}</span><span
+            class="bf flex items-center gap-2 rounded-14 border-line border-ink bg-paper px-4 py-[11px] font-pi-sans text-19 font-semibold text-ink"
+            ><b class="text-sky-ink">₹</b><input
+              class="amt-in oth w-full"
+              name="amount"
+              inputmode="numeric"
+              enterkeyhint="done"
+              pattern="[0-9]*"
+              autocomplete="off"
+              value=""
+              placeholder={c.otherPlaceholder}
+              aria-label={c.otherLabel}
+            /></span
+          ></label
+        >
+        <div class="btotal mt-5.5 flex items-end justify-between gap-3 border-t-line-dashed border-paper-a35 pt-4.5">
+          <div>
+            <p class="tl font-pi-sans text-14 font-semibold text-sky">{c.total}</p>
+            <p
+              class="tv mt-1.5 flex items-start font-pi-display text-92 leading-display font-extrabold tracking-tighter tabular-nums max-tab:text-[68px]"
+            ><sup>₹</sup><span data-amt-num="">{inr(preset.amount)}</span></p>
+          </div>
+          <div class="matka bmatka dark loop mb-1 w-32 flex-none max-tab:w-25" aria-hidden="true"><Matka /></div>
+        </div>
+        <p
+          class="mirror mt-3.5 mb-3 text-center font-pi-sans text-15 leading-[1.35] font-medium"
+          aria-live="polite" data-low="" hidden="" set:html={c.minimum} />
+        <Button
+          href={payUrl}
+          variant="donate"
+          size="xl"
+          block
+          target="_blank"
+          rel="noopener"
+          data-donate=""
+          arrow><span data-btn-label="">{c.button} ₹{inr(preset.amount)}</span></Button
+        >
+        <p class="fine mt-3.5 text-center font-pi-sans text-13-5 leading-[1.45] font-medium text-balance opacity-88">{c.fine}</p>
+      </form>
+    </div>
+  </section>
+</div>

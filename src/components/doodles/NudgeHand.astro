@@ -1,0 +1,9 @@
+---
+/** Pointing hand that nudges the hero call to action once (motion 11).
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0 0 96 64" {...Astro.props}><g class="nudge__hand"><path d="M5 23L17 21L19.5 46L7.5 48Z" fill="#F6F2EA"/><path class="pi-ln" d="M5 23L17 21L19.5 46L7.5 48Z"/><path d="M18 25C24 20 30 17.5 36 17.5L82 16.5C89 16.5 90 25 83.5 25.5L54 26C61 26.5 62 33 55.5 34C61 34.5 61.5 41 55.5 41.5C60.5 42.5 60 48.5 53 48.8L31 48.8C25 48.8 21 47.2 18.6 45.6Z" fill="#fff"/><path class="pi-ln" d="M18 25C24 20 30 17.5 36 17.5L82 16.5C89 16.5 90 25 83.5 25.5L54 26C61 26.5 62 33 55.5 34C61 34.5 61.5 41 55.5 41.5C60.5 42.5 60 48.5 53 48.8L31 48.8C25 48.8 21 47.2 18.6 45.6M31 28C38 31.5 46 31.5 54 26.5M86 8L91 3M88 14L95 12"/></g></svg>

@@ -1,0 +1,18 @@
+---
+/** Card: the rounded, outlined bento tile (@proudindian/design css/primitives/card.css). Renders <div> or <button>. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"div"> &
+  HTMLAttributes<"button"> & {
+    as?: "div" | "button";
+    variant?: "paper" | "paper-2" | "sky" | "wash" | "deep";
+  } & Record<`data-${string}`, string | boolean | undefined>;
+
+const { as: Tag = "div", variant = "paper", class: cls, ...rest } = Astro.props;
+---
+
+<Tag
+  class:list={["pi-card", variant !== "paper" && `pi-card--${variant}`, cls]}
+  type={Tag === "button" ? "button" : undefined}
+  {...rest}><slot /></Tag
+>

@@ -1,0 +1,76 @@
+---
+/**
+ * Privacy policy. The text lives in src/content/privacy.md; this page renders it with a table of contents built from
+ * its ## headings, and a "#" anchor link on every ## and ### heading. While the front matter says `draft: true`, the
+ * page shows the draft note and is noindex (astro.config.mjs also leaves it out of the sitemap).
+ * Styles: src/styles/sections/privacy.css (imported for this page only, via src/styles/privacy-page.css).
+ */
+import Lockup from "../components/brand/Lockup.astro";
+import Button from "../components/ui/Button.astro";
+import Base from "../layouts/Base.astro";
+// after Base, so global.css (and its @layer order) comes first
+import "../styles/privacy-page.css";
+import { getPrivacy } from "../lib/content";
+
+const policy = await getPrivacy();
+const toc = policy.headings.filter((h) => h.depth === 2);
+
+// Drop the team's <!-- CONFIRM --> notes from the output, and add a "#" link after each ## and ### heading so readers
+// can copy a link to a section.
+const html = policy.html.replace(/<!--[\s\S]*?-->/g, "").replace(
+  /<h([23]) id="([^"]+)">([\s\S]*?)<\/h\1>/g,
+  (_, level: string, id: string, text: string) =>
+    `<h${level} id="${id}">${text}<a class="pp-anchor" href="#${id}" aria-label="Link to this section">#</a></h${level}>`
+);
+---
+
+<Base
+  title="Privacy policy · Proud Indian"
+  description="How Proud Indian collects, uses and protects personal data from visitors, donors, volunteers and the children in our programmes."
+  noindex={policy.draft}
+>
+  <main id="main" class="min-h-dvh bg-paper px-14 py-16 max-tab:px-5 max-tab:py-10">
+    <div class="mx-auto max-w-[1120px]">
+      <a href="/" class="mb-14 inline-block text-ink max-tab:mb-10" aria-label="Proud Indian, home"
+        ><Lockup class="block aspect-[6.2877] h-7 w-auto" /></a
+      >
+
+      {
+        policy.draft && (
+          <p class="pp-draft" role="note">
+            <strong>Draft.</strong> {policy.draftNote}
+          </p>
+        )
+      }
+
+      <header class="max-w-[68ch]">
+        <h1 class="font-pi-display text-92 leading-display font-extrabold tracking-poster max-tab:text-56">
+          Privacy <span class="pi-accent">policy.</span>
+        </h1>
+        <p class="mt-8 font-pi-sans text-19 leading-lede max-tab:text-17">{policy.lede}</p>
+        <p class="mt-4 font-pi-sans text-15 text-text-muted">Effective date: {policy.effectiveDate}</p>
+      </header>
+
+      <div class="pp-layout">
+        <nav class="pp-toc" aria-labelledby="pp-toc-title">
+          <details open>
+            <summary id="pp-toc-title">On this page</summary>
+            <ol>
+              {
+                toc.map((h) => (
+                  <li>
+                    <a href={`#${h.slug}`}>{h.text}</a>
+                  </li>
+                ))
+              }
+            </ol>
+          </details>
+        </nav>
+
+        <article class="pp-body" set:html={html} />
+      </div>
+
+      <div class="mt-16"><Button href="/" arrow>Back to the home page</Button></div>
+    </div>
+  </main>
+</Base>

@@ -1,0 +1,63 @@
+---
+/** Phone and tablet poster menu (decision 3): full-screen cyan dialog opened from the header burger. */
+import { getCopy, getSite } from "../../lib/content";
+import { asset } from "../../lib/images";
+import { socialIcons } from "../../lib/social";
+import Lockup from "../brand/Lockup.astro";
+import Sticker from "../ui/Sticker.astro";
+
+const copy = await getCopy();
+const site = await getSite();
+const m = copy.menu;
+const r = site.registrations;
+const social = m.social.map((p) => {
+  const s = site.social.find((x) => x.network === p.network);
+  if (!s) throw new Error(`copy.yaml menu.social: no ${p.network} in site.yaml social`);
+  return { ...s, pill: p.label };
+});
+const pill = "rounded-pill border-line border-ink bg-paper px-[11px] py-[5px]";
+---
+
+<div
+  class="menu fixed inset-0 z-(--z-menu) flex flex-col overflow-x-hidden overflow-y-auto overscroll-contain bg-sky pt-24 pr-[max(--spacing(7),env(safe-area-inset-right))] pl-[max(--spacing(7),env(safe-area-inset-left))] pb-[max(--spacing(7),env(safe-area-inset-bottom))] max-tab:px-5.5 max-tab:pt-21 max-tab:pb-[max(--spacing(5.5),env(safe-area-inset-bottom))]"
+  id="menu" role="dialog" aria-modal="true" aria-label={m.label} hidden>
+  <a
+    class="slogo absolute top-5.5 left-[max(--spacing(6),env(safe-area-inset-left))] text-ink max-tab:top-5 max-tab:left-5"
+    href="#top"
+    aria-label={copy.nav.logoLabel}
+    data-menu-link><Lockup class="block aspect-[6.2877] h-7 w-auto max-tab:h-6" /></a
+  >
+  <button
+    class="x absolute top-4 right-[max(--spacing(4),env(safe-area-inset-right))] cursor-pointer rounded-pill border-line border-ink bg-ink px-[18px] py-[11px] font-pi-sans text-15 font-semibold text-white shadow-paper max-tab:top-3 max-tab:right-3"
+    type="button"
+    data-menu-close
+  >{m.close} <span aria-hidden="true">✕</span></button>
+  <nav class="mlinks relative z-2 flex flex-col" aria-label={m.label}>
+    {
+      m.links.map((l) => (
+        <a
+          class="big flex items-center justify-between border-b-line border-ink py-2.5 font-pi-display text-46 leading-title font-extrabold tracking-title max-tab:text-40"
+          href={l.href}
+          data-menu-link
+        >
+          {l.label} <span aria-hidden="true">→</span>
+        </a>
+      ))
+    }
+  </nav>
+  <ul class="util relative z-2 mt-auto flex max-w-[70%] flex-wrap gap-2 pt-7 font-pi-sans text-13 font-medium tracking-caption">
+    <li class={pill}>{r.taxExemption} · {r.registered}</li>
+    <li class={pill}>NGO Darpan {r.darpan}</li>
+    {
+      social.map((s) => (
+        <li class={pill}>
+          <a class="flex items-center gap-1.5" href={s.url} target="_blank" rel="noopener" aria-label={s.label}>
+            <svg viewBox="0 0 24 24" class="ic size-[15px]" aria-hidden="true" set:html={socialIcons[s.network]} />
+            {s.pill}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <Sticker class="kid" src={asset(m.kid)} alt="" width={136} />
+</div>

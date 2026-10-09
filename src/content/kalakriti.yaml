@@ -1,0 +1,119 @@
+# Kalakriti, the yearly festival (decision 6 and the 2026-10-08 facts update). Update this file for each edition.
+label: Kalakriti · our yearly festival
+heading:
+  word: Paint
+  walk: And sing, dance,
+  accent: perform.
+
+edition:
+  name: Kalakriti
+  version: "3.0"
+  presents: Proud Indian presents
+  ordinal: The 3rd edition
+  date: 20 Sep 2026
+  dateNote: One full day of arts and culture
+  # the poster's numbers; `highlight` is the one printed solid
+  lineup:
+    - { number: "1", word: day }
+    - { number: "500", word: children, highlight: true }
+    - { number: "8", word: events }
+    - { number: "200", word: volunteers }
+  billing: The 8 events
+  events:
+    [
+      Singing,
+      Solo dance,
+      Group dance,
+      Painting,
+      Pot painting,
+      Fancy dress,
+      Clay modelling,
+      Rangoli,
+    ]
+  # the three children standing on the poster's billing strip (left to right)
+  troupe:
+    - image: cutouts/Kalakriti3_DSC01695.png
+      alt: A girl in costume and jewellery, smiling, at the fancy dress event
+    - image: cutouts/Kalakriti3_AC_08849.png
+      alt: A girl in a mirror-work lehenga and dupatta, dancing on stage
+    - image: cutouts/Kalakriti3_IMG_4409.png
+      alt: A boy sitting cross-legged beside the pot he is painting
+
+tickets:
+  band: Kalakriti 3.0 · Optimist crew
+  pick: tear one off
+  volunteer:
+    kicker: Admit one · Optimist crew
+    title: Volunteer at Kalakriti
+    rail: [Kalakriti, Next edition, Register]
+    stub: Crew pass
+  sponsor:
+    kicker: Donate · patron
+    title: Sponsor Kalakriti
+    rail: [Kalakriti, Next edition, Donate]
+    stub: Patron
+  note: Once a year, Kalakriti gives children from our communities one full day of arts and culture, with a stage of their own and an audience cheering them on.
+
+line:
+  heading: All 8 events, on the line
+  stamp: Kalakriti 3.0 · 20 Sep 2026
+  regionLabel: Kalakriti 3.0 photos, one per event
+  swipe: swipe the line
+  # one polaroid per event, hung four to a string
+  photos:
+    - {
+        event: Singing,
+        image: photos/kala-singing.jpg,
+        alt: A boy singing into a microphone,
+        caption: At the mic,
+        position: 35% 30%,
+      }
+    - {
+        event: Solo dance,
+        image: photos/kala-solo-dance.jpg,
+        alt: "A girl in a sequinned pink dress, smiling mid-dance",
+        caption: Her solo,
+        position: 55% 30%,
+      }
+    - {
+        event: Group dance,
+        image: photos/kala-group-dance.jpg,
+        alt: Children in red sequinned jackets dancing together on stage,
+        caption: "In step, on stage",
+        position: 50% 30%,
+      }
+    - {
+        event: Painting,
+        image: photos/kala-painting.jpg,
+        alt: A boy sitting on the floor with a watercolour set and his painting,
+        caption: Watercolours on the floor,
+        position: 50% 40%,
+      }
+    - {
+        event: Pot painting,
+        image: photos/kala-pot-painting.jpg,
+        alt: A boy painting a clay pot blue and red,
+        caption: "A pot, painted by hand",
+        position: 50% 50%,
+      }
+    - {
+        event: Fancy dress,
+        image: photos/kala-fancy-dress.jpg,
+        alt: A girl in a sari holding a paper sword and a spotted shield,
+        caption: Sword and shield,
+        position: 50% 35%,
+      }
+    - {
+        event: Clay modelling,
+        image: photos/kala-clay-modelling.jpg,
+        alt: A boy rolling clay on newspaper,
+        caption: Rolling the clay,
+        position: 50% 40%,
+      }
+    - {
+        event: Rangoli,
+        image: photos/kala-rangoli.jpg,
+        alt: A boy crouching to draw a rangoli in chalk colours on the court,
+        caption: Rangoli on the court,
+        position: 50% 45%,
+      }

@@ -1,0 +1,4 @@
+/* Privacy page only (imported by src/pages/privacy.astro), so the home page doesn't carry it. Same layer as before;
+   @reference gives it the theme (for --theme() breakpoints) without emitting global.css a second time. */
+@reference "./global.css";
+@import "./sections/privacy.css" layer(components);

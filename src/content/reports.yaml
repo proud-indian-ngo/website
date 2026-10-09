@@ -1,0 +1,181 @@
+# Reports and disclosures (decision 9), shown in the Reports bento and drawer, newest first within each kind.
+# kind: annual | audited | disclosure. `year` is the financial year (2023-24); `date` is the month a disclosure was
+# issued (2025-09). The PDFs are in public/reports/, copied unaltered from the old site (pdf/ and pdf/latest/).
+# The bento counts, the drawer tab counts and the year ranges are all derived from this list.
+- id: annual-2023-24
+  kind: annual
+  title: "Annual report 2023-24"
+  year: 2023-24
+  url: /reports/annual-report-2023-24.pdf
+- id: annual-2022-23
+  kind: annual
+  title: "Annual report 2022-23"
+  year: 2022-23
+  url: /reports/annual-report-2022-23.pdf
+- id: annual-2021-22
+  kind: annual
+  title: "Annual report 2021-22"
+  year: 2021-22
+  url: /reports/annual-report-2021-22.pdf
+- id: annual-2020-21
+  kind: annual
+  title: "Annual report 2020-21"
+  year: 2020-21
+  url: /reports/annual-report-2020-21.pdf
+- id: annual-2019-20
+  kind: annual
+  title: "Annual report 2019-20"
+  year: 2019-20
+  url: /reports/annual-report-2019-20.pdf
+- id: audited-2024-25
+  kind: audited
+  title: "Audited financials 2024-25"
+  year: 2024-25
+  url: /reports/audited-financials-2024-25.pdf
+- id: audited-2023-24
+  kind: audited
+  title: "Audited financials 2023-24"
+  year: 2023-24
+  url: /reports/audited-financials-2023-24.pdf
+- id: audited-2022-23
+  kind: audited
+  title: "Audited financials 2022-23"
+  year: 2022-23
+  url: /reports/audited-financials-2022-23.pdf
+- id: audited-2021-22
+  kind: audited
+  title: "Audited financials 2021-22"
+  year: 2021-22
+  url: /reports/audited-financials-2021-22.pdf
+- id: audited-2020-21
+  kind: audited
+  title: "Audited financials 2020-21"
+  year: 2020-21
+  url: /reports/audited-financials-2020-21.pdf
+- id: audited-2019-20
+  kind: audited
+  title: "Audited financials 2019-20"
+  year: 2019-20
+  url: /reports/audited-financials-2019-20.pdf
+- id: kalakriti-2-0
+  kind: disclosure
+  title: "Kalakriti 2.0"
+  date: "2025-09"
+  url: /reports/disclosure-kalakriti-2-0.pdf
+# `featured` puts the title on the top card of the bento's document fan
+- id: gift-distribution-2025
+  kind: disclosure
+  title: "Gift Distribution 2025"
+  date: "2025-04"
+  url: /reports/disclosure-gift-distribution-2025-04.pdf
+  featured: true
+- id: kalakriti-24
+  kind: disclosure
+  title: "Kalakriti ’24"
+  date: "2024-11"
+  url: /reports/disclosure-kalakriti-24-2024-11.pdf
+- id: iisc-visit
+  kind: disclosure
+  title: "A visit to IISc Bangalore"
+  date: "2024-02"
+  url: /reports/disclosure-iisc-visit-2024-02.pdf
+- id: gift-distribution-2024
+  kind: disclosure
+  title: "Gift Distribution 2024"
+  date: "2024-01"
+  url: /reports/disclosure-gift-distribution-2024-01.pdf
+- id: ro-installation-gubbachi
+  kind: disclosure
+  title: "RO water dispenser, Gubbachi school"
+  date: "2023-08"
+  url: /reports/disclosure-ro-installation-gubbachi-2023-08.pdf
+- id: nutrify-the-needful-3
+  kind: disclosure
+  title: "Nutrify the Needful, event 3"
+  date: "2022-04"
+  url: /reports/disclosure-nutrify-the-needful-3-2022-04.pdf
+- id: candle-making
+  kind: disclosure
+  title: "Candle making with Iblur children"
+  date: "2022-03"
+  url: /reports/disclosure-candle-making-2022-03.pdf
+- id: nutrify-the-needful-2
+  kind: disclosure
+  title: "Nutrify the Needful, event 2"
+  date: "2022-02"
+  url: /reports/disclosure-nutrify-the-needful-2-2022-02.pdf
+- id: crash-trolley-halasuru
+  kind: disclosure
+  title: "Crash trolley, Halasuru Referral Hospital"
+  date: "2022-01"
+  url: /reports/disclosure-crash-trolley-halasuru-2022-01.pdf
+- id: zoo-visit
+  kind: disclosure
+  title: "Zoo visit for community children"
+  date: "2021-12"
+  url: /reports/disclosure-zoo-visit-2021-12.pdf
+- id: nutrify-the-needful-1
+  kind: disclosure
+  title: "Nutrify the Needful, event 1"
+  date: "2021-12"
+  url: /reports/disclosure-nutrify-the-needful-1-2021-12.pdf
+- id: library-byramangala
+  kind: disclosure
+  title: "Gram Panchayat library, Byramangala"
+  date: "2021-12"
+  url: /reports/disclosure-library-byramangala-2021-12.pdf
+- id: library-bannikuppe
+  kind: disclosure
+  title: "Gram Panchayat library, Bannikuppe"
+  date: "2021-11"
+  url: /reports/disclosure-library-bannikuppe-2021-11.pdf
+- id: covid-care-rajajinagar
+  kind: disclosure
+  title: "COVID care centre supplies, Rajajinagar"
+  date: "2021-05"
+  url: /reports/disclosure-covid-care-rajajinagar-2021-05.pdf
+- id: library-gopahalli
+  kind: disclosure
+  title: "Government library, Gopahalli Panchayat"
+  date: "2021-05"
+  url: /reports/disclosure-library-gopahalli-2021-05.pdf
+- id: school-devashettahalli
+  kind: disclosure
+  title: "Government school, Devashettahalli"
+  date: "2021-05"
+  url: /reports/disclosure-school-devashettahalli-2021-05.pdf
+- id: covid-care-shanthi-nagar
+  kind: disclosure
+  title: "COVID care centre supplies, Shanthi Nagar"
+  date: "2021-05"
+  url: /reports/disclosure-covid-care-shanthi-nagar-2021-05.pdf
+- id: clay-station-aprons
+  kind: disclosure
+  title: "Clay Station aprons"
+  date: "2021-03"
+  url: /reports/disclosure-clay-station-aprons-2021-03.pdf
+- id: generous-mosquito-nets
+  kind: disclosure
+  title: "Generous 2020: mosquito nets"
+  date: "2020-10"
+  url: /reports/disclosure-generous-mosquito-nets-2020-10.pdf
+- id: covid-family-kits-2
+  kind: disclosure
+  title: "COVID-19 family kits, phase 2"
+  date: "2020-06"
+  url: /reports/disclosure-covid-family-kits-phase-2-2020-06.pdf
+- id: covid-family-kits-1
+  kind: disclosure
+  title: "COVID-19 family kits, phase 1"
+  date: "2020-05"
+  url: /reports/disclosure-covid-family-kits-phase-1-2020-05.pdf
+- id: helios-solar-2
+  kind: disclosure
+  title: "Helios solar, phase 2"
+  date: "2019-09"
+  url: /reports/disclosure-helios-solar-phase-2-2019-09.pdf
+- id: helios-solar-1
+  kind: disclosure
+  title: "Helios solar, phase 1"
+  date: "2019-07"
+  url: /reports/disclosure-helios-solar-phase-1-2019-07.pdf

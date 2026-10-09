@@ -1,0 +1,144 @@
+---
+/** Footer (decision 10): contacts, registrations stamps, the Pause motion toggle (WCAG 2.2.2) and the
+ *  notebook-margin doodles. */
+import { getCopy, getSite } from "../../lib/content";
+import { socialIcons as icons } from "../../lib/social";
+import Lockup from "../brand/Lockup.astro";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import FooterMargins from "../scenes/FooterMargins.astro";
+
+const { footer: f } = await getCopy();
+const site = await getSite();
+const r = site.registrations;
+const stamp =
+  "stamp mb-3 inline-block rounded-3 bg-paper px-2.5 pt-1 pb-[3px] font-pi-sans text-13 font-bold tracking-stamp text-ink uppercase";
+const body = "font-pi-sans text-15-5 leading-copy font-normal text-paper-a90";
+const small = "block font-pi-sans text-13-5 font-medium text-paper-a78";
+const link = "tap-44 font-pi-sans text-16 font-semibold wrap-anywhere";
+---
+
+<div class="s-ft">
+  <footer id="contact" class="ft-foot fC-foot relative z-3 bg-ink pb-10 text-paper">
+    <span class="fC-road" aria-hidden="true"></span>
+    <FooterMargins />
+    <MarginDoodles set="ft" tone="ink" />
+    <div class="ft-wrap relative mx-auto max-w-footer px-14 max-tab:px-5">
+      <div
+        class="fC-grid relative z-2 grid grid-cols-[1.2fr_.65fr_1.6fr] gap-14 pt-18 max-nav:grid-cols-2 max-tab:grid-cols-1 max-tab:gap-10 max-tab:pt-[52px]"
+      >
+        <div>
+          <a class="ft-logo tap-44 block w-[360px] max-w-full text-paper max-tab:w-[270px]" href="/#top" aria-label={f.logoLabel}
+            ><Lockup variant="full" class="block h-auto w-full" /></a
+          >
+          <p class="mis mt-5.5 max-w-[30ch] font-pi-sans text-16 leading-copy font-normal text-paper-a86">{f.mission}</p>
+        </div>
+        <nav aria-label={f.navLabel}>
+          <span class={stamp}>{f.explore}</span>
+          <ul class="ft-links space-y-2.5">
+            {
+              f.links.map((l) => (
+                <li>
+                  <a href={l.href} class="tap-44 font-pi-sans text-17 font-semibold">
+                    {l.label}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <div
+          class="fC-cg grid grid-cols-2 gap-x-9 gap-y-7.5 max-nav:col-span-full max-tab:grid-cols-1 max-tab:gap-7"
+        >
+          <div>
+            <span class={stamp}>{f.write}</span>
+            <ul class="space-y-[9px]">
+              {
+                site.contacts.emails.map((e) => (
+                  <li class={body}>
+                    <small class={small}>{e.label}</small>
+                    <a href={`mailto:${e.address}`} class={link}>
+                      {e.address}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          <div>
+            <span class={stamp}>{f.call}</span>
+            <ul>
+              <li class={body}>
+                <small class={small}>{site.contacts.phone.label}</small><a
+                  class={link}
+                  href={`tel:${site.contacts.phone.tel}`}
+                  >{site.contacts.phone.display}</a
+                >
+              </li>
+            </ul>
+            <span class:list={[stamp, "mt-6.5"]}>{f.visit}</span>
+            <p class={body}><small class={small}>{site.contacts.address.label}</small>{site.contacts.address.text}</p>
+          </div>
+          <div class="col-span-full">
+            <span class={stamp}>{f.follow}</span>
+            <div class="fC-soc flex flex-wrap gap-2.5">
+              {
+                site.social.map((s) => (
+                  <a
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label={s.label}
+                    class="grid size-[46px] place-items-center rounded-round border-line border-paper-a60"
+                  >
+                    <svg viewBox="0 0 24 24" class="ico size-[22px]" aria-hidden="true" set:html={icons[s.network]} />
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="fC-stamps relative z-2 mt-16 flex flex-wrap items-center gap-x-5.5 gap-y-4.5 border-t-line-dashed border-paper-a35 pt-[34px] max-tab:mt-11 max-tab:gap-4"
+        aria-label={f.stampsLabel}
+      >
+        <p
+          class="lab2 mr-1.5 max-w-[18ch] font-pi-sans text-14 font-semibold text-paper-a82 max-tab:max-w-none max-tab:basis-full"
+        >{f.stampsHeading}</p><span class="rs round"
+          ><b>{r.taxExemption}</b>Tax<br />exempt</span
+        ><span class="rs round"><b>{r.registered}</b>Regd.</span><span
+          class="rs rect">NGO Darpan<b>{r.darpan}</b></span
+        ><span class="rs rect">PAN<b>{r.pan}</b></span>
+      </div>
+      <div
+        class="ft-legal relative z-2 mt-10 flex flex-wrap items-center justify-between gap-x-7 gap-y-4.5 font-pi-sans text-14 font-medium text-paper-a82 max-tab:flex-col max-tab:items-start max-tab:gap-4.5"
+      >
+        <div class="l flex flex-wrap items-center gap-x-6 gap-y-2.5">
+          <span>{f.copyright}</span><a href="/privacy/" class="tap-44 underline decoration-1 underline-offset-3">{f.privacy}</a>
+        </div>
+        <div class="ft-pm flex flex-wrap items-center gap-3.5 max-tab:flex-col max-tab:items-start max-tab:gap-2.5">
+          <button
+            type="button"
+            class="ft-pmb"
+            aria-pressed="false"
+            aria-describedby="pm-s"
+            data-pause
+            data-idle={f.pause.idle}
+            data-paused={f.pause.paused}
+            data-reduced={f.pause.reduced}
+            ><svg viewBox="0 0 20 20" class="ic" aria-hidden="true"
+              ><g class="pa" fill="currentColor"
+                ><rect x="4.5" y="3.5" width="3.6" height="13" rx="1.2"></rect><rect
+                  x="11.9"
+                  y="3.5"
+                  width="3.6"
+                  height="13"
+                  rx="1.2"></rect></g
+              ></svg
+            ><span class="t">{f.pause.label}</span><span class="t-on">{f.pause.on}</span><span class="sw" aria-hidden="true"><i></i></span></button
+          ><span class="ft-pms max-w-[30ch] font-pi-sans text-13-5 font-medium text-paper-a82" id="pm-s">{f.pause.idle}</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>

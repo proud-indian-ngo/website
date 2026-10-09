@@ -1,0 +1,74 @@
+---
+/**
+ * Doodle: any of the generic brand doodles by name (section-specific scenes live in src/components/scenes/). Each doodle is a single-purpose component in
+ * src/components/doodles/ whose SVG can be lifted out as-is; they share the 3px ink line (.pi-ln,
+ * @proudindian/design css/primitives/doodle.css). Pass `class="pi-doodle ..."` for a block-level doodle, `loop` to register an
+ * ambient animation with the off-screen pause, and data-reveal for the scroll-in reveal.
+ */
+import type { HTMLAttributes } from "astro/types";
+import AlarmClock from "../doodles/AlarmClock.astro";
+import Book from "../doodles/Book.astro";
+import Bowl from "../doodles/Bowl.astro";
+import ClosingBird from "../doodles/ClosingBird.astro";
+import ClosingPlane from "../doodles/ClosingPlane.astro";
+import ClosingSquiggle from "../doodles/ClosingSquiggle.astro";
+import CollageSun from "../doodles/CollageSun.astro";
+import HandsUp from "../doodles/HandsUp.astro";
+import HeartBadge from "../doodles/HeartBadge.astro";
+import HeartBeat from "../doodles/HeartBeat.astro";
+import HeartChip from "../doodles/HeartChip.astro";
+import HeroSun from "../doodles/HeroSun.astro";
+import KalaSparkle from "../doodles/KalaSparkle.astro";
+import Matka from "../doodles/Matka.astro";
+import Notepad from "../doodles/Notepad.astro";
+import NudgeHand from "../doodles/NudgeHand.astro";
+import PerchedBird from "../doodles/PerchedBird.astro";
+import PosterStar from "../doodles/PosterStar.astro";
+import Sparkle from "../doodles/Sparkle.astro";
+import Squiggle from "../doodles/Squiggle.astro";
+import StepArrow from "../doodles/StepArrow.astro";
+import SwipeArrow from "../doodles/SwipeArrow.astro";
+import TicketArrow from "../doodles/TicketArrow.astro";
+import UnderlineLoop from "../doodles/UnderlineLoop.astro";
+
+export const doodles = {
+  "alarm-clock": AlarmClock,
+  book: Book,
+  bowl: Bowl,
+  "closing-bird": ClosingBird,
+  "closing-plane": ClosingPlane,
+  "closing-squiggle": ClosingSquiggle,
+  "collage-sun": CollageSun,
+  "hands-up": HandsUp,
+  "heart-badge": HeartBadge,
+  "heart-beat": HeartBeat,
+  "heart-chip": HeartChip,
+  "hero-sun": HeroSun,
+  "kala-sparkle": KalaSparkle,
+  matka: Matka,
+  notepad: Notepad,
+  "nudge-hand": NudgeHand,
+  "perched-bird": PerchedBird,
+  "poster-star": PosterStar,
+  sparkle: Sparkle,
+  squiggle: Squiggle,
+  "step-arrow": StepArrow,
+  "swipe-arrow": SwipeArrow,
+  "ticket-arrow": TicketArrow,
+  "underline-loop": UnderlineLoop,
+} as const;
+
+export type DoodleName = keyof typeof doodles;
+
+type Props = HTMLAttributes<"svg"> & {
+  name: DoodleName;
+  /** register as an ambient loop (paused off-screen, under Pause and reduced motion) */
+  loop?: boolean;
+} & Record<`data-${string}`, string | boolean | undefined>;
+
+const { name, loop = false, class: cls, ...rest } = Astro.props;
+// every doodle takes the same SVG props (Sparkle adds an optional fill)
+const Component = doodles[name] as typeof Book;
+---
+
+<Component class:list={[cls, loop && "loop"]} aria-hidden="true" {...rest} />

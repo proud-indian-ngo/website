@@ -1,0 +1,552 @@
+---
+/**
+ * Style guide for developers and the team: tokens, contrast, type, spacing, radii, shadows, motion and every
+ * primitive. Not linked from the site, noindex, and excluded from the sitemap (astro.config.mjs).
+ */
+import Button from "../components/ui/Button.astro";
+import Card from "../components/ui/Card.astro";
+import Chip from "../components/ui/Chip.astro";
+import AccentWord from "../components/ui/AccentWord.astro";
+import Doodle, { doodles } from "../components/ui/Doodle.astro";
+import Peg from "../components/ui/Peg.astro";
+import Polaroid from "../components/ui/Polaroid.astro";
+import SectionLabel from "../components/ui/SectionLabel.astro";
+import Sticker from "../components/ui/Sticker.astro";
+import Ticket from "../components/ui/Ticket.astro";
+import Base from "../layouts/Base.astro";
+import { asset } from "../lib/images";
+import {
+  border,
+  breakpoint,
+  color,
+  container,
+  display,
+  leading,
+  motion,
+  radius,
+  radiusShape,
+  semanticColor,
+  shadow,
+  text,
+  tracking,
+  z,
+} from "@proudindian/design/tokens";
+
+// ---- WCAG contrast
+const lum = (hex: string) => {
+  const n = parseInt(hex.slice(1), 16);
+  const ch = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c) => {
+    const s = c / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * ch[0]! + 0.7152 * ch[1]! + 0.0722 * ch[2]!;
+};
+const ratio = (a: string, b: string) => {
+  const [x, y] = [lum(a), lum(b)].toSorted((p, q) => q - p);
+  return (x! + 0.05) / (y! + 0.05);
+};
+const grade = (r: number) => (r >= 7 ? "AAA" : r >= 4.5 ? "AA" : r >= 3 ? "AA large" : "fail");
+const kebab = (s: string) => s.replace(/([a-z0-9])([A-Z])/g, "$1-$2").replace(/([a-z])(\d)/g, "$1-$2").toLowerCase();
+const swatches = Object.entries(color).map(([k, hex]) => ({
+  name: kebab(k),
+  hex,
+  vs: [
+    { on: "ink", r: ratio(hex, color.ink) },
+    { on: "paper", r: ratio(hex, color.paper) },
+    { on: "white", r: ratio(hex, color.white) },
+  ],
+}));
+const pairs = [
+  ["ink", "paper", "body text"],
+  ["ink", "sky", "text on cyan bands"],
+  ["paper", "ink", "text on ink"],
+  ["skyInk", "paper", "accent words, links"],
+  ["skyDeep", "paper", "focus ring"],
+  ["sky", "ink", "accent on ink"],
+  ["ink", "marigold", "donate buttons"],
+  ["mute", "paper", "muted text"],
+] as const;
+const textSteps = [...text].toReversed();
+const spaceSteps = [1, 2, 3, 4, 5, 6, 8, 10, 12, 14, 16, 20, 24, 28, 32];
+const loops = Object.entries(motion.loop);
+---
+
+<Base title="Style guide · Proud Indian" description="Proud Indian design tokens and primitives." noindex>
+  <main id="main" class="sg bg-paper px-14 pt-14 pb-32 text-ink max-tab:px-5">
+    <header class="mx-auto mb-16 max-w-section">
+      <SectionLabel num="SG">Proud Indian style system</SectionLabel>
+      <h1 class="mt-4 font-pi-display text-96 leading-display font-extrabold tracking-poster max-tab:text-56">
+        Tokens and <AccentWord>primitives.</AccentWord>
+      </h1>
+      <p class="mt-6 max-w-[60ch] text-17 leading-lede">
+        Source of truth: <code>@proudindian/design</code>. Its <code>tokens/*.ts</code> generate <code>theme.css</code>
+        (Tailwind v4 <code>@theme</code>) and <code>tokens.css</code>. Primitives live in its <code>css/primitives/</code>
+        as plain <code>.pi-*</code> classes and in <code>src/components/ui/</code> as Astro components.
+      </p>
+      <div class="mt-6 flex flex-wrap items-center gap-3">
+        <button
+          type="button"
+          class="ft-pmb-sg pi-btn pi-btn--ghost"
+          aria-pressed="false"
+          data-pause
+          data-idle="Motion is on. Press to pause every demo."
+          data-paused="Motion is paused (saved for the whole site)."
+          data-reduced="Motion is off because your device asks for reduced motion.">Pause motion</button
+        >
+        <span id="pm-s" class="text-14 text-text-muted">Motion is on. Press to pause every demo.</span>
+      </div>
+    </header>
+
+    <section class="sg-sec">
+      <h2 class="sg-h">Colour</h2>
+      <p class="sg-note">Contrast against ink, paper and white (WCAG 2.2: 4.5 for text, 3 for large text and UI).</p>
+      <ul class="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
+        {
+          swatches.map((s) => (
+            <li class="overflow-hidden rounded-14 border-line border-ink bg-white">
+              <div class="h-20 border-b-line border-ink" style={`background:${s.hex}`} />
+              <div class="p-3">
+                <p class="font-pi-display text-17 font-extrabold">{s.name}</p>
+                <p class="font-mono text-13 text-text-muted">
+                  {s.hex} · <code>bg-{s.name}</code>
+                </p>
+                <ul class="mt-2 space-y-0.5 text-13">
+                  {s.vs.map((v) => (
+                    <li>
+                      on {v.on}: <b>{v.r.toFixed(2)}</b> <span class="text-text-muted">{grade(v.r)}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+      <h3 class="sg-h3">Pairs in use</h3>
+      <ul class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-3">
+        {
+          pairs.map(([fg, bg, use]) => (
+            <li class="rounded-10 border-line border-ink p-4" style={`color:${color[fg]};background:${color[bg]}`}>
+              <p class="font-pi-display text-22 font-extrabold">Aa {use}</p>
+              <p class="text-13">
+                {kebab(fg)} on {kebab(bg)} · {ratio(color[fg], color[bg]).toFixed(2)}:1 ·{" "}
+                {grade(ratio(color[fg], color[bg]))}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+      <h3 class="sg-h3">Roles</h3>
+      <ul class="flex flex-wrap gap-2">
+        {
+          Object.entries(semanticColor).map(([k, v]) => (
+            <li class="flex items-center gap-2 rounded-pill border-line border-ink bg-white py-1 pr-3 pl-1 text-13">
+              <span class="size-5 rounded-round border-line border-ink" style={`background:${v}`} />
+              <code>{k}</code>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="sg-sec">
+      <h2 class="sg-h">Type</h2>
+      <p class="sg-note">
+        Bricolage Grotesque 800 for display (<code>font-pi-display</code>), Geist for text (<code>font-pi-sans</code>). No
+        italics. Every step sets line-height normal, like the prototype's <code>font:</code> shorthand.
+      </p>
+      <div class="space-y-3">
+        {
+          Object.entries(display).map(([k, v]) => (
+            <div class="overflow-hidden border-b-line border-ink-a14 pb-3">
+              <p class="text-13 text-text-muted">
+                <code>text-{k}</code> · {v}
+              </p>
+              <p
+                class="font-pi-display leading-[.82] font-extrabold tracking-tighter whitespace-nowrap"
+                style={`font-size:${v.startsWith("clamp") ? v : "20vw"}`}
+              >
+                {k.startsWith("verb") ? "Teach." : "Optimist."}
+              </p>
+            </div>
+          ))
+        }
+        {
+          textSteps.map((n) => (
+            <div class="flex items-baseline gap-6 border-b-line border-ink-a14 pb-2">
+              <code class="w-24 flex-none text-13 text-text-muted">text-{String(n).replace(".", "-")}</code>
+              <p
+                class:list={["truncate", n >= 22 ? "font-pi-display font-extrabold tracking-heading" : "font-pi-sans"]}
+                style={`font-size:${n}px`}
+              >
+                {n >= 22 ? "Be an Optimist" : "Most weekends we’re with children in Bengaluru."}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+      <div class="mt-8 grid grid-cols-2 gap-8 max-tab:grid-cols-1">
+        <div>
+          <h3 class="sg-h3">Line height</h3>
+          <ul class="space-y-1 text-14">
+            {
+              Object.entries(leading).map(([k, v]) => (
+                <li>
+                  <code>leading-{k}</code> · {v}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div>
+          <h3 class="sg-h3">Letter spacing</h3>
+          <ul class="space-y-1 text-14">
+            {
+              Object.entries(tracking).map(([k, v]) => (
+                <li>
+                  <code>tracking-{k}</code> · {v}{" "}
+                  <span class="font-pi-display text-20 font-extrabold" style={`letter-spacing:${v}`}>
+                    Kalakriti
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="sg-sec">
+      <h2 class="sg-h">Space, radius, line, shadow</h2>
+      <p class="sg-note">
+        Markup uses Tailwind's 4px spacing with quarter steps (<code>p-3.5</code> is 14px). Hand-written CSS uses
+        <code>var(--space-N)</code>.
+      </p>
+      <ul class="space-y-1.5">
+        {
+          spaceSteps.map((n) => (
+            <li class="flex items-center gap-4 text-13">
+              <code class="w-28">p-{n} · {n * 4}px</code>
+              <span class="h-3 rounded-pill bg-sky" style={`width:${n * 4}px`} />
+            </li>
+          ))
+        }
+      </ul>
+      <h3 class="sg-h3">Radius</h3>
+      <ul class="flex flex-wrap gap-4">
+        {
+          [...radius.map((n) => [String(n), `${n}px`]), ...Object.entries(radiusShape)].map(([k, v]) => (
+            <li class="text-center text-12">
+              <span class="mb-1 block size-20 border-line border-ink bg-white" style={`border-radius:${v}`} />
+              <code>rounded-{k}</code>
+            </li>
+          ))
+        }
+      </ul>
+      <h3 class="sg-h3">Lines</h3>
+      <ul class="flex flex-wrap gap-6 text-13">
+        {
+          Object.entries(border).map(([k, v]) => (
+            <li>
+              <span class="mb-1 block h-10 w-32 bg-white" style={`border:${v} solid var(--color-ink)`} />
+              <code>--border-{k}</code> · {v}
+            </li>
+          ))
+        }
+        <li>
+          <span class="mb-1 block h-10 w-32 border-line border-ink bg-white"></span><code>border-line border-ink</code>
+        </li>
+        <li>
+          <span class="mb-1 block h-10 w-32 border-line-dashed border-ink bg-white"></span><code>border-line-dashed</code>
+        </li>
+      </ul>
+      <h3 class="sg-h3">Shadows</h3>
+      <ul class="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-6 bg-sky-wash p-6">
+        {
+          Object.keys(shadow).map((k) => (
+            <li class="text-center text-12">
+              <span
+                class:list={["mb-2 block h-16 rounded-10 border-line border-ink", k.includes("paper") ? "bg-ink" : "bg-white"]}
+                style={`box-shadow:var(--shadow-${k})`}
+              />
+              <code>shadow-{k}</code>
+            </li>
+          ))
+        }
+      </ul>
+      <h3 class="sg-h3">Sticker outline</h3>
+      <div class="flex items-end gap-10 bg-sky p-6">
+        <Sticker src={asset("cutouts/GiftASmile2026_DSC_0036.png")} alt="Sticker sample" width={120} class="h-40 w-auto" />
+        <p class="text-14">
+          <code>.pi-sticker</code> / <code>sticker-outline</code>: 5px paper outline (four hard drop-shadows) plus a soft
+          lift.
+        </p>
+      </div>
+    </section>
+
+    <section class="sg-sec">
+      <h2 class="sg-h">Layout</h2>
+      <div class="grid grid-cols-3 gap-8 text-14 max-tab:grid-cols-1">
+        <div>
+          <h3 class="sg-h3">Breakpoints</h3>
+          <ul class="space-y-1">
+            {
+              Object.entries(breakpoint).map(([k, v]) => (
+                <li>
+                  <code>{k}:</code> ≥{v}px · <code>max-{k}:</code> &lt;{v}px
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div>
+          <h3 class="sg-h3">Containers</h3>
+          <ul class="space-y-1">
+            {
+              Object.entries(container).map(([k, v]) => (
+                <li>
+                  <code>max-w-{k}</code> · {v}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <div>
+          <h3 class="sg-h3">Z-index</h3>
+          <ul class="space-y-1">
+            {
+              Object.entries(z).map(([k, v]) => (
+                <li>
+                  <code>z-(--z-{kebab(k)})</code> · {v}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="sg-sec">
+      <h2 class="sg-h">Motion</h2>
+      <p class="sg-note">
+        Only transform, opacity, clip-path and stroke-dashoffset animate. Loops run only under
+        <code>html[data-motion=on]</code>: the Pause button above and reduced motion stop them all.
+      </p>
+      <div class="grid grid-cols-2 gap-8 max-tab:grid-cols-1">
+        <ul class="space-y-1 text-14">
+          {
+            Object.entries(motion.duration).map(([k, v]) => (
+              <li>
+                <code>--dur-{k}</code> · {v}
+              </li>
+            ))
+          }
+          {
+            Object.entries(motion.ease).map(([k, v]) => (
+              <li class="flex items-center gap-3">
+                <code class="w-36">ease-{k}</code>
+                <span class="sg-track">
+                  <span class="sg-dot" style={`animation-timing-function:${v}`} />
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+        <ul class="grid grid-cols-3 gap-3 text-12">
+          {
+            loops.map(([k, v]) => (
+              <li class="rounded-10 border-line border-ink bg-white p-2 text-center">
+                <span class="sg-loop loop" style={`animation-duration:${v}`} />
+                <code>--loop-{k}</code> {v}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <h3 class="sg-h3">Scroll-in reveal</h3>
+      <div class="flex flex-wrap items-end gap-6" data-stagger="120">
+        <p data-reveal="rise" class="rounded-10 border-line border-ink bg-white p-4">rise</p>
+        <p data-reveal="slap" class="rounded-10 border-line border-ink bg-white p-4">slap</p>
+        <p data-reveal="hang" class="rounded-10 border-line border-ink bg-white p-4">hang</p>
+        <p data-reveal="wipe" class="font-pi-display text-56 font-extrabold">wipe</p>
+        <Doodle name="squiggle" class="pi-doodle h-8 w-48" data-reveal="draw" />
+      </div>
+    </section>
+
+    <section class="sg-sec">
+      <h2 class="sg-h">Primitives</h2>
+      <h3 class="sg-h3">Button</h3>
+      {
+        (["md", "lg", "xl"] as const).map((size) => (
+          <div class="mb-4 flex flex-wrap items-center gap-3">
+            {(["ink", "sky", "donate", "ghost"] as const).map((variant) => (
+              <Button href="#" variant={variant} size={size} arrow={variant === "ink"}>
+                {variant} {size}
+              </Button>
+            ))}
+          </div>
+        ))
+      }
+      <div class="max-w-[420px]"><Button href="#" variant="donate" size="xl" block arrow>Donate ₹1,000</Button></div>
+
+      <h3 class="sg-h3">Chip</h3>
+      <ul class="pi-chips"><Chip>Maths classes</Chip><Chip>Spoken English</Chip><Chip>Art &amp; craft</Chip></ul>
+
+      <h3 class="sg-h3">SectionLabel and AccentWord</h3>
+      <div class="flex flex-wrap gap-6">
+        <div class="rounded-14 bg-paper p-6">
+          <SectionLabel num="01">Education</SectionLabel>
+          <p class="font-pi-display text-56 leading-none font-extrabold">Four ways <AccentWord>show up.</AccentWord></p>
+        </div>
+        <div class="rounded-14 bg-sky p-6">
+          <SectionLabel num="02">Nutrition</SectionLabel>
+          <p class="font-pi-display text-56 leading-none font-extrabold">
+            Fund a <AccentWord variant="outline">weekend.</AccentWord>
+          </p>
+        </div>
+        <div class="rounded-14 bg-ink p-6 text-paper">
+          <SectionLabel num="03" class="text-marigold">Kalakriti</SectionLabel>
+          <p class="font-pi-display text-56 leading-none font-extrabold">
+            And <AccentWord variant="marigold">perform.</AccentWord>
+          </p>
+        </div>
+      </div>
+
+      <h3 class="sg-h3">Sticker</h3>
+      <div class="flex items-end gap-10 bg-sky p-6">
+        <Sticker src={asset("cutouts/Kalakriti3_DSC01748.png")} alt="Cut-out" width={160} class="h-48 w-auto" />
+        <Sticker
+          src={asset("cutouts/GiftASmile2026_DSC_000106.png")}
+          alt="Cropped cut-out"
+          crop="617/950"
+          width={130}
+          class="w-[130px]"
+        />
+      </div>
+
+      <h3 class="sg-h3">Polaroid</h3>
+      <div class="flex flex-wrap items-start gap-10 bg-sky p-10">
+        <div class="relative w-[200px]">
+          <Peg />
+          <Polaroid
+            variant="peg"
+            class="mt-2.5 rotate-[-3deg]"
+            src={asset("photos/teach-maths-class.jpg")}
+            alt="Maths class"
+            width={200}
+            caption="peg"
+          />
+        </div>
+        <Polaroid
+          variant="tape"
+          class="relative w-[260px]"
+          frame={false}
+          src={asset("photos/about-awards-2024-25.jpg")}
+          alt="Awards"
+          width={260}
+          caption="tape"
+        />
+        <Polaroid class="w-[200px]" src={asset("photos/kala-singing.jpg")} alt="Singing" width={200} caption="plain" />
+      </div>
+
+      <h3 class="sg-h3">Ticket</h3>
+      <div class="grid max-w-[360px] gap-6 bg-ink p-6">
+        <Ticket href="#" kicker="Admit one · Optimist crew" title="Volunteer at Kalakriti" arrow rail={["Kalakriti", "Next edition", "Register"]} stub="Crew pass" />
+        <Ticket href="#" variant="marigold" kicker="Donate · patron" title="Sponsor Kalakriti" rail={["Kalakriti", "Next edition", "Donate"]} stub="Patron" />
+      </div>
+
+      <h3 class="sg-h3">Card</h3>
+      <div class="grid grid-cols-5 gap-4 max-tab:grid-cols-2">
+        {
+          (["paper", "paper-2", "sky", "wash", "deep"] as const).map((v) => (
+            <Card variant={v} class="min-h-[160px]">
+              <p class="text-14 font-semibold">{v}</p>
+              <p class="mt-auto font-pi-display text-56 leading-none font-extrabold">23k+</p>
+            </Card>
+          ))
+        }
+      </div>
+
+      <h3 class="sg-h3">Doodle</h3>
+      <ul class="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-4">
+        {
+          (Object.keys(doodles) as (keyof typeof doodles)[]).map((n) => (
+            <li class="flex flex-col items-center gap-2 rounded-10 border-line border-ink bg-white p-3 text-12">
+              <Doodle name={n} class="pi-doodle h-16 w-auto max-w-full overflow-visible" />
+              <code>{n}</code>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </main>
+</Base>
+
+<style is:global>
+  .sg-sec {
+    max-width: var(--container-section);
+    margin: 0 auto var(--space-96);
+  }
+  .sg-h {
+    font: var(--font-weight-extrabold) var(--text-52) / var(--leading-none) var(--font-pi-display);
+    letter-spacing: var(--tracking-heavy);
+    margin-bottom: var(--space-12);
+  }
+  .sg-h3 {
+    font: var(--font-weight-extrabold) var(--text-22) var(--font-pi-display);
+    margin: var(--space-32) 0 var(--space-12);
+  }
+  .sg-note {
+    max-width: 70ch;
+    margin-bottom: var(--space-20);
+    color: var(--color-text-muted);
+  }
+  .sg code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.9em;
+  }
+  .sg-track {
+    position: relative;
+    display: block;
+    width: 200px;
+    height: 12px;
+    border-radius: var(--radius-pill);
+    background: var(--color-paper-2);
+  }
+  .sg-dot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: var(--radius-round);
+    background: var(--color-sky-ink);
+  }
+  .sg-loop {
+    display: block;
+    width: 28px;
+    height: 28px;
+    margin: 0 auto 6px;
+    border: var(--line-ink);
+    border-radius: var(--radius-4);
+    background: var(--color-marigold);
+  }
+  @keyframes sg-slide {
+    to {
+      transform: translateX(188px);
+    }
+  }
+  @keyframes sg-turn {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  html[data-motion="on"] .sg-dot {
+    animation: sg-slide 1.6s infinite alternate;
+  }
+  html[data-motion="on"] .sg-loop {
+    animation-name: sg-turn;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+</style>

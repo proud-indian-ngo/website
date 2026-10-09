@@ -1,0 +1,10 @@
+---
+/** Volunteer paper plane (motion 08): the dashed trail and the plane. Paths are set by the plane script.
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg  {...Astro.props}><defs><mask id="trail-mask" maskUnits="userSpaceOnUse"><path class="trail-reveal" pathLength="1" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-dasharray="1 2"></path></mask></defs>
+  <path class="trail" mask="url(#trail-mask)"></path><g class="plane"><path d="M17 0L-15-11L-8 1Z" fill="#fff"></path><path d="M17 0L-8 1L-11 11Z" fill="#EFE9DE"></path></g></svg>

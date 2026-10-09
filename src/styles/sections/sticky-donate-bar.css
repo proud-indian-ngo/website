@@ -1,0 +1,14 @@
+/* Phone sticky donate bar (decision 8). The bar itself is utilities in StickyDonateBar.astro; this keeps the
+   slide-in (src/scripts/rail.ts toggles .show) and the two-layer shadow. */
+@media (width < --theme(--breakpoint-tab)) {
+  .sbar {
+    box-shadow: var(--shadow-ring-paper), var(--shadow-soft);
+    /* + the home-indicator inset, since the bar sits that much higher on notched phones */
+    transform: translateY(calc(140% + env(safe-area-inset-bottom)));
+    transition: transform 180ms var(--ease-settle);
+  }
+  .sbar.show {
+    transform: none;
+    transition-duration: 250ms;
+  }
+}

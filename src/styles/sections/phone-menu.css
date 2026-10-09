@@ -1,0 +1,34 @@
+/* Phone and tablet poster menu (decision 3). Layout and type are utilities in PhoneMenu.astro; this keeps the tilted
+   cut-out child and the page scroll lock. */
+.menu .kid {
+  position: absolute;
+  right: -20px;
+  bottom: 40px;
+  height: 220px;
+  width: auto;
+  transform: rotate(-6deg);
+  z-index: 1;
+}
+@media (max-height: 640px) {
+  .menu .kid {
+    display: none;
+  }
+}
+/* the page scroll lock while the menu or the reports drawer is open (lockScroll in src/scripts/modal.ts). With a
+   classic scrollbar (one that takes width), .scroll-gutter keeps its gutter when overflow: hidden removes the bar, so
+   the page doesn't reflow or shift sideways. */
+html.scroll-lock {
+  overflow: hidden;
+}
+html.scroll-lock.scroll-gutter {
+  scrollbar-gutter: stable;
+}
+/* press feedback on the menu links and the close button (the separate scale property) */
+.menu .big,
+.menu .x {
+  transition: scale 160ms var(--ease-settle);
+}
+.menu .big:active,
+.menu .x:active {
+  scale: 0.98;
+}

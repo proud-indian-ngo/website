@@ -1,0 +1,61 @@
+---
+import MarginSprite from "../components/margins/MarginSprite.astro";
+import Closing from "../components/sections/Closing.astro";
+import Donate from "../components/sections/Donate.astro";
+import Footer from "../components/sections/Footer.astro";
+import Header from "../components/sections/Header.astro";
+import Hero from "../components/sections/Hero.astro";
+import HeroPreload from "../components/sections/HeroPreload.astro";
+import Kalakriti from "../components/sections/Kalakriti.astro";
+import PhoneMenu from "../components/sections/PhoneMenu.astro";
+import ProgrammeBand from "../components/sections/ProgrammeBand.astro";
+import ProgrammeIndex from "../components/sections/ProgrammeIndex.astro";
+import ProgrammesIntro from "../components/sections/ProgrammesIntro.astro";
+import Reports from "../components/sections/Reports.astro";
+import ReportsDrawer from "../components/sections/ReportsDrawer.astro";
+import StickyDonateBar from "../components/sections/StickyDonateBar.astro";
+import Trustees from "../components/sections/Trustees.astro";
+import Volunteer from "../components/sections/Volunteer.astro";
+import Base from "../layouts/Base.astro";
+import { getCopy, getProgrammes } from "../lib/content";
+import { loadEvents } from "../lib/events/load";
+
+const copy = await getCopy();
+const programmes = await getProgrammes();
+const bands = programmes.filter((p) => p.kind === "band");
+const band = (anchor: string) => {
+  const b = bands.find((p) => p.anchor === anchor);
+  if (!b) throw new Error(`Missing programme band ${anchor}`);
+  return b;
+};
+const events = await loadEvents();
+---
+
+<Base title={copy.meta.title} description={copy.meta.description}>
+  <HeroPreload slot="head" />
+  <MarginSprite />
+  <Header />
+  <PhoneMenu />
+  <ProgrammeIndex />
+  <main id="main">
+    <Hero />
+    <div class="s-prog">
+      <ProgrammesIntro />
+      <ProgrammeBand band={band("b0")} />
+      <ProgrammeBand band={band("b1")} />
+    </div>
+    <div class="s-kala">
+      <Kalakriti />
+    </div>
+    <div class="s-prog">
+      <ProgrammeBand band={band("b3")} />
+    </div>
+    <Volunteer events={events} />
+    <Donate />
+    <Reports><Trustees /></Reports>
+    <Closing />
+  </main>
+  <Footer />
+  <StickyDonateBar />
+  <ReportsDrawer />
+</Base>

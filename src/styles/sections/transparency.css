@@ -1,0 +1,931 @@
+/* Transparency (decision 9). The section shell, headings, trustees and the "At a glance" ticket are utilities in
+   Reports.astro and Trustees.astro. This keeps the bento wall (a spanning grid whose tiles restyle their shared
+   label/number classes), the 95% ring, the document fan, the reports drawer and its tabs, the trustee cut-out
+   placement, the ticket notches and the taped awards polaroid. */
+.s-tr .go {
+  display: flex;
+  align-items: center;
+  gap: var(--space-14);
+}
+@media (width < --theme(--breakpoint-tab)) {
+  .s-tr .go {
+    display: none;
+  }
+}
+/* every ring here sits on paper (section, drawer), so the default sky-deep ring (4.03:1), not the on-dark one */
+.s-tr .pi-btn:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+.s-tr [data-donate] {
+  margin-top: var(--space-22);
+}
+.s-tr .coin {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.s-tr .tr-eb {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  font: var(--font-weight-semibold) var(--text-15) var(--font-pi-sans);
+  border: var(--line-ink);
+  border-radius: var(--radius-pill);
+  padding: var(--space-4) var(--space-14) var(--space-4) var(--space-6);
+  background: var(--color-surface-paper);
+  margin-bottom: var(--space-22);
+}
+.s-tr .tr-eb svg {
+  width: 24px;
+}
+.s-tr .tr-eb.sm {
+  font-size: var(--text-13);
+  margin-bottom: var(--space-10);
+  padding: var(--space-3) var(--space-12) var(--space-3) 5px;
+}
+.s-tr .tr-eb.sm svg {
+  width: 20px;
+}
+.s-tr .tr-h3 {
+  font: var(--font-weight-extrabold) var(--text-56)/0.95 var(--font-pi-display);
+  letter-spacing: var(--tracking-heavy);
+  text-wrap: balance;
+}
+.s-tr .pi-accent.sq .tr-squig {
+  position: absolute;
+  left: -2%;
+  right: -4%;
+  width: 106%;
+  bottom: -0.2em;
+  height: 0.26em;
+}
+.s-tr .tr-squig .pi-ln {
+  stroke: var(--color-sky);
+  stroke-width: 5;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.s-tr .tr-ring {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* the ring's glow reaches past the viewBox; don't clip it to a square */
+  overflow: visible;
+}
+.s-tr .tr-ring circle {
+  fill: none;
+  stroke-width: 20;
+}
+.s-tr .tr-ring .trk {
+  stroke: var(--color-paper-2);
+  stroke-width: 20;
+}
+.s-tr .tr-ring .arc {
+  stroke: var(--color-sky-deep);
+  stroke-linecap: round;
+}
+.s-tr .rw {
+  position: relative;
+}
+.s-tr .rv {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: var(--font-weight-extrabold) 120px/var(--leading-none)
+    var(--font-pi-display);
+  letter-spacing: var(--tracking-tighter);
+  font-variant-numeric: tabular-nums;
+}
+.s-tr .rv sup {
+  font-size: 0.4em;
+  margin: -0.9em 0 0 0.02em;
+  letter-spacing: var(--tracking-normal);
+}
+.s-tr .kchip {
+  display: inline-block;
+  font: var(--font-weight-semibold) var(--text-13) var(--font-pi-sans);
+  border: var(--border-ink) solid currentColor;
+  border-radius: var(--radius-pill);
+  padding: var(--space-3) var(--space-10);
+  margin-right: var(--space-8);
+  letter-spacing: var(--tracking-normal);
+}
+.s-tr .tr-face img {
+  position: absolute;
+  left: 50%;
+  height: auto;
+  max-width: none;
+  display: block;
+}
+.s-tr .tr-tabs {
+  display: flex;
+  gap: var(--space-6);
+  border-bottom: var(--line-ink);
+  margin-bottom: var(--space-8);
+}
+.s-tr .tr-tabs button {
+  font: var(--font-weight-semibold) var(--text-16) var(--font-pi-sans);
+  color: var(--color-ink);
+  background: none;
+  border: 0;
+  padding: var(--space-12) var(--space-14) var(--space-14);
+  cursor: pointer;
+  position: relative;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+.s-tr .tr-tabs button .n {
+  font: var(--font-weight-semibold) var(--text-12-5) var(--font-pi-sans);
+  border: var(--line-ink);
+  border-radius: var(--radius-pill);
+  padding: 1px var(--space-8);
+  font-variant-numeric: tabular-nums;
+}
+.s-tr .tr-tabs button[aria-selected="true"] {
+  color: var(--color-sky-ink);
+}
+.s-tr .tr-tabs button[aria-selected="true"] .n {
+  background: var(--color-surface-sky);
+  color: var(--color-ink);
+}
+.s-tr .tr-tabs button[aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: -1.5px;
+  height: 5px;
+  border-radius: var(--radius-5) var(--radius-5) 0 0;
+  background: var(--color-sky-deep);
+}
+.s-tr .tr-tabs button:focus-visible,
+.s-tr .tr-doc:focus-visible,
+.s-tr .pi-card:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-offset);
+}
+.s-tr .tr-docs li + li {
+  border-top: var(--border-ink) solid var(--color-ink-a14);
+}
+.s-tr .tr-doc {
+  display: flex;
+  align-items: center;
+  gap: var(--space-20);
+  padding: var(--space-14) var(--space-4);
+}
+/* "See all" is a button (it reveals the rest of the list in place) dressed as a document row */
+.s-tr button.tr-doc {
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+/* press feedback (the separate scale property, so the hover transform in motion.css is kept) */
+.s-tr button.pi-card:active,
+.s-tr .tr-doc:active {
+  scale: 0.98;
+}
+@media (hover: hover) and (pointer: fine) {
+  .s-tr .tr-doc:hover .dt b {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+.s-tr .tr-cover {
+  position: relative;
+  flex: none;
+  width: 52px;
+  height: 68px;
+  border: var(--line-ink);
+  border-radius: var(--radius-5);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 5px;
+  background: var(--color-surface-paper);
+  box-shadow: var(--shadow-ink);
+}
+.s-tr .tr-cover i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 24px;
+  border-radius: var(--radius-3) var(--radius-3) 0 0;
+  border-bottom: var(--line-ink);
+}
+.s-tr .tr-cover b {
+  font: var(--font-weight-extrabold) var(--text-12-5)/var(--leading-none)
+    var(--font-pi-display);
+  letter-spacing: var(--tracking-label);
+  white-space: nowrap;
+}
+.s-tr .k-dis {
+  background-image:
+    linear-gradient(var(--color-ink), var(--color-ink)),
+    linear-gradient(var(--color-ink), var(--color-ink)),
+    linear-gradient(var(--color-ink), var(--color-ink));
+  background-size:
+    30px 2px,
+    30px 2px,
+    20px 2px;
+  background-position:
+    8px 34px,
+    8px 42px,
+    8px 50px;
+  background-repeat: no-repeat;
+}
+.s-tr .lf {
+  display: inline;
+}
+.s-tr .ls {
+  display: none;
+}
+.s-tr .cDrawer .lf {
+  display: none;
+}
+.s-tr .cDrawer .ls {
+  display: inline;
+}
+.s-tr .k-ann i {
+  background: var(--color-surface-sky);
+}
+.s-tr .k-aud {
+  background: var(--color-surface-ink);
+  color: var(--color-paper);
+}
+.s-tr .k-aud i {
+  background: var(--color-surface-paper-2);
+}
+.s-tr .k-dis i {
+  background: var(--color-surface-wash);
+}
+.s-tr .k-more {
+  background: var(--color-surface-sky);
+  justify-content: center;
+  align-items: center;
+}
+.s-tr .k-more b {
+  font-size: var(--text-17);
+}
+.s-tr .dt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  flex: 1;
+}
+.s-tr .dt b {
+  font: var(--font-weight-bold) var(--text-18)/var(--leading-label)
+    var(--font-pi-sans);
+  letter-spacing: var(--tracking-body);
+}
+.s-tr .dm {
+  font: var(--font-weight-medium) var(--text-14) var(--font-pi-sans);
+  color: var(--color-text-muted);
+}
+.s-tr .dl {
+  font: var(--font-weight-semibold) var(--text-14) var(--font-pi-sans);
+  border: var(--line-ink);
+  border-radius: var(--radius-pill);
+  padding: var(--space-6) 13px;
+  white-space: nowrap;
+  flex: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .s-tr .tr-doc:hover .dl {
+    background: var(--color-surface-sky);
+  }
+}
+.s-tr .cBento {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, minmax(232px, auto)) auto;
+  gap: var(--space-16);
+}
+.s-tr .cl {
+  font: var(--font-weight-semibold) var(--text-16)/var(--leading-body)
+    var(--font-pi-sans);
+}
+.s-tr .cn {
+  font: var(--font-weight-extrabold) var(--text-96)/0.82 var(--font-pi-display);
+  letter-spacing: var(--tracking-tightest);
+  margin-top: auto;
+  padding-top: var(--space-24);
+  font-variant-numeric: tabular-nums;
+}
+.s-tr .cs {
+  font: var(--font-weight-semibold) var(--text-14-5) var(--font-pi-sans);
+  margin-top: var(--space-12);
+}
+.s-tr .pi-card--deep .kchip {
+  border-color: var(--color-white);
+}
+.s-tr .c95 {
+  grid-column: span 2;
+  grid-row: span 2;
+  background: var(--color-surface-ink);
+  color: var(--color-paper);
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-22);
+  padding: var(--space-40);
+}
+.s-tr .c95 .rw {
+  width: min(380px, 100%);
+}
+.s-tr .tr-ring.dark .trk {
+  stroke: var(--color-paper-a16);
+}
+.s-tr .tr-ring.dark .arc {
+  stroke: var(--color-sky);
+}
+.s-tr .c95 .rv {
+  font-size: 150px;
+}
+.s-tr .c95 .cl {
+  font: var(--font-weight-extrabold) var(--text-34)/var(--leading-none)
+    var(--font-pi-display);
+  letter-spacing: var(--tracking-title);
+  text-align: center;
+}
+.s-tr .c95s {
+  position: absolute;
+  width: 40px;
+  right: 40px;
+  top: 40px;
+}
+.s-tr .cDis {
+  grid-column: span 2;
+  background: var(--color-surface-sky);
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: var(--space-20);
+  padding: var(--space-24) var(--space-30) var(--space-26) var(--space-26);
+}
+.s-tr .cdT {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  order: -1;
+}
+.s-tr .cdT .cl {
+  margin-bottom: auto;
+  padding-bottom: var(--space-20);
+}
+.s-tr .cdT b {
+  font: var(--font-weight-extrabold) var(--text-128)/0.8 var(--font-pi-display);
+  letter-spacing: var(--tracking-tightest);
+}
+.s-tr .cdT > span:last-child {
+  font: var(--font-weight-extrabold) var(--text-26)/var(--leading-none)
+    var(--font-pi-display);
+  letter-spacing: var(--tracking-title);
+  margin-top: var(--space-14);
+  white-space: nowrap;
+}
+.s-tr .fan {
+  position: relative;
+  width: 236px;
+  height: 176px;
+  flex: none;
+  align-self: center;
+  margin-right: var(--space-6);
+}
+.s-tr .fd {
+  position: absolute;
+  width: 128px;
+  height: 166px;
+  background: var(--color-surface-paper);
+  border: var(--line-ink);
+  border-radius: var(--radius-8);
+  padding: var(--space-40) var(--space-12) var(--space-12);
+  box-shadow: var(--shadow-ink);
+  display: flex;
+  align-items: flex-end;
+}
+.s-tr .fd i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 30px;
+  background: var(--color-surface-wash);
+  border-bottom: var(--line-ink);
+  border-radius: var(--radius-6) var(--radius-6) 0 0;
+}
+.s-tr .fd b {
+  font: var(--font-weight-extrabold) var(--text-17)/1.02 var(--font-pi-display);
+  letter-spacing: var(--tracking-label);
+}
+.s-tr .fd:not(.f2) {
+  background-image:
+    linear-gradient(var(--color-ink), var(--color-ink)),
+    linear-gradient(var(--color-ink), var(--color-ink));
+  background-size:
+    70px 2px,
+    50px 2px;
+  background-position:
+    12px 48px,
+    12px 58px;
+  background-repeat: no-repeat;
+}
+.s-tr .f0 {
+  left: 0;
+  top: 12px;
+  transform: rotate(-10deg);
+}
+.s-tr .f1 {
+  left: 50px;
+  top: 2px;
+  transform: rotate(-3deg);
+}
+.s-tr .f2 {
+  left: 104px;
+  top: 8px;
+  transform: rotate(6deg);
+}
+.s-tr .cAnn .cs,
+.s-tr .cAud .cs {
+  white-space: nowrap;
+}
+.s-tr .cReg {
+  grid-column: span 4;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-14);
+  padding: var(--space-22) var(--space-26) var(--space-24);
+  min-height: 0;
+  background: var(--color-surface-paper-2);
+}
+.s-tr .cReg .cl {
+  font: var(--font-weight-extrabold) var(--text-24)/var(--leading-none)
+    var(--font-pi-display);
+  letter-spacing: var(--tracking-title);
+}
+.s-tr .cReg ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-10);
+  width: 100%;
+  justify-content: space-between;
+}
+.s-tr .cReg li {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  border: var(--line-ink);
+  border-radius: var(--radius-14);
+  padding: var(--space-8) var(--space-14);
+  background: var(--color-surface-paper);
+}
+.s-tr .cReg li span {
+  font: var(--font-weight-semibold) var(--text-12) var(--font-pi-sans);
+  color: var(--color-sky-ink);
+}
+.s-tr .cReg li b {
+  font: var(--font-weight-bold) var(--text-16) var(--font-pi-sans);
+}
+/* tablets (701 to 1100px): four columns clipped the numbers ("23k+" showed as "23"), so the wall has two columns:
+   the 95% ring across the top, then the tiles in pairs */
+@media (width >= --theme(--breakpoint-tab)) and (width < --theme(--breakpoint-lap)) {
+  .s-tr .cBento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+    grid-auto-rows: minmax(200px, auto);
+  }
+  .s-tr .c95 {
+    grid-column: span 2;
+    grid-row: auto;
+  }
+  .s-tr .c95 .rw {
+    width: min(320px, 100%);
+  }
+  .s-tr .c95 .rv {
+    font-size: 124px;
+  }
+  .s-tr .cReg {
+    grid-column: span 2;
+  }
+  .s-tr .cn {
+    font-size: clamp(72px, 8vw, 96px);
+  }
+}
+.s-tr .cScrim {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-scrim);
+  background: var(--color-ink-a50);
+}
+.s-tr .cDrawer {
+  position: fixed;
+  z-index: var(--z-drawer);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(var(--container-drawer), 100%);
+  background: var(--color-surface-paper);
+  border-left: var(--line-ink);
+  padding: var(--space-32) var(--space-36);
+  padding-right: max(var(--space-36), env(safe-area-inset-right));
+  padding-bottom: max(var(--space-32), env(safe-area-inset-bottom));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  box-shadow: -12px 0 0 var(--color-sky);
+}
+.s-tr .cDrawer[hidden],
+.s-tr .cScrim[hidden] {
+  display: none;
+}
+/* Drawer motion: it slides in from the right edge (a bottom sheet on phones) and back out to it, the scrim fades.
+   reports-drawer.ts only flips [hidden]; display is transitioned with allow-discrete, so a close keeps the drawer
+   rendered until its slide-out ends, and @starting-style is the first frame of an open. The transition is the target
+   state's: the open (not [hidden]) gets the 320ms glide-in, the close ([hidden]) the 200ms --ease-glide out. Motion off
+   and reduced motion: ambient.css drops every transition, so it opens and closes instantly. */
+.s-tr .cDrawer {
+  --dr-out: calc(100% + 12px) 0;
+  translate: 0 0;
+  transition:
+    translate 320ms cubic-bezier(0.32, 0.72, 0, 1),
+    display 320ms allow-discrete;
+}
+.s-tr .cDrawer[hidden] {
+  translate: var(--dr-out);
+  transition:
+    translate 200ms var(--ease-glide),
+    display 200ms allow-discrete;
+}
+@starting-style {
+  .s-tr .cDrawer:not([hidden]) {
+    translate: var(--dr-out);
+  }
+}
+.s-tr .cScrim {
+  opacity: 1;
+  transition:
+    opacity 240ms var(--ease-settle),
+    display 240ms allow-discrete;
+}
+.s-tr .cScrim[hidden] {
+  opacity: 0;
+  transition:
+    opacity 160ms var(--ease-glide),
+    display 160ms allow-discrete;
+}
+@starting-style {
+  .s-tr .cScrim:not([hidden]) {
+    opacity: 0;
+  }
+}
+/* phones: a bottom sheet, from below the bottom edge (past its 8px sky shadow) */
+@media (width < --theme(--breakpoint-tab)) {
+  .s-tr .cDrawer {
+    --dr-out: 0 calc(100% + 8px);
+  }
+}
+/* "See all": the rows it reveals fade in together (reports-drawer.ts adds .fresh for the length of the fade) */
+.s-tr .tr-docs li.fresh {
+  transition: opacity 200ms ease-out;
+}
+@starting-style {
+  .s-tr .tr-docs li.fresh {
+    opacity: 0;
+  }
+}
+.s-tr .cdHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-16);
+  margin-bottom: var(--space-22);
+}
+.s-tr .cDrawer .tr-h3 {
+  font-size: var(--text-40);
+}
+.s-tr .cClose {
+  background: var(--color-surface-paper);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-ink);
+  cursor: pointer;
+}
+.s-tr .cDrawer .tr-tabs {
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.s-tr .cDrawer .tr-tabs button {
+  font-size: var(--text-15);
+  padding: var(--space-12) 11px var(--space-14);
+}
+@media (width < --theme(--breakpoint-tab)) {
+  .s-tr .tr-h3 {
+    font-size: var(--text-40);
+  }
+  .s-tr .rv {
+    font-size: 88px;
+  }
+  .s-tr .tr-tabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin: 0 -20px var(--space-8);
+    padding: 0 var(--space-14);
+  }
+  .s-tr .tr-tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .s-tr .tr-tabs button {
+    font-size: var(--text-15);
+    padding: var(--space-12) var(--space-8) var(--space-14);
+  }
+  .s-tr .tr-tabs button[aria-selected="true"]::after {
+    bottom: 0;
+  }
+  .s-tr .lf {
+    display: none;
+  }
+  .s-tr .ls {
+    display: inline;
+  }
+  .s-tr .tr-cover b {
+    font-size: 10px;
+    letter-spacing: var(--tracking-title);
+  }
+  .s-tr .k-dis {
+    background-size:
+      22px 2px,
+      22px 2px,
+      14px 2px;
+    background-position:
+      6px 27px,
+      6px 34px,
+      6px 41px;
+  }
+  .s-tr .tr-doc {
+    gap: var(--space-14);
+    padding: var(--space-12) 0;
+  }
+  .s-tr .tr-cover {
+    width: 46px;
+    height: 58px;
+    padding: var(--space-4);
+  }
+  .s-tr .tr-cover i {
+    height: 19px;
+  }
+  .s-tr .tr-cover b {
+    font-size: var(--text-12);
+  }
+  .s-tr .dt b {
+    font-size: var(--text-16);
+  }
+  .s-tr .dm {
+    font-size: var(--text-13);
+  }
+  .s-tr .dl {
+    font-size: var(--text-13);
+    padding: 5px var(--space-10);
+  }
+  .s-tr .kchip {
+    font-size: var(--text-12);
+    padding: var(--space-2) var(--space-8);
+    margin: 0 0 var(--space-6);
+  }
+  .s-tr .cBento {
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: auto;
+    gap: var(--space-12);
+  }
+  .s-tr .pi-card {
+    border-radius: var(--radius-20);
+    padding: var(--space-18) var(--space-18);
+    min-height: 168px;
+  }
+  .s-tr .c95 {
+    grid-column: span 2;
+    grid-row: auto;
+    padding: var(--space-30) var(--space-20);
+  }
+  .s-tr .c95 .rw {
+    width: 230px;
+  }
+  .s-tr .c95 .rv {
+    font-size: var(--text-92);
+  }
+  .s-tr .c95 .cl {
+    font-size: var(--text-26);
+  }
+  .s-tr .c95s {
+    right: 20px;
+    top: 20px;
+    width: 30px;
+  }
+  .s-tr .cl {
+    font-size: var(--text-14-5);
+  }
+  .s-tr .cn {
+    font-size: 62px;
+    padding-top: var(--space-18);
+  }
+  .s-tr .cs {
+    font-size: var(--text-12-5);
+    white-space: normal;
+  }
+  .s-tr .cAnn .cs,
+  .s-tr .cAud .cs {
+    white-space: normal;
+  }
+  .s-tr .cDis {
+    grid-column: span 2;
+    flex-direction: row;
+    align-items: stretch;
+    padding: var(--space-20) var(--space-14) var(--space-22) var(--space-20);
+    gap: var(--space-6);
+  }
+  .s-tr .cdT .cl {
+    padding-bottom: var(--space-12);
+  }
+  .s-tr .fan {
+    width: 132px;
+    height: 120px;
+    align-self: center;
+  }
+  .s-tr .fd {
+    width: 84px;
+    height: 110px;
+    padding: var(--space-24) 7px var(--space-8);
+    border-radius: var(--radius-6);
+  }
+  .s-tr .fd:not(.f2) {
+    background-size:
+      46px 2px,
+      32px 2px;
+    background-position:
+      8px 34px,
+      8px 41px;
+  }
+  .s-tr .fd i {
+    height: 19px;
+  }
+  .s-tr .fd b {
+    font-size: var(--text-11-5);
+  }
+  .s-tr .f1 {
+    left: 24px;
+  }
+  .s-tr .f2 {
+    left: 48px;
+  }
+  .s-tr .fan {
+    margin: 0;
+  }
+  .s-tr .cdT b {
+    font-size: var(--text-92);
+  }
+  .s-tr .cdT > span:last-child {
+    font-size: var(--text-21);
+    white-space: normal;
+    max-width: 8ch;
+  }
+  .s-tr .cReg {
+    grid-column: span 2;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-14);
+    padding: var(--space-20) var(--space-18);
+  }
+  .s-tr .cReg .cl {
+    width: auto;
+  }
+  .s-tr .cReg li {
+    padding: var(--space-6) 11px;
+  }
+  .s-tr .cReg li b {
+    font-size: var(--text-14-5);
+  }
+  .s-tr .cReg ul {
+    justify-content: flex-start;
+  }
+  .s-tr .cBento {
+    grid-template-rows: none;
+  }
+  .s-tr .cDrawer {
+    top: auto;
+    left: 0;
+    width: 100%;
+    max-height: 88vh;
+    border-left: 0;
+    border-top: var(--line-ink);
+    border-radius: var(--radius-24) var(--radius-24) 0 0;
+    padding: var(--space-22) var(--space-20)
+      calc(var(--space-28) + env(safe-area-inset-bottom));
+    box-shadow: 0 -8px 0 var(--color-sky);
+  }
+  .s-tr .cDrawer .tr-h3 {
+    font-size: var(--text-30);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-tr .tr-squig .pi-ln {
+    transition: none !important;
+  }
+}
+/* the bottom sheet's grabber pill (phones only; decorative, the sheet closes with its Close button, Esc or the scrim) */
+.s-tr .cGrab {
+  display: none;
+}
+@media (width < --theme(--breakpoint-tab)) {
+  .s-tr .cGrab {
+    display: block;
+    width: 36px;
+    height: 5px;
+    margin: calc(var(--space-10) * -1) auto var(--space-14);
+    border-radius: var(--radius-pill);
+    background: var(--color-ink-a30);
+  }
+}
+.s-tr .cdFoot {
+  font: var(--font-weight-medium) var(--text-13-5)/1.4 var(--font-pi-sans);
+  color: var(--color-text-muted);
+  margin-top: var(--space-22);
+  padding-top: var(--space-16);
+  border-top: var(--border-ink) dashed var(--color-ink-a30);
+}
+.s-tr .go {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  width: 38px;
+  height: 38px;
+  border: var(--line-ink);
+  border-radius: var(--radius-round);
+  display: grid;
+  place-items: center;
+  font: var(--font-weight-semibold) var(--text-18) var(--font-pi-sans);
+  background: var(--color-surface-paper);
+}
+@media (width < --theme(--breakpoint-tab)) {
+  .s-tr .go {
+    width: 32px;
+    height: 32px;
+    right: 12px;
+    top: 12px;
+    font-size: var(--text-15);
+  }
+  .s-tr .cAnn .cl,
+  .s-tr .cAud .cl {
+    padding-right: var(--space-30);
+  }
+}
+/* fixes-3 · "At a glance" ticket beside the two trustees: balances the row on desktop, stacks under them on phones */
+.s-tr .gl-card {
+  transform: rotate(1.2deg);
+}
+.s-tr .gl-stamp {
+  transform: rotate(-2deg);
+}
+.s-tr .gl-pol {
+  position: relative;
+  z-index: 1;
+  width: 78%;
+  margin: -6px 0 0 auto;
+  background: var(--color-surface-card);
+  padding: 9px 9px 0;
+  border: var(--line-ink);
+  box-shadow: var(--shadow-photo);
+  transform: rotate(-2.5deg);
+}
+.s-tr .gl-pol img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1200/545;
+  object-fit: cover;
+}
+.s-tr .gl-pol figcaption {
+  font: var(--font-weight-extrabold) var(--text-15)/1.1 var(--font-pi-display);
+  letter-spacing: var(--tracking-label);
+  padding: 9px var(--space-2) 11px;
+}
+.s-tr .gl-pol .tape {
+  position: absolute;
+  left: 50%;
+  top: -12px;
+  width: 74px;
+  height: 22px;
+  margin-left: -37px;
+  background: var(--color-sky-a55);
+  border: var(--border-hair) solid var(--color-ink-a25);
+  transform: rotate(3deg);
+}
+@media (width < --theme(--breakpoint-tab)) {
+  .s-tr .gl-card {
+    transform: rotate(0.6deg);
+  }
+}

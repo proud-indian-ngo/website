@@ -1,0 +1,14 @@
+---
+/** Closing street scene, phone (560x244): kite, walk to school, gate, tiffin.
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0 8 560 244" preserveAspectRatio="xMidYMax meet" {...Astro.props}>
+ <g class="kid"><circle class="s fp" cx="29" cy="212" r="5"/><path class="s f2" d="M22 238V225C22 221 25 219 29 219C33 219 36 221 36 225V238Z"/><path class="s" d="M26 238V250M32 238V250M23 225L19 234M35 224L43 212"/></g><g class="kite"><path class="s str" d="M43 212C57 168 45 118 73 53"/><path class="s ac" d="M81 18L97 40L81 66L65 40Z"/><path class="s" d="M65 40H97M81 18V66M81 66C89 76 77 84 87 96"/></g>
+ <g class="pair"><circle class="s fp" cx="123" cy="193" r="6"/><path class="s ac" d="M114 230V208C114 203 118 200 123 200C128 200 132 203 132 208V230Z"/><path class="s" d="M119 230L115 250M127 230L131 250M114 208L109 222M132 208L141 222"/><circle class="s fp" cx="151" cy="213" r="5"/><path class="s f2" d="M144 238V225C144 221 147 219 151 219C155 219 158 221 158 225V238Z"/><path class="s" d="M148 238L145 250M154 238L157 250M145 225L141 222M158 225L161 233"/></g>
+ <g class="gate"><path class="s f2" d="M198 250V112H224V250M384 250V112H410V250"/><path class="s" d="M198 124H224M384 124H410M198 238H224M384 238H410M224 166Q304 146 384 166M224 204H384M240 162.4V250M256 159.6V250M272 157.6V250M288 156.4V250M304 156V250M320 156.4V250M336 157.6V250M352 159.6V250M368 162.4V250"/><rect class="s ac" x="190" y="84" width="228" height="28" rx="3"/><text x="306" y="103" text-anchor="middle">SCHOOL</text><g class="gbird"><path class="s fp" d="M392 80C392 74 397 71 402 72C404 68 410 68 411 73L415 74L411 76C410 81 406 84 400 84C396 84 392 83 392 80Z"/><path class="s" d="M392 80L387 82"/><circle class="eye" cx="406.5" cy="72" r="1.2"/></g></g>
+ <g class="tiffin"><path class="s" d="M456 225V204M524 225V204M452 204H528M458 225V250M522 225V250"/><path class="s f2" d="M448 218H532V225H448Z"/><path class="s" d="M477.5 214V188Q477.5 182 490 182Q502.5 182 502.5 188V214"/><rect class="s f2" x="480" y="194" width="20" height="8" rx="3.5"/><rect class="s ac" x="480" y="202" width="20" height="8" rx="3.5"/><rect class="s f2" x="480" y="210" width="20" height="8" rx="3.5"/><path class="s f2" d="M481 194C481 188.5 499 188.5 499 194Z"/><g class="steam"><path class="s w1" d="M485 174C481 169 488 166 484 160"/><path class="s w2" d="M495 174C491 169 498 166 494 160"/></g></g>
+</svg>

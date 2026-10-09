@@ -1,0 +1,9 @@
+---
+/** Programme band clothesline string with its two nails.
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0 0 600 90" preserveAspectRatio="none" {...Astro.props}><path class="pi-ln" d="M0 14C40 34 70 46 100 50S220 66 300 66S440 54 500 44S570 18 600 6"></path><circle class="nl" cx="3" cy="14" r="4"></circle><circle class="nl" cx="597" cy="6" r="4"></circle></svg>

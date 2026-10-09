@@ -1,0 +1,42 @@
+---
+/**
+ * Preload the hero's girl cut-out, the largest thing in the first screen (so the LCP on most phones), at the size and
+ * format the page will pick: k1m on phones, k1 above. Each link has a media query, so a browser fetches only the one
+ * it shows. The srcset is built exactly as Img builds it (AVIF, 1x/1.5x/2x), so the preload is the request the
+ * <picture> then reuses.
+ */
+import { PHONE_MAX } from "@proudindian/design/tokens";
+import { getImage } from "astro:assets";
+import { getCopy } from "../../lib/content";
+import { asset } from "../../lib/images";
+
+const girl = asset((await getCopy()).hero.kids.girl.image);
+const preload = async (width: number) => {
+  const widths = [...new Set([1, 1.5, 2].map((k) => Math.min(Math.round(width * k), girl.width)))].toSorted(
+    (a, b) => a - b
+  );
+  const img = await getImage({ src: girl, widths, format: "avif", sizes: `${width}px` });
+  return { srcset: img.srcSet.attribute, sizes: `${width}px` };
+};
+const phone = await preload(190);
+const wide = await preload(260);
+---
+
+<link
+  rel="preload"
+  as="image"
+  type="image/avif"
+  imagesrcset={phone.srcset}
+  imagesizes={phone.sizes}
+  media={`(max-width: ${PHONE_MAX}px)`}
+  fetchpriority="high"
+/>
+<link
+  rel="preload"
+  as="image"
+  type="image/avif"
+  imagesrcset={wide.srcset}
+  imagesizes={wide.sizes}
+  media={`(min-width: ${PHONE_MAX + 1}px)`}
+  fetchpriority="high"
+/>

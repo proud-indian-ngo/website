@@ -1,0 +1,28 @@
+order: 2
+kind: band
+anchor: b1
+num: "02"
+name: Nutrition
+verb: Feed
+verbReveal: rise
+surface: paper
+doodle: bowl
+line: Nutrition drives and shared meals, because nobody learns hungry.
+chips: [Nutrition drives, Shared meals]
+cta: Volunteer for this
+polaroids:
+  - image: photos/feed-nutrition-drive-dec2022.jpg
+    alt: A grinning boy flashing a peace sign with his red nutrition pack at the December 2022 nutrition drive
+    caption: Nutrition drive
+    position: 50% 50%
+  - image: photos/feed-lunch-kalakriti2.jpg
+    alt: Two girls in festival dresses eating lunch on a bench at Kalakriti 2.0
+    caption: Kalakriti lunch
+    position: 50% 50%
+  - image: photos/feed-food-drive-sep2022.jpg
+    alt: A smiling boy holding his plate of food at the September 2022 food distribution
+    caption: Food drive
+    position: 50% 50%
+sticker:
+  image: cutouts/NutritionDistribution_DSC_0177.png
+  alt: A girl smiling with her nutrition pack

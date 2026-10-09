@@ -1,0 +1,165 @@
+/* Programme index rail (decision 5) */
+/* ---------- 3e. programme index: sticky doodle icons (decision 5) ---------- */
+.pidx {
+  position: fixed;
+  right: 34px;
+  top: 50%;
+  z-index: var(--z-programme-index);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+  background: var(--color-surface-paper);
+  border: var(--line-ink);
+  border-radius: var(--radius-pill);
+  padding: var(--space-10) var(--space-8);
+  box-shadow: var(--shadow-ink);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(18px, -50%);
+  transition:
+    opacity var(--dur-medium),
+    transform var(--dur-medium),
+    visibility 0s var(--dur-medium);
+}
+.pidx.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -50%);
+  transition:
+    opacity var(--dur-medium),
+    transform var(--dur-medium);
+}
+.pidx.on-ink {
+  box-shadow: 3px 3px 0 var(--color-paper-a90);
+}
+.pidx a {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-round);
+  position: relative;
+  color: var(--color-ink);
+}
+.pidx .ic {
+  display: block;
+  width: auto;
+  height: auto;
+} /* fixes-3: the shared .ic rule (16px box) pushed the 36px icon 10px right and down */
+.pidx .ic svg {
+  display: block;
+  width: 36px;
+  height: 36px;
+}
+.pidx .pi-ln {
+  stroke: var(--color-ink);
+}
+.pidx a:not(.on) .ic {
+  opacity: 0.55;
+}
+@media (hover: hover) and (pointer: fine) {
+  .pidx a:hover .ic {
+    opacity: 1;
+  }
+}
+.pidx a.on {
+  background: var(--color-surface-paper-2);
+  box-shadow: inset 0 0 0 1.5px var(--color-ink);
+}
+.pidx a.on .f {
+  fill: var(--color-sky);
+}
+.pidx a.on[data-k="kalakriti"] .f {
+  fill: var(--color-marigold);
+}
+.pidx a.on .f2 {
+  fill: var(--color-ink);
+}
+.pidx .lb {
+  position: absolute;
+  right: 66px;
+  font: var(--font-weight-semibold) var(--text-13) var(--font-pi-sans);
+  background: var(--color-surface-ink);
+  color: var(--color-white);
+  border-radius: var(--radius-pill);
+  padding: 5px 11px;
+  white-space: nowrap;
+  display: none;
+}
+.pidx a.on .lb {
+  display: block;
+}
+.pidx a.on[data-k="kalakriti"] .lb {
+  background: var(--color-marigold);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-ring-ink);
+}
+@media (width < --theme(--breakpoint-tab)) {
+  .pidx {
+    top: calc(var(--header-h) + 10px);
+    left: 0;
+    right: 0;
+    flex-direction: row;
+    gap: var(--space-6);
+    overflow-x: auto;
+    scrollbar-width: none;
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: var(--space-4) var(--space-12) var(--space-6);
+    transform: translateY(-8px);
+  }
+  .pidx::-webkit-scrollbar {
+    display: none;
+  }
+  .pidx.show {
+    transform: none;
+  }
+  .pidx.on-ink {
+    box-shadow: none;
+  }
+  .pidx a {
+    width: auto;
+    height: auto;
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-6);
+    font: var(--font-weight-semibold) var(--text-13) var(--font-pi-sans);
+    border: var(--line-ink);
+    border-radius: var(--radius-pill);
+    padding: var(--space-4) var(--space-12) var(--space-4) var(--space-6);
+    background: var(--color-surface-paper);
+    box-shadow: var(--shadow-ink-sm);
+  }
+  .pidx .ic svg {
+    width: 22px;
+    height: 22px;
+  }
+  .pidx a:not(.on) .ic {
+    opacity: 1;
+  }
+  .pidx .lb {
+    position: static;
+    display: inline;
+    background: none;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+    font: inherit;
+  }
+  .pidx a.on {
+    background: var(--color-surface-ink);
+    color: var(--color-white);
+    box-shadow: var(--shadow-paper-sm);
+  }
+  .pidx a.on .pi-ln {
+    stroke: var(--color-white);
+  }
+  .pidx a.on[data-k="kalakriti"] .lb {
+    background: none;
+    color: inherit;
+    box-shadow: none;
+  }
+}

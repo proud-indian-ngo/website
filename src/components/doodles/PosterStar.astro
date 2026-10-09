@@ -1,0 +1,9 @@
+---
+/** Kalakriti poster star (.tw twinkles, .glint flashes).
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0 0 100 100" {...Astro.props}><path class="pi-ln tw" fill="#F4A62A" d="M50 8L61 37.5L92 39L67.5 58.5L76.5 89L50 71.5L23 89.5L32.5 58L8 38.5L39.5 37Z"></path><g class="glint"><path class="pi-ln" d="M96 4V16M90 10H102M4 76V84M0 80H8"></path></g></svg>

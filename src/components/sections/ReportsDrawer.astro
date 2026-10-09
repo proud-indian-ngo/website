@@ -1,0 +1,114 @@
+---
+/** Reports drawer (decision 9): a dialog with three tabs of documents, opened from the bento tiles. */
+import { facts, fill, getCopy, getReports, getSite, shortYear } from "../../lib/content";
+import HeartBadge from "../doodles/HeartBadge.astro";
+import Button from "../ui/Button.astro";
+
+const { reports: r } = await getCopy();
+const site = await getSite();
+const docs = await getReports();
+const d = r.drawer;
+const tabs = [
+  { key: "ann", kind: "annual" },
+  { key: "aud", kind: "audited" },
+  { key: "dis", kind: "disclosure" },
+] as const;
+const count = (kind: string) => docs.filter((x) => x.kind === kind).length;
+/** "Sep 2025" from a disclosure's "2025-09" (fixed names: ICU writes "Sept" in some locales) */
+const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const month = (date: string) => `${months[Number(date.slice(5, 7)) - 1]} ${date.slice(0, 4)}`;
+const meta = (doc: (typeof docs)[number], kind: (typeof tabs)[number]["kind"]) => {
+  const when = doc.year ?? (doc.date ? month(doc.date) : undefined);
+  return when ? `${d.meta[kind]} · ${when}` : d.meta[kind];
+};
+const selected = "dis";
+---
+
+<div class="s-tr">
+  <div class="cScrim" data-close="" hidden=""></div><aside
+    class="cDrawer"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cdh"
+    hidden=""
+  >
+    <span class="cGrab" aria-hidden="true"></span>
+    <div class="cdHead">
+      <div>
+        <p class="tr-eb sm"><HeartBadge class="pi-doodle" aria-hidden="true" />{d.eyebrow}</p>
+        <h3 id="cdh" class="tr-h3">{d.heading}</h3>
+      </div>
+      <Button class="cClose" variant="ghost" data-close="">{d.close} <span aria-hidden="true">✕</span></Button>
+    </div>
+    <div class="tr-tabs" role="tablist" aria-label={d.tabsLabel}>
+      {
+        tabs.map((t) => (
+          <button
+            role="tab"
+            id={`c-t-${t.key}`}
+            aria-controls={`c-p-${t.key}`}
+            aria-selected={t.key === selected ? "true" : "false"}
+            tabindex={t.key === selected ? "0" : "-1"}
+            data-tab={t.key}
+            aria-label={`${d.tabs[t.kind].long}, ${count(t.kind)}`}
+          >
+            <span class="lf">{d.tabs[t.kind].long}</span>
+            <span class="ls">{d.tabs[t.kind].short}</span> <span class="n">{count(t.kind)}</span>
+          </button>
+        ))
+      }
+    </div>
+    {
+      tabs.map((t) => {
+        const list = docs.filter((x) => x.kind === t.kind);
+        // disclosures: the first `preview` are listed, the rest stay hidden until "See all" reveals them in place
+        const shown = t.kind === "disclosure" ? r.disclosures.preview : list.length;
+        const more = Math.max(list.length - shown, 0);
+        return (
+          <ul
+            class="tr-docs"
+            role="tabpanel"
+            id={`c-p-${t.key}`}
+            aria-labelledby={`c-t-${t.key}`}
+            hidden={t.key !== selected}
+          >
+            {list.map((doc, i) => (
+              <li hidden={i >= shown} data-more-item={i >= shown ? "" : undefined}>
+                <a class="tr-doc" href={doc.url}>
+                  <span class={`tr-cover k-${t.key}`} aria-hidden="true">
+                    <i />
+                    <b>{doc.year ? shortYear(doc.year) : ""}</b>
+                  </span>
+                  <span class="dt">
+                    <b>{doc.title}</b>
+                    <span class="dm">{meta(doc, t.kind)}</span>
+                  </span>
+                  <span class="dl">
+                    {d.pdf} <span aria-hidden="true">↓</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+            {more > 0 && (
+              <li>
+                <button type="button" class="tr-doc xmore" data-see-all>
+                  <span class="tr-cover k-more" aria-hidden="true">
+                    <b>+{more}</b>
+                  </span>
+                  <span class="dt">
+                    <b>{fill(r.disclosures.more, { n: String(more) })}</b>
+                    <span class="dm">{fill(r.disclosures.inAll, { total: String(list.length) })}</span>
+                  </span>
+                  <span class="dl">
+                    {d.seeAll} <span aria-hidden="true">↓</span>
+                  </span>
+                </button>
+              </li>
+            )}
+          </ul>
+        );
+      })
+    }
+    <p class="cdFoot">{fill(d.foot, facts(site))}</p>
+  </aside>
+</div>

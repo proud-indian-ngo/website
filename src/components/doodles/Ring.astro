@@ -1,0 +1,10 @@
+---
+/** The Reports "95%" ring. `percent` sets the arc; the arc draws on when the bento reveals. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & { percent: number };
+const { percent, ...rest } = Astro.props;
+const dash = `${percent} 100`;
+---
+
+<svg viewBox="0 0 200 200" {...rest}><circle cx="100" cy="100" r="84" class="trk"></circle><circle cx="100" cy="100" r="84" class="glow" pathLength="100" stroke-dasharray={dash} transform="rotate(-90 100 100)"></circle><circle cx="100" cy="100" r="84" class="arc" pathLength="100" stroke-dasharray={dash} transform="rotate(-90 100 100)"></circle></svg>

@@ -1,0 +1,9 @@
+---
+/** Closing section paper plane with a looping dashed trail.
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0 0 220 120" {...Astro.props}><path class="ft-ln" style="stroke-dasharray:3 9" d="M6 110C40 118 70 100 66 78C62 58 38 64 46 82C54 100 110 92 150 60"></path><path class="ft-ln" style="fill:#fff" d="M206 24L152 50L166 58Z M206 24L166 58L168 76Z"></path></svg>

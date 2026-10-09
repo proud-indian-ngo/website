@@ -1,0 +1,28 @@
+order: 4
+kind: band
+anchor: b3
+num: "04"
+name: Community
+verb: Gather
+verbReveal: rise
+surface: sky
+doodle: heart
+line: "Days that bring everyone together: Gift a Smile, outings for the children, and volunteering days with companies that pitch in."
+chips: [Gift a Smile, Outings, Volunteering days]
+cta: Volunteer for this
+polaroids:
+  - image: photos/gather-gift-a-smile.jpg
+    alt: Three girls with the badminton sets they got at Gift a Smile
+    caption: Gift a Smile
+    position: 50% 40%
+  - image: photos/gather-playground.jpg
+    alt: Boys arm in arm on the playground outing
+    caption: Playground outing
+    position: 50% 45%
+  - image: photos/gather-prani.jpg
+    alt: A boy holding a rabbit on the Prani visit
+    caption: Prani visit
+    position: 50% 50%
+sticker:
+  image: cutouts/GiftASmile2026_DSC_0036.png
+  alt: A boy with the badminton set he got at Gift a Smile

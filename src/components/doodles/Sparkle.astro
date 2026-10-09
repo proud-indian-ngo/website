@@ -1,0 +1,9 @@
+---
+/** Four-point sparkle (hero, Volunteer poster, Donate, Reports 95% tile). SVG verbatim from the prototype. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & { fill?: string } & Record<`data-${string}`, string | boolean | undefined>;
+const { fill = "#fff", ...rest } = Astro.props;
+---
+
+<svg viewBox="0 0 40 40" {...rest}><path class="pi-ln" fill={fill} d="M20 3C21 14 26 19 37 20C26 21 21 26 20 37C19 26 14 21 3 20C14 19 19 14 20 3Z"></path></svg>

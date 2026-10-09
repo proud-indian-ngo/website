@@ -1,0 +1,32 @@
+---
+/** Margin doodles: one layer of outline doodles in a section's side gutters (see placements.ts). Static (no motion,
+ *  no hover), aria-hidden, drawn from the outline sprite that MarginSprite.astro inlines once per page.
+ *  tone: the section background (paper, sky or ink), which sets the line colour and opacity (margins.css). */
+import outline from "@proudindian/design/illustrations/outline/manifest.json";
+
+import { enabled, type SetName, spots } from "./placements";
+
+interface Props {
+  set: SetName;
+  tone?: "paper" | "sky" | "ink";
+  class?: string;
+}
+const { set, tone = "paper", class: cls } = Astro.props;
+/** width / height of each symbol's viewBox, where it is not square */
+const aspect = new Map(outline.filter((o) => o.aspect !== 1).map((o) => [o.name, o.aspect]));
+---
+
+{
+  enabled && (
+    <div class:list={["mg", set, tone !== "paper" && tone, cls]} aria-hidden="true">
+      {spots[set].map((d) => (
+        <svg
+          class:list={["mg-d", `mg-${d.side}`, { "mg-w": d.wide, "mg-t1": d.tier === 1, "mg-t2": d.tier === 2 }]}
+          style={`--f:${d.f};top:${d.y}%;--s:${d.s};--r:${d.r}deg${aspect.has(d.m) ? `;--a:${aspect.get(d.m)}` : ""}`}
+        >
+          <use href={`#pi-outline-${d.m}`} />
+        </svg>
+      ))}
+    </div>
+  )
+}

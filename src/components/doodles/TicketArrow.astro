@@ -1,0 +1,9 @@
+---
+/** "tear one off" arrow pointing at the Kalakriti tickets.
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0 0 120 70" {...Astro.props}><path class="pi-ln" d="M6 52C26 20 62 8 104 22"></path><path class="pi-ln" d="M88 9.5L106 22.5L88.5 36"></path></svg>

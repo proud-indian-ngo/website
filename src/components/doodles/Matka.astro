@@ -1,0 +1,22 @@
+---
+/** Donate matka (clay pot). Coins are dropped into .coins by the coin script.
+ *  SVG copied verbatim from prototypes/final/index.html; per-use classes and data-reveal attributes come in as props. */
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"svg"> & Record<`data-${string}`, string | boolean | undefined>;
+---
+
+<svg viewBox="0 0 240 210" {...Astro.props}>
+  <ellipse cx="120" cy="50" rx="36" ry="8.5" fill="#0F1B24"></ellipse>
+  <path class="ink" d="M80 50.5C84 42 156 42 160.5 51"></path>
+  <g class="rest"><g transform="translate(106 40) rotate(-16)"><circle cx="2.5" cy="3.5" r="16" fill="#0F1B24"></circle><circle r="16" fill="#F6F2EA" stroke="#0F1B24" stroke-width="2.5"></circle><path d="M-6.5-9H7M-6.5-3.8H7M-3-9C5.5-9 5.5 1.4-3 1.4H-5.5L5 11" fill="none" stroke="#0F1B24" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></g><g transform="translate(133 35) rotate(14)"><circle cx="2.5" cy="3.5" r="16" fill="#0F1B24"></circle><circle r="16" fill="#F6F2EA" stroke="#0F1B24" stroke-width="2.5"></circle><path d="M-6.5-9H7M-6.5-3.8H7M-3-9C5.5-9 5.5 1.4-3 1.4H-5.5L5 11" fill="none" stroke="#0F1B24" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></g></g>
+  <g class="coins"></g>
+  <g class="pot" style="transform-box:fill-box;transform-origin:50% 100%">
+    <path d="M84 51C86 58 86 63 80 69C54 86 40 106 42 130C46 170 84 193 120 193C156 193 194 170 198 130C200 106 186 86 160 69C154 63 154 58 156 51A36 8.5 0 0 1 84 51Z" fill="#4CC0EC"></path>
+    <path class="ink" d="M84 51.5C86 58 86 63 80 69C54 86 40 106 42 130C46 170 84 193 120 193C156 193 194 170 198 130C200 106 186.5 86 160 69C154 63 154 58 156.5 51.5"></path>
+    <path class="ink" d="M79 50A41 10.5 0 0 0 161 50.5M86 66C102 72.5 140 72.5 155 66"></path>
+    <path class="ink" d="M50 110C66 102 82 118 99 110C116 102 132 118 149 110C166 102 180 116 191 110"></path>
+    <path class="ink" d="M44 140C62 132 78 148 96 140C114 132 130 148 148 140C166 132 182 146 196 139"></path>
+    <circle cx="74" cy="125" r="3" fill="#0F1B24"></circle><circle cx="108" cy="125" r="3" fill="#0F1B24"></circle><circle cx="142" cy="125" r="3" fill="#0F1B24"></circle><circle cx="174" cy="124" r="3" fill="#0F1B24"></circle>
+    <path class="ink" d="M62 100C66 90 74 82 82 78" style="stroke:#F6F2EA;stroke-width:4;opacity:.85"></path>
+  </g></svg>

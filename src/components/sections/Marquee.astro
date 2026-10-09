@@ -1,0 +1,42 @@
+---
+/** Programme marquee (motion 10): an ink band, 38s per loop, paused on hover, focus and off-screen; a static wrapped
+ *  row when motion is off. The second copy exists only to make the loop seamless and is hidden from assistive tech. */
+import { getCopy } from "../../lib/content";
+
+const { marquee } = await getCopy();
+const link =
+  "mx-[18px] font-pi-display text-30 leading-[1.15] font-extrabold tracking-label whitespace-nowrap max-tab:mx-[13px] max-tab:text-22";
+const star = "text-22 text-sky not-italic max-tab:text-16";
+---
+
+<div
+  class="marquee loop relative z-5 overflow-hidden bg-ink py-4 text-paper max-tab:py-[13px]" data-reveal="rise" data-at="380" role="region" aria-label={marquee.label}>
+  <div class="marquee__track">
+    <div class="marquee__group">
+      {
+        marquee.items.map((i) => (
+          <Fragment>
+            <a href={i.href} class={link}>
+              {i.label}
+            </a>
+            <i aria-hidden="true" class={star}>
+              ✦
+            </i>
+          </Fragment>
+        ))
+      }
+    </div>
+    <div class="marquee__group" aria-hidden="true">
+      {
+        marquee.items.map((i) => (
+          <Fragment>
+            <a href={i.href} tabindex="-1" class={link}>
+              {i.label}
+            </a>
+            <i class={star}>✦</i>
+          </Fragment>
+        ))
+      }
+    </div>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+---
+/**
+ * Polaroid: a white-framed photo with an offset ink shadow (@proudindian/design css/primitives/polaroid.css).
+ *   variant "peg"   hangs from a clothesline (pivot at the top; render <Peg /> beside it)
+ *   variant "tape"  taped down (a tape strip inside the frame)
+ *   variant "plain" just the frame
+ * `frame` wraps the photo in the 4:5 window; `tag` prints a small marigold label on the photo.
+ */
+import type { ImageMetadata } from "astro";
+import type { HTMLAttributes } from "astro/types";
+import Img from "./Img.astro";
+
+type Props = HTMLAttributes<"figure"> & {
+  src: ImageMetadata;
+  alt: string;
+  width: number;
+  /** the width on phones, as a CSS length (see Img) */
+  phone?: string;
+  caption?: string;
+  /** object-position of the photo, e.g. "50% 35%" */
+  position?: string;
+  variant?: "peg" | "tape" | "plain";
+  frame?: boolean;
+  tag?: string;
+} & Record<`data-${string}`, string | boolean | undefined>;
+
+const { src, alt, width, phone, caption, position, variant = "plain", frame = true, tag, class: cls, ...rest } = Astro.props;
+const imgStyle = position ? `object-position:${position}` : undefined;
+---
+
+<figure class:list={["pi-polaroid", variant === "peg" && "pi-polaroid--peg", cls]} {...rest}>
+  {variant === "tape" && <span class="pi-tape tape" aria-hidden="true" />}
+  {tag && <span class="mt">{tag}</span>}
+  {
+    frame ? (
+      <span class="pi-polaroid__photo">
+        <Img src={src} alt={alt} width={width} phone={phone} style={imgStyle} />
+      </span>
+    ) : (
+      <Img src={src} alt={alt} width={width} phone={phone} style={imgStyle} />
+    )
+  }
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

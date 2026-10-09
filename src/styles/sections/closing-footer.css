@@ -1,0 +1,413 @@
+/* Closing call to action and footer (decision 10). Layout and type are utilities in Closing.astro and Footer.astro.
+   This keeps the bird, plane and squiggle doodles, the taped photo strip, the two street scenes, the road, the
+   registration stamps, the notebook-margin doodles, link hovers and focus, and the Pause motion switch states. */
+.s-ft .ft-ln {
+  fill: none;
+  stroke: var(--color-ink);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.s-ft .ft-foot a {
+  transition: color var(--dur-fast);
+}
+@media (hover: hover) and (pointer: fine) {
+  .s-ft .ft-foot a:hover {
+    color: var(--color-sky);
+  }
+}
+.s-ft .ft-foot :focus-visible {
+  outline: var(--focus-ring-on-dark);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--radius-6);
+}
+.s-ft .ico {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.s-ft .ft-pmb {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-12);
+  min-height: 48px;
+  padding: var(--space-6) var(--space-8) var(--space-6) var(--space-16);
+  border-radius: var(--radius-pill);
+  border: var(--line-paper);
+  background: transparent;
+  color: var(--color-paper);
+  font: var(--font-weight-semibold) var(--text-15) var(--font-pi-sans);
+  cursor: pointer;
+  box-shadow: var(--shadow-sky);
+}
+@media (hover: hover) and (pointer: fine) {
+  .s-ft .ft-pmb:hover {
+    background: var(--color-paper-a8);
+  }
+}
+.s-ft .ft-pmb .ic {
+  width: 20px;
+  height: 20px;
+}
+.s-ft .ft-pmb .sw {
+  position: relative;
+  width: 46px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  border: var(--line-paper);
+  background: var(--color-paper-a10);
+  flex: none;
+}
+.s-ft .ft-pmb .sw i {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 19px;
+  height: 19px;
+  border-radius: var(--radius-round);
+  background: var(--color-surface-paper);
+  transition: transform 150ms var(--ease-settle);
+}
+.s-ft .ft-pmb[aria-pressed="true"] {
+  background: var(--color-surface-paper);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-sky);
+}
+.s-ft .ft-pmb[aria-pressed="true"] .sw {
+  background: var(--color-surface-sky);
+  border-color: var(--color-ink);
+}
+.s-ft .ft-pmb[aria-pressed="true"] .sw i {
+  transform: translateX(18px);
+  background: var(--color-surface-ink);
+}
+/* paused (or reduced motion): the label reads "Motion paused" and the pause icon stays; no play icon, which read
+   as "press to play" */
+.s-ft .ft-pmb .t-on,
+.s-ft .ft-pmb[aria-pressed="true"] .t {
+  display: none;
+}
+.s-ft .ft-pmb[aria-pressed="true"] .t-on {
+  display: inline;
+}
+.s-ft .ft-margin {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.s-ft .ft-dd {
+  position: absolute;
+  opacity: 0.3;
+  color: var(--color-paper);
+}
+.s-ft .ft-dd svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.s-ft .ft-dd path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+@media (hover: hover) and (pointer: fine) and (width >= --theme(--breakpoint-tab)) {
+  .s-ft .ft-margin .ft-dd {
+    pointer-events: auto;
+  }
+  html[data-motion="on"] .s-ft .ft-dd {
+    transition: transform var(--dur-slower) var(--ease-spring);
+  }
+  html[data-motion="on"] .s-ft .ft-dd:hover {
+    transform: rotate(4deg) scale(1.04) !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .s-ft .ft-dd {
+    transition: none !important;
+  }
+}
+.s-ft .fC-sq {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -18px;
+  width: 100%;
+  height: 22px;
+}
+.s-ft .fC-sq path {
+  stroke: var(--color-sky-ink);
+  stroke-width: 4;
+}
+.s-ft .fC-bird {
+  position: absolute;
+  width: 150px;
+  left: calc(50% - 560px);
+  top: -40px;
+  transform: rotate(-6deg);
+}
+.s-ft .fC-plane {
+  position: absolute;
+  width: 220px;
+  right: calc(50% - 600px);
+  top: 120px;
+}
+.s-ft .fC-strip {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin: var(--space-84) auto 0;
+  padding: 0 var(--space-40) var(--space-10);
+  position: relative;
+  z-index: 2;
+}
+.s-ft .fC-strip li {
+  flex: none;
+  width: 224px;
+  margin: 0 -6px;
+}
+.s-ft .fC-strip figure {
+  padding: var(--space-10) var(--space-10) 0;
+}
+.s-ft .fC-strip img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: 50% 22%;
+}
+.s-ft .fC-strip figcaption {
+  font: var(--font-weight-semibold) var(--text-15)/var(--leading-none)
+    var(--font-pi-sans);
+  padding: 13px var(--space-2) var(--space-14);
+  text-align: center;
+}
+.s-ft .fC-strip li:nth-child(1) {
+  transform: rotate(-5deg) translateY(10px);
+}
+.s-ft .fC-strip li:nth-child(2) {
+  transform: rotate(3deg) translateY(-8px);
+}
+.s-ft .fC-strip li:nth-child(3) {
+  transform: rotate(-2deg) translateY(14px);
+}
+.s-ft .fC-strip li:nth-child(4) {
+  transform: rotate(4deg) translateY(-4px);
+}
+.s-ft .fC-strip li:nth-child(5) {
+  transform: rotate(-4deg) translateY(8px);
+}
+.s-ft .fC-strip .tape {
+  position: absolute;
+  left: 50%;
+  top: -12px;
+  width: 78px;
+  height: 24px;
+  margin-left: -39px;
+  background: var(--color-sky-a55);
+  border: var(--border-hair) solid var(--color-ink-a25);
+  transform: rotate(-3deg);
+}
+.s-ft .fC-strip li {
+  position: relative;
+}
+/* Decision 10, option A: the refined monoline street. Two drawings, switched at the phone breakpoint. Desktop: the
+   1440x250 street at its own aspect ratio, capped at 1600px and centred, while the road below runs full width. Phone: a
+   recomposed 560x244 scene (kite, walk to school, gate, tiffin) drawn whole. One 2.25px line (1.75px on phones),
+   paper-2 fills, one sky accent per object. */
+.s-ft .fC-scene {
+  display: block;
+  width: min(100%, var(--container-scene));
+  height: auto;
+  aspect-ratio: 1440/250;
+  margin: var(--space-56) auto 0;
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+}
+.s-ft .fC-scene.ph {
+  display: none;
+}
+.s-ft .fC-scene .s {
+  fill: none;
+  stroke: var(--color-ink);
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+.s-ft .fC-scene .f2 {
+  fill: var(--color-paper-2);
+}
+.s-ft .fC-scene .fp {
+  fill: var(--color-paper);
+}
+.s-ft .fC-scene .ac,
+.s-ft .fC-scene .bl {
+  fill: var(--color-sky);
+}
+.s-ft .fC-scene .eye {
+  fill: var(--color-ink);
+}
+.s-ft .fC-scene .str {
+  stroke-dasharray: 0 6.5;
+}
+/* The ambient loops move the kite, the birds and the steam with transforms. Chrome only runs those on the compositor
+   if the lines inside scale with the drawing, so these groups drop non-scaling-stroke and give their line width (and the
+   kite string's dots) in the drawing's own units instead. --scene-k is the drawing's viewBox units per screen pixel,
+   set by the site script on resize, so the lines stay exactly 2.25px (1.75px on phones) on screen. */
+.s-ft .fC-scene :is(.kite, .birds, .gbird, .pb1, .pb2, .steam) .s {
+  vector-effect: none;
+  stroke-width: calc(2.25 * var(--scene-k, 1));
+}
+.s-ft .fC-scene :is(.kite, .birds, .gbird, .pb1, .pb2, .steam) .str {
+  stroke-dasharray: 0 calc(6.5 * var(--scene-k, 1));
+}
+.s-ft .fC-scene text {
+  font: var(--font-weight-bold) var(--text-13) var(--font-pi-sans);
+  letter-spacing: var(--tracking-sign);
+  fill: var(--color-ink);
+}
+.s-ft .fC-road {
+  display: block;
+  width: 100%;
+  height: 10px;
+  background: repeating-linear-gradient(
+      90deg,
+      var(--color-paper-a55) 0 28px,
+      transparent 28px 64px
+    )
+    0 5px/100% 2px no-repeat;
+}
+.s-ft .stamp {
+  transform: rotate(-1.5deg);
+}
+.s-ft .rs {
+  color: var(--color-sky);
+  border: var(--border-heavy) solid var(--color-sky);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font: var(--font-weight-semibold) var(--text-13)/var(--leading-label)
+    var(--font-pi-sans);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  outline: 1.5px solid var(--color-sky);
+  outline-offset: var(--focus-offset);
+}
+.s-ft .rs b {
+  font: var(--font-weight-extrabold) var(--text-26)/var(--leading-none)
+    var(--font-pi-display);
+  letter-spacing: var(--tracking-label);
+  text-transform: none;
+}
+.s-ft .rs.round {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-round);
+}
+.s-ft .rs.round:nth-child(1) {
+  transform: rotate(-8deg);
+}
+.s-ft .rs.round:nth-child(2) {
+  transform: rotate(6deg);
+}
+.s-ft .rs.rect {
+  border-radius: var(--radius-6);
+  padding: var(--space-10) var(--space-14);
+  transform: rotate(-1.5deg);
+}
+.s-ft .rs.rect b {
+  font-size: var(--text-19);
+  margin-top: var(--space-4);
+}
+.s-ft .rs.rect:nth-child(4) {
+  transform: rotate(1.5deg);
+}
+@media (width < --theme(--breakpoint-tab)) {
+  .s-ft .fC-sq {
+    bottom: -12px;
+    height: 16px;
+  }
+  .s-ft .fC-bird {
+    width: 84px;
+    left: 8px;
+    top: -50px;
+  }
+  .s-ft .fC-plane {
+    display: none;
+  }
+  .s-ft .fC-strip {
+    justify-content: flex-start;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: var(--space-20) var(--space-26) var(--space-22);
+    margin-top: var(--space-44);
+    gap: var(--space-18);
+  }
+  .s-ft .fC-strip li {
+    width: 172px;
+    margin: 0;
+    scroll-snap-align: center;
+  }
+  .s-ft .fC-strip figcaption {
+    font-size: var(--text-14);
+  }
+  .s-ft .fC-strip {
+    display: none;
+  } /* fixes-3: the polaroid strip is desktop-only */
+  .s-ft .fC-scene.dk {
+    display: none;
+  }
+  .s-ft .fC-scene.ph {
+    display: block;
+    width: calc(100% - 24px);
+    aspect-ratio: 560/244;
+    margin: var(--space-56) var(--space-12) 0;
+  }
+  .s-ft .fC-scene .s {
+    stroke-width: 1.75;
+  }
+  .s-ft .fC-scene :is(.kite, .birds, .gbird, .pb1, .pb2, .steam) .s {
+    stroke-width: calc(1.75 * var(--scene-k, 1));
+  }
+  .s-ft .rs.round {
+    width: 84px;
+    height: 84px;
+  }
+  .s-ft .rs.rect b {
+    font-size: var(--text-17);
+  }
+}
+.s-ft .ft-margin.mb {
+  display: none;
+}
+@media (width < --theme(--breakpoint-tab)) {
+  .s-ft .ft-margin.dk {
+    display: none;
+  }
+  .s-ft .ft-margin.mb {
+    display: block;
+  }
+}
+/* contact links are full paper on the 90% text (kept here so the hover colour above still wins) */
+.s-ft .fC-cg a {
+  color: var(--color-paper);
+}
+/* the swipe row hides its scrollbar on touch screens; mouse and trackpad users get the thin brand bar
+   (.pi-scroll-thin, @proudindian/design/scrollbar.css) so they can see it scrolls */
+@media (hover: none), (pointer: coarse) {
+  .s-ft .fC-strip {
+    scrollbar-width: none;
+  }
+  .s-ft .fC-strip::-webkit-scrollbar {
+    display: none;
+  }
+}
