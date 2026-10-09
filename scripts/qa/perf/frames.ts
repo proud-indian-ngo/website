@@ -427,6 +427,32 @@ async function runConfig(
         });
       }, s.i);
       await sleep(page, 1500);
+      // Chrome reports every frame of a compositor animation as dropped while its element straddles the bottom edge
+      // of the viewport, though the screen updates at full rate (a screencast shows it). With the section's top at
+      // the top of a phone screen, the volunteer clock and the donate pot sit right there: scroll them fully in view.
+      // An animated SVG child moves with its whole <svg>, so that is the box to check; one taller than the screen
+      // (the plane's overlay) can't fit and is left alone.
+      const nudged = await page.evaluate(() => {
+        let over = 0;
+        for (const a of document.getAnimations()) {
+          const t = (a.effect as KeyframeEffect | null)?.target;
+          if (a.playState !== "running" || !t) continue;
+          const box =
+            t instanceof SVGElement && !(t instanceof SVGSVGElement)
+              ? (t.ownerSVGElement ?? t)
+              : t;
+          const q = box.getBoundingClientRect();
+          if (
+            q.height < innerHeight &&
+            q.top < innerHeight &&
+            q.bottom > innerHeight
+          )
+            over = Math.max(over, q.bottom - innerHeight + 8);
+        }
+        if (over) scrollBy({ top: over, behavior: "instant" });
+        return Math.round(over);
+      });
+      if (nudged) await sleep(page, 300);
       const running = await page.evaluate(() =>
         document
           .getAnimations()
