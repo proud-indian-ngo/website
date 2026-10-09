@@ -49,6 +49,13 @@ export async function refreshEvents(onChange: () => void) {
   if (!el?.textContent) return;
   const state = JSON.parse(el.textContent) as State;
   if (!state.url) return;
+  // the production feed only allows the live site and its previews (CORS): from a local server (dev, preview, CI)
+  // the request can only fail, with a console error, so it isn't made. A local mock feed (http) still refreshes.
+  if (
+    /^(localhost|127\.0\.0\.1)$/.test(location.hostname) &&
+    state.url.startsWith("https:")
+  )
+    return;
   let events: PublicEvent[];
   try {
     const res = await fetch(state.url, {
