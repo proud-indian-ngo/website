@@ -131,9 +131,12 @@ async function run(browser, url, tag) {
     await sleep(150);
     r["donate pick: deep link"] = await page.evaluate(() => {
       const a = document.querySelector("#donate [data-donate]");
+      // the parameter is the Razorpay item name (the prototype predates its rename), so only its value is compared
+      const u = new URL(a.href);
       return (
-        a.href ===
-          "https://pages.razorpay.com/proud-indian-ngo-donate?donate_an_amount_of_your_choice=2500" &&
+        u.origin + u.pathname ===
+          "https://pages.razorpay.com/proud-indian-ngo-donate" &&
+        [...u.searchParams.values()].join() === "2500" &&
         a.textContent.includes("Donate ₹2,500")
       );
     });

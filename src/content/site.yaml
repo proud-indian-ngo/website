@@ -63,5 +63,5 @@ links:
   # rupees. If the item is renamed in Razorpay, this parameter changes and the amount silently stops pre-filling.
   razorpay:
     base: https://pages.razorpay.com/proud-indian-ngo-donate
-    param: donate_an_amount_of_your_choice
+    param: your_donation
     min: 100

@@ -23,6 +23,7 @@ bun run preview    # serve dist/ at http://localhost:4321
 | `bun run check:types` | `astro check` (TypeScript 6; `astro check` does not support TypeScript 7 yet) |
 | `bun run fix` | Format and auto-fix lint |
 | `bun run check:design` | The installed `@proudindian/design` matches the version the site expects; a `file:` install is not stale; the `public/` brand files are byte-identical to the package's |
+| `bun run check:razorpay` | The live Razorpay page still pre-fills the amount from `site.yaml` → `links.razorpay` (item name and minimum; see [Donations](#donations)) |
 | `bun run design:sync` | Copy the favicons and `og.png` from the package into `public/` (after a package update) |
 | `bun run qa:parity` | Screenshot the prototype and the site and diff them per section (see below) |
 | `bun run qa:behaviour` | Motion-on behaviour checks against the prototype and the site, plus site-only scroll-lock checks for the reports drawer and the phone menu |
@@ -92,7 +93,7 @@ node scripts/qa/events.mjs     # switches the mock between a, b, one, empty, slo
 
 ## Donations
 
-Buttons deep-link to Razorpay: `https://pages.razorpay.com/proud-indian-ngo-donate?donate_an_amount_of_your_choice=<rupees>`, with a minimum of ₹100. Below the minimum the total dims, the button reads "Enter ₹100 or more" and is `aria-disabled` (clicks do nothing), and a note appears once an amount is typed. Focusing or typing in the "Or enter another amount" field deselects the presets. The parameter name is the Razorpay item name in snake case. **If the item is renamed in Razorpay, the amount silently stops pre-filling.** It is configured once, in `site.yaml` → `links.razorpay`.
+Buttons deep-link to Razorpay: `https://pages.razorpay.com/proud-indian-ngo-donate?your_donation=<rupees>`, with a minimum of ₹100. Below the minimum the total dims, the button reads "Enter ₹100 or more" and is `aria-disabled` (clicks do nothing), and a note appears once an amount is typed. Focusing or typing in the "Or enter another amount" field deselects the presets. The parameter name is the Razorpay item name in snake case. **If the item is renamed in Razorpay, the amount silently stops pre-filling** (it happened once: the item became "Your donation"). It is configured once, in `site.yaml` → `links.razorpay`. `bun run check:razorpay` reads the live page and fails if the parameter or the minimum no longer match; CI runs it on every deploy and flags a mismatch as a warning without blocking the deploy.
 
 ## Deploying to Cloudflare Pages
 
@@ -294,4 +295,3 @@ bun run qa:doodles     # margin doodles clear of content at 390-2560px (needs a 
 - [ ] **Custom domains.** Add `proudindian.ngo` and `www` to the Pages project once the Razorpay URLs are checked.
 - [ ] **Real-device check.** The safe-area insets (notch, home indicator) for the sticky donate bar, the menu and the drawer are only verified in CSS; check them on an iPhone.
 - [ ] **Razorpay redirects and webhooks.** Before moving DNS, check the Razorpay dashboard for a redirect URL or webhook pointing at the old site (`payment_success.php`, `verify-razorpay-payment.php`, `webhooks-verify.php`). The new site has no server, so those stop working.
-- [ ] **Razorpay page copy.** The payment page still has the old site's text (design-decisions.md, "Facts update: donations").

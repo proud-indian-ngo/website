@@ -57,6 +57,9 @@ jobs:
 
       - run: bun run check
       - run: bun run check:types
+      # a renamed Razorpay item breaks the amount pre-fill: warn, but don't hold back the deploy
+      - name: Razorpay pre-fill
+        run: bun run check:razorpay || echo "::warning title=Razorpay::The donate page no longer pre-fills the amount; see the step log and update site.yaml → links.razorpay"
       - run: bun run build
         env:
           PUBLIC_SITE_URL: https://proudindian.ngo

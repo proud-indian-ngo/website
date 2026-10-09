@@ -20,6 +20,7 @@
     "qa:doodles": "node scripts/qa/doodles.mjs",
     "prepare": "lefthook install || true",
     "check:design": "bun scripts/check-design.ts",
+    "check:razorpay": "bun scripts/check-razorpay.ts",
     "design:sync": "bun scripts/check-design.ts --sync"
   },
   "dependencies": {
