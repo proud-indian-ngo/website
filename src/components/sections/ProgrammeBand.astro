@@ -5,7 +5,6 @@
  * string, the cut-out child on the band floor and the band's ambient doodle.
  */
 import type { CollectionEntry } from "astro:content";
-import { getSite } from "../../lib/content";
 import { asset } from "../../lib/images";
 import MarginDoodles from "../margins/MarginDoodles.astro";
 import Book from "../doodles/Book.astro";
@@ -25,7 +24,6 @@ interface Props {
 }
 
 const { band: b } = Astro.props;
-const site = await getSite();
 const verbReveal = b.verbReveal === "wipe" ? { "data-reveal": "wipe" } : { "data-reveal": "rise", "data-y": "56" };
 // widest the floor sticker is shown, per band (its height is --kh)
 const mgSet = ({ b0: "teach", b1: "feed", b3: "gather" } as const)[b.anchor as "b0" | "b1" | "b3"];
@@ -47,7 +45,7 @@ const stickerWidth = { book: 270, bowl: 420, heart: 300 }[b.doodle];
     >{b.line}</p>
     <ul class="pi-chips mb-5.5">{b.chips.map((c) => <Chip>{c}</Chip>)}</ul>
     <div class="ctas">
-      <Button href={site.links.register} arrow>{b.cta}</Button>
+      <Button href="#volunteer" arrow>{b.cta}</Button>
     </div>
     <div class="bside">
       <div class="bpics loop">
