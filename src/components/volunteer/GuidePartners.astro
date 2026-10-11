@@ -1,0 +1,15 @@
+---
+/** Volunteer guide, partners: the home page's partner logos (Partners.astro) in a section of their own, before the
+ *  closing. Logos: src/content/partners.yaml. Copy: copy.yaml → partners. */
+import Partners from "../sections/Partners.astro";
+---
+
+<section
+  class="vg-partners relative border-t-line border-ink bg-paper px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+  id="partners"
+  aria-labelledby="partners-h"
+>
+  <div class="relative z-2 mx-auto max-w-section">
+    <Partners level="h2" />
+  </div>
+</section>

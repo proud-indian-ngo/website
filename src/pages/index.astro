@@ -7,6 +7,7 @@ import Header from "../components/sections/Header.astro";
 import Hero from "../components/sections/Hero.astro";
 import HeroPreload from "../components/sections/HeroPreload.astro";
 import Kalakriti from "../components/sections/Kalakriti.astro";
+import Partners from "../components/sections/Partners.astro";
 import PhoneMenu from "../components/sections/PhoneMenu.astro";
 import ProgrammeBand from "../components/sections/ProgrammeBand.astro";
 import ProgrammeIndex from "../components/sections/ProgrammeIndex.astro";
@@ -60,7 +61,10 @@ const structured = homeStructuredData(
     </div>
     <Volunteer events={events} guide="/volunteer/" />
     <Donate />
-    <Reports><Trustees /></Reports>
+    <Reports>
+      <Trustees />
+      <Partners class="mt-28 max-tab:mt-20" />
+    </Reports>
     <Closing />
   </main>
   <Footer />

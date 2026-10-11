@@ -12,7 +12,7 @@ import { defineCollection } from "astro:content";
 const asset = z
   .string()
   .regex(
-    /^(photos|cutouts|board)\/[\w.-]+\.(jpg|png)$/,
+    /^(photos|cutouts|board|partners)\/[\w.-]+\.(jpg|png)$/,
     "a path under src/assets/"
   );
 const position = z.string().regex(/^\d+% \d+%$/);
@@ -219,6 +219,15 @@ const trustees = defineCollection({
   }),
 });
 
+const partners = defineCollection({
+  loader: single("partners"),
+  schema: z.object({
+    items: z
+      .array(z.object({ name: z.string(), logo: asset, url: z.url() }))
+      .min(1),
+  }),
+});
+
 const copy = defineCollection({
   loader: single("copy"),
   schema: z.object({
@@ -389,6 +398,12 @@ const copy = defineCollection({
         photo: pic.extend({ caption: z.string() }),
       }),
     }),
+    partners: z.object({
+      heading,
+      lede: z.string(),
+      /** the accessible name of each logo link; {name} is the partner */
+      visit: z.string(),
+    }),
     closing: z.object({
       chip: z.string(),
       heading,
@@ -550,6 +565,7 @@ export const collections = {
   kalakriti,
   reports,
   trustees,
+  partners,
   copy,
   privacy,
   volunteer,

@@ -1,0 +1,81 @@
+---
+/** Partners and supporters: a grid of logo tiles, each linking to the partner's site. The logos sit in muted ink and
+ *  take their colours on hover and focus (always in colour on touch screens). Rendered inside the Reports section on
+ *  the home page, after the trustees, and in its own section on the volunteer guide (GuidePartners.astro).
+ *  Logos: src/content/partners.yaml. Copy: copy.yaml → partners. */
+import { getCopy, getPartners } from "../../lib/content";
+import { asset } from "../../lib/images";
+import AccentWord from "../ui/AccentWord.astro";
+import Img from "../ui/Img.astro";
+
+interface Props {
+  /** "h2" when the block is its own section (the volunteer guide); "h3" inside Reports */
+  level?: "h2" | "h3";
+  class?: string;
+}
+
+const { level = "h3", class: className } = Astro.props;
+const { partners: p } = await getCopy();
+/** every logo fits a 180×52 box, or 180×72 when it is squarish (narrower than 1.8:1), so a stacked mark and
+ *  wordmark stay readable; its CSS width is what the box allows at its aspect ratio */
+const BOX = { width: 180, height: 52, squarishHeight: 72 };
+const logos = (await getPartners()).map((x) => {
+  const src = asset(x.logo);
+  const squarish = src.width / src.height < 1.8;
+  const height = squarish ? BOX.squarishHeight : BOX.height;
+  return { ...x, src, squarish, width: Math.min(BOX.width, Math.round((height * src.width) / src.height)) };
+});
+const Heading = level;
+---
+
+<div class:list={["pt-board relative", className]}>
+  <div
+    class="mb-10 grid grid-cols-[minmax(0,1fr)_minmax(0,400px)] items-end gap-14 max-tab:mb-8 max-tab:grid-cols-1 max-tab:gap-4.5"
+    data-stagger="70"
+  >
+    <Heading
+      id="partners-h"
+      class:list={[
+        "font-pi-display font-extrabold text-balance",
+        level === "h2"
+          ? "text-64 leading-[.9] tracking-poster max-tab:text-44"
+          : "text-56 leading-[.95] tracking-heavy max-tab:text-40",
+      ]}
+      data-reveal="wipe"
+    >
+      {`${p.heading.before} `}<AccentWord class="relative inline-block">{p.heading.accent}</AccentWord>
+    </Heading>
+    <p class="pb-1.5 font-pi-sans text-17 leading-[1.45] font-normal text-pretty" data-reveal="rise">{p.lede}</p>
+  </div>
+  <!-- flex rather than grid, so a short last row is centred -->
+  <ul
+    class="flex flex-wrap justify-center gap-4 *:basis-[calc((100%-3rem)/4)] max-lap:*:basis-[calc((100%-2rem)/3)] max-tab:gap-3 max-tab:*:basis-[calc((100%-0.75rem)/2)]"
+    data-stagger="50"
+  >
+    {
+      logos.map((l) => (
+        <li data-reveal="rise">
+          <a
+            class="group flex h-30 items-center justify-center rounded-20 border-line border-ink bg-white px-5 max-tab:h-24 max-tab:rounded-14 max-tab:px-3.5"
+            href={l.url}
+            target="_blank"
+            rel="noopener"
+            aria-label={p.visit.replace("{name}", l.name)}
+          >
+            <Img
+              class:list={[
+                "h-auto w-auto max-w-full",
+                l.squarish ? "max-h-18 max-tab:max-h-14" : "max-h-13 max-tab:max-h-10",
+                "brightness-75 grayscale group-hover:brightness-100 group-hover:grayscale-0 group-focus-visible:brightness-100 group-focus-visible:grayscale-0 motion-safe:transition-[filter] motion-safe:duration-200 [@media(hover:none)]:brightness-100 [@media(hover:none)]:grayscale-0",
+              ]}
+              src={l.src}
+              alt=""
+              width={l.width}
+              phone={`${Math.round(l.width * 0.77)}px`}
+            />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>

@@ -8,6 +8,7 @@ import {
   getCopy,
   getGuideCards,
   getKalakriti,
+  getPartners,
   getPrivacy,
   getProgrammes,
   getReports,
@@ -69,15 +70,29 @@ const faqLines = (
     "",
   ]);
 
+/** "## With thanks to our partners.", the lede and one link per partner (partners.yaml) */
+const partnerLines = (
+  copy: Copy,
+  partners: Awaited<ReturnType<typeof getPartners>>
+) => [
+  `## ${copy.partners.heading.before} ${copy.partners.heading.accent}`,
+  "",
+  copy.partners.lede,
+  "",
+  ...partners.map((p) => `- [${p.name}](${p.url})`),
+  "",
+];
+
 /** The whole site in one file: /llms.txt (https://llmstxt.org) and the home page's Markdown. */
 export async function siteMarkdown(origin: URL | undefined) {
-  const [site, copy, programmes, kalakriti, reports, events] =
+  const [site, copy, programmes, kalakriti, reports, partners, events] =
     await Promise.all([
       getSite(),
       getCopy(),
       getProgrammes(),
       getKalakriti(),
       getReports(),
+      getPartners(),
       loadEvents(),
     ]);
   const guide = await getVolunteerPage();
@@ -136,6 +151,7 @@ export async function siteMarkdown(origin: URL | undefined) {
     ),
     `- ${pdfs("disclosure").length} project disclosures, listed on the [website](${abs("/#reports")}).`,
     "",
+    ...partnerLines(copy, partners),
     "## Contact",
     "",
     ...site.contacts.emails.map((e) => `- ${e.label}: ${e.address}`),
@@ -151,11 +167,12 @@ export async function siteMarkdown(origin: URL | undefined) {
 
 /** The volunteer guide (/volunteer/), section by section in page order. */
 export async function volunteerMarkdown(origin: URL | undefined) {
-  const [site, copy, guide, cards, events] = await Promise.all([
+  const [site, copy, guide, cards, partners, events] = await Promise.all([
     getSite(),
     getCopy(),
     getVolunteerPage(),
     getGuideCards(),
+    getPartners(),
     loadEvents(),
   ]);
   const values = guideValues(site);
@@ -229,6 +246,7 @@ export async function volunteerMarkdown(origin: URL | undefined) {
     `## ${heading(guide.faq.heading)}`,
     "",
     ...faqLines(guide, values, url),
+    ...partnerLines(copy, partners),
     "## More",
     "",
     `- [Proud Indian](${abs("/")}): the programmes, Kalakriti, donations and reports.`,

@@ -44,6 +44,12 @@ export async function getReports() {
     .map((e) => ({ id: e.id, ...e.data }))
     .toSorted((a, b) => when(b).localeCompare(when(a)));
 }
+/** in partners.yaml order */
+export async function getPartners() {
+  const entry = await getEntry("partners", "partners");
+  if (!entry) throw missing("partners");
+  return entry.data.items;
+}
 export async function getTrustees() {
   return (await getCollection("trustees")).map((e) => ({
     id: e.id,

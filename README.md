@@ -70,6 +70,7 @@ All content is YAML in `src/content/`, validated against typed schemas in `src/c
 | Kalakriti: edition, date, numbers, the 8 events and their photos, tickets | `src/content/kalakriti.yaml` |
 | Annual reports, audited financials, project disclosures | `src/content/reports.yaml` (kind, title, year or date, url), with the PDFs in `public/reports/`. Every count and year range on the page is derived from it. The drawer lists the first `copy.yaml` → `reports.disclosures.preview` disclosures, and its "See all" row reveals the rest in place. |
 | Trustees | `src/content/trustees.yaml` (`fit` positions the cut-out in its tile) |
+| Partners and supporters (the logo grid after the trustees on the home page, and before the closing on the volunteer guide) | `src/content/partners.yaml` (name, logo, url, in display order), with the logos in `src/assets/partners/` as transparent PNGs trimmed to the artwork, about 200px tall. The heading and lede are `copy.yaml` → `partners`. |
 | Donation presets and the default amount | `copy.yaml` → `donate.card.presets` |
 | The poster when sessions cannot be loaded | `copy.yaml` → `volunteer.unavailable` |
 | The volunteer guide (`/volunteer/`): its hero, "What you'll do" cards, where we meet, internships and the FAQ | `src/content/volunteer.yaml`. The sessions, the how-to-join steps and the closing are shared with the home page (`copy.yaml`). FAQ answers can use `[text](url)` links and `{register}`, `{events}`, `{hr}`, `{connect}`, `{phone}`; emails become links. |
