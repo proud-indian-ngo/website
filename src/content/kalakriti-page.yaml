@@ -24,7 +24,7 @@ hero:
   lede: "Kalakriti is our arts festival for children from Bengaluru’s low-income communities. One Sunday in September, they sing, dance, paint and dress up in front of guest judges and a hall that cheers for every one of them."
   volunteer: Volunteer at Kalakriti
   sponsor: Sponsor a child
-  # the quick facts under the heading
+  # the festival's numbers, on the stage edge under the troupe
   facts:
     [
       Next edition September 2027,
@@ -34,14 +34,22 @@ hero:
       Free for every child,
     ]
   factsLabel: Kalakriti at a glance
-  # two of the three cut-outs from the home page's poster (kalakriti.yaml → edition.troupe), by position
-  kids: [1, 2]
 
 events:
   eyebrow: The day
   heading: { before: Eight events, accent: one Sunday. }
-  lede: "The morning is quiet work: paint sets on newspaper, clay on the desks, pots turning blue and orange, and rangoli creeping across the court. After lunch the hall gets loud. Guest judges mark every event, the winners lift their trophies, and every child goes home with a certificate."
-  # the photos are kalakriti.yaml → line.photos, one per event
+  lede: "Four events in the morning and four on stage after lunch. Guest judges mark every one, the winners lift their trophies, and every child goes home with a certificate."
+  # the day's running order in two parts, the quiet morning and the loud afternoon. `events` name kalakriti.yaml →
+  # line.photos by their `event`, one polaroid each
+  acts:
+    - label: Morning
+      title: On the floor
+      line: Paint sets on newspaper, clay on the desks, pots turning blue and orange, and rangoli creeping across the court.
+      events: [Painting, Pot painting, Clay modelling, Rangoli]
+    - label: Afternoon
+      title: On stage
+      line: "After lunch the hall gets loud: songs, solos, group dances and a parade of costumes."
+      events: [Singing, Solo dance, Group dance, Fancy dress]
 
 editions:
   eyebrow: Editions
@@ -118,19 +126,33 @@ horizon:
 gallery:
   eyebrow: Kalakriti 3.0
   heading: { before: Moments from, accent: 20 September. }
+  # the clothesline: eight polaroids, four to a string (one swipeable line on phones)
+  regionLabel: Kalakriti 3.0 photos, on the line
+  prev: Previous moments
+  next: More moments
+  swipe: swipe the line
   photos:
     - image: photos/kala3-classical.jpg
       alt: A girl in a mirror-work lehenga and dupatta dancing a folk dance on stage
       caption: Folk, in full colour
+    - image: photos/kala3-solo.jpg
+      alt: A girl in a purple kurta dancing a solo, one arm raised, beside a bank of flowers on stage
+      caption: Her solo
+    - image: photos/kala3-dandiya.jpg
+      alt: A girl in an embroidered blouse dancing with dandiya sticks raised
+      caption: Dandiya sticks up
     - image: photos/kala3-duet.jpg
       alt: Two girls in white and red saris dancing a duet on stage
       caption: The duet
+    - image: photos/kala3-kurtas.jpg
+      alt: A row of girls in matching orange kurtas, palms out, dancing together under the stage lights
+      caption: All in orange
+    - image: photos/kala3-kneel.jpg
+      alt: A girl in an orange kurta with jasmine in her hair, kneeling mid-dance at the front of the stage
+      caption: Front and centre
     - image: photos/kala3-pot.jpg
       alt: A girl in a blue dress painting a clay pot, surrounded by other children painting
       caption: Pot painting
-    - image: photos/kala3-rangoli.jpg
-      alt: A child's hands drawing the Indian flag in rangoli colours on the court
-      caption: A tricolour rangoli
     - image: photos/kala3-certificates.jpg
       alt: Children holding up their certificates and medals in front of the sponsors' board
       caption: Certificates for all

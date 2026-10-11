@@ -339,3 +339,25 @@ html[data-motion="on"] .s-kala .kl-row + .kl-row .hg {
     stroke: var(--color-marigold);
   }
 }
+/* "Tear one off" (scripts/tear.ts): the tickets you can pull off their stub. The stub's half is a copy of the body
+   laid over it while you pull; touch keeps vertical scrolling and gives horizontal pulls to the tear. */
+.pi-ticket[data-tear] {
+  position: relative;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.pi-ticket[data-tear] .pi-ticket__body {
+  position: relative;
+}
+.pi-ticket[data-tear] .pi-ticket__torn {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+html[data-motion="on"] .pi-ticket[data-tear] {
+  cursor: grab;
+}
+html[data-motion="on"] .pi-ticket.is-tearing {
+  cursor: grabbing;
+}

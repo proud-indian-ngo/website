@@ -1,17 +1,21 @@
 ---
 /**
- * /kalakriti/ hero: "A stage of their own, once a year." on cyan with two of the poster's cut-out children
- * (kalakriti.yaml → edition.troupe), the two calls to action (volunteer, sponsor a child) and the festival's numbers.
- * Copy: kalakriti-page.yaml → hero. The cut-out layout is the volunteer guide's (volunteer-page.css).
+ * /kalakriti/ hero: the festival's own stage, not the guides' cyan hero. "A stage of their own, once a year." on ink
+ * under a string of bunting, the two calls to action as the home poster's tear-off tickets (volunteer, sponsor a
+ * child), the poster's troupe of three cut-outs standing in a spotlight, and the festival's numbers on the marigold
+ * stage edge. Copy: kalakriti-page.yaml → hero; the troupe and the tickets' small print from kalakriti.yaml. The
+ * bunting, tickets and troupe outline are the home band's (.s-kala, sections/kalakriti.css); the stage is
+ * kalakriti-page.css.
  */
 import { getKalakriti, getKalakritiPage } from "../../lib/content";
 import { asset } from "../../lib/images";
 import KalaSparkle from "../doodles/KalaSparkle.astro";
+import TicketArrow from "../doodles/TicketArrow.astro";
 import MarginDoodles from "../margins/MarginDoodles.astro";
-import Button from "../ui/Button.astro";
-import HeroHeading from "../ui/HeroHeading.astro";
-import HeroKids from "../ui/HeroKids.astro";
-import TickPills from "../ui/TickPills.astro";
+import BuntingString from "../scenes/BuntingString.astro";
+import AccentWord from "../ui/AccentWord.astro";
+import Sticker from "../ui/Sticker.astro";
+import Ticket from "../ui/Ticket.astro";
 
 interface Props {
   /** the volunteer sign-up link */
@@ -20,34 +24,104 @@ interface Props {
 
 const { register } = Astro.props;
 const { hero: h } = await getKalakritiPage();
-const { troupe } = (await getKalakriti()).edition;
-const kids = h.kids.map((i) => {
-  const k = troupe[i];
-  if (!k) throw new Error(`kalakriti-page.yaml hero.kids: no troupe child ${i}`);
-  return { src: asset(k.image), label: k.alt };
-});
+const { edition, tickets: t } = await getKalakriti();
+/** the troupe, left to right: fancy dress, dance, pot painting */
+const troupe = [
+  { cls: "kh-t1", width: 220, phone: "30vw", at: "420" },
+  { cls: "kh-t2", width: 280, phone: "38vw", at: "260" },
+  { cls: "kh-t3", width: 210, phone: "29vw", at: "580" },
+];
 ---
 
-<div class="s-hero relative" id="top">
+<div class="s-hero s-kala relative" id="top">
   <section
-    class="vg-hero relative overflow-hidden bg-sky px-14 pt-[150px] pb-28 max-tab:px-5 max-tab:pt-[104px] max-tab:pb-14"
+    class="kh-stage relative overflow-hidden bg-ink px-14 pt-[164px] text-paper max-tab:px-5 max-tab:pt-[136px]"
     aria-labelledby="kala-h"
   >
-    <MarginDoodles set="khero" tone="sky" />
-    <div class="relative z-2 mx-auto max-w-section" data-stagger="80">
-      <p
-        class="mb-6 inline-flex items-center gap-2 rounded-pill border-line border-ink bg-white py-1 pr-3.5 pl-1.5 font-pi-sans text-15 font-semibold"
-        data-reveal="rise"
-      >
-        <KalaSparkle class="pi-doodle w-6" aria-hidden="true" />{h.eyebrow}
-      </p>
-      <HeroHeading id="kala-h" heading={h.heading} lede={h.lede} class="kala-h1" />
-      <div class="mt-8 flex flex-wrap items-center gap-3 max-tab:mt-6" data-reveal="rise">
-        <Button href={register} size="lg" arrow>{h.volunteer}</Button>
-        <Button href="/csr/#sponsor" variant="ghost" size="lg">{h.sponsor}</Button>
-      </div>
-      <TickPills items={h.facts} label={h.factsLabel} class="max-w-[46rem]" />
+    <MarginDoodles set="khero" tone="ink" />
+    <div class="kh-bunting" aria-hidden="true">
+      <BuntingString class="kh-str" />
+      <BuntingString class="kh-str kh-str--r" />
     </div>
-    <HeroKids kids={kids} />
+    <div class="kh-grid relative z-2 mx-auto max-w-section" data-stagger="80">
+      <div class="kh-copy">
+        <p
+          class="kh-eyebrow mb-6 inline-flex items-center gap-2 rounded-pill border-line border-paper py-1 pr-3.5 pl-1.5 font-pi-sans text-15 font-semibold text-marigold"
+          data-reveal="rise"
+        >
+          <KalaSparkle class="pi-doodle w-6" aria-hidden="true" />{h.eyebrow}
+        </p>
+        <h1
+          id="kala-h"
+          class="kala-h1 font-pi-display leading-[.88] font-extrabold tracking-poster text-balance text-paper"
+          data-reveal="wipe"
+        >
+          {`${h.heading.before} `}<AccentWord variant="marigold">{h.heading.accent}</AccentWord>
+        </h1>
+        <p
+          class="mt-6 max-w-[46ch] font-pi-sans text-20 leading-lede text-pretty text-paper-a86 max-tab:mt-5 max-tab:text-17"
+          data-reveal="rise"
+        >
+          {h.lede}
+        </p>
+        <p
+          class="pick mt-9 ml-2 flex items-end gap-1 font-pi-display text-24 font-extrabold tracking-label text-marigold max-tab:mt-8 max-tab:text-21"
+          aria-hidden="true"
+          data-reveal="rise"
+        >
+          {t.pick}
+          <TicketArrow class="pi-doodle parr" />
+        </p>
+        <div class="kh-tickets mt-7" data-reveal="rise">
+          <Ticket
+            tear
+            variant="paper"
+            href={register}
+            kicker={t.volunteer.kicker}
+            title={h.volunteer}
+            arrow
+            rail={t.volunteer.rail}
+            stub={t.volunteer.stub}
+          />
+          <Ticket
+            tear
+            variant="marigold"
+            href="/csr/#sponsor"
+            kicker={t.sponsor.kicker}
+            title={h.sponsor}
+            rail={t.sponsor.rail}
+            stub={t.sponsor.stub}
+          />
+        </div>
+      </div>
+      <div class="kh-troupe" data-stagger="0">
+        <div class="kh-spot" aria-hidden="true"></div>
+        {
+          edition.troupe.map((k, i) => {
+            const p = troupe[i];
+            return (
+              p && (
+                <Sticker
+                  class={`tp ${p.cls} wob`}
+                  src={asset(k.image)}
+                  alt={k.alt}
+                  width={p.width}
+                  phone={p.phone}
+                  eager
+                  data-reveal="slap"
+                  data-at={p.at}
+                />
+              )
+            );
+          })
+        }
+      </div>
+    </div>
+    <ul
+      class="kh-apron relative z-3 -mx-14 flex flex-wrap justify-center gap-y-1 border-t-line border-ink bg-marigold px-14 py-4 font-pi-display text-22 leading-[1.15] font-extrabold tracking-subtitle text-ink max-tab:-mx-5 max-tab:px-5 max-tab:py-3 max-tab:text-17"
+      aria-label={h.factsLabel}
+    >
+      {h.facts.map((f) => <li>{f}</li>)}
+    </ul>
   </section>
 </div>

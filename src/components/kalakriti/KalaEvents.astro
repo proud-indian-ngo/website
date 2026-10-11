@@ -1,6 +1,7 @@
 ---
-/** /kalakriti/, "Eight events, one Sunday.": what the day looks like, then one taped polaroid per event, from the home
- *  page's photo line (kalakriti.yaml → line.photos). Copy: kalakriti-page.yaml → events. */
+/** /kalakriti/, "Eight events, one Sunday.": the day's running order in two parts, the quiet morning on paper and the
+ *  afternoon on a dark stage, each with its events as taped polaroids from the home page's photo line
+ *  (kalakriti.yaml → line.photos, matched by event). Copy: kalakriti-page.yaml → events. */
 import { getKalakriti, getKalakritiPage } from "../../lib/content";
 import { asset } from "../../lib/images";
 import MarginDoodles from "../margins/MarginDoodles.astro";
@@ -9,6 +10,14 @@ import SectionHead from "../ui/SectionHead.astro";
 
 const { events: e } = await getKalakritiPage();
 const { photos } = (await getKalakriti()).line;
+const acts = e.acts.map((a) => ({
+  ...a,
+  photos: a.events.map((name) => {
+    const p = photos.find((x) => x.event === name);
+    if (!p) throw new Error(`kalakriti-page.yaml events.acts: no photo for the event "${name}" in kalakriti.yaml`);
+    return p;
+  }),
+}));
 ---
 
 <section
@@ -20,22 +29,50 @@ const { photos } = (await getKalakriti()).line;
   <MarginDoodles set="kevents" />
   <div class="relative z-2 mx-auto max-w-section">
     <SectionHead id="kala-events-h" eyebrow={e.eyebrow} heading={e.heading} lede={e.lede} />
-    <ul class="kala-pols mt-16 grid grid-cols-4 gap-x-8 gap-y-12 max-lap:grid-cols-2 max-tab:mt-10 max-tab:gap-x-4.5 max-tab:gap-y-8">
+    <ol class="mt-16 flex flex-col gap-8 max-tab:mt-10 max-tab:gap-6">
       {
-        photos.map((p) => (
-          <li>
-            <Polaroid
-              src={asset(p.image)}
-              alt={p.alt}
-              width={280}
-              phone="42vw"
-              caption={p.event}
-              position={p.position}
-              variant="tape"
-            />
+        acts.map((a, n) => (
+          <li
+            class:list={[
+              "ke-act grid grid-cols-[260px_minmax(0,1fr)] items-start gap-10 rounded-20 border-line border-ink px-10 pt-9 pb-12 max-lap:grid-cols-1 max-lap:gap-8 max-tab:px-5 max-tab:pt-6 max-tab:pb-8",
+              n === 0 ? "bg-white" : "ke-act--stage bg-ink text-paper",
+            ]}
+            data-reveal="rise"
+          >
+            <div>
+              <p class="inline-flex items-center gap-2 rounded-4 bg-marigold px-3 pt-1 pb-1.5 font-pi-display text-17 font-extrabold tracking-label text-ink">
+                {a.label}
+              </p>
+              <h3 class="mt-4 font-pi-display text-44 leading-[.95] font-extrabold tracking-heading max-tab:text-34">
+                {a.title}
+              </h3>
+              <p
+                class:list={[
+                  "mt-3 font-pi-sans text-17 leading-body text-pretty",
+                  n === 0 ? "text-text-muted" : "text-paper-a86",
+                ]}
+              >
+                {a.line}
+              </p>
+            </div>
+            <ul class="kala-pols grid grid-cols-4 gap-x-6 gap-y-8 max-lap:grid-cols-2 max-tab:gap-x-4.5">
+              {a.photos.map((p) => (
+                <li>
+                  <Polaroid
+                    src={asset(p.image)}
+                    alt={p.alt}
+                    width={220}
+                    phone="42vw"
+                    caption={p.event}
+                    position={p.position}
+                    variant="tape"
+                  />
+                </li>
+              ))}
+            </ul>
           </li>
         ))
       }
-    </ul>
+    </ol>
   </div>
 </section>

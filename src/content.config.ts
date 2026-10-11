@@ -519,8 +519,22 @@ const csr = defineCollection({
       lede: z.string(),
       plan: z.string(),
       fund: z.string(),
-      facts: z.array(z.string()).min(1),
-      kids: z.array(z.object({ image: asset, label: z.string() })).length(2),
+      stamps: z.object({
+        label: z.string(),
+        round: z
+          .array(z.object({ value: z.string(), label: z.string() }))
+          .length(2),
+        rect: z
+          .array(z.object({ label: z.string(), value: z.string() }))
+          .min(1),
+        audited: z.string(),
+      }),
+      photo: z.object({
+        image: asset,
+        alt: z.string(),
+        kicker: z.string(),
+        caption: z.string(),
+      }),
     }),
     ways: z.object({
       eyebrow: z.string(),
@@ -699,10 +713,22 @@ const kalakritiPage = defineCollection({
       sponsor: z.string(),
       facts: z.array(z.string()).min(1),
       factsLabel: z.string(),
-      /** positions in kalakriti.yaml → edition.troupe */
-      kids: z.array(z.number().int().min(0)).length(2),
     }),
-    events: z.object({ eyebrow: z.string(), heading, lede: z.string() }),
+    events: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      acts: z
+        .array(
+          z.object({
+            label: z.string(),
+            title: z.string(),
+            line: z.string(),
+            events: z.array(z.string()).min(1),
+          })
+        )
+        .length(2),
+    }),
     editions: z.object({
       eyebrow: z.string(),
       heading,
@@ -750,7 +776,12 @@ const kalakritiPage = defineCollection({
     gallery: z.object({
       eyebrow: z.string(),
       heading,
-      photos: z.array(photo).min(1),
+      regionLabel: z.string(),
+      prev: z.string(),
+      next: z.string(),
+      swipe: z.string(),
+      /** hung four to a string */
+      photos: z.array(photo).length(8),
     }),
     join: z.object({
       eyebrow: z.string(),
@@ -794,8 +825,12 @@ const volunteer = defineCollection({
       lede: z.string(),
       join: z.string(),
       sessions: z.string(),
+      factsTitle: z.string(),
       facts: z.array(z.string()).min(1),
-      kids: z.array(z.object({ image: asset, label: z.string() })).length(2),
+      /** pinned up beside the notepad */
+      photos: z
+        .array(z.object({ image: asset, alt: z.string(), caption: z.string() }))
+        .length(2),
     }),
     do: z.object({
       eyebrow: z.string(),
