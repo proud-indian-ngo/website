@@ -2,9 +2,9 @@
 # Decided on 2026-10-11: four offers (volunteering days, Kalakriti sponsorship, programme funding, gift and kit drives);
 # four volunteering formats; Kalakriti prices from Kalakriti 2.0's costs (₹4,27,936 for 450+ children); volunteering
 # days are quoted as materials plus a facilitation charge, with no per-head price on the page; enquiries by email and
-# WhatsApp. Bengaluru only (the Mumbai chapter closed in 2026).
-# TO CONFIRM before launch: group sizes and lengths in days.formats, the reply and report times in how.steps, the
-# planning lead time in the FAQ, and the safeguarding rules (drafted from common practice; there is no written policy).
+# WhatsApp. Bengaluru only (the Mumbai chapter closed in 2026). Costs are from the audited accounts
+# (public/reports/audited-financials-2025-26.pdf, receipts and payments) and the project disclosures; update them when
+# a new year's accounts come in.
 # Text may use {placeholders}: {csr1} {darpan} {taxExemption} {registered} {connect} {finance} {phone}, and the
 # FAQ answers [text](url) links; email addresses become mailto links.
 
@@ -103,7 +103,7 @@ days:
       provide: A role for everyone, a briefing and lunch.
   cost:
     heading: What a day costs
-    text: "We quote each day as the materials plus a facilitation charge, which covers the planning, the Optimist lead, getting to the site and the report afterwards. You get the quote after our first call, before you commit."
+    text: "We quote each day as the materials plus a facilitation charge, which covers the planning, the Optimist lead, getting to the site and the report afterwards. For scale: the materials for Oracle’s seed-pen day came to ₹6,550, and the paint for the wall Ethos painted to ₹20,271. You get the quote after our first call, before you commit."
   done:
     heading: Companies who have volunteered with us in Bengaluru
     items:
@@ -114,11 +114,11 @@ days:
 kalakriti:
   eyebrow: Sponsor Kalakriti
   heading: { before: Give children a, accent: stage. }
-  lede: "Once a year, children from our communities get one full day of arts and culture: eight events marked by guest judges, a stage of their own and a hall cheering them on. Every child goes home with a certificate."
+  lede: "Once a year, children from our communities get one full day of arts and culture: eight events marked by guest judges, a stage of their own and a hall cheering them on. Every child goes home with a certificate, and the ones who shine get a year of training through Kalakriti Horizon, with competitions outside to test their skills."
   # the cost line under the tiers links the festival's own financial disclosure (reports.yaml)
-  cost: "Kalakriti 2.0 cost ₹4,27,936 for 450+ children, about ₹950 a child, and every rupee is in its financial disclosure."
+  cost: "Kalakriti 3.0 cost ₹4,44,190 for 500 children, about ₹890 a child, and Kalakriti Horizon, the year of dance, music and art training before it, another ₹2,03,373. Every rupee is in the financial disclosure."
   costLink: Read the disclosure
-  disclosure: /reports/disclosure-kalakriti-2-0.pdf
+  disclosure: /reports/disclosure-kalakriti-3-0.pdf
   tiers:
     - amount: "₹1,000"
       name: One child
@@ -139,21 +139,29 @@ fund:
   lede: Each programme maps to an activity in Schedule VII of the Companies Act. We agree the budget, the milestones and the reporting with you before anything starts.
   scheduleLabel: Schedule VII
   fundsLabel: Your funding pays for
-  # one row per programme, in this order. `programme` is an anchor from programmes/*.yaml (or kalakriti)
+  costLabel: What it cost in 2025–26
+  # one row per programme, in this order. `programme` is an anchor from programmes/*.yaml (or kalakriti); `cost` is
+  # from the audited accounts for 2025–26 (Bengaluru lines only; the Mumbai lines are labelled, and Gift a Smile is
+  # Bengaluru only). Kalakriti's training is "Dance Class Payment" plus "Kalakriti Training"; the school fees are for
+  # four Bengaluru students.
   rows:
     - programme: b0
       schedule: "(ii) Promoting education"
-      funds: Class materials, learning kits and the weekend classes at our community centre.
+      funds: Class materials, learning kits, the weekend classes at our community centre, and school fees for children who would otherwise drop out.
+      cost: ₹2,00,000 to clear four students’ pending school fees, ₹14,800 on learning kits, ₹12,243 on art and craft materials and ₹20,000 towards the community centre.
     - programme: b1
       schedule: "(i) Eradicating hunger and malnutrition"
       funds: Ration kits for families, and a proper meal whenever we bring the children together.
+      cost: ₹37,960 on ration kits and ₹37,735 on food distribution.
     - programme: kalakriti
       schedule: "(v) Promoting art and culture"
-      funds: The festival day, from the venue and travel to the medals. See the sponsorships above.
+      funds: The festival day, from the venue and travel to the medals, and Kalakriti Horizon, a year of training for the children who shine on the day, with outside competitions to test their skills. See the sponsorships above.
+      cost: ₹4,27,936 for Kalakriti 2.0, with 450+ children, and ₹1,69,772 for the year of training after it.
     - programme: b3
       schedule: "(iii) Reducing inequalities faced by economically backward groups"
       funds: Gift a Smile, outings for the children, and community days.
-  budget: Budgets for classes, meals and community days depend on how many children and for how long. Tell us what you have in mind and we’ll send a plan with costs.
+      cost: ₹2,49,239 for Gift a Smile.
+  budget: "Those are whole years, from our [audited accounts for 2025–26](/reports/audited-financials-2025-26.pdf). You can fund a programme for a year, a term or a single drive: tell us what you have in mind and we’ll send a plan with costs."
   cta: Talk to us about funding
   subject: CSR funding
 
