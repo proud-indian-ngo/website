@@ -2,6 +2,11 @@
 # kind: annual | audited | disclosure. `year` is the financial year (2023-24); `date` is the month a disclosure was
 # issued (2025-09). The PDFs are in public/reports/, unaltered.
 # The bento counts, the drawer tab counts and the year ranges are all derived from this list.
+- id: annual-2025-26
+  kind: annual
+  title: "Annual report 2025-26"
+  year: 2025-26
+  url: /reports/annual-report-2025-26.pdf
 - id: annual-2024-25
   kind: annual
   title: "Annual report 2024-25"
@@ -67,18 +72,23 @@
   title: "Audited financials 2019-20"
   year: 2019-20
   url: /reports/audited-financials-2019-20.pdf
+# `featured` puts the title on the top card of the bento's document fan
+- id: kalakriti-3-0
+  kind: disclosure
+  title: "Kalakriti 3.0"
+  date: "2026-10"
+  url: /reports/disclosure-kalakriti-3-0.pdf
+  featured: true
 - id: kalakriti-2-0
   kind: disclosure
   title: "Kalakriti 2.0"
   date: "2025-09"
   url: /reports/disclosure-kalakriti-2-0.pdf
-# `featured` puts the title on the top card of the bento's document fan
 - id: gift-distribution-2025
   kind: disclosure
   title: "Gift Distribution 2025"
   date: "2025-04"
   url: /reports/disclosure-gift-distribution-2025-04.pdf
-  featured: true
 - id: kalakriti-24
   kind: disclosure
   title: "Kalakriti ’24"

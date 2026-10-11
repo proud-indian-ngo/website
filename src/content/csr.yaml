@@ -116,9 +116,9 @@ kalakriti:
   heading: { before: Give children a, accent: stage. }
   lede: "Once a year, children from our communities get one full day of arts and culture: eight events marked by guest judges, a stage of their own and a hall cheering them on. Every child goes home with a certificate."
   # the cost line under the tiers links the festival's own financial disclosure (reports.yaml)
-  cost: "Kalakriti 2.0 cost ₹4,27,936 for 450+ children, about ₹950 a child, and every rupee is in its financial disclosure."
+  cost: "Kalakriti 3.0 cost ₹4,44,190 for 500 children, about ₹890 a child, and Kalakriti Horizon, the year of dance, music and art training before it, another ₹2,03,373. Every rupee is in the financial disclosure."
   costLink: Read the disclosure
-  disclosure: /reports/disclosure-kalakriti-2-0.pdf
+  disclosure: /reports/disclosure-kalakriti-3-0.pdf
   tiers:
     - amount: "₹1,000"
       name: One child
