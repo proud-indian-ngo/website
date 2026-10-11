@@ -2,7 +2,7 @@
 /**
  * /volunteer/: everything about volunteering with Proud Indian, for people looking for weekend volunteering in
  * Bengaluru. The hero, then the home page's volunteer section (live sessions, how to join), what you'd do, where we
- * meet, internships, the FAQ and the partners, then the closing section and the footer. Copy: src/content/volunteer.yaml; sessions
+ * meet, the safeguarding rules, internships, the FAQ and the partners, then the closing section and the footer. Copy: src/content/volunteer.yaml; sessions
  * from the events feed. Structured data: the page, its FAQ and the sessions (src/lib/structured-data.ts).
  */
 import MarginSprite from "../components/margins/MarginSprite.astro";
@@ -10,6 +10,7 @@ import Closing from "../components/sections/Closing.astro";
 import Footer from "../components/sections/Footer.astro";
 import Header from "../components/sections/Header.astro";
 import PhoneMenu from "../components/sections/PhoneMenu.astro";
+import Safeguarding from "../components/sections/Safeguarding.astro";
 import StickyDonateBar from "../components/sections/StickyDonateBar.astro";
 import Volunteer from "../components/sections/Volunteer.astro";
 import GuideDo from "../components/volunteer/GuideDo.astro";
@@ -40,7 +41,7 @@ const structured = volunteerStructuredData(
 );
 /** the sections on this page: header, menu and footer links to them stay here, the rest (and the logo, "#top") go to
  *  the home page */
-const anchors = ["#volunteer", "#do", "#where", "#internships", "#faq", "#closing"];
+const anchors = ["#volunteer", "#do", "#where", "#safeguarding", "#internships", "#faq", "#closing"];
 // the guide's own nav: its sections, and the phone menu adds a way home
 const navLinks = page.nav.links;
 const menuLinks = [{ label: page.nav.home, href: "/" }, ...navLinks];
@@ -56,6 +57,7 @@ const menuLinks = [{ label: page.nav.home, href: "/" }, ...navLinks];
     <Volunteer events={events} />
     <GuideDo />
     <GuideWhere events={events.data.events} />
+    <Safeguarding set="vsafe" />
     <GuideInternships values={values} email={values.hr!} />
     <GuideFaq items={faq.page} />
     <GuidePartners />

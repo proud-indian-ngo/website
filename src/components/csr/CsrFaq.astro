@@ -4,7 +4,7 @@
 import { getCsrPage } from "../../lib/content";
 import MarginDoodles from "../margins/MarginDoodles.astro";
 import FaqAccordion from "../ui/FaqAccordion.astro";
-import CsrHead from "./CsrHead.astro";
+import SectionHead from "../ui/SectionHead.astro";
 
 interface Props {
   /** the questions with their answers already rendered (src/lib/inline.ts) */
@@ -23,7 +23,7 @@ const { faq: f } = await getCsrPage();
 >
   <MarginDoodles set="cfaq" />
   <div class="relative z-2 mx-auto max-w-[880px]">
-    <CsrHead id="csr-faq-h" eyebrow={f.eyebrow} heading={f.heading} />
+    <SectionHead id="csr-faq-h" eyebrow={f.eyebrow} heading={f.heading} />
     <FaqAccordion items={items} />
   </div>
 </section>

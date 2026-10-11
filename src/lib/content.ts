@@ -51,6 +51,12 @@ export async function getReports() {
     .toSorted((a, b) => when(b).localeCompare(when(a)));
 }
 /** in partners.yaml order */
+export async function getSafeguarding() {
+  const entry = await getEntry("safeguarding", "safeguarding");
+  if (!entry) throw missing("safeguarding");
+  return entry.data;
+}
+
 export async function getPartners() {
   const entry = await getEntry("partners", "partners");
   if (!entry) throw missing("partners");

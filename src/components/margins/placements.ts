@@ -46,6 +46,7 @@ export type SetName =
   | "vdo"
   | "vwhere"
   | "vint"
+  | "vsafe"
   | "vfaq"
   | "chero"
   | "cways"
@@ -195,6 +196,13 @@ const plans: Record<SetName, Plan> = {
     l: ["notepad", "pencil"],
     r: ["tick", "star"],
     h: 760,
+    gl: 400,
+    gr: 400,
+  },
+  vsafe: {
+    l: ["heart", "star"],
+    r: ["hands", "sparkle"],
+    h: 920,
     gl: 400,
     gr: 400,
   },

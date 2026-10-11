@@ -1,7 +1,7 @@
 ---
 /**
  * Transparency: the bento wall. The document tiles open the reports drawer (ReportsDrawer.astro,
- * src/scripts/reports-drawer.ts). Trustees, "At a glance" and the partners render inside this section through the slot.
+ * src/scripts/reports-drawer.ts). The registrations with a certificate link its PDF (site.yaml → certificates). Trustees, "At a glance" and the partners render inside this section through the slot.
  */
 import { facts, fill, getCopy, getReports, getSite } from "../../lib/content";
 import MarginDoodles from "../margins/MarginDoodles.astro";
@@ -121,12 +121,23 @@ const span = (list: typeof docs) => {
           <p class="cl">{r.registered.heading}</p>
           <ul>
             {
-              r.registered.items.map((i) => (
-                <li>
-                  <span>{i.label}</span>
-                  <b>{fill(i.value, values)}</b>
-                </li>
-              ))
+              r.registered.items.map((i) =>
+                i.cert ? (
+                  <li class="cert">
+                    <a href={site.certificates[i.cert]} aria-label={`${i.label} ${fill(i.value, values)}, certificate (${r.registered.pdf})`}>
+                      <span>
+                        {i.label} · {r.registered.pdf}
+                      </span>
+                      <b>{fill(i.value, values)}</b>
+                    </a>
+                  </li>
+                ) : (
+                  <li>
+                    <span>{i.label}</span>
+                    <b>{fill(i.value, values)}</b>
+                  </li>
+                )
+              )
             }
           </ul>
         </Card>

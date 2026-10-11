@@ -8,7 +8,7 @@ import { mailto } from "../../lib/links";
 import MarginDoodles from "../margins/MarginDoodles.astro";
 import Button from "../ui/Button.astro";
 import SectionLabel from "../ui/SectionLabel.astro";
-import CsrHead from "./CsrHead.astro";
+import SectionHead from "../ui/SectionHead.astro";
 
 interface Props {
   /** where the emails go */
@@ -33,7 +33,7 @@ const rows = f.rows.map((r) => {
 >
   <MarginDoodles set="cfund" />
   <div class="relative z-2 mx-auto max-w-section">
-    <CsrHead id="csr-fund-h" eyebrow={f.eyebrow} heading={f.heading} lede={f.lede} />
+    <SectionHead id="csr-fund-h" eyebrow={f.eyebrow} heading={f.heading} lede={f.lede} />
     <ul class="mt-14 grid border-t-line border-ink max-tab:mt-10" data-stagger="60">
       {
         rows.map((r) => (

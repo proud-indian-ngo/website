@@ -13,7 +13,7 @@ import CsrFund from "../components/csr/CsrFund.astro";
 import CsrHero from "../components/csr/CsrHero.astro";
 import CsrHow from "../components/csr/CsrHow.astro";
 import CsrPaperwork from "../components/csr/CsrPaperwork.astro";
-import CsrSafeguarding from "../components/csr/CsrSafeguarding.astro";
+import Safeguarding from "../components/sections/Safeguarding.astro";
 import CsrSponsor from "../components/csr/CsrSponsor.astro";
 import CsrWays from "../components/csr/CsrWays.astro";
 import Footer from "../components/sections/Footer.astro";
@@ -45,7 +45,7 @@ const structured = csrStructuredData(
   origin
 );
 /** the sections on this page: header, menu and footer links to them stay here, the rest go to the home page */
-const anchors = ["#ways", "#days", "#sponsor", "#fund", "#drives", "#paperwork", "#faq", "#partners", "#closing"];
+const anchors = ["#ways", "#days", "#sponsor", "#fund", "#drives", "#safeguarding", "#paperwork", "#faq", "#partners", "#closing"];
 const navLinks = page.nav.links;
 const menuLinks = [{ label: page.nav.home, href: "/" }, ...navLinks];
 ---
@@ -62,7 +62,7 @@ const menuLinks = [{ label: page.nav.home, href: "/" }, ...navLinks];
     <CsrSponsor email={email} />
     <CsrFund email={email} />
     <CsrHow />
-    <CsrSafeguarding />
+    <Safeguarding set="csafe" />
     <GuidePartners cta={false} />
     <CsrPaperwork values={values} />
     <CsrFaq items={faq.page} />
