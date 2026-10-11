@@ -9,7 +9,7 @@
  * factors (CI runs each on its own runner, so one doesn't slow the other's measurements).
  *
  *   bun run qa:lighthouse              RUNS=1 bun run qa:lighthouse              FORMS=desktop bun run qa:lighthouse
- *   PAGES=volunteer/ bun run qa:lighthouse   (default: the home page, the volunteer guide and /csr/)
+ *   PAGES=volunteer/ bun run qa:lighthouse   (default: the home page, the volunteer guide, /csr/ and /privacy/)
  */
 import { appendFileSync, existsSync } from "node:fs";
 
@@ -27,7 +27,7 @@ const TBT_MAX = 200;
 const PORT = 4401;
 const FORMS = (process.env.FORMS ?? "mobile,desktop").split(",");
 /** pages, relative to the site root: the home page, the volunteer guide and the page for companies */
-const PAGES = (process.env.PAGES ?? ",volunteer/,csr/").split(",");
+const PAGES = (process.env.PAGES ?? ",volunteer/,csr/,privacy/").split(",");
 
 const server = await serve(DIST, PORT);
 const failures = [];
