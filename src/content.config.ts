@@ -564,12 +564,14 @@ const csr = defineCollection({
       lede: z.string(),
       scheduleLabel: z.string(),
       fundsLabel: z.string(),
+      costLabel: z.string(),
       rows: z
         .array(
           z.object({
             programme: z.string(),
             schedule: z.string(),
             funds: z.string(),
+            cost: z.string(),
           })
         )
         .min(1),

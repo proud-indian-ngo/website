@@ -32,6 +32,11 @@
   title: "Annual report 2019-20"
   year: 2019-20
   url: /reports/annual-report-2019-20.pdf
+- id: audited-2025-26
+  kind: audited
+  title: "Audited financials 2025-26"
+  year: 2025-26
+  url: /reports/audited-financials-2025-26.pdf
 - id: audited-2024-25
   kind: audited
   title: "Audited financials 2024-25"

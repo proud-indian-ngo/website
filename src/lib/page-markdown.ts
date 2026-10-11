@@ -348,10 +348,10 @@ export async function csrMarkdown(origin: URL | undefined) {
     "",
     ...fund.rows.map(
       (r) =>
-        `- **${name(r.programme)}**: ${fund.scheduleLabel} ${r.schedule}. ${fund.fundsLabel}: ${r.funds}`
+        `- **${name(r.programme)}**: ${fund.scheduleLabel} ${r.schedule}. ${fund.fundsLabel}: ${r.funds} ${fund.costLabel}: ${r.cost}`
     ),
     "",
-    fund.budget,
+    markdown(fund.budget, values, url),
     "",
     `### ${drives.heading}`,
     "",

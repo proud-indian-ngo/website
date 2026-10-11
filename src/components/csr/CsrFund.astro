@@ -3,6 +3,7 @@
  *  gift and kit drives (#drives), each with a pre-filled email. Copy: csr.yaml → fund, drives; the programme names
  *  from programmes/*.yaml. */
 import { getCsrPage, getProgrammes } from "../../lib/content";
+import { inline } from "../../lib/inline";
 import { mailto } from "../../lib/links";
 import MarginDoodles from "../margins/MarginDoodles.astro";
 import Button from "../ui/Button.astro";
@@ -53,12 +54,19 @@ const rows = f.rows.map((r) => {
             <p class="font-pi-sans text-17 leading-body font-medium text-pretty max-lap:col-start-2 max-tab:col-start-auto">
               <span class="block font-pi-sans text-13 font-semibold tracking-caption text-sky-ink">{f.fundsLabel}</span>
               {r.funds}
+              <span class="mt-2.5 block font-pi-sans text-15 leading-[1.4] text-text-muted">
+                <span class="font-semibold text-ink">{f.costLabel}:</span> {r.cost}
+              </span>
             </p>
           </li>
         ))
       }
     </ul>
-    <p class="mt-8 max-w-[62ch] font-pi-sans text-17 leading-body text-pretty" data-reveal="rise">{f.budget}</p>
+    <p
+      class="mt-8 max-w-[62ch] font-pi-sans text-17 leading-body text-pretty [&_a]:font-semibold [&_a]:underline"
+      data-reveal="rise"
+      set:html={inline(f.budget, {})}
+    />
     <div class="mt-8 flex flex-wrap gap-3" data-reveal="rise">
       <Button href={mailto(email, f.subject)} size="lg" arrow>{f.cta}</Button>
     </div>
