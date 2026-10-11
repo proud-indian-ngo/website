@@ -185,13 +185,15 @@ reports:
   auditedLabel: Audited financials
   registered:
     heading: Registered and verifiable
+    # cert: the pill links that certificate's PDF (site.yaml → certificates); `pdf` is added to its label
+    pdf: PDF
     items:
-      - { label: Tax exemption, value: "{taxExemption}" }
-      - { label: Registered, value: "{registered}" }
-      - { label: NGO Darpan, value: "{darpan}" }
+      - { label: Tax exemption, value: "{taxExemption}", cert: taxExemption }
+      - { label: Registered, value: "{registered}", cert: registered }
+      - { label: NGO Darpan, value: "{darpan}", cert: darpan }
       - { label: PAN, value: "{pan}" }
       - { label: Registration no., value: "{registrationNo}" }
-      - { label: CSR-1, value: "{csr1}" }
+      - { label: CSR-1, value: "{csr1}", cert: csr1 }
       - { label: Founded, value: "{foundedShort} · {city}" }
   drawer:
     eyebrow: Reports

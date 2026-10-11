@@ -15,6 +15,7 @@ import {
   getPrivacy,
   getProgrammes,
   getReports,
+  getSafeguarding,
   getSite,
   getVolunteerPage,
   postalAddress,
@@ -86,6 +87,16 @@ const partnerLines = (
   "",
 ];
 
+/** "## Children first.", the lede and the rules (safeguarding.yaml), on /volunteer/ and /csr/ */
+const safeguardingLines = (s: Awaited<ReturnType<typeof getSafeguarding>>) => [
+  `## ${s.heading.before} ${s.heading.accent}`,
+  "",
+  s.lede,
+  "",
+  ...s.rules.map((x) => `- ${x}`),
+  "",
+];
+
 /** The whole site in one file: /llms.txt (https://llmstxt.org) and the home page's Markdown. */
 export async function siteMarkdown(origin: URL | undefined) {
   const [site, copy, programmes, kalakriti, reports, partners, events] =
@@ -120,7 +131,7 @@ export async function siteMarkdown(origin: URL | undefined) {
     "",
     `- [Register as a volunteer](${site.links.register}): create an account on the Proud Indian dashboard, then show interest in a session.`,
     `- [Every upcoming session](${site.links.events}): the dashboard's list, after signing in.`,
-    `- [Volunteer guide](${abs("/volunteer/")}): what you'd do, where we meet, internships and the FAQ.`,
+    `- [Volunteer guide](${abs("/volunteer/")}): what you'd do, where we meet, the safeguarding rules, internships and the FAQ.`,
     `- Questions about volunteering or internships: ${values.hr}, or call or WhatsApp ${site.contacts.phone.display}.`,
     "",
     "## Upcoming sessions",
@@ -156,6 +167,7 @@ export async function siteMarkdown(origin: URL | undefined) {
     "",
     `- Founded in ${site.city} on ${site.founded.long}. ${site.stats.optimists} Optimists (volunteers), ${site.stats.hours} volunteer hours, ${site.stats.reached} people reached.`,
     `- Registered ${r.taxExemption} and ${r.registered}. NGO Darpan ${r.darpan}, PAN ${r.pan}, registration no. ${r.registrationNo}. Registered with the Ministry of Corporate Affairs to take on CSR projects (CSR-1 ${r.csr1}).`,
+    `- Certificates (PDF): [CSR-1](${abs(site.certificates.csr1)}), [${r.taxExemption}](${abs(site.certificates.taxExemption)}), [${r.registered}](${abs(site.certificates.registered)}), [NGO Darpan](${abs(site.certificates.darpan)}).`,
     ...[...pdfs("annual"), ...pdfs("audited")].map(
       (d) => `- [${d.title}](${abs(d.url)})`
     ),
@@ -177,14 +189,16 @@ export async function siteMarkdown(origin: URL | undefined) {
 
 /** The volunteer guide (/volunteer/), section by section in page order. */
 export async function volunteerMarkdown(origin: URL | undefined) {
-  const [site, copy, guide, cards, partners, events] = await Promise.all([
-    getSite(),
-    getCopy(),
-    getVolunteerPage(),
-    getGuideCards(),
-    getPartners(),
-    loadEvents(),
-  ]);
+  const [site, copy, guide, cards, partners, events, safeguarding] =
+    await Promise.all([
+      getSite(),
+      getCopy(),
+      getVolunteerPage(),
+      getGuideCards(),
+      getPartners(),
+      loadEvents(),
+      getSafeguarding(),
+    ]);
   const values = guideValues(site);
   const abs = (path: string) => new URL(path, origin ?? site.url).href;
   const url = abs("/volunteer/");
@@ -245,6 +259,7 @@ export async function volunteerMarkdown(origin: URL | undefined) {
           "",
         ]
       : []),
+    ...safeguardingLines(safeguarding),
     `## ${heading(i.heading)}`,
     "",
     i.lede,
@@ -268,28 +283,21 @@ export async function volunteerMarkdown(origin: URL | undefined) {
 
 /** The page for companies (/csr/), section by section in page order. */
 export async function csrMarkdown(origin: URL | undefined) {
-  const [site, csr, programmes, partners, reports] = await Promise.all([
-    getSite(),
-    getCsrPage(),
-    getProgrammes(),
-    getPartners(),
-    getReports(),
-  ]);
+  const [site, csr, programmes, partners, reports, safeguarding] =
+    await Promise.all([
+      getSite(),
+      getCsrPage(),
+      getProgrammes(),
+      getPartners(),
+      getReports(),
+      getSafeguarding(),
+    ]);
   const values = { ...facts(site), ...guideValues(site) };
   const abs = (path: string) => new URL(path, origin ?? site.url).href;
   const url = abs("/csr/");
   const heading = (h: { before: string; accent: string }) =>
     `${h.before} ${h.accent}`;
-  const {
-    hero,
-    ways,
-    days,
-    kalakriti: k,
-    fund,
-    drives,
-    how,
-    safeguarding,
-  } = csr;
+  const { hero, ways, days, kalakriti: k, fund, drives, how } = csr;
   const name = (anchor: string) => {
     const p = programmes.find((x) => x.anchor === anchor);
     return p ? `${p.verb} (${p.name})` : anchor;
@@ -363,18 +371,13 @@ export async function csrMarkdown(origin: URL | undefined) {
     "",
     ...how.steps.map((x, i) => `${i + 1}. **${x.title}.** ${x.line}`),
     "",
-    `## ${heading(safeguarding.heading)}`,
-    "",
-    safeguarding.lede,
-    "",
-    ...safeguarding.rules.map((x) => `- ${x}`),
-    "",
+    ...safeguardingLines(safeguarding),
     ...partnerLines(await getCopy(), partners),
     `## ${heading(csr.paperwork.heading)}`,
     "",
     ...csr.paperwork.items.map(
       (i) =>
-        `- ${i.label}: ${fill(i.value, values)}${i.note ? ` (${i.note})` : ""}${i.pdf ? ` · [${csr.paperwork.pdf}](${abs(i.pdf)})` : ""}`
+        `- ${i.label}: ${fill(i.value, values)}${i.note ? ` (${i.note})` : ""}${i.cert ? ` · [${csr.paperwork.pdf}](${abs(site.certificates[i.cert])})` : ""}`
     ),
     ...(audited
       ? [

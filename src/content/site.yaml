@@ -25,6 +25,14 @@ registrations:
   # Ministry of Corporate Affairs registration to take on CSR projects (form CSR-1); companies ask for it first
   csr1: CSR00053151
 
+# the registration certificates in public/certificates/, linked from the home page's registrations and /csr/#paperwork.
+# When one is renewed, replace the file (black out trustees' personal details first) and update csr.yaml → paperwork.
+certificates:
+  csr1: /certificates/csr-1-registration.pdf
+  taxExemption: /certificates/80g-approval.pdf
+  registered: /certificates/12a-registration.pdf
+  darpan: /certificates/ngo-darpan.pdf
+
 contacts:
   emails:
     - label: General

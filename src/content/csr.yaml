@@ -194,17 +194,7 @@ how:
     - title: The report
       line: Photos, numbers and receipts within two weeks. For CSR funding, a utilisation report as well.
 
-safeguarding:
-  eyebrow: Safeguarding
-  heading: { before: Children, accent: first. }
-  lede: Everyone who spends time with our children follows the same rules, whether they come with a company or on their own.
-  rules:
-    - Volunteers are 18 or over, and every session with children starts with a short briefing.
-    - Nobody is ever alone with a child. An Optimist is always in the room.
-    - We take the photos, and share only the ones we have permission to use. Please don’t photograph the children yourself.
-    - No personal contact with children or their families outside our sessions, including phone numbers and social media.
-    - Gifts and money go through us, never to one child, so every child gets the same.
-    - Anyone who doesn’t follow the rules is asked to leave.
+# (the safeguarding rules, safeguarding.yaml, come after how it works: the same section as on /volunteer/)
 
 # (the partner logo grid, copy.yaml → partners and partners.yaml, sits between safeguarding and the paperwork)
 
@@ -214,23 +204,23 @@ paperwork:
   lede: The registrations CSR teams ask for, with their certificates, and every annual report and audited statement since 2019–20.
   registrationsLabel: Registrations
   items:
-    # pdf: a copy in public/certificates/. When a registration is renewed, replace the file and update the value and note.
+    # cert: the certificate PDF, from site.yaml → certificates. When a registration is renewed, update the value and note.
     - label: CSR-1 (Ministry of Corporate Affairs)
       value: "{csr1}"
       note: Registered 8 May 2023
-      pdf: /certificates/csr-1-registration.pdf
+      cert: csr1
     - label: Tax exemption
       value: "{taxExemption} · AAETP0762C26BL02"
       note: Section 354, Income-tax Act 2025 · valid to 2030–31
-      pdf: /certificates/80g-approval.pdf
+      cert: taxExemption
     - label: Registered
       value: "{registered} · AAETP0762C26BL01"
       note: Section 332, Income-tax Act 2025 · valid to 2035–36
-      pdf: /certificates/12a-registration.pdf
+      cert: registered
     - label: NGO Darpan
       value: "{darpan}"
       note: NITI Aayog · registered 19 October 2019
-      pdf: /certificates/ngo-darpan.pdf
+      cert: darpan
     - { label: PAN, value: "{pan}" }
     - { label: Registration no., value: "{registrationNo}" }
     - { label: Founded, value: "{foundedLong} · {city}" }

@@ -4,7 +4,7 @@
 import { getCsrPage } from "../../lib/content";
 import MarginDoodles from "../margins/MarginDoodles.astro";
 import Button from "../ui/Button.astro";
-import CsrHead from "./CsrHead.astro";
+import SectionHead from "../ui/SectionHead.astro";
 
 interface Props {
   /** the pre-filled email behind the button */
@@ -29,7 +29,7 @@ const facts = (f: (typeof d.formats)[number]) => [
 >
   <MarginDoodles set="cdays" />
   <div class="relative z-2 mx-auto max-w-section">
-    <CsrHead id="csr-days-h" eyebrow={d.eyebrow} heading={d.heading} lede={d.lede} />
+    <SectionHead id="csr-days-h" eyebrow={d.eyebrow} heading={d.heading} lede={d.lede} />
     <ol class="mt-14 grid grid-cols-2 gap-6 max-lap:grid-cols-1 max-tab:mt-10 max-tab:gap-4.5" data-stagger="70">
       {
         d.formats.map((f, i) => (

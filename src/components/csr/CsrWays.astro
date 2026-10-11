@@ -6,7 +6,7 @@ import IndexBowl from "../doodles/IndexBowl.astro";
 import IndexBrush from "../doodles/IndexBrush.astro";
 import IndexHands from "../doodles/IndexHands.astro";
 import MarginDoodles from "../margins/MarginDoodles.astro";
-import CsrHead from "./CsrHead.astro";
+import SectionHead from "../ui/SectionHead.astro";
 
 const { ways: w } = await getCsrPage();
 // in card order: a day together, the festival, the programmes, the drives
@@ -21,7 +21,7 @@ const icons = [IndexHands, IndexBrush, IndexBook, IndexBowl];
 >
   <MarginDoodles set="cways" />
   <div class="relative z-2 mx-auto max-w-section">
-    <CsrHead id="csr-ways-h" eyebrow={w.eyebrow} heading={w.heading} lede={w.lede} />
+    <SectionHead id="csr-ways-h" eyebrow={w.eyebrow} heading={w.heading} lede={w.lede} />
     <ul class="mt-14 grid grid-cols-4 gap-5 max-lap:grid-cols-2 max-tab:mt-10 max-tab:grid-cols-1 max-tab:gap-4" data-stagger="60">
       {
         w.cards.map((c, i) => {

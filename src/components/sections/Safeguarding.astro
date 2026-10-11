@@ -1,21 +1,27 @@
 ---
-/** /csr/, "Children first.": the rules everyone who spends time with our children follows. Copy: csr.yaml →
- *  safeguarding. */
-import { getCsrPage } from "../../lib/content";
+/** "Children first.": the rules everyone who spends time with our children follows, on /volunteer/ and /csr/. Copy:
+ *  safeguarding.yaml. */
+import { getSafeguarding } from "../../lib/content";
 import MarginDoodles from "../margins/MarginDoodles.astro";
-import CsrHead from "./CsrHead.astro";
+import SectionHead from "../ui/SectionHead.astro";
 
-const { safeguarding: s } = await getCsrPage();
+interface Props {
+  /** the page's margin doodle set for this section (placements.ts) */
+  set: "vsafe" | "csafe";
+}
+
+const { set } = Astro.props;
+const s = await getSafeguarding();
 ---
 
 <section
-  class="csr-safe relative overflow-hidden border-t-line border-ink bg-paper-2 px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+  class="safe relative overflow-hidden border-t-line border-ink bg-paper-2 px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
   id="safeguarding"
-  aria-labelledby="csr-safe-h"
+  aria-labelledby="safe-h"
 >
-  <MarginDoodles set="csafe" />
+  <MarginDoodles set={set} />
   <div class="relative z-2 mx-auto grid max-w-section grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)] items-start gap-16 max-lap:grid-cols-1 max-lap:gap-10">
-    <CsrHead id="csr-safe-h" eyebrow={s.eyebrow} heading={s.heading} lede={s.lede} />
+    <SectionHead id="safe-h" eyebrow={s.eyebrow} heading={s.heading} lede={s.lede} />
     <ul class="pi-card grid gap-0 py-3" data-stagger="50">
       {
         s.rules.map((r) => (

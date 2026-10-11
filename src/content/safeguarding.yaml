@@ -1,0 +1,12 @@
+# The rules everyone who spends time with our children follows, shown on /volunteer/ and /csr/ (Safeguarding.astro)
+# and in both pages' Markdown. One list, so volunteers and company teams are always told the same thing.
+eyebrow: Safeguarding
+heading: { before: Children, accent: first. }
+lede: Everyone who spends time with our children follows the same rules, whether they come on their own or with their company.
+rules:
+  - Volunteers are 18 or over, and every session with children starts with a short briefing.
+  - Nobody is ever alone with a child. An Optimist is always in the room.
+  - We take the photos, and share only the ones we have permission to use. Please don’t photograph the children yourself.
+  - No personal contact with children or their families outside our sessions, including phone numbers and social media.
+  - Gifts and money go through us, never to one child, so every child gets the same.
+  - Anyone who doesn’t follow the rules is asked to leave.

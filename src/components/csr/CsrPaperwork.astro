@@ -1,12 +1,12 @@
 ---
 /** /csr/, "Ready for your due diligence.": the registrations (CSR-1 first) with their certificates as PDFs
- *  (public/certificates/), the latest audited financials and annual report (newest in reports.yaml), a link to every
+ *  (site.yaml → certificates), the latest audited financials and annual report (newest in reports.yaml), a link to every
  *  report on the home page, and how to get the rest of the onboarding documents.
  *  Copy: csr.yaml → paperwork; values from site.yaml. */
-import { fill, getCsrPage, getReports } from "../../lib/content";
+import { fill, getCsrPage, getReports, getSite } from "../../lib/content";
 import { inline } from "../../lib/inline";
 import MarginDoodles from "../margins/MarginDoodles.astro";
-import CsrHead from "./CsrHead.astro";
+import SectionHead from "../ui/SectionHead.astro";
 
 interface Props {
   /** {placeholders} for the copy */
@@ -16,6 +16,7 @@ interface Props {
 const { values } = Astro.props;
 const { paperwork: p } = await getCsrPage();
 const reports = await getReports();
+const { certificates } = await getSite();
 // getReports() is newest first
 const audited = reports.find((d) => d.kind === "audited");
 const annual = reports.find((d) => d.kind === "annual");
@@ -34,7 +35,7 @@ const docs = [
 >
   <MarginDoodles set="cdocs" />
   <div class="relative z-2 mx-auto max-w-section">
-    <CsrHead id="csr-docs-h" eyebrow={p.eyebrow} heading={p.heading} lede={p.lede} />
+    <SectionHead id="csr-docs-h" eyebrow={p.eyebrow} heading={p.heading} lede={p.lede} />
     <div class="mt-14 grid grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] items-start gap-6 max-lap:grid-cols-1 max-tab:mt-10 max-tab:gap-4.5">
       <div class="rounded-20 border-line border-ink bg-white px-6.5 pt-6 pb-4 shadow-photo max-tab:px-5" data-reveal="rise">
         <p
@@ -49,12 +50,12 @@ const docs = [
                 <dt class="shrink-0 font-pi-sans text-14 font-semibold tracking-caption text-sky-ink">{i.label}</dt>
                 <dd class="text-right font-pi-sans text-17 leading-[1.25] font-bold max-tab:text-left">
                   {fill(i.value, values)}
-                  {(i.note || i.pdf) && (
+                  {(i.note || i.cert) && (
                     <span class="mt-1 block text-14 leading-snug font-medium text-text-muted">
                       {i.note}
-                      {i.note && i.pdf && <span aria-hidden="true"> · </span>}
-                      {i.pdf && (
-                        <a class="font-semibold text-ink underline decoration-1 underline-offset-3" href={i.pdf} aria-label={`${i.label} certificate (${p.pdf})`}>
+                      {i.note && i.cert && <span aria-hidden="true"> · </span>}
+                      {i.cert && (
+                        <a class="font-semibold text-ink underline decoration-1 underline-offset-3" href={certificates[i.cert]} aria-label={`${i.label} certificate (${p.pdf})`}>
                           {p.pdf}
                         </a>
                       )}

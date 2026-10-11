@@ -494,6 +494,29 @@
 .s-tr .cReg li b {
   font: var(--font-weight-bold) var(--text-16) var(--font-pi-sans);
 }
+/* a registration with a certificate: the whole pill opens its PDF */
+.s-tr .cReg li.cert {
+  padding: 0;
+  transition: background-color 160ms var(--ease-settle);
+}
+.s-tr .cReg li.cert a {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-8) var(--space-14);
+  border-radius: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+.s-tr .cReg li.cert a:focus-visible {
+  outline: 3px solid var(--color-sky-deep);
+  outline-offset: 2px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .s-tr .cReg li.cert:hover {
+    background: var(--color-sky-wash);
+  }
+}
 /* tablets (701 to 1100px): four columns clipped the numbers ("23k+" showed as "23"), so the wall has two columns:
    the 95% ring across the top, then the tiles in pairs */
 @media (width >= --theme(--breakpoint-tab)) and (width < --theme(--breakpoint-lap)) {
@@ -805,6 +828,12 @@
     width: auto;
   }
   .s-tr .cReg li {
+    padding: var(--space-6) 11px;
+  }
+  .s-tr .cReg li.cert {
+    padding: 0;
+  }
+  .s-tr .cReg li.cert a {
     padding: var(--space-6) 11px;
   }
   .s-tr .cReg li b {

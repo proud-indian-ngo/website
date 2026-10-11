@@ -28,6 +28,10 @@ const link = z.object({ label: z.string(), href: z.string() });
 const single = (name: string) =>
   glob({ pattern: `${name}.yaml`, base: "./src/content" });
 
+/** a registration with a certificate in public/certificates/ (site.yaml → certificates) */
+const certKey = z.enum(["csr1", "taxExemption", "registered", "darpan"]);
+const certPath = z.string().startsWith("/certificates/").endsWith(".pdf");
+
 const site = defineCollection({
   loader: single("site"),
   schema: z.object({
@@ -53,6 +57,7 @@ const site = defineCollection({
       registrationNo: z.string(),
       csr1: z.string().regex(/^CSR\d{8}$/),
     }),
+    certificates: z.record(certKey, certPath),
     contacts: z.object({
       emails: z.array(z.object({ label: z.string(), address: z.email() })),
       phone: z.object({
@@ -229,6 +234,16 @@ const partners = defineCollection({
   }),
 });
 
+const safeguarding = defineCollection({
+  loader: single("safeguarding"),
+  schema: z.object({
+    eyebrow: z.string(),
+    heading: z.object({ before: z.string(), accent: z.string() }),
+    lede: z.string(),
+    rules: z.array(z.string()).min(1),
+  }),
+});
+
 const copy = defineCollection({
   loader: single("copy"),
   schema: z.object({
@@ -373,7 +388,14 @@ const copy = defineCollection({
       auditedLabel: z.string(),
       registered: z.object({
         heading: z.string(),
-        items: z.array(z.object({ label: z.string(), value: z.string() })),
+        pdf: z.string(),
+        items: z.array(
+          z.object({
+            label: z.string(),
+            value: z.string(),
+            cert: certKey.optional(),
+          })
+        ),
       }),
       drawer: z.object({
         eyebrow: z.string(),
@@ -595,12 +617,6 @@ const csr = defineCollection({
       heading,
       steps: z.array(z.object({ title: z.string(), line: z.string() })).min(2),
     }),
-    safeguarding: z.object({
-      eyebrow: z.string(),
-      heading,
-      lede: z.string(),
-      rules: z.array(z.string()).min(1),
-    }),
     paperwork: z.object({
       eyebrow: z.string(),
       heading,
@@ -612,12 +628,8 @@ const csr = defineCollection({
           value: z.string(),
           /** validity or date, under the value */
           note: z.string().optional(),
-          /** the certificate in public/certificates/ */
-          pdf: z
-            .string()
-            .startsWith("/certificates/")
-            .endsWith(".pdf")
-            .optional(),
+          /** the certificate PDF (site.yaml → certificates) */
+          cert: certKey.optional(),
         })
       ),
       /** the certificate link's label */
@@ -737,6 +749,7 @@ export const collections = {
   reports,
   trustees,
   partners,
+  safeguarding,
   copy,
   privacy,
   volunteer,

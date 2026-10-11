@@ -2,7 +2,7 @@
 /** /csr/, "From first email to report.": the steps from an enquiry to the report afterwards. Copy: csr.yaml → how. */
 import { getCsrPage } from "../../lib/content";
 import MarginDoodles from "../margins/MarginDoodles.astro";
-import CsrHead from "./CsrHead.astro";
+import SectionHead from "../ui/SectionHead.astro";
 
 const { how: h } = await getCsrPage();
 ---
@@ -14,7 +14,7 @@ const { how: h } = await getCsrPage();
 >
   <MarginDoodles set="chow" tone="sky" />
   <div class="relative z-2 mx-auto max-w-section">
-    <CsrHead id="csr-how-h" eyebrow={h.eyebrow} heading={h.heading} tone="sky" />
+    <SectionHead id="csr-how-h" eyebrow={h.eyebrow} heading={h.heading} tone="sky" />
     <ol class="mt-14 grid grid-cols-4 gap-5 max-lap:grid-cols-2 max-tab:mt-10 max-tab:grid-cols-1 max-tab:gap-4" data-stagger="70">
       {
         h.steps.map((s, i) => (
