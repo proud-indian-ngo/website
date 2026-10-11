@@ -15,12 +15,14 @@ type Props = HTMLAttributes<"a"> & {
   rail: string[];
   /** vertical text on the tear-off stub */
   stub: string;
+  /** can be torn off its stub by pulling it (scripts/tear.ts) */
+  tear?: boolean;
 } & Record<`data-${string}`, string | boolean | undefined>;
 
-const { href, variant = "paper", kicker, title, arrow = false, rail, stub, class: cls, ...rest } = Astro.props;
+const { href, variant = "paper", kicker, title, arrow = false, rail, stub, tear = false, class: cls, ...rest } = Astro.props;
 ---
 
-<a class:list={["pi-ticket", `pi-ticket--${variant}`, cls]} href={href} {...rest}
+<a class:list={["pi-ticket", `pi-ticket--${variant}`, cls]} href={href} data-tear={tear || undefined} {...rest}
   ><span class="pi-ticket__body">
     <span class="pi-ticket__main"
       ><span class="pi-ticket__kicker">{kicker}</span><span class="pi-ticket__title"

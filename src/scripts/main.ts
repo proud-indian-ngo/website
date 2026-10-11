@@ -17,6 +17,7 @@ import { initRail, onScroll } from "./rail";
 import { initReportsDrawer } from "./reports-drawer";
 import { fireLoadTriggers, initReveal, sweep } from "./reveal";
 import { initSwipe } from "./swipe";
+import { initTear } from "./tear";
 import { initWebMcp } from "./webmcp";
 import { initWobble } from "./wobble";
 
@@ -38,6 +39,7 @@ initReportsDrawer();
 initLoops();
 initWobble();
 initSwipe();
+initTear();
 initBento();
 initReveal();
 initPlane();

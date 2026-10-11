@@ -699,10 +699,22 @@ const kalakritiPage = defineCollection({
       sponsor: z.string(),
       facts: z.array(z.string()).min(1),
       factsLabel: z.string(),
-      /** positions in kalakriti.yaml → edition.troupe */
-      kids: z.array(z.number().int().min(0)).length(2),
     }),
-    events: z.object({ eyebrow: z.string(), heading, lede: z.string() }),
+    events: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      acts: z
+        .array(
+          z.object({
+            label: z.string(),
+            title: z.string(),
+            line: z.string(),
+            events: z.array(z.string()).min(1),
+          })
+        )
+        .length(2),
+    }),
     editions: z.object({
       eyebrow: z.string(),
       heading,
@@ -750,7 +762,12 @@ const kalakritiPage = defineCollection({
     gallery: z.object({
       eyebrow: z.string(),
       heading,
-      photos: z.array(photo).min(1),
+      regionLabel: z.string(),
+      prev: z.string(),
+      next: z.string(),
+      swipe: z.string(),
+      /** hung four to a string */
+      photos: z.array(photo).length(8),
     }),
     join: z.object({
       eyebrow: z.string(),

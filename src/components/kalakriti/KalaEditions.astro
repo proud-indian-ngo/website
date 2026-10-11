@@ -1,6 +1,6 @@
 ---
-/** /kalakriti/, "Three Septembers so far.": one card per edition, newest first, with its photo, date, venue, numbers,
- *  what it cost and raised, and its financial disclosure. Copy: kalakriti-page.yaml → editions. */
+/** /kalakriti/, "Three Septembers so far.": one taped poster per edition, newest first (a small version of the home
+ *  band's festival poster), with its date, venue, photo, numbers, what it cost and raised, and its financial disclosure. Copy: kalakriti-page.yaml → editions. */
 import { getKalakritiPage } from "../../lib/content";
 import { asset } from "../../lib/images";
 import { newTab } from "../../lib/links";
@@ -10,10 +10,9 @@ import NewTab from "../ui/NewTab.astro";
 import SectionHead from "../ui/SectionHead.astro";
 
 const { editions: e } = await getKalakritiPage();
+/** the numbers under the photo; the date and venue are on the poster's head */
 const rows = (x: (typeof e.items)[number]) =>
   [
-    [e.labels.date, x.dateLabel],
-    [e.labels.venue, x.venue],
     [e.labels.children, x.children],
     [e.labels.volunteers, x.volunteers],
     [e.labels.cost, x.cost],
@@ -30,30 +29,38 @@ const rows = (x: (typeof e.items)[number]) =>
   <MarginDoodles set="keditions" />
   <div class="relative z-2 mx-auto max-w-section">
     <SectionHead id="kala-editions-h" eyebrow={e.eyebrow} heading={e.heading} lede={e.lede} />
-    <ol class="mt-14 grid grid-cols-3 gap-6 max-lap:grid-cols-1 max-tab:mt-10 max-tab:gap-5">
+    <ol class="mt-16 grid grid-cols-3 items-start gap-10 max-lap:mx-auto max-lap:max-w-[560px] max-lap:grid-cols-1 max-tab:mt-10 max-tab:gap-12">
       {
-        e.items.map((x) => (
-          <li class="flex flex-col overflow-hidden rounded-20 border-line border-ink bg-white shadow-photo">
-            <Img
-              src={asset(x.image)}
-              alt={x.alt}
-              width={420}
-              phone="calc(100vw - 40px)"
-              class="aspect-[3/2] w-full border-b-line border-ink object-cover"
-            />
-            <div class="flex flex-1 flex-col gap-4 px-6 pt-5 pb-6 max-tab:px-5">
-              <h3 class="font-pi-display text-30 leading-none font-extrabold tracking-heading">{x.name}</h3>
-              <dl class="grid grid-cols-2 gap-x-4 gap-y-3">
-                {rows(x).map(([label, value], i) => (
-                  <div class:list={[i < 2 && "col-span-2"]}>
-                    <dt class="font-pi-sans text-13 font-semibold tracking-caption text-sky-ink">{label}</dt>
-                    <dd class="font-pi-sans text-17 leading-[1.25] font-bold">{value}</dd>
+        e.items.map((x) => {
+          const [word, ...version] = x.name.split(" ");
+          return (
+            <li class="ked relative flex flex-col border-line border-ink bg-paper px-6 pt-7 pb-6 max-tab:px-5">
+              <span class="pi-tape tape" aria-hidden="true" />
+              <h3 class="font-pi-display text-52 leading-[.9] font-extrabold tracking-tighter max-tab:text-44">
+                {word} <span class="text-sky-ink">{version.join(" ")}</span>
+              </h3>
+              <p class="mt-3 self-start rounded-4 bg-ink px-2.5 pt-1 pb-1.5 font-pi-display text-17 font-extrabold tracking-label text-paper">
+                {x.dateLabel}
+              </p>
+              <p class="mt-2 font-pi-sans text-15 font-semibold">{x.venue}</p>
+              <Img
+                src={asset(x.image)}
+                alt={x.alt}
+                width={420}
+                phone="calc(100vw - 80px)"
+                class="mt-5 aspect-[3/2] w-full border-line border-ink object-cover"
+              />
+              <dl class="mt-4 grid grid-cols-2 gap-x-4">
+                {rows(x).map(([label, value]) => (
+                  <div class="flex items-baseline justify-between gap-2 border-t-line border-ink pt-1 pb-2">
+                    <dt class="font-pi-sans text-13 font-semibold tracking-caption">{label}</dt>
+                    <dd class="font-pi-display text-22 leading-none font-extrabold tracking-title tabular-nums">{value}</dd>
                   </div>
                 ))}
               </dl>
-              <p class="font-pi-sans text-15 leading-body text-pretty text-text-muted">{x.note}</p>
+              <p class="mt-3 font-pi-sans text-15 leading-body text-pretty text-text-muted">{x.note}</p>
               <a
-                class="mt-auto self-start font-pi-sans text-15 font-bold text-sky-ink underline decoration-1 underline-offset-3"
+                class="mt-4 self-start font-pi-sans text-15 font-bold text-sky-ink underline decoration-1 underline-offset-3"
                 href={x.disclosure}
                 {...newTab()}
               >
@@ -61,9 +68,9 @@ const rows = (x: (typeof e.items)[number]) =>
                 <span class="sr-only">: {x.name}</span>
                 <NewTab />
               </a>
-            </div>
-          </li>
-        ))
+            </li>
+          );
+        })
       }
     </ol>
   </div>

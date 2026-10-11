@@ -285,7 +285,8 @@ const plans: Record<SetName, Plan> = {
     h: 900,
     gl: 400,
     gr: 400,
-    y: [14, 90],
+    // below the bunting
+    y: [20, 90],
   },
   kevents: {
     l: ["brush", "note", "sparkle"],
