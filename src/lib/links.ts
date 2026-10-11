@@ -29,7 +29,7 @@ export const opensNewTab = (href: string) =>
   (/^https?:\/\//i.test(href) && !OWN_SITE.test(href));
 
 /** What screen readers hear after a link that opens a new tab (WCAG G201); everyone else sees "↗". */
-export const NEW_TAB_NOTE = "opens in a new tab";
+const NEW_TAB_NOTE = "opens in a new tab";
 
 /** target and rel for a new-tab link. `sponsored` marks a link given in return for support (Google's link spam
  *  policy asks for it on paid placements, and Kalakriti's sponsors get their name on the festival). */
