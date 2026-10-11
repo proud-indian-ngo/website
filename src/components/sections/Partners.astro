@@ -7,6 +7,7 @@ import { getCopy, getPartners } from "../../lib/content";
 import { asset } from "../../lib/images";
 import AccentWord from "../ui/AccentWord.astro";
 import Img from "../ui/Img.astro";
+import { newTab, newTabLabel } from "../../lib/links";
 
 interface Props {
   /** "h2" when the block is its own section (the volunteer guide); "h3" inside Reports */
@@ -60,9 +61,8 @@ const Heading = level;
           <a
             class="group flex h-30 items-center justify-center rounded-20 border-line border-ink bg-white px-5 max-tab:h-24 max-tab:rounded-14 max-tab:px-3.5"
             href={l.url}
-            target="_blank"
-            rel="noopener"
-            aria-label={p.visit.replace("{name}", l.name)}
+            {...newTab(true)}
+            aria-label={newTabLabel(p.visit.replace("{name}", l.name))}
           >
             <Img
               class:list={[

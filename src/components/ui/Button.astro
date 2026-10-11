@@ -4,6 +4,8 @@
  * Renders <a> when `href` is set, otherwise <button>.
  */
 import type { HTMLAttributes } from "astro/types";
+import { newTab as newTabAttrs } from "../../lib/links";
+import NewTab from "./NewTab.astro";
 
 type Props = Omit<HTMLAttributes<"a"> & HTMLAttributes<"button">, "type"> & {
   href?: string;
@@ -13,11 +15,22 @@ type Props = Omit<HTMLAttributes<"a"> & HTMLAttributes<"button">, "type"> & {
   block?: boolean;
   /** trailing "→" (hidden from screen readers) */
   arrow?: boolean;
+  /** opens in a new tab: sets target and rel, and ends with "↗" and a note for screen readers instead of the arrow */
+  newTab?: boolean;
   type?: "button" | "submit";
 } & Record<`data-${string}`, string | boolean | undefined>;
 
-const { href, variant = "ink", size = "md", block = false, arrow = false, type = "button", class: cls, ...rest } =
-  Astro.props;
+const {
+  href,
+  variant = "ink",
+  size = "md",
+  block = false,
+  arrow = false,
+  newTab = false,
+  type = "button",
+  class: cls,
+  ...rest
+} = Astro.props;
 const classes = [
   "pi-btn",
   `pi-btn--${variant}`,
@@ -28,6 +41,6 @@ const classes = [
 const Tag = href ? "a" : "button";
 ---
 
-<Tag class:list={classes} href={href} type={href ? undefined : type} {...rest}
-  ><slot />{arrow && <Fragment>{" "}<span aria-hidden="true">→</span></Fragment>}</Tag
+<Tag class:list={classes} href={href} type={href ? undefined : type} {...newTab && newTabAttrs()} {...rest}
+  ><slot />{newTab ? <NewTab /> : arrow && <Fragment>{" "}<span aria-hidden="true">→</span></Fragment>}</Tag
 >

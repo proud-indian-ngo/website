@@ -5,6 +5,7 @@
  */
 import { fill, type getSite } from "./content";
 import { esc } from "./escape";
+import { NEW_TAB_MARK, opensNewTab } from "./links";
 
 const LINK_RE = /\[([^\]]+)\]\(([^)\s]+)\)/g;
 const EMAIL_RE = /(^|[\s(])([\w.+-]+@[\w-]+(?:\.[\w-]+)+)/g;
@@ -22,7 +23,15 @@ export function inline(
   // links first (their text may hold an email), parked as tokens so escaping and the email pass leave them alone
   const html = esc(
     fill(text, values).replace(LINK_RE, (_, label: string, href: string) => {
-      links.push(`<a href="${esc(resolve(href, base))}">${esc(label)}</a>`);
+      // on the page, PDFs and other sites open in a new tab and say so (src/lib/links.ts); structured data (`base`
+      // set) gets the plain link
+      const tab =
+        !base && opensNewTab(href)
+          ? [' target="_blank" rel="noopener"', NEW_TAB_MARK]
+          : ["", ""];
+      links.push(
+        `<a href="${esc(resolve(href, base))}"${tab[0]}>${esc(label)}${tab[1]}</a>`
+      );
       return `\uE000${links.length - 1}\uE001`;
     })
   );

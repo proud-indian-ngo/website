@@ -231,7 +231,7 @@ trustees:
 partners:
   heading: { before: With thanks to our, accent: partners. }
   lede: The companies and organisations that have volunteered with us, backed our programmes or lent a hand.
-  visit: "{name} (opens their website)"
+  visit: "{name}’s website"
   # the link under the logos, to the page for companies (not shown on that page)
   cta: Partner with us
 

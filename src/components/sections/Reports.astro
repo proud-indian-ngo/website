@@ -12,6 +12,7 @@ import Sparkle from "../doodles/Sparkle.astro";
 import Squiggle from "../doodles/Squiggle.astro";
 import AccentWord from "../ui/AccentWord.astro";
 import Card from "../ui/Card.astro";
+import { newTab, newTabLabel } from "../../lib/links";
 
 const { reports: r } = await getCopy();
 const site = await getSite();
@@ -124,9 +125,13 @@ const span = (list: typeof docs) => {
               r.registered.items.map((i) =>
                 i.cert ? (
                   <li class="cert">
-                    <a href={site.certificates[i.cert]} aria-label={`${i.label} ${fill(i.value, values)}, certificate (${r.registered.pdf})`}>
+                    <a
+                      href={site.certificates[i.cert]}
+                      {...newTab()}
+                      aria-label={newTabLabel(`${i.label} ${fill(i.value, values)}, certificate (${r.registered.pdf})`)}
+                    >
                       <span>
-                        {i.label} · {r.registered.pdf}
+                        {i.label} · {r.registered.pdf} <span aria-hidden="true">↗</span>
                       </span>
                       <b>{fill(i.value, values)}</b>
                     </a>
