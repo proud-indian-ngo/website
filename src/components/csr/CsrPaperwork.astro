@@ -7,6 +7,8 @@ import { fill, getCsrPage, getReports, getSite } from "../../lib/content";
 import { inline } from "../../lib/inline";
 import MarginDoodles from "../margins/MarginDoodles.astro";
 import SectionHead from "../ui/SectionHead.astro";
+import NewTab from "../ui/NewTab.astro";
+import { newTab, newTabLabel, opensNewTab } from "../../lib/links";
 
 interface Props {
   /** {placeholders} for the copy */
@@ -55,8 +57,11 @@ const docs = [
                       {i.note}
                       {i.note && i.cert && <span aria-hidden="true"> · </span>}
                       {i.cert && (
-                        <a class="font-semibold text-ink underline decoration-1 underline-offset-3" href={certificates[i.cert]} aria-label={`${i.label} certificate (${p.pdf})`}>
-                          {p.pdf}
+                        <a class="font-semibold text-ink underline decoration-1 underline-offset-3" href={certificates[i.cert]}
+                          {...newTab()}
+                          aria-label={newTabLabel(`${i.label} certificate (${p.pdf})`)}
+                        >
+                          {p.pdf} <span aria-hidden="true">↗</span>
                         </a>
                       )}
                     </span>
@@ -76,9 +81,10 @@ const docs = [
                 <a
                   class="flex items-center justify-between gap-3 rounded-14 border-line border-ink bg-paper px-4 py-3 font-pi-sans text-16 font-semibold no-underline hover-fine:bg-sky"
                   href={d.href}
+                  {...opensNewTab(d.href) && newTab()}
                 >
                   <span>{d.label}</span>
-                  <span aria-hidden="true">→</span>
+                  {opensNewTab(d.href) ? <NewTab /> : <span aria-hidden="true">→</span>}
                 </a>
               </li>
             ))

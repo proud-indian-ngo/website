@@ -142,10 +142,8 @@ const payUrl = `${rzp.base}?${rzp.param}=${preset.amount}`;
           variant="donate"
           size="xl"
           block
-          target="_blank"
-          rel="noopener"
-          data-donate=""
-          arrow><span data-btn-label="">{c.button} ₹{inr(preset.amount)}</span></Button
+          newTab
+          data-donate=""><span data-btn-label="">{c.button} ₹{inr(preset.amount)}</span></Button
         >
         <p class="fine mt-3.5 text-center font-pi-sans text-13-5 leading-[1.45] font-medium text-balance opacity-88">{c.fine}</p>
       </form>

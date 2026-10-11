@@ -1,7 +1,7 @@
 ---
 /** Phone and tablet poster menu: full-screen cyan dialog opened from the header burger. */
 import { getCopy, getSite } from "../../lib/content";
-import { type Anchors, linkTo } from "../../lib/links";
+import { type Anchors, linkTo, newTab, newTabLabel } from "../../lib/links";
 import { asset } from "../../lib/images";
 import { socialIcons } from "../../lib/social";
 import Lockup from "../brand/Lockup.astro";
@@ -60,7 +60,7 @@ const pill = "rounded-pill border-line border-ink bg-paper px-[11px] py-[5px]";
     {
       social.map((s) => (
         <li class={pill}>
-          <a class="flex items-center gap-1.5" href={s.url} target="_blank" rel="noopener" aria-label={s.label}>
+          <a class="flex items-center gap-1.5" href={s.url} {...newTab()} aria-label={newTabLabel(s.label)}>
             <svg viewBox="0 0 24 24" class="ic size-[15px]" aria-hidden="true" set:html={socialIcons[s.network]} />
             {s.pill}
           </a>

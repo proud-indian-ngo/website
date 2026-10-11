@@ -2,7 +2,8 @@
 /** Footer: contacts, registrations stamps, the Pause motion toggle (WCAG 2.2.2) and the
  *  notebook-margin doodles. */
 import { getCopy, getSite, postalAddress } from "../../lib/content";
-import { type Anchors, linkTo } from "../../lib/links";
+import { type Anchors, linkTo, newTab, newTabLabel } from "../../lib/links";
+import NewTab from "../ui/NewTab.astro";
 import { socialIcons as icons } from "../../lib/social";
 import Lockup from "../brand/Lockup.astro";
 import MarginDoodles from "../margins/MarginDoodles.astro";
@@ -90,8 +91,9 @@ const link = "tap-44 font-pi-sans text-16 font-semibold wrap-anywhere";
                     <small class={small}>{a.label}</small>
                     {postalAddress(a)}
                     {a.map && (
-                      <a class:list={[link, "mt-0.5 block"]} href={a.map} target="_blank" rel="noopener" aria-label={`${f.directions}: ${a.label}`}>
+                      <a class:list={[link, "mt-0.5 block"]} href={a.map} {...newTab()} aria-label={newTabLabel(`${f.directions}: ${a.label}`)}>
                         {f.directions}
+                        <NewTab />
                       </a>
                     )}
                   </li>
@@ -106,9 +108,8 @@ const link = "tap-44 font-pi-sans text-16 font-semibold wrap-anywhere";
                 site.social.map((s) => (
                   <a
                     href={s.url}
-                    target="_blank"
-                    rel="noopener"
-                    aria-label={s.label}
+                    {...newTab()}
+                    aria-label={newTabLabel(s.label)}
                     class="grid size-[46px] place-items-center rounded-round border-line border-paper-a60"
                   >
                     <svg viewBox="0 0 24 24" class="ico size-[22px]" aria-hidden="true" set:html={icons[s.network]} />

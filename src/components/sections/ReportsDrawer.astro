@@ -3,6 +3,8 @@
 import { facts, fill, getCopy, getReports, getSite, shortYear } from "../../lib/content";
 import HeartBadge from "../doodles/HeartBadge.astro";
 import Button from "../ui/Button.astro";
+import NewTab from "../ui/NewTab.astro";
+import { newTab } from "../../lib/links";
 
 const { reports: r } = await getCopy();
 const site = await getSite();
@@ -74,7 +76,7 @@ const selected = "dis";
           >
             {list.map((doc, i) => (
               <li hidden={i >= shown} data-more-item={i >= shown ? "" : undefined}>
-                <a class="tr-doc" href={doc.url}>
+                <a class="tr-doc" href={doc.url} {...newTab()}>
                   <span class={`tr-cover k-${t.key}`} aria-hidden="true">
                     <i />
                     <b>{doc.year ? shortYear(doc.year) : ""}</b>
@@ -84,7 +86,8 @@ const selected = "dis";
                     <span class="dm">{meta(doc, t.kind)}</span>
                   </span>
                   <span class="dl">
-                    {d.pdf} <span aria-hidden="true">↓</span>
+                    {d.pdf}
+                    <NewTab />
                   </span>
                 </a>
               </li>

@@ -4,11 +4,12 @@
  *  On ink, like the home page's Kalakriti band. Copy: csr.yaml → kalakriti. */
 import { getCsrPage, getKalakriti } from "../../lib/content";
 import { asset } from "../../lib/images";
-import { mailto } from "../../lib/links";
+import { mailto, newTab } from "../../lib/links";
 import MarginDoodles from "../margins/MarginDoodles.astro";
 import Button from "../ui/Button.astro";
 import Polaroid from "../ui/Polaroid.astro";
 import SectionHead from "../ui/SectionHead.astro";
+import NewTab from "../ui/NewTab.astro";
 
 interface Props {
   /** where the email goes */
@@ -60,8 +61,8 @@ const photo = photos.find((p) => p.event === "Group dance") ?? photos[0]!;
       </ul>
       <p class="mt-8 max-w-[60ch] font-pi-sans text-17 leading-body text-pretty text-paper-a90" data-reveal="rise">
         {k.cost}{" "}
-        <a class="font-semibold text-paper underline decoration-1 underline-offset-3" href={k.disclosure}
-          >{k.costLink}</a
+        <a class="font-semibold text-paper underline decoration-1 underline-offset-3" href={k.disclosure} {...newTab()}
+          >{k.costLink}<NewTab /></a
         >
       </p>
       <div class="mt-10 flex flex-wrap items-center gap-3 max-tab:mt-8" data-reveal="rise">

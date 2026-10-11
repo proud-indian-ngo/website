@@ -11,13 +11,14 @@ import Base from "../layouts/Base.astro";
 // after Base, so global.css (and its @layer order) comes first
 import "../styles/privacy-page.css";
 import { getPrivacy } from "../lib/content";
+import { markNewTabLinks } from "../lib/links";
 
 const policy = await getPrivacy();
 const toc = policy.headings.filter((h) => h.depth === 2);
 
-// Drop the team's <!-- CONFIRM --> notes from the output, and add a "#" link after each ## and ### heading so readers
-// can copy a link to a section.
-const html = policy.html.replace(/<!--[\s\S]*?-->/g, "").replace(
+// Drop the team's <!-- CONFIRM --> notes from the output, add a "#" link after each ## and ### heading so readers
+// can copy a link to a section, and open other sites in a new tab like the rest of the site.
+const html = markNewTabLinks(policy.html).replace(/<!--[\s\S]*?-->/g, "").replace(
   /<h([23]) id="([^"]+)">([\s\S]*?)<\/h\1>/g,
   (_, level: string, id: string, text: string) =>
     `<h${level} id="${id}">${text}<a class="pp-anchor" href="#${id}" aria-label="Link to this section">#</a></h${level}>`
