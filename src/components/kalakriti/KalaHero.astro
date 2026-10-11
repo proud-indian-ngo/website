@@ -1,0 +1,53 @@
+---
+/**
+ * /kalakriti/ hero: "A stage of their own, once a year." on cyan with two of the poster's cut-out children
+ * (kalakriti.yaml → edition.troupe), the two calls to action (volunteer, sponsor a child) and the festival's numbers.
+ * Copy: kalakriti-page.yaml → hero. The cut-out layout is the volunteer guide's (volunteer-page.css).
+ */
+import { getKalakriti, getKalakritiPage } from "../../lib/content";
+import { asset } from "../../lib/images";
+import KalaSparkle from "../doodles/KalaSparkle.astro";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import Button from "../ui/Button.astro";
+import HeroHeading from "../ui/HeroHeading.astro";
+import HeroKids from "../ui/HeroKids.astro";
+import TickPills from "../ui/TickPills.astro";
+
+interface Props {
+  /** the volunteer sign-up link */
+  register: string;
+}
+
+const { register } = Astro.props;
+const { hero: h } = await getKalakritiPage();
+const { troupe } = (await getKalakriti()).edition;
+const kids = h.kids.map((i) => {
+  const k = troupe[i];
+  if (!k) throw new Error(`kalakriti-page.yaml hero.kids: no troupe child ${i}`);
+  return { src: asset(k.image), label: k.alt };
+});
+---
+
+<div class="s-hero relative" id="top">
+  <section
+    class="vg-hero relative overflow-hidden bg-sky px-14 pt-[150px] pb-28 max-tab:px-5 max-tab:pt-[104px] max-tab:pb-14"
+    aria-labelledby="kala-h"
+  >
+    <MarginDoodles set="khero" tone="sky" />
+    <div class="relative z-2 mx-auto max-w-section" data-stagger="80">
+      <p
+        class="mb-6 inline-flex items-center gap-2 rounded-pill border-line border-ink bg-white py-1 pr-3.5 pl-1.5 font-pi-sans text-15 font-semibold"
+        data-reveal="rise"
+      >
+        <KalaSparkle class="pi-doodle w-6" aria-hidden="true" />{h.eyebrow}
+      </p>
+      <HeroHeading id="kala-h" heading={h.heading} lede={h.lede} class="kala-h1" />
+      <div class="mt-8 flex flex-wrap items-center gap-3 max-tab:mt-6" data-reveal="rise">
+        <Button href={register} size="lg" arrow>{h.volunteer}</Button>
+        <Button href="/csr/#sponsor" variant="ghost" size="lg">{h.sponsor}</Button>
+      </div>
+      <TickPills items={h.facts} label={h.factsLabel} class="max-w-[46rem]" />
+    </div>
+    <HeroKids kids={kids} />
+  </section>
+</div>

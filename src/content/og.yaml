@@ -27,6 +27,12 @@ csr:
       cutouts/NutritionDistribution_DSC_0177.png,
     ]
   alt: "CSR and employee volunteering in Bengaluru with Proud Indian: CSR-1 registered, 80G and 12A; volunteering days and Kalakriti sponsorship."
+kalakriti:
+  pre: Children's arts festival in
+  word: Bengaluru.
+  pills: [500 children · 8 events, Every September]
+  kids: [cutouts/Kalakriti3_AC_08849.png, cutouts/Kalakriti3_IMG_4409.png]
+  alt: "Kalakriti, Proud Indian's yearly arts festival for children in Bengaluru: 500 children, 8 events, every September."
 privacy:
   pre: How we handle your data
   word: Privacy policy.

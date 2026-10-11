@@ -1,0 +1,70 @@
+---
+/** /kalakriti/, "Three Septembers so far.": one card per edition, newest first, with its photo, date, venue, numbers,
+ *  what it cost and raised, and its financial disclosure. Copy: kalakriti-page.yaml → editions. */
+import { getKalakritiPage } from "../../lib/content";
+import { asset } from "../../lib/images";
+import { newTab } from "../../lib/links";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import Img from "../ui/Img.astro";
+import NewTab from "../ui/NewTab.astro";
+import SectionHead from "../ui/SectionHead.astro";
+
+const { editions: e } = await getKalakritiPage();
+const rows = (x: (typeof e.items)[number]) =>
+  [
+    [e.labels.date, x.dateLabel],
+    [e.labels.venue, x.venue],
+    [e.labels.children, x.children],
+    [e.labels.volunteers, x.volunteers],
+    [e.labels.cost, x.cost],
+    [e.labels.raised, x.raised],
+  ].filter((r): r is [string, string] => Boolean(r[1]));
+---
+
+<section
+  class="relative overflow-hidden border-t-line border-ink bg-paper-2 px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+  id="editions"
+  data-spy="editions"
+  aria-labelledby="kala-editions-h"
+>
+  <MarginDoodles set="keditions" />
+  <div class="relative z-2 mx-auto max-w-section">
+    <SectionHead id="kala-editions-h" eyebrow={e.eyebrow} heading={e.heading} lede={e.lede} />
+    <ol class="mt-14 grid grid-cols-3 gap-6 max-lap:grid-cols-1 max-tab:mt-10 max-tab:gap-5">
+      {
+        e.items.map((x) => (
+          <li class="flex flex-col overflow-hidden rounded-20 border-line border-ink bg-white shadow-photo">
+            <Img
+              src={asset(x.image)}
+              alt={x.alt}
+              width={420}
+              phone="calc(100vw - 40px)"
+              class="aspect-[3/2] w-full border-b-line border-ink object-cover"
+            />
+            <div class="flex flex-1 flex-col gap-4 px-6 pt-5 pb-6 max-tab:px-5">
+              <h3 class="font-pi-display text-30 leading-none font-extrabold tracking-heading">{x.name}</h3>
+              <dl class="grid grid-cols-2 gap-x-4 gap-y-3">
+                {rows(x).map(([label, value], i) => (
+                  <div class:list={[i < 2 && "col-span-2"]}>
+                    <dt class="font-pi-sans text-13 font-semibold tracking-caption text-sky-ink">{label}</dt>
+                    <dd class="font-pi-sans text-17 leading-[1.25] font-bold">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+              <p class="font-pi-sans text-15 leading-body text-pretty text-text-muted">{x.note}</p>
+              <a
+                class="mt-auto self-start font-pi-sans text-15 font-bold text-sky-ink underline decoration-1 underline-offset-3"
+                href={x.disclosure}
+                {...newTab()}
+              >
+                {e.disclosure}
+                <span class="sr-only">: {x.name}</span>
+                <NewTab />
+              </a>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

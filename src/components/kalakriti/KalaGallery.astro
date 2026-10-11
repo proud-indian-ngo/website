@@ -1,0 +1,31 @@
+---
+/** /kalakriti/, "Moments from 20 September.": a row of tilted, taped polaroids from the last edition. Copy:
+ *  kalakriti-page.yaml → gallery. */
+import { getKalakritiPage } from "../../lib/content";
+import { asset } from "../../lib/images";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import Polaroid from "../ui/Polaroid.astro";
+import SectionHead from "../ui/SectionHead.astro";
+
+const { gallery: g } = await getKalakritiPage();
+---
+
+<section
+  class="relative overflow-hidden border-t-line border-ink bg-paper px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+  id="gallery"
+  aria-labelledby="kala-gallery-h"
+>
+  <MarginDoodles set="kgallery" />
+  <div class="relative z-2 mx-auto max-w-section">
+    <SectionHead id="kala-gallery-h" eyebrow={g.eyebrow} heading={g.heading} />
+    <ul class="kala-pols kala-gallery mt-16 grid grid-cols-5 gap-6 max-lap:grid-cols-3 max-tab:mt-10 max-tab:grid-cols-2 max-tab:gap-4.5">
+      {
+        g.photos.map((p) => (
+          <li>
+            <Polaroid src={asset(p.image)} alt={p.alt} width={240} phone="42vw" caption={p.caption} variant="tape" />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

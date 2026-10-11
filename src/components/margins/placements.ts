@@ -55,6 +55,13 @@ export type SetName =
   | "cfund"
   | "chow"
   | "csafe"
+  | "khero"
+  | "kevents"
+  | "keditions"
+  | "khorizon"
+  | "kgallery"
+  | "kjoin"
+  | "kfaq"
   | "cdocs"
   | "cfaq"
   | "cclose";
@@ -268,6 +275,57 @@ const plans: Record<SetName, Plan> = {
     l: ["notepad", "tick"],
     r: ["pencil", "star"],
     h: 1000,
+    gl: 400,
+    gr: 400,
+  },
+  // the /kalakriti/ page's sections (the 1264px section width, like the guides')
+  khero: {
+    l: ["drum", "star", "sparkle"],
+    r: ["brush", "sun"],
+    h: 900,
+    gl: 400,
+    gr: 400,
+    y: [14, 90],
+  },
+  kevents: {
+    l: ["brush", "note", "sparkle"],
+    r: ["drum", "star", "pencil"],
+    h: 1900,
+    gl: 400,
+    gr: 400,
+  },
+  keditions: {
+    l: ["star", "notepad", "kite"],
+    r: ["sparkle", "tick", "heart"],
+    h: 1500,
+    gl: 400,
+    gr: 400,
+  },
+  khorizon: {
+    l: ["note", "star"],
+    r: ["drum", "sparkle"],
+    h: 1100,
+    gl: 400,
+    gr: 400,
+  },
+  kgallery: {
+    l: ["heart", "sparkle"],
+    r: ["brush", "star"],
+    h: 900,
+    gl: 400,
+    gr: 400,
+  },
+  kjoin: {
+    l: ["hands", "star"],
+    r: ["heart", "rupee"],
+    h: 1000,
+    gl: 400,
+    gr: 400,
+  },
+  kfaq: {
+    l: ["notepad", "sparkle", "star"],
+    r: ["clock", "brush"],
+    h: 1300,
     gl: 400,
     gr: 400,
   },

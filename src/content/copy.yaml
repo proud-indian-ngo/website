@@ -266,7 +266,7 @@ closing:
     - {
         image: photos/strip-dance.jpg,
         alt: Children in red T-shirts holding their dance trophies,
-        caption: Dance completion,
+        caption: Dance competition,
       }
 
 footer:
@@ -276,7 +276,7 @@ footer:
   navLabel: Footer
   links:
     - { label: Programmes, href: "#programmes" }
-    - { label: Kalakriti, href: "#kalakriti" }
+    - { label: Kalakriti, href: /kalakriti/ }
     - { label: Volunteer, href: /volunteer/ }
     - { label: For companies, href: /csr/ }
     - { label: Donate, href: "#donate" }

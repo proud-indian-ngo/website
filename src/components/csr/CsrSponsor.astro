@@ -1,6 +1,6 @@
 ---
 /** /csr/, "Give children a stage.": the Kalakriti sponsorships (per child, per event, title), what the last festival
- *  cost with its financial disclosure, a pre-filled email and a link to the festival on the home page.
+ *  cost with its financial disclosure, a pre-filled email and a link to the festival's page.
  *  On ink, like the home page's Kalakriti band. Copy: csr.yaml → kalakriti. */
 import { getCsrPage, getKalakriti } from "../../lib/content";
 import { asset } from "../../lib/images";
@@ -67,7 +67,7 @@ const photo = photos.find((p) => p.event === "Group dance") ?? photos[0]!;
       </p>
       <div class="mt-10 flex flex-wrap items-center gap-3 max-tab:mt-8" data-reveal="rise">
         <Button href={mailto(email, k.subject)} variant="sky" size="lg" arrow>{k.cta}</Button>
-        <a class="tap-44 inline-flex items-center px-2 font-pi-sans text-16 font-semibold text-paper underline decoration-1 underline-offset-3" href="/#kalakriti"
+        <a class="tap-44 inline-flex items-center px-2 font-pi-sans text-16 font-semibold text-paper underline decoration-1 underline-offset-3" href="/kalakriti/"
           >{k.more}</a
         >
       </div>

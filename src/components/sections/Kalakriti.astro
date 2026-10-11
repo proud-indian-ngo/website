@@ -158,7 +158,12 @@ const troupePhone = ["35vw", "46vw", "35vw"];
         rail={k.tickets.sponsor.rail}
         stub={k.tickets.sponsor.stub}
       />
-      <p class="tn mt-2 text-16 leading-[1.45] text-paper tab:max-desk:col-span-full tab:max-desk:max-w-[52ch]">{k.tickets.note}</p>
+      <p class="tn mt-2 text-16 leading-[1.45] text-paper tab:max-desk:col-span-full tab:max-desk:max-w-[52ch]">
+        {k.tickets.note}
+        <a class="font-semibold whitespace-nowrap text-paper underline decoration-1 underline-offset-3" href="/kalakriti/"
+          >{k.tickets.more} <span aria-hidden="true">→</span></a
+        >
+      </p>
     </div>
   </div>
   <div class="kline relative mx-auto mt-26 max-w-kalakriti max-tab:-mx-5 max-tab:mt-16">

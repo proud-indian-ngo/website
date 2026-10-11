@@ -1,0 +1,49 @@
+---
+/** /kalakriti/, "Make the next one bigger.": the three ways in (the crew, sponsoring, donating), each a card with its
+ *  button, and the last crew's photo. Copy: kalakriti-page.yaml → join. */
+import { fill, getKalakritiPage } from "../../lib/content";
+import { asset } from "../../lib/images";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import Button from "../ui/Button.astro";
+import Polaroid from "../ui/Polaroid.astro";
+import SectionHead from "../ui/SectionHead.astro";
+
+interface Props {
+  /** {placeholders} for the card links ({register}) */
+  values: Record<string, string>;
+}
+
+const { values } = Astro.props;
+const { join: j } = await getKalakritiPage();
+---
+
+<section
+  class="relative overflow-hidden border-t-line border-ink bg-paper-2 px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+  id="join"
+  data-spy="join"
+  aria-labelledby="kala-join-h"
+>
+  <MarginDoodles set="kjoin" />
+  <div class="relative z-2 mx-auto max-w-section">
+    <div class="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-14 max-lap:grid-cols-1 max-lap:gap-10">
+      <SectionHead id="kala-join-h" eyebrow={j.eyebrow} heading={j.heading} lede={j.lede} />
+      <div class="kala-crew wob max-lap:hidden">
+        <span class="pi-tape tape" aria-hidden="true" />
+        <Polaroid src={asset(j.photo.image)} alt={j.photo.alt} width={360} caption={j.photo.caption} frame={false} />
+      </div>
+    </div>
+    <ul class="mt-14 grid grid-cols-3 gap-6 max-lap:grid-cols-1 max-tab:mt-10 max-tab:gap-4.5">
+      {
+        j.cards.map((c, i) => (
+          <li class:list={["pi-card flex flex-col gap-3", i === 1 && "pi-card--sky"]}>
+            <h3 class="font-pi-display text-30 leading-[1.02] font-extrabold tracking-heading">{c.title}</h3>
+            <p class="font-pi-sans text-16 leading-body font-medium text-pretty">{c.line}</p>
+            <div class="mt-auto pt-3">
+              <Button href={fill(c.href, values)} variant={i === 1 ? "ink" : "ghost"} arrow>{c.cta}</Button>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

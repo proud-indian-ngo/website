@@ -1,0 +1,59 @@
+---
+/**
+ * /kalakriti/: the yearly children's arts festival. The hero with the numbers, the eight events, each edition with
+ * its numbers and financial disclosure, Kalakriti Horizon (the year of training after the festival), photos from the
+ * last edition, the ways to get involved, the FAQ and the closing. Instagram posts link here (and /kalakriti and the
+ * old kalakriti.php redirect here). Copy: src/content/kalakriti-page.yaml; the events and their photos and the hero's
+ * cut-outs from kalakriti.yaml. Structured data: the page, each edition as an Event, and the FAQ.
+ */
+import MarginSprite from "../components/margins/MarginSprite.astro";
+import KalaEditions from "../components/kalakriti/KalaEditions.astro";
+import KalaEvents from "../components/kalakriti/KalaEvents.astro";
+import KalaGallery from "../components/kalakriti/KalaGallery.astro";
+import KalaHero from "../components/kalakriti/KalaHero.astro";
+import KalaHorizon from "../components/kalakriti/KalaHorizon.astro";
+import KalaJoin from "../components/kalakriti/KalaJoin.astro";
+import Closing from "../components/sections/Closing.astro";
+import FaqSection from "../components/sections/FaqSection.astro";
+import Footer from "../components/sections/Footer.astro";
+import Header from "../components/sections/Header.astro";
+import PhoneMenu from "../components/sections/PhoneMenu.astro";
+import StickyDonateBar from "../components/sections/StickyDonateBar.astro";
+import Base from "../layouts/Base.astro";
+// after Base, so global.css (and its @layer order) comes first. The hero's cut-outs, the tick pills and the FAQ
+// accordion are the volunteer guide's, so this page uses its stylesheet too.
+import "../styles/volunteer-page.css";
+import "../styles/kalakriti-page.css";
+import { getKalakritiPage, getSite } from "../lib/content";
+import { guidePage, guideValues } from "../lib/inline";
+import { jsonLd, kalakritiStructuredData } from "../lib/structured-data";
+
+const page = await getKalakritiPage();
+const site = await getSite();
+const values = guideValues(site);
+const { origin, faq, page: summary } = guidePage(page.meta, page.faq.items, values, Astro.site, Astro.url.pathname);
+const structured = kalakritiStructuredData(summary, faq.data, page, origin);
+/** the sections on this page: header, menu and footer links to them stay here, the rest go to the home page */
+const anchors = ["#events", "#editions", "#horizon", "#gallery", "#join", "#faq", "#closing"];
+const navLinks = page.nav.links;
+const menuLinks = [{ label: page.nav.home, href: "/" }, ...navLinks];
+---
+
+<Base title={page.meta.title} description={page.meta.description} og="kalakriti" markdown>
+  <script is:inline slot="head" type="application/ld+json" set:html={jsonLd(structured)} />
+  <MarginSprite />
+  <Header anchors={anchors} links={navLinks} join={site.links.register} joinLabel={page.nav.join} />
+  <PhoneMenu anchors={anchors} links={menuLinks} />
+  <main id="main">
+    <KalaHero register={site.links.register} />
+    <KalaEvents />
+    <KalaEditions />
+    <KalaHorizon />
+    <KalaGallery />
+    <KalaJoin values={values} />
+    <FaqSection eyebrow={page.faq.eyebrow} heading={page.faq.heading} items={faq.page} set="kfaq" />
+    <Closing anchors={anchors} />
+  </main>
+  <Footer anchors={anchors} />
+  <StickyDonateBar anchors={anchors} />
+</Base>

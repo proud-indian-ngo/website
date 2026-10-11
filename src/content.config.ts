@@ -174,6 +174,8 @@ const kalakriti = defineCollection({
         rail: z.array(z.string()),
         stub: z.string(),
       }),
+      /** the link after the note, to /kalakriti/ */
+      more: z.string(),
       note: z.string(),
     }),
     line: z.object({
@@ -670,6 +672,110 @@ const og = defineCollection({
 });
 
 /** /volunteer/: the volunteer guide (src/content/volunteer.yaml) */
+/** /kalakriti/: the festival's own page (kalakriti-page.yaml). The home band is `kalakriti` above. */
+const photo = z.object({ image: asset, alt: z.string(), caption: z.string() });
+const kalakritiPage = defineCollection({
+  loader: single("kalakriti-page"),
+  schema: z.object({
+    meta: z.object({ title: z.string(), description: z.string() }),
+    nav: z.object({
+      links: z
+        .array(
+          z.object({
+            label: z.string(),
+            href: z.string().startsWith("#"),
+            spy: z.string(),
+          })
+        )
+        .min(1),
+      home: z.string(),
+      join: z.string(),
+    }),
+    hero: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      volunteer: z.string(),
+      sponsor: z.string(),
+      facts: z.array(z.string()).min(1),
+      factsLabel: z.string(),
+      /** positions in kalakriti.yaml → edition.troupe */
+      kids: z.array(z.number().int().min(0)).length(2),
+    }),
+    events: z.object({ eyebrow: z.string(), heading, lede: z.string() }),
+    editions: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      labels: z.object({
+        date: z.string(),
+        venue: z.string(),
+        children: z.string(),
+        volunteers: z.string(),
+        cost: z.string(),
+        raised: z.string(),
+      }),
+      disclosure: z.string(),
+      items: z
+        .array(
+          z.object({
+            name: z.string(),
+            date: z.iso.date(),
+            dateLabel: z.string(),
+            venue: z.string(),
+            children: z.string().optional(),
+            volunteers: z.string().optional(),
+            cost: z.string(),
+            raised: z.string(),
+            note: z.string(),
+            disclosure: z.string().startsWith("/reports/").endsWith(".pdf"),
+            image: asset,
+            alt: z.string(),
+          })
+        )
+        .min(1),
+    }),
+    horizon: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      yearLabel: z.string(),
+      stats: z
+        .array(z.object({ number: z.string(), label: z.string() }))
+        .min(1),
+      story: z.string(),
+      next: z.string(),
+      photo,
+    }),
+    gallery: z.object({
+      eyebrow: z.string(),
+      heading,
+      photos: z.array(photo).min(1),
+    }),
+    join: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      cards: z
+        .array(
+          z.object({
+            title: z.string(),
+            line: z.string(),
+            cta: z.string(),
+            href: z.string(),
+          })
+        )
+        .length(3),
+      photo,
+    }),
+    faq: z.object({
+      eyebrow: z.string(),
+      heading,
+      items: z.array(z.object({ q: z.string(), a: z.string() })).min(1),
+    }),
+  }),
+});
+
 const volunteer = defineCollection({
   loader: single("volunteer"),
   schema: z.object({
@@ -754,5 +860,6 @@ export const collections = {
   privacy,
   volunteer,
   csr,
+  kalakritiPage,
   og,
 };

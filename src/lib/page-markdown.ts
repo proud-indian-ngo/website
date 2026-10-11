@@ -11,6 +11,7 @@ import {
   getCsrPage,
   getGuideCards,
   getKalakriti,
+  getKalakritiPage,
   getPartners,
   getPrivacy,
   getProgrammes,
@@ -27,7 +28,6 @@ import { guideValues, markdown } from "./inline";
 
 type Site = Awaited<ReturnType<typeof getSite>>;
 type Copy = Awaited<ReturnType<typeof getCopy>>;
-type Guide = Awaited<ReturnType<typeof getVolunteerPage>>;
 
 /** a built index.md (the Pages Function adds the negotiation headers when it serves one) */
 export const markdownResponse = (text: string) =>
@@ -61,18 +61,13 @@ const sessionLines = (site: Site, sessions: PublicEvent[]) =>
         `New sessions go up on the [dashboard](${site.links.events}) first, usually for the coming weekends.`,
       ];
 
-/** the volunteer guide's FAQ, one ### heading per question; its links resolve against the guide */
+/** a page's FAQ, one ### heading per question; its links resolve against the page */
 const faqLines = (
-  guide: Guide,
+  items: { q: string; a: string }[],
   values: Record<string, string>,
-  guideUrl: string
+  pageUrl: string
 ) =>
-  guide.faq.items.flatMap((f) => [
-    `### ${f.q}`,
-    "",
-    markdown(f.a, values, guideUrl),
-    "",
-  ]);
+  items.flatMap((f) => [`### ${f.q}`, "", markdown(f.a, values, pageUrl), ""]);
 
 /** "## With thanks to our partners.", the lede and one link per partner (partners.yaml) */
 const partnerLines = (
@@ -140,7 +135,7 @@ export async function siteMarkdown(origin: URL | undefined) {
     "",
     "## Volunteering FAQ",
     "",
-    ...faqLines(guide, values, abs("/volunteer/")),
+    ...faqLines(guide.faq.items, values, abs("/volunteer/")),
     "## Programmes",
     "",
     ...programmes.map((p) =>
@@ -148,6 +143,8 @@ export async function siteMarkdown(origin: URL | undefined) {
         ? `- **${p.verb} (${p.name})**: ${p.line} (${p.chips.join(", ")})`
         : `- **${p.verb} (${p.name})**: ${kalakriti.tickets.note} ${kalakriti.edition.name} ${kalakriti.edition.version} was on ${kalakriti.edition.date}: ${kalakriti.edition.lineup.map((l) => `${l.number} ${l.word}`).join(", ")}. Events: ${kalakriti.edition.events.join(", ")}.`
     ),
+    "",
+    `- [Kalakriti, the festival](${abs("/kalakriti/")}): the eight events, every edition with its numbers and financial disclosure, Kalakriti Horizon (a year of training for the children who stand out), how to volunteer or sponsor, and an FAQ.`,
     "",
     "## Donate",
     "",
@@ -271,7 +268,7 @@ export async function volunteerMarkdown(origin: URL | undefined) {
     "",
     `## ${heading(guide.faq.heading)}`,
     "",
-    ...faqLines(guide, values, url),
+    ...faqLines(guide.faq.items, values, url),
     ...partnerLines(copy, partners),
     "## More",
     "",
@@ -396,12 +393,7 @@ export async function csrMarkdown(origin: URL | undefined) {
     "",
     `## ${heading(csr.faq.heading)}`,
     "",
-    ...csr.faq.items.flatMap((f) => [
-      `### ${f.q}`,
-      "",
-      markdown(f.a, values, url),
-      "",
-    ]),
+    ...faqLines(csr.faq.items, values, url),
     "## More",
     "",
     `- [Proud Indian](${abs("/")}): the programmes, Kalakriti, donations and reports.`,
@@ -428,6 +420,93 @@ export async function privacyMarkdown(origin: URL | undefined) {
     `Effective date: ${policy.effectiveDate}`,
     "",
     body,
+    "",
+  ].join("\n");
+}
+
+/** The festival's page (/kalakriti/), section by section in page order. */
+export async function kalakritiMarkdown(origin: URL | undefined) {
+  const [site, page, kalakriti, csr] = await Promise.all([
+    getSite(),
+    getKalakritiPage(),
+    getKalakriti(),
+    getCsrPage(),
+  ]);
+  const values = guideValues(site);
+  const abs = (path: string) => new URL(path, origin ?? site.url).href;
+  const url = abs("/kalakriti/");
+  const heading = (h: { before: string; accent: string }) =>
+    `${h.before} ${h.accent}`;
+  const { hero, events, editions: ed, horizon: h, join: j } = page;
+  const L = ed.labels;
+
+  return [
+    `# Kalakriti: ${heading(hero.heading)}`,
+    "",
+    `> ${page.meta.description}`,
+    "",
+    hero.lede,
+    "",
+    hero.facts.join(" · "),
+    "",
+    `[${hero.volunteer}](${site.links.register}) · [${hero.sponsor}](${abs("/csr/#sponsor")})`,
+    "",
+    `## ${heading(events.heading)}`,
+    "",
+    events.lede,
+    "",
+    ...kalakriti.line.photos.map((p) => `- ${p.event}`),
+    "",
+    `## ${heading(ed.heading)}`,
+    "",
+    ed.lede,
+    "",
+    ...ed.items.flatMap((x) => [
+      `### ${x.name}`,
+      "",
+      `- ${L.date}: ${x.dateLabel}`,
+      `- ${L.venue}: ${x.venue}`,
+      ...(x.children ? [`- ${L.children}: ${x.children}`] : []),
+      ...(x.volunteers ? [`- ${L.volunteers}: ${x.volunteers}`] : []),
+      `- ${L.cost}: ${x.cost}`,
+      `- ${L.raised}: ${x.raised}`,
+      "",
+      `${x.note} [${ed.disclosure}](${abs(x.disclosure)}).`,
+      "",
+    ]),
+    `## ${h.eyebrow}: ${heading(h.heading)}`,
+    "",
+    h.lede,
+    "",
+    `${h.yearLabel}:`,
+    "",
+    ...h.stats.map((x) => `- ${x.number} ${x.label}`),
+    "",
+    `${h.story} ${h.next}`,
+    "",
+    `## ${heading(j.heading)}`,
+    "",
+    j.lede,
+    "",
+    ...j.cards.map(
+      (c) =>
+        `- **${c.title}.** ${c.line} [${c.cta}](${abs(fill(c.href, values))})`
+    ),
+    "",
+    "Sponsorships:",
+    "",
+    ...csr.kalakriti.tiers.map(
+      (t) => `- **${t.name}, ${t.amount}**: ${t.line}`
+    ),
+    "",
+    `## ${heading(page.faq.heading)}`,
+    "",
+    ...faqLines(page.faq.items, values, url),
+    "## More",
+    "",
+    `- [Proud Indian](${abs("/")}): the programmes, donations and reports.`,
+    `- [For companies](${abs("/csr/")}): CSR, Kalakriti sponsorship and employee volunteering.`,
+    `- Questions: ${values.connect}, or call or WhatsApp ${site.contacts.phone.display}.`,
     "",
   ].join("\n");
 }

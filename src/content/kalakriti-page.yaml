@@ -1,0 +1,181 @@
+# /kalakriti/: the festival's own page, for parents, volunteers, schools, sponsors and anyone who follows a link from
+# Instagram (posts link to proudindian.ngo/kalakriti). The home page's Kalakriti band (kalakriti.yaml) stays the short
+# version; this is the whole story. Numbers come from each edition's financial disclosure (reports.yaml), the annual
+# report for 2025-26 and the audited accounts. The sponsorship tiers are csr.yaml → kalakriti.tiers, so the two pages
+# can't disagree. Text may use {placeholders} ({connect}, {register}) and [text](url) links.
+
+meta:
+  title: Kalakriti · Children's arts festival in Bengaluru (Bangalore) · Proud Indian
+  description: "Kalakriti is Proud Indian's yearly arts festival for children in Bengaluru: one Sunday in September, eight events, 500 children and 200 volunteers. Free for every child."
+
+nav:
+  links:
+    - { label: The day, href: "#events", spy: events }
+    - { label: Editions, href: "#editions", spy: editions }
+    - { label: Horizon, href: "#horizon", spy: horizon }
+    - { label: Get involved, href: "#join", spy: join }
+    - { label: FAQ, href: "#faq", spy: faq }
+  home: Home
+  join: Volunteer
+
+hero:
+  eyebrow: Kalakriti · Bengaluru
+  heading: { before: "A stage of their own,", accent: once a year. }
+  lede: "Kalakriti is our arts festival for children from Bengaluru’s low-income communities. One Sunday in September, they sing, dance, paint and dress up in front of guest judges and a hall that cheers for every one of them."
+  volunteer: Volunteer at Kalakriti
+  sponsor: Sponsor a child
+  # the quick facts under the heading
+  facts:
+    [
+      Next edition September 2027,
+      500 children,
+      8 events,
+      200 volunteers,
+      Free for every child,
+    ]
+  factsLabel: Kalakriti at a glance
+  # two of the three cut-outs from the home page's poster (kalakriti.yaml → edition.troupe), by position
+  kids: [1, 2]
+
+events:
+  eyebrow: The day
+  heading: { before: Eight events, accent: one Sunday. }
+  lede: "The morning is quiet work: paint sets on newspaper, clay on the desks, pots turning blue and orange, and rangoli creeping across the court. After lunch the hall gets loud. Guest judges mark every event, the winners lift their trophies, and every child goes home with a certificate."
+  # the photos are kalakriti.yaml → line.photos, one per event
+
+editions:
+  eyebrow: Editions
+  heading: { before: Three Septembers, accent: so far. }
+  lede: Each edition has its own financial disclosure, with every payment and every rupee raised.
+  labels:
+    date: Date
+    venue: Venue
+    children: Children
+    volunteers: Volunteers
+    cost: Cost
+    raised: Raised
+  disclosure: Read the disclosure
+  # newest first. `date` is ISO (structured data uses it), `dateLabel` is what the page shows
+  items:
+    - name: Kalakriti 3.0
+      date: "2026-09-20"
+      dateLabel: Sunday 20 September 2026
+      venue: Shishu Mandir, Bengaluru
+      children: "500"
+      volunteers: "200"
+      cost: "₹4,44,190"
+      raised: "₹6,00,000"
+      note: Funded by Ethos (₹5,00,000) and Xencia Technologies (₹1,00,000). Nine buses brought the children and volunteers.
+      disclosure: /reports/disclosure-kalakriti-3-0.pdf
+      image: photos/kalakriti-3-hall.jpg
+      alt: A hall packed with children on blue chairs, waiting for the stage events at Kalakriti 3.0
+    - name: Kalakriti 2.0
+      date: "2025-09-14"
+      dateLabel: Sunday 14 September 2025
+      venue: National Education Society of Karnataka, Bengaluru
+      children: 450+
+      volunteers: 180+
+      cost: "₹4,27,936"
+      raised: "₹3,80,337"
+      note: "₹3,23,014 of it raised through crowdfunding on GiveIndia, the rest from cake and stationery stalls, volunteers’ T-shirts and a company donation."
+      disclosure: /reports/disclosure-kalakriti-2-0.pdf
+      image: photos/kalakriti-2-trophy.jpg
+      alt: Children in teal T-shirts cheering as their team lifts a trophy on stage at Kalakriti 2.0
+    - name: Kalakriti ’24
+      date: "2024-09-22"
+      dateLabel: Sunday 22 September 2024
+      venue: St Francis College, Bengaluru
+      cost: "₹3,03,068"
+      raised: "₹4,61,855"
+      note: The first edition. What was left over paid for training the children who stood out, which became Kalakriti Horizon.
+      disclosure: /reports/disclosure-kalakriti-24-2024-11.pdf
+      image: photos/kalakriti-1-dance.jpg
+      alt: Five boys in kurtas and dhotis dancing in front of the Kalakriti banner at the first edition
+
+horizon:
+  eyebrow: Kalakriti Horizon
+  heading: { before: "After the stage,", accent: a whole year. }
+  lede: "The children who shine at Kalakriti don’t go back to waiting for next September. Through Kalakriti Horizon they train every week with dance, music and art teachers, visit studios, and enter competitions outside to test their skills."
+  # the numbers for the year just finished (the Kalakriti 3.0 disclosure, part B)
+  yearLabel: September 2025 to September 2026
+  stats:
+    - { number: "100", label: weekly training sessions }
+    - {
+        number: "5",
+        label: "centres: Gubbachi (Kariyammana Agrahara and Kodathi), Links, Thanal and Ruva",
+      }
+    - {
+        number: "₹2,03,373",
+        label: "for trainers, studio visits and competitions",
+      }
+  story: "In June 2026, five of the children danced at the Soorya national dance competition and came home with a trophy."
+  next: "For 2026–27 we will choose at least four centres, with at least ten children at each."
+  photo:
+    image: photos/horizon-soorya.jpg
+    alt: Five children in red T-shirts holding the trophy and certificate they won at the Soorya dance competition
+    caption: Soorya, June 2026
+
+gallery:
+  eyebrow: Kalakriti 3.0
+  heading: { before: Moments from, accent: 20 September. }
+  photos:
+    - image: photos/kala3-classical.jpg
+      alt: A girl in a mirror-work lehenga and dupatta dancing a folk dance on stage
+      caption: Folk, in full colour
+    - image: photos/kala3-duet.jpg
+      alt: Two girls in white and red saris dancing a duet on stage
+      caption: The duet
+    - image: photos/kala3-pot.jpg
+      alt: A girl in a blue dress painting a clay pot, surrounded by other children painting
+      caption: Pot painting
+    - image: photos/kala3-rangoli.jpg
+      alt: A child's hands drawing the Indian flag in rangoli colours on the court
+      caption: A tricolour rangoli
+    - image: photos/kala3-certificates.jpg
+      alt: Children holding up their certificates and medals in front of the sponsors' board
+      caption: Certificates for all
+
+join:
+  eyebrow: Get involved
+  heading: { before: Make the next one, accent: bigger. }
+  lede: "Kalakriti 4.0 is in September 2027, usually on the second or third Sunday. It takes a crew, a few sponsors and a lot of small donations."
+  cards:
+    - title: Join the crew
+      line: "Around 200 Optimists run the day: the events, registration, lunch, and getting every child there and back. The crew meets on weekends in the months before."
+      cta: Become an Optimist
+      href: "{register}"
+    - title: Sponsor the festival
+      line: "₹1,000 brings one child for the day, ₹50,000 sponsors one of the eight events, and ₹4,50,000 makes your company the title sponsor."
+      cta: See the sponsorships
+      href: /csr/#sponsor
+    - title: Give what you can
+      line: Every rupee of a donation goes into the same disclosure as the sponsors’ money, line by line.
+      cta: Donate
+      href: /#donate
+  photo:
+    image: photos/kalakriti-crew.jpg
+    alt: The Kalakriti 3.0 volunteer crew in maroon T-shirts, with children, outside the venue
+    caption: The crew of Kalakriti 3.0
+
+faq:
+  eyebrow: FAQ
+  heading: { before: "Questions,", accent: answered. }
+  items:
+    - q: When is Kalakriti?
+      a: Once a year, usually on the second or third Sunday of September. Kalakriti 4.0 will be in September 2027, and we announce the date here and on Instagram.
+    - q: Who takes part?
+      a: "Children from our community centres and from partner learning centres across Bengaluru: 500 of them at Kalakriti 3.0. A school or centre that would like to bring its children can write to {connect}."
+    - q: Does it cost anything for the children?
+      a: No. We pay for the buses, lunch, the art materials, the medals and the certificates, from sponsorships and donations.
+    - q: What are the eight events?
+      a: Singing, solo dance, group dance, painting, pot painting, fancy dress, clay modelling and rangoli.
+    - q: Who judges?
+      a: Guest judges mark every event. The winners get medals and trophies, and every child who takes part gets a certificate.
+    - q: What is Kalakriti Horizon?
+      a: "Our year-long training for the children who stand out at the festival: weekly dance, music and art classes at their centres, studio visits and competitions outside. [More about Horizon](#horizon)."
+    - q: How can I volunteer?
+      a: "[Register on the dashboard]({register}) and sign up for the Kalakriti crew. No experience is needed; you get a role and a briefing before the day."
+    - q: Can my company sponsor Kalakriti?
+      a: "Yes: per child, per event or as the title sponsor, with the paperwork your CSR team needs. [See the sponsorships](/csr/#sponsor)."
+    - q: Where does the money go?
+      a: "Every edition has a financial disclosure listing each payment. At Kalakriti 3.0 the biggest costs were the buses (₹1,35,936), food (₹82,924) and the venue staff (₹65,955). [See the editions](#editions)."

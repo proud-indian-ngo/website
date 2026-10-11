@@ -8,8 +8,8 @@ import { fill, getCsrPage } from "../../lib/content";
 import { asset } from "../../lib/images";
 import HeartBadge from "../doodles/HeartBadge.astro";
 import MarginDoodles from "../margins/MarginDoodles.astro";
-import AccentWord from "../ui/AccentWord.astro";
 import Button from "../ui/Button.astro";
+import HeroHeading from "../ui/HeroHeading.astro";
 import HeroKids from "../ui/HeroKids.astro";
 import TickPills from "../ui/TickPills.astro";
 
@@ -38,19 +38,7 @@ const kids = h.kids.map((k) => ({ src: asset(k.image), label: k.label }));
       >
         <HeartBadge class="pi-doodle w-6" aria-hidden="true" />{h.eyebrow}
       </p>
-      <h1
-        id="csr-h"
-        class="csr-h1 font-pi-display leading-[.9] font-extrabold tracking-poster text-balance"
-        data-reveal="wipe"
-      >
-        {`${h.heading.before} `}<AccentWord variant="outline" class="relative inline-block">{h.heading.accent}</AccentWord>
-      </h1>
-      <p
-        class="mt-7 max-w-[50ch] font-pi-sans text-20 leading-lede text-pretty max-tab:mt-5 max-tab:text-17"
-        data-reveal="rise"
-      >
-        {h.lede}
-      </p>
+      <HeroHeading id="csr-h" heading={h.heading} lede={h.lede} class="csr-h1" />
       <div class="mt-8 flex flex-wrap items-center gap-3 max-tab:mt-6" data-reveal="rise">
         <Button href={plan} size="lg" arrow>{h.plan}</Button>
         <Button href="#ways" variant="ghost" size="lg">{h.fund}</Button>

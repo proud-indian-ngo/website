@@ -1,0 +1,41 @@
+---
+/** /kalakriti/, "Eight events, one Sunday.": what the day looks like, then one taped polaroid per event, from the home
+ *  page's photo line (kalakriti.yaml → line.photos). Copy: kalakriti-page.yaml → events. */
+import { getKalakriti, getKalakritiPage } from "../../lib/content";
+import { asset } from "../../lib/images";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import Polaroid from "../ui/Polaroid.astro";
+import SectionHead from "../ui/SectionHead.astro";
+
+const { events: e } = await getKalakritiPage();
+const { photos } = (await getKalakriti()).line;
+---
+
+<section
+  class="relative overflow-hidden border-t-line border-ink bg-paper px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+  id="events"
+  data-spy="events"
+  aria-labelledby="kala-events-h"
+>
+  <MarginDoodles set="kevents" />
+  <div class="relative z-2 mx-auto max-w-section">
+    <SectionHead id="kala-events-h" eyebrow={e.eyebrow} heading={e.heading} lede={e.lede} />
+    <ul class="kala-pols mt-16 grid grid-cols-4 gap-x-8 gap-y-12 max-lap:grid-cols-2 max-tab:mt-10 max-tab:gap-x-4.5 max-tab:gap-y-8">
+      {
+        photos.map((p) => (
+          <li>
+            <Polaroid
+              src={asset(p.image)}
+              alt={p.alt}
+              width={280}
+              phone="42vw"
+              caption={p.event}
+              position={p.position}
+              variant="tape"
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
