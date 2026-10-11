@@ -172,6 +172,7 @@ export async function siteMarkdown(origin: URL | undefined) {
       (d) => `- [${d.title}](${abs(d.url)})`
     ),
     `- ${pdfs("disclosure").length} project disclosures, listed on the [website](${abs("/#reports")}).`,
+    `- [Privacy policy](${abs("/privacy/")}): what personal data we collect from visitors, donors, volunteers and the children in our programmes, and how we protect it.`,
     "",
     ...partnerLines(copy, partners),
     "## Contact",
