@@ -114,7 +114,7 @@ days:
 kalakriti:
   eyebrow: Sponsor Kalakriti
   heading: { before: Give children a, accent: stage. }
-  lede: "Once a year, children from our communities get one full day of arts and culture: eight events marked by guest judges, a stage of their own and a hall cheering them on. Every child goes home with a certificate."
+  lede: "Once a year, children from our communities get one full day of arts and culture: eight events marked by guest judges, a stage of their own and a hall cheering them on. Every child goes home with a certificate, and the ones who shine get a year of training through Kalakriti Horizon, with competitions outside to test their skills."
   # the cost line under the tiers links the festival's own financial disclosure (reports.yaml)
   cost: "Kalakriti 3.0 cost ₹4,44,190 for 500 children, about ₹890 a child, and Kalakriti Horizon, the year of dance, music and art training before it, another ₹2,03,373. Every rupee is in the financial disclosure."
   costLink: Read the disclosure
@@ -141,20 +141,22 @@ fund:
   fundsLabel: Your funding pays for
   costLabel: What it cost in 2025–26
   # one row per programme, in this order. `programme` is an anchor from programmes/*.yaml (or kalakriti); `cost` is
-  # from the audited accounts for 2025–26 (Bengaluru lines only) or the programme's disclosure
+  # from the audited accounts for 2025–26 (Bengaluru lines only; the Mumbai lines are labelled, and Gift a Smile is
+  # Bengaluru only). Kalakriti's training is "Dance Class Payment" plus "Kalakriti Training"; the school fees are for
+  # four Bengaluru students.
   rows:
     - programme: b0
       schedule: "(ii) Promoting education"
-      funds: Class materials, learning kits and the weekend classes at our community centre.
-      cost: ₹14,800 on learning kits, ₹12,243 on art and craft materials and ₹20,000 towards the community centre.
+      funds: Class materials, learning kits, the weekend classes at our community centre, and school fees for children who would otherwise drop out.
+      cost: ₹2,00,000 to clear four students’ pending school fees, ₹14,800 on learning kits, ₹12,243 on art and craft materials and ₹20,000 towards the community centre.
     - programme: b1
       schedule: "(i) Eradicating hunger and malnutrition"
       funds: Ration kits for families, and a proper meal whenever we bring the children together.
       cost: ₹37,960 on ration kits and ₹37,735 on food distribution.
     - programme: kalakriti
       schedule: "(v) Promoting art and culture"
-      funds: The festival day, from the venue and travel to the medals. See the sponsorships above.
-      cost: ₹4,27,936 for Kalakriti 2.0, with 450+ children.
+      funds: The festival day, from the venue and travel to the medals, and Kalakriti Horizon, a year of training for the children who shine on the day, with outside competitions to test their skills. See the sponsorships above.
+      cost: ₹4,27,936 for Kalakriti 2.0, with 450+ children, and ₹1,69,772 for the year of training after it.
     - programme: b3
       schedule: "(iii) Reducing inequalities faced by economically backward groups"
       funds: Gift a Smile, outings for the children, and community days.
