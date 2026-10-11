@@ -34,7 +34,7 @@ export type SetName =
   | "teach"
   | "feed"
   | "kala"
-  | "gather"
+  | "connect"
   | "vol"
   | "don"
   | "rp"
@@ -140,7 +140,7 @@ const plans: Record<SetName, Plan> = {
     gr: 323,
     y: [4, 96],
   },
-  gather: {
+  connect: {
     l: ["hands", "kite", "star"],
     r: ["heart", "sparkle"],
     h: 1000,
@@ -355,7 +355,7 @@ const plans: Record<SetName, Plan> = {
   },
 };
 /** sections whose right strip is squeezed by the programme rail: the first right doodle needs a 90px strip, more need 180px */
-const railSets = new Set<SetName>(["prog", "teach", "feed", "kala", "gather"]);
+const railSets = new Set<SetName>(["prog", "teach", "feed", "kala", "connect"]);
 
 function rng(seed: number) {
   return () => {

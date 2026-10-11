@@ -69,6 +69,7 @@ marquee:
     - { label: Shared meals, href: "#b1" }
     - { label: Kalakriti, href: "#kalakriti" }
     - { label: Gift a Smile, href: "#b3" }
+    - { label: Kit drives, href: "#b3" }
     - { label: Outings, href: "#b3" }
     - { label: Volunteering days, href: "#b3" }
 

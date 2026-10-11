@@ -158,7 +158,7 @@ async function desktop(browser: Browser, url: string) {
     return p.classList.contains("show") && p.classList.contains("on-ink");
   });
   await page.click('[data-pidx] a[data-k="b3"]');
-  r["rail link to Gather"] = await until(page, () =>
+  r["rail link to Connect"] = await until(page, () =>
     document
       .querySelector('[data-pidx] a[data-k="b3"]')!
       .classList.contains("on")

@@ -89,7 +89,7 @@ html[data-motion="on"] .s-prog .g3 {
   animation-delay: -2.2s;
 }
 /* the floor sticker: flush on the band floor; the per-band crop hides each cut-out's old watermark below it.
-   Teach's girl stands on her own feet (a small crop); Feed's girl with her nutrition pack is cropped at the floor; Gather's cut-out ends at a photo edge, which sits below the floor */
+   Teach's girl stands on her own feet (a small crop); Feed's girl with her nutrition pack is cropped at the floor; Connect's cut-out ends at a photo edge, which sits below the floor */
 .s-prog .bB {
   --crop: 0;
 }
@@ -193,6 +193,11 @@ html[data-motion="on"] .s-prog .g3 {
         1fr
       );
     min-height: 0;
+  }
+  /* "Connect." reaches the heart's top-right spot here, so the heart drops under the polaroids */
+  .s-prog #b3 .dB1 {
+    top: auto;
+    bottom: 190px;
   }
 }
 @media (width < --theme(--breakpoint-tab)) {

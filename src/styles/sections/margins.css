@@ -51,7 +51,7 @@
 }
 .mg.teach,
 .mg.feed,
-.mg.gather {
+.mg.connect {
   /* the band's padding: max(88px, (100% - 1520px) / 2) left, max(226px, ...) right */
   --lx1: calc(
     max(88px, (100% - 1520px) / 2) - 28px
@@ -188,7 +188,7 @@
   }
 }
 @media (width >= 1800px) {
-  :is(.mg.teach, .mg.feed, .mg.gather, .mg.kala, .mg.prog, .mg.cl) {
+  :is(.mg.teach, .mg.feed, .mg.connect, .mg.kala, .mg.prog, .mg.cl) {
     display: block;
   }
 }
@@ -199,12 +199,12 @@
 }
 /* right strips next to the rail: the first doodle needs 90px of strip, any more need 180px */
 @media (width < 2124px) {
-  :is(.mg.teach, .mg.feed, .mg.gather) .mg-d.mg-t1 {
+  :is(.mg.teach, .mg.feed, .mg.connect) .mg-d.mg-t1 {
     display: none !important;
   }
 }
 @media (width < 2304px) {
-  :is(.mg.teach, .mg.feed, .mg.gather) .mg-d.mg-t2 {
+  :is(.mg.teach, .mg.feed, .mg.connect) .mg-d.mg-t2 {
     display: none !important;
   }
 }

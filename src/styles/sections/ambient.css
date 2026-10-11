@@ -105,7 +105,7 @@ html[data-motion="on"] .s-prog .bowl .s2 {
 html[data-motion="on"] .s-prog .bowl .s3 {
   animation-delay: -3.2s;
 }
-/* Gather: a heartbeat, and a tiny heart floats off */
+/* Connect: a heartbeat, and a tiny heart floats off */
 .s-prog .heart .mini {
   opacity: 0;
 }
