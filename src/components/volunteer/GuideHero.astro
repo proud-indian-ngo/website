@@ -6,16 +6,15 @@
 import { getSite, getVolunteerPage } from "../../lib/content";
 import { asset } from "../../lib/images";
 import HandsUp from "../doodles/HandsUp.astro";
-import HeroSun from "../doodles/HeroSun.astro";
-import Sparkle from "../doodles/Sparkle.astro";
 import MarginDoodles from "../margins/MarginDoodles.astro";
 import AccentWord from "../ui/AccentWord.astro";
 import Button from "../ui/Button.astro";
-import Sticker from "../ui/Sticker.astro";
+import HeroKids from "../ui/HeroKids.astro";
+import TickPills from "../ui/TickPills.astro";
 
 const { hero: h } = await getVolunteerPage();
 const site = await getSite();
-const [k1, k2] = h.kids;
+const kids = h.kids.map((k) => ({ src: asset(k.image), label: k.label }));
 ---
 
 <div class="s-hero relative" id="top">
@@ -48,51 +47,8 @@ const [k1, k2] = h.kids;
         <Button href={site.links.register} size="lg" arrow>{h.join}</Button>
         <Button href="#volunteer" variant="ghost" size="lg">{h.sessions}</Button>
       </div>
-      <ul class="vg-facts mt-9 flex flex-wrap gap-2.5 max-tab:mt-7" aria-label="At a glance">
-        {
-          h.facts.map((f) => (
-            <li class="inline-flex items-center gap-2 rounded-pill border-line border-ink bg-paper py-1.5 pr-4 pl-2 font-pi-sans text-15 font-semibold max-tab:text-14">
-              <svg viewBox="0 0 20 20" class="vg-tick size-5 flex-none" aria-hidden="true">
-                <circle cx="10" cy="10" r="8.6" />
-                <path d="M6.2 10.4L8.8 12.9L13.9 7.4" />
-              </svg>
-              {f}
-            </li>
-          ))
-        }
-      </ul>
+      <TickPills items={h.facts} label="At a glance" />
     </div>
-    <div class="vg-kids" data-stagger="0">
-      <HeroSun class="sun loop vg-sun overflow-visible" aria-hidden="true" />
-      <Sparkle class="vg-spark" data-reveal="slap" data-at="700" aria-hidden="true" />
-      {
-        k1 && (
-          <Sticker
-            class="vg-k1 wob"
-            src={asset(k1.image)}
-            alt={k1.label}
-            width={300}
-            phone="44vw"
-            eager
-            data-reveal="slap"
-            data-at="300"
-          />
-        )
-      }
-      {
-        k2 && (
-          <Sticker
-            class="vg-k2 wob"
-            src={asset(k2.image)}
-            alt={k2.label}
-            width={280}
-            phone="40vw"
-            eager
-            data-reveal="slap"
-            data-at="480"
-          />
-        )
-      }
-    </div>
+    <HeroKids kids={kids} />
   </section>
 </div>

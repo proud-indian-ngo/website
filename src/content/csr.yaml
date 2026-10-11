@@ -1,0 +1,262 @@
+# /csr/: for companies looking for a CSR partner or an employee volunteering day in Bengaluru (Bangalore).
+# Decided on 2026-10-11: four offers (volunteering days, Kalakriti sponsorship, programme funding, gift and kit drives);
+# four volunteering formats; Kalakriti prices from Kalakriti 2.0's costs (₹4,27,936 for 450+ children); volunteering
+# days are quoted as materials plus a facilitation charge, with no per-head price on the page; enquiries by email and
+# WhatsApp. Bengaluru only (the Mumbai chapter closed in 2026).
+# TO CONFIRM before launch: group sizes and lengths in days.formats, the reply and report times in how.steps, the
+# planning lead time in the FAQ, and the safeguarding rules (drafted from common practice; there is no written policy).
+# Text may use {placeholders}: {csr1} {darpan} {taxExemption} {registered} {connect} {finance} {phone}, and the
+# FAQ answers [text](url) links; email addresses become mailto links.
+
+meta:
+  title: CSR and employee volunteering in Bengaluru (Bangalore) · Proud Indian
+  description: "A CSR-1 registered NGO in Bengaluru. Bring your team for a volunteering day with children, sponsor the Kalakriti arts festival or fund weekend classes. 80G, 12A."
+
+# the page's own header and phone menu links; `spy` lights the header link while its section is on screen
+nav:
+  links:
+    - { label: Ways to help, href: "#ways", spy: ways }
+    - { label: Volunteering days, href: "#days", spy: days }
+    - { label: Kalakriti, href: "#sponsor", spy: sponsor }
+    - { label: Programmes, href: "#fund", spy: fund }
+    - { label: Paperwork, href: "#paperwork", spy: paperwork }
+    - { label: FAQ, href: "#faq", spy: faq }
+  home: Home
+  # the header button: a pre-filled email (contact.subject)
+  join: Plan a day
+
+# the pre-filled emails behind the buttons: the subject line, and the first lines of the body for the company to fill in
+contact:
+  subject: CSR / volunteering day
+  body: "Company:\nTeam size:\nRough dates:\nWhat we have in mind:\n"
+
+hero:
+  eyebrow: For companies · Bengaluru
+  heading: { before: CSR and employee volunteering in, accent: Bengaluru. }
+  lede: "Bring your team for a day with children from Bengaluru’s low-income communities, fund the weekend classes they come to, or put your name on Kalakriti, their arts festival. We plan it with you, run it with you, and send a report afterwards."
+  plan: Plan a volunteering day
+  fund: Ways to fund us
+  facts:
+    [
+      "CSR-1 {csr1}",
+      "{taxExemption} and {registered}",
+      "NGO Darpan {darpan}",
+      "Audited every year since 2019–20",
+    ]
+  kids:
+    - image: cutouts/Kalakriti3_DSC01695.png
+      label: A girl in costume and jewellery, smiling, at Kalakriti’s fancy dress event
+    - image: cutouts/NutritionDistribution_DSC_0177.png
+      label: A girl smiling with her nutrition pack
+
+ways:
+  eyebrow: Ways to partner
+  heading: { before: Four ways to, accent: help. }
+  lede: Most companies start with a volunteering day and come back for something bigger. Mix them as you like.
+  cards:
+    - title: Volunteering days
+      line: "A half or full day for your team: a session with the children, kit-building at your office, painting a classroom, or crewing one of our big days."
+      href: "#days"
+      link: See the four formats
+    - title: Sponsor Kalakriti
+      line: "Our children’s arts festival, once a year. ₹1,000 brings a child for the day; ₹50,000 sponsors one of its eight events."
+      href: "#sponsor"
+      link: See the sponsorships
+    - title: Fund a programme
+      line: CSR funding for weekend classes, shared meals or community days, with the budget, milestones and reports agreed before we start.
+      href: "#fund"
+      link: See the programmes
+    - title: Gift and kit drives
+      line: Your employees fund or collect school kits, ration kits or Gift a Smile wishes, and we take them to children we know by name.
+      href: "#drives"
+      link: See how drives work
+
+days:
+  eyebrow: Volunteering days
+  heading: { before: Bring your, accent: team. }
+  lede: "Pick a format and we handle the rest: the place, the materials, fitting around the children’s week, and an Optimist lead on the day."
+  labels: { size: Team size, length: How long, where: Where, provide: We bring }
+  formats:
+    - name: A session with the children
+      size: 8 to 15 people
+      length: About 3 hours, on a Saturday or Sunday morning
+      where: Our community centre in Ibbaluru, near Bellandur
+      what: Run a maths, Spoken English or art and craft session in small groups, alongside the Optimists who teach the class every week.
+      provide: The lesson plan, the materials and a briefing before you start.
+    - name: Kit-building at your office
+      size: 20 to 100 people
+      length: 2 to 3 hours, on a weekday
+      where: Your office
+      what: Assemble learning, school or hygiene kits as a team. We take them to the children and tell you where they went.
+      provide: Everything for the kits, and a short talk about who they’re for.
+    - name: Paint a classroom or a wall
+      size: 15 to 40 people
+      length: A full day
+      where: A school, home or centre we work with in Bengaluru
+      what: Turn a bare wall into a mural, or a classroom into one with maps, numbers and the alphabet on its walls.
+      provide: The site, the design, paint and tools, and someone to lead the painting.
+    - name: Crew one of our big days
+      size: 10 to 40 people
+      length: A full day, at Kalakriti in September or Gift a Smile in December and January
+      where: The festival venue, or the places we hand out gifts
+      what: Run one of Kalakriti’s eight events, or help hand out the gifts children wished for at Gift a Smile.
+      provide: A role for everyone, a briefing and lunch.
+  cost:
+    heading: What a day costs
+    text: "We quote each day as the materials plus a facilitation charge, which covers the planning, the Optimist lead, getting to the site and the report afterwards. You get the quote after our first call, before you commit."
+  done:
+    heading: Companies who have volunteered with us in Bengaluru
+    items:
+      - { name: Ethos, did: painted a wall at an orphanage }
+      - { name: Oracle, did: made seed pens with us }
+  cta: Plan a volunteering day
+
+kalakriti:
+  eyebrow: Sponsor Kalakriti
+  heading: { before: Give children a, accent: stage. }
+  lede: "Once a year, children from our communities get one full day of arts and culture: eight events marked by guest judges, a stage of their own and a hall cheering them on. Every child goes home with a certificate."
+  # the cost line under the tiers links the festival's own financial disclosure (reports.yaml)
+  cost: "Kalakriti 2.0 cost ₹4,27,936 for 450+ children, about ₹950 a child, and every rupee is in its financial disclosure."
+  costLink: Read the disclosure
+  disclosure: /reports/disclosure-kalakriti-2-0.pdf
+  tiers:
+    - amount: "₹1,000"
+      name: One child
+      line: "Brings one child for the day: travel, lunch, materials, a medal and a certificate."
+    - amount: "₹50,000"
+      name: One event
+      line: Sponsors one of the eight events, from rangoli to group dance, with your name on its stage and in the festival report.
+    - amount: "₹4,50,000"
+      name: Title sponsor
+      line: Covers the whole festival, with your name on Kalakriti and on everything we put out about it.
+  cta: Ask about sponsoring Kalakriti
+  subject: Kalakriti sponsorship
+  more: More about Kalakriti
+
+fund:
+  eyebrow: Fund a programme
+  heading: { before: Where your CSR, accent: goes. }
+  lede: Each programme maps to an activity in Schedule VII of the Companies Act. We agree the budget, the milestones and the reporting with you before anything starts.
+  scheduleLabel: Schedule VII
+  fundsLabel: Your funding pays for
+  # one row per programme, in this order. `programme` is an anchor from programmes/*.yaml (or kalakriti)
+  rows:
+    - programme: b0
+      schedule: "(ii) Promoting education"
+      funds: Class materials, learning kits and the weekend classes at our community centre.
+    - programme: b1
+      schedule: "(i) Eradicating hunger and malnutrition"
+      funds: Ration kits for families, and a proper meal whenever we bring the children together.
+    - programme: kalakriti
+      schedule: "(v) Promoting art and culture"
+      funds: The festival day, from the venue and travel to the medals. See the sponsorships above.
+    - programme: b3
+      schedule: "(iii) Reducing inequalities faced by economically backward groups"
+      funds: Gift a Smile, outings for the children, and community days.
+  budget: Budgets for classes, meals and community days depend on how many children and for how long. Tell us what you have in mind and we’ll send a plan with costs.
+  cta: Talk to us about funding
+  subject: CSR funding
+
+drives:
+  heading: Gift and kit drives
+  lede: "A drive lets everyone in the company take part, not just the people who can come out for a day."
+  items:
+    - name: Gift a Smile
+      when: December and January
+      line: Children tell us what they wish for; your employees fund or buy the gifts, and we hand them over.
+    - name: School kits
+      when: Before the school year
+      line: Bags, books and stationery for children starting a new year.
+    - name: Ration kits
+      when: Any time
+      line: Groceries for a family’s month, packed by your team or bought through us.
+  cta: Plan a drive
+  subject: Gift or kit drive
+
+how:
+  eyebrow: How it works
+  heading: { before: From first email to, accent: report. }
+  steps:
+    - title: Write to us
+      line: Tell us your team size, rough dates and what you have in mind. We reply within two working days.
+    - title: Plan it together
+      line: A call to pick the format and the date, then a quote and the paperwork your CSR team needs.
+    - title: On the day
+      line: An Optimist lead meets your team, briefs everyone and runs the day with you.
+    - title: The report
+      line: Photos, numbers and receipts within two weeks. For CSR funding, a utilisation report as well.
+
+safeguarding:
+  eyebrow: Safeguarding
+  heading: { before: Children, accent: first. }
+  lede: Everyone who spends time with our children follows the same rules, whether they come with a company or on their own.
+  rules:
+    - Volunteers are 18 or over, and every session with children starts with a short briefing.
+    - Nobody is ever alone with a child. An Optimist is always in the room.
+    - We take the photos, and share only the ones we have permission to use. Please don’t photograph the children yourself.
+    - No personal contact with children or their families outside our sessions, including phone numbers and social media.
+    - Gifts and money go through us, never to one child, so every child gets the same.
+    - Anyone who doesn’t follow the rules is asked to leave.
+
+# (the partner logo grid, copy.yaml → partners and partners.yaml, sits between safeguarding and the paperwork)
+
+paperwork:
+  eyebrow: Paperwork
+  heading: { before: Ready for your, accent: due diligence. }
+  lede: The registrations CSR teams ask for, with their certificates, and every annual report and audited statement since 2019–20.
+  registrationsLabel: Registrations
+  items:
+    # pdf: a copy in public/certificates/. When a registration is renewed, replace the file and update the value and note.
+    - label: CSR-1 (Ministry of Corporate Affairs)
+      value: "{csr1}"
+      note: Registered 8 May 2023
+      pdf: /certificates/csr-1-registration.pdf
+    - label: Tax exemption
+      value: "{taxExemption} · AAETP0762C26BL02"
+      note: Section 354, Income-tax Act 2025 · valid to 2030–31
+      pdf: /certificates/80g-approval.pdf
+    - label: Registered
+      value: "{registered} · AAETP0762C26BL01"
+      note: Section 332, Income-tax Act 2025 · valid to 2035–36
+      pdf: /certificates/12a-registration.pdf
+    - label: NGO Darpan
+      value: "{darpan}"
+      note: NITI Aayog · registered 19 October 2019
+      pdf: /certificates/ngo-darpan.pdf
+    - { label: PAN, value: "{pan}" }
+    - { label: Registration no., value: "{registrationNo}" }
+    - { label: Founded, value: "{foundedLong} · {city}" }
+  documentsLabel: Reports
+  latestAudited: Latest audited financials
+  latestAnnual: Latest annual report
+  all: Every report and project disclosure
+  pdf: PDF
+  certificates: The trust deed, bank details and KYC documents for your onboarding are a request away at {connect}.
+
+faq:
+  eyebrow: FAQ
+  heading: { before: "Questions,", accent: answered. }
+  items:
+    - q: Is Proud Indian eligible for CSR funding?
+      a: "Yes. We are registered with the Ministry of Corporate Affairs to take on CSR projects (CSR-1 {csr1}), registered under {taxExemption} and {registered}, and our accounts have been audited every year since 2019–20. See the [paperwork](#paperwork)."
+    - q: Can a volunteering day count towards our CSR spend?
+      a: That’s for your CSR committee to decide. Either way, we give you an invoice with the costs broken down and a report on the day.
+    - q: How many people can you take?
+      a: From 8 for a session with the children to around 100 for kit-building at your office. For a bigger team we split the day into batches or mix the formats.
+    - q: Can we volunteer on a weekday?
+      a: Yes, for kit-building at your office and for most painting days. Sessions with the children are on Saturdays and Sundays, because they’re at school during the week.
+    - q: Where do volunteering days happen?
+      a: Sessions with the children are at our community centre in Ibbaluru, near Bellandur. Painting days are at schools, homes and centres we work with around Bengaluru, and kit-building is at your office.
+    - q: How far ahead should we plan?
+      a: Three to four weeks for most days, and longer for a painting day or a Kalakriti sponsorship.
+    - q: Can we do something regular, not just one day?
+      a: Yes. A team can come to a class every month, or fund a programme for a year. Tell us what you have in mind and we’ll plan it with you.
+    - q: Do donations get an 80G receipt?
+      a: Yes. Every donation gets an {taxExemption} receipt by email; add your PAN when you donate. For receipts and invoices, write to {finance}.
+
+closing:
+  eyebrow: Get in touch
+  heading: { before: Let’s plan, accent: something. }
+  lede: Write with your team size, rough dates and what you have in mind, or message us on WhatsApp. We reply within two working days.
+  email: Email us
+  whatsapp: WhatsApp us

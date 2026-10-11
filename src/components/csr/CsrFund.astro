@@ -1,0 +1,93 @@
+---
+/** /csr/, "Where your CSR goes.": each programme with its Schedule VII activity and what funding pays for, then the
+ *  gift and kit drives (#drives), each with a pre-filled email. Copy: csr.yaml → fund, drives; the programme names
+ *  from programmes/*.yaml. */
+import { getCsrPage, getProgrammes } from "../../lib/content";
+import { mailto } from "../../lib/links";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import Button from "../ui/Button.astro";
+import SectionLabel from "../ui/SectionLabel.astro";
+import CsrHead from "./CsrHead.astro";
+
+interface Props {
+  /** where the emails go */
+  email: string;
+}
+
+const { email } = Astro.props;
+const { fund: f, drives: dr } = await getCsrPage();
+const programmes = await getProgrammes();
+const rows = f.rows.map((r) => {
+  const p = programmes.find((x) => x.anchor === r.programme);
+  if (!p) throw new Error(`csr.yaml fund.rows: no programme ${r.programme}`);
+  return { ...r, num: p.num, name: p.name, verb: p.verb };
+});
+---
+
+<section
+  class="csr-fund relative overflow-hidden border-t-line border-ink bg-paper px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+  id="fund"
+  data-spy="fund"
+  aria-labelledby="csr-fund-h"
+>
+  <MarginDoodles set="cfund" />
+  <div class="relative z-2 mx-auto max-w-section">
+    <CsrHead id="csr-fund-h" eyebrow={f.eyebrow} heading={f.heading} lede={f.lede} />
+    <ul class="mt-14 grid border-t-line border-ink max-tab:mt-10" data-stagger="60">
+      {
+        rows.map((r) => (
+          <li
+            class="grid grid-cols-[minmax(0,15rem)_minmax(0,1fr)_minmax(0,1.2fr)] items-baseline gap-8 border-b-line border-ink py-6 max-lap:grid-cols-[minmax(0,13rem)_minmax(0,1fr)] max-lap:gap-x-6 max-lap:gap-y-3 max-tab:grid-cols-1 max-tab:gap-2.5 max-tab:py-5"
+            data-reveal="rise"
+          >
+            <div>
+              <SectionLabel num={r.num}>{r.name}</SectionLabel>
+              <h3 class="mt-2 font-pi-display text-44 leading-[.9] font-extrabold tracking-tightest max-tab:text-40">
+                {r.verb}<span class="text-accent-ink">.</span>
+              </h3>
+            </div>
+            <p class="font-pi-sans text-16 leading-[1.4] font-semibold">
+              <span class="block font-pi-sans text-13 font-semibold tracking-caption text-sky-ink">{f.scheduleLabel}</span>
+              {r.schedule}
+            </p>
+            <p class="font-pi-sans text-17 leading-body font-medium text-pretty max-lap:col-start-2 max-tab:col-start-auto">
+              <span class="block font-pi-sans text-13 font-semibold tracking-caption text-sky-ink">{f.fundsLabel}</span>
+              {r.funds}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="mt-8 max-w-[62ch] font-pi-sans text-17 leading-body text-pretty" data-reveal="rise">{f.budget}</p>
+    <div class="mt-8 flex flex-wrap gap-3" data-reveal="rise">
+      <Button href={mailto(email, f.subject)} size="lg" arrow>{f.cta}</Button>
+    </div>
+
+    <div class="mt-24 max-tab:mt-16" id="drives" aria-labelledby="csr-drives-h">
+      <div class="max-w-[52ch]" data-stagger="70">
+        <h3
+          id="csr-drives-h"
+          class="font-pi-display text-56 leading-[.95] font-extrabold tracking-heavy text-balance max-tab:text-40"
+          data-reveal="wipe"
+        >
+          {dr.heading}
+        </h3>
+        <p class="mt-5 font-pi-sans text-17 leading-[1.45] text-pretty" data-reveal="rise">{dr.lede}</p>
+      </div>
+      <ul class="mt-10 grid grid-cols-3 gap-5 max-lap:grid-cols-1 max-tab:mt-8 max-tab:gap-4" data-stagger="60">
+        {
+          dr.items.map((x) => (
+            <li class="pi-card pi-card--paper-2 flex flex-col gap-2" data-reveal="rise">
+              <p class="font-pi-sans text-13 font-semibold tracking-caption text-sky-ink">{x.when}</p>
+              <h4 class="font-pi-display text-26 leading-[1.05] font-extrabold tracking-heading">{x.name}</h4>
+              <p class="font-pi-sans text-16 leading-body font-medium text-pretty">{x.line}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="mt-8 flex flex-wrap gap-3" data-reveal="rise">
+        <Button href={mailto(email, dr.subject)} variant="ghost" size="lg" arrow>{dr.cta}</Button>
+      </div>
+    </div>
+  </div>
+</section>

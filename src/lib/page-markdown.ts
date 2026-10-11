@@ -1,11 +1,14 @@
 /**
  * The pages as Markdown, for AI agents. /llms.txt is the whole site in one file; each page with prose also has an
- * index.md beside its index.html (/index.md, /volunteer/index.md, /privacy/index.md), which functions/_middleware.ts
+ * index.md beside its index.html (/index.md, /volunteer/index.md, /csr/index.md, /privacy/index.md), which functions/_middleware.ts
  * serves at the page's own URL to requests that send `Accept: text/markdown`. Built from the same content and events
  * feed as the pages, so none of it needs editing by hand. Links are absolute: the text is read away from the page.
  */
 import {
+  facts,
+  fill,
   getCopy,
+  getCsrPage,
   getGuideCards,
   getKalakriti,
   getPartners,
@@ -142,10 +145,17 @@ export async function siteMarkdown(origin: URL | undefined) {
     `- [Donate via Razorpay](${site.links.razorpay.base}): one-time gifts from ₹${site.links.razorpay.min}. Donations are tax-exempt under section ${r.taxExemption}; add your PAN for the receipt.`,
     `- ${site.stats.programmesPercent}% of funds go to programmes.`,
     "",
+    `## For companies: CSR and employee volunteering`,
+    "",
+    `${site.name} is registered with the Ministry of Corporate Affairs to take on CSR projects (CSR-1 ${r.csr1}). Companies can bring a team for a volunteering day, sponsor Kalakriti, fund a programme or run a gift or kit drive, all in Bengaluru.`,
+    "",
+    `- [CSR and employee volunteering in Bengaluru](${abs("/csr/")}): volunteering-day formats, Kalakriti sponsorships (from ₹1,000 a child), the programmes with their Schedule VII activities, safeguarding, the paperwork and an FAQ.`,
+    `- To plan something: ${values.connect}, or call or WhatsApp ${site.contacts.phone.display}.`,
+    "",
     "## About and transparency",
     "",
     `- Founded in ${site.city} on ${site.founded.long}. ${site.stats.optimists} Optimists (volunteers), ${site.stats.hours} volunteer hours, ${site.stats.reached} people reached.`,
-    `- Registered ${r.taxExemption} and ${r.registered}. NGO Darpan ${r.darpan}, PAN ${r.pan}, registration no. ${r.registrationNo}.`,
+    `- Registered ${r.taxExemption} and ${r.registered}. NGO Darpan ${r.darpan}, PAN ${r.pan}, registration no. ${r.registrationNo}. Registered with the Ministry of Corporate Affairs to take on CSR projects (CSR-1 ${r.csr1}).`,
     ...[...pdfs("annual"), ...pdfs("audited")].map(
       (d) => `- [${d.title}](${abs(d.url)})`
     ),
@@ -252,6 +262,146 @@ export async function volunteerMarkdown(origin: URL | undefined) {
     `- [Proud Indian](${abs("/")}): the programmes, Kalakriti, donations and reports.`,
     `- [Donate](${abs("/#donate")}): towards class materials, meals and Kalakriti.`,
     `- Questions: ${values.hr}, or call or WhatsApp ${site.contacts.phone.display}.`,
+    "",
+  ].join("\n");
+}
+
+/** The page for companies (/csr/), section by section in page order. */
+export async function csrMarkdown(origin: URL | undefined) {
+  const [site, csr, programmes, partners, reports] = await Promise.all([
+    getSite(),
+    getCsrPage(),
+    getProgrammes(),
+    getPartners(),
+    getReports(),
+  ]);
+  const values = { ...facts(site), ...guideValues(site) };
+  const abs = (path: string) => new URL(path, origin ?? site.url).href;
+  const url = abs("/csr/");
+  const heading = (h: { before: string; accent: string }) =>
+    `${h.before} ${h.accent}`;
+  const {
+    hero,
+    ways,
+    days,
+    kalakriti: k,
+    fund,
+    drives,
+    how,
+    safeguarding,
+  } = csr;
+  const name = (anchor: string) => {
+    const p = programmes.find((x) => x.anchor === anchor);
+    return p ? `${p.verb} (${p.name})` : anchor;
+  };
+  const latest = (kind: string) => reports.find((d) => d.kind === kind);
+  const audited = latest("audited");
+  const annual = latest("annual");
+
+  return [
+    `# ${heading(hero.heading)}`,
+    "",
+    `> ${csr.meta.description}`,
+    "",
+    hero.lede,
+    "",
+    hero.facts.map((f) => fill(f, values)).join(" · "),
+    "",
+    `To plan something, write to ${values.connect} (subject “${csr.contact.subject}”) with your team size, rough dates and what you have in mind, or call or WhatsApp ${site.contacts.phone.display}.`,
+    "",
+    `## ${heading(ways.heading)}`,
+    "",
+    ways.lede,
+    "",
+    ...ways.cards.map((c) => `- **${c.title}**: ${c.line}`),
+    "",
+    `## ${heading(days.heading)}`,
+    "",
+    days.lede,
+    "",
+    ...days.formats.flatMap((f) => [
+      `### ${f.name}`,
+      "",
+      f.what,
+      "",
+      `- ${days.labels.size}: ${f.size}`,
+      `- ${days.labels.length}: ${f.length}`,
+      `- ${days.labels.where}: ${f.where}`,
+      `- ${days.labels.provide}: ${f.provide}`,
+      "",
+    ]),
+    `**${days.cost.heading}.** ${days.cost.text}`,
+    "",
+    `${days.done.heading}: ${days.done.items.map((x) => `${x.name} (${x.did})`).join(", ")}.`,
+    "",
+    `## ${heading(k.heading)}`,
+    "",
+    k.lede,
+    "",
+    ...k.tiers.map((t) => `- **${t.name}, ${t.amount}**: ${t.line}`),
+    "",
+    `${k.cost} [${k.costLink}](${abs(k.disclosure)}).`,
+    "",
+    `## ${heading(fund.heading)}`,
+    "",
+    fund.lede,
+    "",
+    ...fund.rows.map(
+      (r) =>
+        `- **${name(r.programme)}**: ${fund.scheduleLabel} ${r.schedule}. ${fund.fundsLabel}: ${r.funds}`
+    ),
+    "",
+    fund.budget,
+    "",
+    `### ${drives.heading}`,
+    "",
+    drives.lede,
+    "",
+    ...drives.items.map((x) => `- **${x.name}** (${x.when}): ${x.line}`),
+    "",
+    `## ${heading(how.heading)}`,
+    "",
+    ...how.steps.map((x, i) => `${i + 1}. **${x.title}.** ${x.line}`),
+    "",
+    `## ${heading(safeguarding.heading)}`,
+    "",
+    safeguarding.lede,
+    "",
+    ...safeguarding.rules.map((x) => `- ${x}`),
+    "",
+    ...partnerLines(await getCopy(), partners),
+    `## ${heading(csr.paperwork.heading)}`,
+    "",
+    ...csr.paperwork.items.map(
+      (i) =>
+        `- ${i.label}: ${fill(i.value, values)}${i.note ? ` (${i.note})` : ""}${i.pdf ? ` · [${csr.paperwork.pdf}](${abs(i.pdf)})` : ""}`
+    ),
+    ...(audited
+      ? [
+          `- [${csr.paperwork.latestAudited}, ${audited.year}](${abs(audited.url)})`,
+        ]
+      : []),
+    ...(annual
+      ? [
+          `- [${csr.paperwork.latestAnnual}, ${annual.year}](${abs(annual.url)})`,
+        ]
+      : []),
+    `- [${csr.paperwork.all}](${abs("/#reports")})`,
+    "",
+    markdown(csr.paperwork.certificates, values, url),
+    "",
+    `## ${heading(csr.faq.heading)}`,
+    "",
+    ...csr.faq.items.flatMap((f) => [
+      `### ${f.q}`,
+      "",
+      markdown(f.a, values, url),
+      "",
+    ]),
+    "## More",
+    "",
+    `- [Proud Indian](${abs("/")}): the programmes, Kalakriti, donations and reports.`,
+    `- [Volunteer guide](${abs("/volunteer/")}): weekend volunteering for individuals.`,
     "",
   ].join("\n");
 }

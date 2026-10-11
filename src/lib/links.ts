@@ -9,3 +9,11 @@ export const linkTo = (href: string, anchors: Anchors) =>
   anchors && href.startsWith("#") && !anchors.includes(href)
     ? `/${href}`
     : href;
+
+/** A mailto link with a pre-filled subject (and body), for the buttons that start an email. */
+export const mailto = (to: string, subject: string, body?: string) =>
+  `mailto:${to}?subject=${encodeURIComponent(subject)}${body ? `&body=${encodeURIComponent(body)}` : ""}`;
+
+/** A WhatsApp chat link from a "+91…" phone number. */
+export const whatsapp = (tel: string) =>
+  `https://wa.me/${tel.replace(/\D/g, "")}`;

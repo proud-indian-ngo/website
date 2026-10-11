@@ -46,7 +46,17 @@ export type SetName =
   | "vdo"
   | "vwhere"
   | "vint"
-  | "vfaq";
+  | "vfaq"
+  | "chero"
+  | "cways"
+  | "cdays"
+  | "csponsor"
+  | "cfund"
+  | "chow"
+  | "csafe"
+  | "cdocs"
+  | "cfaq"
+  | "cclose";
 export interface Spot {
   m: Motif;
   side: "l" | "r";
@@ -192,6 +202,78 @@ const plans: Record<SetName, Plan> = {
     l: ["notepad", "sparkle", "star"],
     r: ["clock", "book"],
     h: 1300,
+    gl: 400,
+    gr: 400,
+  },
+  // the /csr/ page's sections (the 1264px section width, like the volunteer guide's)
+  chero: {
+    l: ["kite", "star", "sparkle"],
+    r: ["hands", "sun"],
+    h: 900,
+    gl: 400,
+    gr: 400,
+    y: [14, 90],
+  },
+  cways: {
+    l: ["hands", "star"],
+    r: ["heart", "pencil"],
+    h: 980,
+    gl: 400,
+    gr: 400,
+  },
+  cdays: {
+    l: ["brush", "pencil", "sparkle"],
+    r: ["book", "clock", "star"],
+    h: 1800,
+    gl: 400,
+    gr: 400,
+  },
+  csponsor: {
+    l: ["drum", "star"],
+    r: ["brush", "sparkle", "note"],
+    h: 1250,
+    gl: 400,
+    gr: 400,
+  },
+  cfund: {
+    l: ["book", "bowl", "star"],
+    r: ["rupee", "heart", "kite"],
+    h: 1900,
+    gl: 400,
+    gr: 400,
+  },
+  chow: {
+    l: ["notepad", "sparkle"],
+    r: ["plane", "tick"],
+    h: 820,
+    gl: 400,
+    gr: 400,
+  },
+  csafe: {
+    l: ["heart", "star"],
+    r: ["hands", "sparkle"],
+    h: 920,
+    gl: 400,
+    gr: 400,
+  },
+  cdocs: {
+    l: ["notepad", "tick"],
+    r: ["pencil", "star"],
+    h: 1000,
+    gl: 400,
+    gr: 400,
+  },
+  cfaq: {
+    l: ["notepad", "sparkle", "star"],
+    r: ["clock", "book"],
+    h: 1300,
+    gl: 400,
+    gr: 400,
+  },
+  cclose: {
+    l: ["heart", "kite"],
+    r: ["sun", "sparkle"],
+    h: 760,
     gl: 400,
     gr: 400,
   },

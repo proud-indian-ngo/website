@@ -50,7 +50,7 @@ const type = (r: Response) => r.headers.get("Content-Type") ?? "";
 const varies = (r: Response) => /\baccept\b/i.test(r.headers.get("Vary") ?? "");
 
 const r: Record<string, boolean> = {};
-for (const path of ["/", "/volunteer/", "/privacy/"]) {
+for (const path of ["/", "/volunteer/", "/csr/", "/privacy/"]) {
   const md = await get(path, "text/markdown");
   const body = await md.text();
   r[`${path} markdown to text/markdown`] =

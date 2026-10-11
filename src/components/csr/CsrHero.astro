@@ -1,0 +1,62 @@
+---
+/**
+ * /csr/ hero: "CSR and employee volunteering in Bengaluru." on cyan with two cut-out kids, the two calls to action
+ * (a pre-filled email and the ways to fund) and the registrations a CSR team checks first. Copy: csr.yaml → hero.
+ * The cut-out layout is the volunteer guide's (volunteer-page.css).
+ */
+import { fill, getCsrPage } from "../../lib/content";
+import { asset } from "../../lib/images";
+import HeartBadge from "../doodles/HeartBadge.astro";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import AccentWord from "../ui/AccentWord.astro";
+import Button from "../ui/Button.astro";
+import HeroKids from "../ui/HeroKids.astro";
+import TickPills from "../ui/TickPills.astro";
+
+interface Props {
+  /** {placeholders} for the copy */
+  values: Record<string, string>;
+  /** the pre-filled email behind "Plan a volunteering day" */
+  plan: string;
+}
+
+const { values, plan } = Astro.props;
+const { hero: h } = await getCsrPage();
+const kids = h.kids.map((k) => ({ src: asset(k.image), label: k.label }));
+---
+
+<div class="s-hero relative" id="top">
+  <section
+    class="vg-hero relative overflow-hidden bg-sky px-14 pt-[150px] pb-28 max-tab:px-5 max-tab:pt-[104px] max-tab:pb-14"
+    aria-labelledby="csr-h"
+  >
+    <MarginDoodles set="chero" tone="sky" />
+    <div class="relative z-2 mx-auto max-w-section" data-stagger="80">
+      <p
+        class="mb-6 inline-flex items-center gap-2 rounded-pill border-line border-ink bg-white py-1 pr-3.5 pl-1.5 font-pi-sans text-15 font-semibold"
+        data-reveal="rise"
+      >
+        <HeartBadge class="pi-doodle w-6" aria-hidden="true" />{h.eyebrow}
+      </p>
+      <h1
+        id="csr-h"
+        class="csr-h1 font-pi-display leading-[.9] font-extrabold tracking-poster text-balance"
+        data-reveal="wipe"
+      >
+        {`${h.heading.before} `}<AccentWord variant="outline" class="relative inline-block">{h.heading.accent}</AccentWord>
+      </h1>
+      <p
+        class="mt-7 max-w-[50ch] font-pi-sans text-20 leading-lede text-pretty max-tab:mt-5 max-tab:text-17"
+        data-reveal="rise"
+      >
+        {h.lede}
+      </p>
+      <div class="mt-8 flex flex-wrap items-center gap-3 max-tab:mt-6" data-reveal="rise">
+        <Button href={plan} size="lg" arrow>{h.plan}</Button>
+        <Button href="#ways" variant="ghost" size="lg">{h.fund}</Button>
+      </div>
+      <TickPills items={h.facts.map((f) => fill(f, values))} label="Registrations" class="max-w-[44rem]" />
+    </div>
+    <HeroKids kids={kids} />
+  </section>
+</div>

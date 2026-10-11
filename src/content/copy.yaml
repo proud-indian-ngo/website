@@ -32,6 +32,7 @@ menu:
     - { label: Volunteer, href: "#volunteer" }
     - { label: Donate, href: "#donate" }
     - { label: Reports, href: "#reports" }
+    - { label: For companies, href: /csr/ }
   # the social pills, in this order; URLs and accessible labels come from site.yaml → social
   social:
     - { network: instagram, label: Instagram }
@@ -190,6 +191,7 @@ reports:
       - { label: NGO Darpan, value: "{darpan}" }
       - { label: PAN, value: "{pan}" }
       - { label: Registration no., value: "{registrationNo}" }
+      - { label: CSR-1, value: "{csr1}" }
       - { label: Founded, value: "{foundedShort} · {city}" }
   drawer:
     eyebrow: Reports
@@ -206,7 +208,7 @@ reports:
       disclosure: Project disclosure
     pdf: PDF
     seeAll: See all
-    foot: Registered {taxExemption} · {registered} · NGO Darpan {darpan} · PAN {pan}
+    foot: Registered {taxExemption} · {registered} · NGO Darpan {darpan} · PAN {pan} · CSR-1 {csr1}
 
 trustees:
   heading: { before: Our, accent: trustees. }
@@ -228,6 +230,8 @@ partners:
   heading: { before: With thanks to our, accent: partners. }
   lede: The companies and organisations that have volunteered with us, backed our programmes or lent a hand.
   visit: "{name} (opens their website)"
+  # the link under the logos, to the page for companies (not shown on that page)
+  cta: Partner with us
 
 closing:
   chip: Weekend sessions · Bengaluru
@@ -272,6 +276,7 @@ footer:
     - { label: Programmes, href: "#programmes" }
     - { label: Kalakriti, href: "#kalakriti" }
     - { label: Volunteer, href: /volunteer/ }
+    - { label: For companies, href: /csr/ }
     - { label: Donate, href: "#donate" }
     - { label: Reports, href: "#reports" }
     - { label: About, href: "#about" }

@@ -1,0 +1,78 @@
+---
+/** /csr/, "Bring your team.": the volunteering-day formats (team size, length, where, what we bring), what a day
+ *  costs, the companies that have volunteered with us in Bengaluru, and a pre-filled email. Copy: csr.yaml → days. */
+import { getCsrPage } from "../../lib/content";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import Button from "../ui/Button.astro";
+import CsrHead from "./CsrHead.astro";
+
+interface Props {
+  /** the pre-filled email behind the button */
+  plan: string;
+}
+
+const { plan } = Astro.props;
+const { days: d } = await getCsrPage();
+const facts = (f: (typeof d.formats)[number]) => [
+  [d.labels.size, f.size],
+  [d.labels.length, f.length],
+  [d.labels.where, f.where],
+  [d.labels.provide, f.provide],
+];
+---
+
+<section
+  class="csr-days relative overflow-hidden border-t-line border-ink bg-paper-2 px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+  id="days"
+  data-spy="days"
+  aria-labelledby="csr-days-h"
+>
+  <MarginDoodles set="cdays" />
+  <div class="relative z-2 mx-auto max-w-section">
+    <CsrHead id="csr-days-h" eyebrow={d.eyebrow} heading={d.heading} lede={d.lede} />
+    <ol class="mt-14 grid grid-cols-2 gap-6 max-lap:grid-cols-1 max-tab:mt-10 max-tab:gap-4.5" data-stagger="70">
+      {
+        d.formats.map((f, i) => (
+          <li class="pi-card flex flex-col gap-4" data-reveal="rise">
+            <p class="font-pi-sans text-14 font-bold tracking-caption text-sky-ink">0{i + 1}</p>
+            <h3 class="-mt-2 font-pi-display text-32 leading-[1.02] font-extrabold tracking-heading text-balance max-tab:text-26">
+              {f.name}
+            </h3>
+            <p class="font-pi-sans text-17 leading-body font-medium text-pretty">{f.what}</p>
+            <dl class="mt-auto grid gap-0 border-t-line border-ink-a14">
+              {
+                facts(f).map(([k, v]) => (
+                  <div class="grid grid-cols-[9.5rem_1fr] gap-4 border-b-line border-ink-a14 py-2.5 last:border-b-0 max-tab:grid-cols-1 max-tab:gap-0.5">
+                    <dt class="font-pi-sans text-13 font-semibold tracking-caption text-sky-ink">{k}</dt>
+                    <dd class="font-pi-sans text-16 leading-[1.35] font-semibold">{v}</dd>
+                  </div>
+                ))
+              }
+            </dl>
+          </li>
+        ))
+      }
+    </ol>
+    <div class="mt-10 grid grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] gap-6 max-lap:grid-cols-1 max-tab:mt-8 max-tab:gap-4.5">
+      <div class="pi-card pi-card--sky" data-reveal="rise">
+        <h3 class="font-pi-display text-26 leading-[1.05] font-extrabold tracking-heading">{d.cost.heading}</h3>
+        <p class="mt-3 font-pi-sans text-17 leading-body font-medium text-pretty">{d.cost.text}</p>
+      </div>
+      <div class="pi-card" data-reveal="rise">
+        <h3 class="font-pi-display text-22 leading-[1.1] font-extrabold tracking-heading text-balance">{d.done.heading}</h3>
+        <ul class="mt-3 grid gap-2 font-pi-sans text-16 leading-body font-medium">
+          {
+            d.done.items.map((x) => (
+              <li>
+                <b class="font-bold">{x.name}</b> {x.did}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 flex justify-center max-tab:mt-9">
+      <Button href={plan} size="lg" arrow>{d.cta}</Button>
+    </div>
+  </div>
+</section>

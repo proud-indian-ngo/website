@@ -58,6 +58,24 @@ export function guideValues(site: Site): Record<string, string> {
     events: site.links.events,
     hr: email(/volunteer/i),
     connect: email(/general/i),
+    finance: email(/donation/i),
     phone: site.contacts.phone.display,
   };
+}
+
+/** A page's FAQ answers rendered twice: for the page, and for its FAQPage structured data, which is read away from the
+ *  page, so its links are absolute ("#volunteer" becomes "https://…/volunteer/#volunteer"). */
+export const faqAnswers = (
+  items: { q: string; a: string }[],
+  values: Record<string, string>,
+  pageUrl: string
+) => ({
+  page: items.map((f) => ({ q: f.q, a: inline(f.a, values) })),
+  data: items.map((f) => ({ q: f.q, a: inline(f.a, values, pageUrl) })),
+});
+
+/** The site's origin and this page's absolute URL, for structured data. */
+export function pageUrls(site: URL | undefined, pathname: string) {
+  const origin = (site ?? new URL("https://proudindian.ngo/")).href;
+  return { origin, url: new URL(pathname, origin).href };
 }

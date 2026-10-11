@@ -1,0 +1,58 @@
+---
+/** /csr/ closing: "Let's plan something." with the pre-filled email, WhatsApp and the phone number. Copy: csr.yaml →
+ *  closing; contacts from site.yaml. */
+import { getCsrPage, getSite } from "../../lib/content";
+import { whatsapp } from "../../lib/links";
+import HeartChip from "../doodles/HeartChip.astro";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import AccentWord from "../ui/AccentWord.astro";
+import Button from "../ui/Button.astro";
+
+interface Props {
+  /** the pre-filled email */
+  plan: string;
+  /** the address it goes to, shown under the buttons */
+  email: string;
+}
+
+const { plan, email } = Astro.props;
+const { closing: c } = await getCsrPage();
+const site = await getSite();
+---
+
+<section
+  class="csr-close relative overflow-hidden border-t-line border-ink bg-sky px-14 pt-28 pb-32 text-center max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+  id="closing"
+  aria-labelledby="csr-close-h"
+>
+  <MarginDoodles set="cclose" tone="sky" />
+  <div class="relative z-2 mx-auto flex max-w-[760px] flex-col items-center" data-stagger="75">
+    <p
+      class="mb-5.5 inline-flex items-center gap-2 rounded-pill border-line border-ink bg-white py-1 pr-3.5 pl-1.5 font-pi-sans text-15 font-semibold"
+      data-reveal="rise"
+    >
+      <HeartChip class="pi-doodle w-6" aria-hidden="true" />{c.eyebrow}
+    </p>
+    <h2
+      id="csr-close-h"
+      class="font-pi-display text-96 leading-[.88] font-extrabold tracking-poster text-balance max-tab:text-56"
+      data-reveal="wipe"
+    >
+      {`${c.heading.before} `}<AccentWord variant="outline" class="relative inline-block">{c.heading.accent}</AccentWord>
+    </h2>
+    <p class="mt-6.5 max-w-[48ch] font-pi-sans text-19 leading-lede text-pretty max-tab:text-17" data-reveal="rise">
+      {c.lede}
+    </p>
+    <div class="mt-9 flex flex-wrap justify-center gap-3" data-reveal="rise">
+      <Button href={plan} size="lg" arrow>{c.email}</Button>
+      <Button href={whatsapp(site.contacts.phone.tel)} variant="ghost" size="lg" target="_blank" rel="noopener"
+        >{c.whatsapp}</Button
+      >
+    </div>
+    <p class="mt-6 font-pi-sans text-16 font-semibold" data-reveal="rise">
+      <a class="underline decoration-1 underline-offset-3" href={`mailto:${email}`}>{email}</a>
+      <span aria-hidden="true"> · </span>
+      <a class="underline decoration-1 underline-offset-3" href={`tel:${site.contacts.phone.tel}`}>{site.contacts.phone.display}</a>
+    </p>
+  </div>
+</section>

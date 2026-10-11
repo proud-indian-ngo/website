@@ -18,6 +18,12 @@ export async function getVolunteerPage() {
   if (!entry) throw missing("volunteer");
   return entry.data;
 }
+/** /csr/, the page for companies (src/content/csr.yaml) */
+export async function getCsrPage() {
+  const entry = await getEntry("csr", "csr");
+  if (!entry) throw missing("csr");
+  return entry.data;
+}
 /** The share card for a page (src/content/og.yaml), or undefined for the default brand card. */
 export async function getShareCard(page: string) {
   const entry = await getEntry("og", "og");

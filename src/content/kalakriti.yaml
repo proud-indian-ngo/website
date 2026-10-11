@@ -48,9 +48,10 @@ tickets:
     rail: [Kalakriti, Next edition, Register]
     stub: Crew pass
   sponsor:
-    kicker: Donate · patron
+    # goes to the sponsorships on /csr/
+    kicker: Sponsor · patron
     title: Sponsor Kalakriti
-    rail: [Kalakriti, Next edition, Donate]
+    rail: [Kalakriti, Next edition, Sponsor]
     stub: Patron
   note: Once a year, Kalakriti gives children from our communities one full day of arts and culture, with a stage of their own and an audience cheering them on.
 

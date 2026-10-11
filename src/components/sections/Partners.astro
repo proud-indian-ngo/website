@@ -11,10 +11,12 @@ import Img from "../ui/Img.astro";
 interface Props {
   /** "h2" when the block is its own section (the volunteer guide); "h3" inside Reports */
   level?: "h2" | "h3";
+  /** the "Partner with us" link to /csr/ under the logos (off on /csr/ itself) */
+  cta?: boolean;
   class?: string;
 }
 
-const { level = "h3", class: className } = Astro.props;
+const { level = "h3", cta = true, class: className } = Astro.props;
 const { partners: p } = await getCopy();
 /** every logo fits a 180×52 box, or 180×72 when it is squarish (narrower than 1.8:1), so a stacked mark and
  *  wordmark stay readable; its CSS width is what the box allows at its aspect ratio */
@@ -78,4 +80,16 @@ const Heading = level;
       ))
     }
   </ul>
+  {
+    cta && (
+      <p class="mt-8 text-center max-tab:mt-6" data-reveal="rise">
+        <a
+          class="tap-44 inline-flex items-center gap-1.5 font-pi-sans text-17 font-bold text-sky-ink underline decoration-1 underline-offset-4"
+          href="/csr/"
+        >
+          {p.cta} <span aria-hidden="true">→</span>
+        </a>
+      </p>
+    )
+  }
 </div>

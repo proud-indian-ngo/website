@@ -48,6 +48,16 @@ https://:project.pages.dev/*
   Content-Type: application/pdf
   Content-Disposition: inline
 
+# Registration certificates (public/certificates/, linked from /csr/#paperwork): a renewal replaces the file under the
+# same name, so cache them for a day. Kept out of search results, so searches land on /csr/ and not a loose PDF.
+/certificates/*
+  ! Cache-Control
+  Cache-Control: public, max-age=86400
+  ! Content-Type
+  Content-Type: application/pdf
+  Content-Disposition: inline
+  X-Robots-Tag: noindex
+
 # Link headers for agent discovery (RFC 8288): each page with Markdown points to it (the same as its
 # <link rel="alternate" type="text/markdown">), and to /llms.txt, the whole site in Markdown; the home page also to the
 # API catalog. A new page with an index.md.ts gets its own block here.
@@ -55,6 +65,8 @@ https://:project.pages.dev/*
   Link: </index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain", </.well-known/api-catalog>; rel="api-catalog"
 /volunteer/
   Link: </volunteer/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
+/csr/
+  Link: </csr/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
 /privacy/
   Link: </privacy/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
 
@@ -63,6 +75,8 @@ https://:project.pages.dev/*
 /index.md
   X-Robots-Tag: noindex
 /volunteer/index.md
+  X-Robots-Tag: noindex
+/csr/index.md
   X-Robots-Tag: noindex
 /privacy/index.md
   X-Robots-Tag: noindex

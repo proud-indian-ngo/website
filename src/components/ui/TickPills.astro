@@ -1,0 +1,26 @@
+---
+/** A row of paper pills, each with a tick: the quick facts under the volunteer guide's and /csr/'s hero headings.
+ *  The tick's colours are in volunteer-page.css (.vg-tick). */
+interface Props {
+  items: string[];
+  /** the list's accessible name */
+  label: string;
+  class?: string;
+}
+
+const { items, label, class: cls } = Astro.props;
+---
+
+<ul class:list={["vg-facts mt-9 flex flex-wrap gap-2.5 max-tab:mt-7", cls]} aria-label={label}>
+  {
+    items.map((f) => (
+      <li class="inline-flex items-center gap-2 rounded-pill border-line border-ink bg-paper py-1.5 pr-4 pl-2 font-pi-sans text-15 font-semibold max-tab:text-14">
+        <svg viewBox="0 0 20 20" class="vg-tick size-5 flex-none" aria-hidden="true">
+          <circle cx="10" cy="10" r="8.6" />
+          <path d="M6.2 10.4L8.8 12.9L13.9 7.4" />
+        </svg>
+        {f}
+      </li>
+    ))
+  }
+</ul>

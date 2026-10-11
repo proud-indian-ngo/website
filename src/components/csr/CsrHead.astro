@@ -1,0 +1,51 @@
+---
+/** The /csr/ page's section heading: the eyebrow pill, the h2 with its accent word and an optional lede. `tone` is the
+ *  section's background (ink sections get a paper pill and a paper lede). */
+import AccentWord from "../ui/AccentWord.astro";
+
+interface Props {
+  id: string;
+  eyebrow: string;
+  heading: { before: string; accent: string };
+  lede?: string;
+  tone?: "paper" | "sky" | "ink";
+  class?: string;
+}
+
+const { id, eyebrow, heading, lede, tone = "paper", class: cls } = Astro.props;
+---
+
+<div class:list={["max-w-[52ch]", cls]} data-stagger="75">
+  <p
+    class:list={[
+      "mb-5.5 inline-flex rounded-pill border-line px-3.5 py-1 font-pi-sans text-15 font-semibold",
+      tone === "ink" ? "border-paper bg-paper text-ink" : "border-ink bg-white",
+    ]}
+    data-reveal="rise"
+  >
+    {eyebrow}
+  </p>
+  <h2
+    id={id}
+    class="font-pi-display text-84 leading-[.9] font-extrabold tracking-poster text-balance max-tab:text-52"
+    data-reveal="wipe"
+  >
+    {`${heading.before} `}<AccentWord
+      variant={tone === "ink" ? "marigold" : tone === "sky" ? "outline" : undefined}
+      class="relative inline-block">{heading.accent}</AccentWord
+    >
+  </h2>
+  {
+    lede && (
+      <p
+        class:list={[
+          "mt-6.5 font-pi-sans text-19 leading-lede text-pretty max-tab:text-17",
+          tone === "ink" && "text-paper-a90",
+        ]}
+        data-reveal="rise"
+      >
+        {lede}
+      </p>
+    )
+  }
+</div>

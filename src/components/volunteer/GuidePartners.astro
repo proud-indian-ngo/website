@@ -1,7 +1,14 @@
 ---
-/** Volunteer guide, partners: the home page's partner logos (Partners.astro) in a section of their own, before the
- *  closing. Logos: src/content/partners.yaml. Copy: copy.yaml → partners. */
+/** Partners in a section of their own: on the volunteer guide before the closing, and on /csr/ before the paperwork.
+ *  The home page's partner logos (Partners.astro). Logos: src/content/partners.yaml. Copy: copy.yaml → partners. */
 import Partners from "../sections/Partners.astro";
+
+interface Props {
+  /** the "Partner with us" link under the logos (off on /csr/, which is where it goes) */
+  cta?: boolean;
+}
+
+const { cta = true } = Astro.props;
 ---
 
 <section
@@ -10,6 +17,6 @@ import Partners from "../sections/Partners.astro";
   aria-labelledby="partners-h"
 >
   <div class="relative z-2 mx-auto max-w-section">
-    <Partners level="h2" />
+    <Partners level="h2" cta={cta} />
   </div>
 </section>

@@ -1,0 +1,41 @@
+/* /csr/ page only (imported by src/pages/csr.astro, after volunteer-page.css, whose hero cut-outs, tick pills and FAQ
+   accordion it reuses). Layout and type sizes are utilities in the components (src/components/csr/); this keeps the
+   few things utilities express badly. @reference gives it the theme without emitting global.css a second time. */
+@reference "./global.css";
+
+@layer components {
+  /* a longer heading than the guide's, so a little smaller and wider */
+  .csr-h1 {
+    max-width: 15ch;
+    font-size: clamp(52px, 6.6vw, 104px);
+  }
+  /* the way-to-partner cards lift on hover, like the other cards you can press */
+  .csr-way {
+    color: inherit;
+    transition: translate 160ms var(--ease-settle);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .csr-way:hover {
+      translate: 0 -3px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .csr-way {
+      transition: none;
+    }
+  }
+  /* the Kalakriti polaroid, tilted and taped like the guide's */
+  .csr-pol {
+    position: relative;
+    width: 240px;
+    rotate: 3deg;
+  }
+  .csr-pol .tape {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    z-index: 2;
+    translate: -50% 0;
+    rotate: -4deg;
+  }
+}
