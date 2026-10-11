@@ -195,7 +195,7 @@ async function check(
       for (const o of obs) if (hit(dd, o)) out.push(`${dd.id} x ${o.k}`);
       // the rail is fixed: any vertical position, so test the column against doodles where the rail can show
       if (
-        /^(prog|teach|feed|gather|kala):/.test(dd.id) &&
+        /^(prog|teach|feed|connect|kala):/.test(dd.id) &&
         dd.x < rq.right + sx &&
         rq.left + sx < dd.x + dd.w
       )

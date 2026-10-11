@@ -1,6 +1,6 @@
 ---
 /**
- * One programme band, reused for Teach, Feed and Gather and driven by
+ * One programme band, reused for Teach, Feed and Connect and driven by
  * src/content/programmes/*.yaml: the giant verb, the line, chips and call to action, three polaroids pegged on a
  * string, the cut-out child on the band floor and the band's ambient doodle.
  */
@@ -26,7 +26,7 @@ interface Props {
 const { band: b } = Astro.props;
 const verbReveal = b.verbReveal === "wipe" ? { "data-reveal": "wipe" } : { "data-reveal": "rise", "data-y": "56" };
 // widest the floor sticker is shown, per band (its height is --kh)
-const mgSet = ({ b0: "teach", b1: "feed", b3: "gather" } as const)[b.anchor as "b0" | "b1" | "b3"];
+const mgSet = ({ b0: "teach", b1: "feed", b3: "connect" } as const)[b.anchor as "b0" | "b1" | "b3"];
 const stickerWidth = { book: 270, bowl: 420, heart: 300 }[b.doodle];
 ---
 
