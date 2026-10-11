@@ -58,6 +58,14 @@ https://:project.pages.dev/*
   Content-Disposition: inline
   X-Robots-Tag: noindex
 
+# Brand-launch campaign images (public/campaign/brand-launch/): Buffer fetches these by URL to schedule the launch
+# week's posts (12–18 Oct 2026). They aren't part of the site, so they stay out of search. Temporary: delete the folder
+# and this block after 19 Oct 2026. Source: proud-indian-ngo/design campaigns/2026-10-brand-launch.
+/campaign/*
+  ! Cache-Control
+  Cache-Control: public, max-age=86400
+  X-Robots-Tag: noindex
+
 # Link headers for agent discovery (RFC 8288): each page with Markdown points to it (the same as its
 # <link rel="alternate" type="text/markdown">), and to /llms.txt, the whole site in Markdown; the home page also to the
 # API catalog. A new page with an index.md.ts gets its own block here.
