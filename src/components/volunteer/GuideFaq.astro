@@ -2,7 +2,8 @@
 /**
  * Volunteer guide FAQ: the questions as an accordion of <details> (open without JavaScript, every answer in the HTML
  * for search engines and agents), with the self-ticking notepad. The same answers go into the page's FAQPage
- * structured data. Copy: volunteer.yaml → faq.
+ * structured data. The questions are written on the hero's notepad, one ruled line each (volunteer-page.css, .vg-pad).
+ * Copy: volunteer.yaml → faq.
  */
 import { getVolunteerPage } from "../../lib/content";
 import Notepad from "../doodles/Notepad.astro";
@@ -49,7 +50,9 @@ const { faq: f } = await getVolunteerPage();
           >
         </h2>
       </div>
-      <FaqAccordion items={items} />
+      <div class="vg-pad vg-faq-pad mt-12 max-tab:mt-9">
+        <FaqAccordion items={items} />
+      </div>
     </div>
   </section>
 </div>

@@ -28,13 +28,18 @@ hero:
   lede: "Give a Saturday morning or a Sunday afternoon to children in Bengaluru’s low-income communities. Teach a class, run an art session or help at a food drive, alongside Optimists who have done it before."
   join: Become an Optimist
   sessions: See upcoming sessions
+  # the notepad pinned beside the heading
+  factsTitle: The fine print
   facts:
     [18 and over, No experience needed, Free to join, Saturdays and Sundays]
-  kids:
-    - image: cutouts/ArtCraft_May2026_1000381054.png
-      label: A girl holding up the painting she made in art and craft class
-    - image: cutouts/GiftASmile2026_DSC_0036.png
-      label: A boy with the badminton set he got at Gift a Smile
+  # the two photos pinned up beside it: a class and a circle, Optimists with the children
+  photos:
+    - image: photos/volunteer-maths-board.jpg
+      alt: A volunteer at the whiteboard teaching multiplication to children at their desks
+      caption: Maths class, Saturday
+    - image: photos/volunteer-circle.jpg
+      alt: Volunteers sitting in a circle on the floor with children at the community centre
+      caption: Spoken English, Sunday
 
 do:
   eyebrow: What you’ll do

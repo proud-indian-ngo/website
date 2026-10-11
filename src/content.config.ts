@@ -811,8 +811,12 @@ const volunteer = defineCollection({
       lede: z.string(),
       join: z.string(),
       sessions: z.string(),
+      factsTitle: z.string(),
       facts: z.array(z.string()).min(1),
-      kids: z.array(z.object({ image: asset, label: z.string() })).length(2),
+      /** pinned up beside the notepad */
+      photos: z
+        .array(z.object({ image: asset, alt: z.string(), caption: z.string() }))
+        .length(2),
     }),
     do: z.object({
       eyebrow: z.string(),
