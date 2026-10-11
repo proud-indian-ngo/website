@@ -1,0 +1,32 @@
+---
+/** A page's FAQ on paper: the eyebrow and heading, then the accordion (FaqAccordion.astro). Used by /csr/ and
+ *  /kalakriti/; the same answers go into each page's FAQPage structured data. */
+import type { SetName } from "../margins/placements";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import FaqAccordion from "../ui/FaqAccordion.astro";
+import SectionHead from "../ui/SectionHead.astro";
+
+interface Props {
+  eyebrow: string;
+  heading: { before: string; accent: string };
+  /** the questions with their answers already rendered (src/lib/inline.ts) */
+  items: { q: string; a: string }[];
+  /** the page's margin doodle set for this section (placements.ts) */
+  set: SetName;
+}
+
+const { eyebrow, heading, items, set } = Astro.props;
+---
+
+<section
+  class="relative overflow-hidden border-t-line border-ink bg-paper px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+  id="faq"
+  data-spy="faq"
+  aria-labelledby="faq-h"
+>
+  <MarginDoodles set={set} />
+  <div class="relative z-2 mx-auto max-w-[880px]">
+    <SectionHead id="faq-h" eyebrow={eyebrow} heading={heading} />
+    <FaqAccordion items={items} />
+  </div>
+</section>

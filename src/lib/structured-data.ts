@@ -5,7 +5,7 @@
  * Facts come from site.yaml and copy.yaml, sessions from the pi-dash feed (src/lib/events/load.ts), so nothing here
  * needs editing by hand. The browser refresh does not touch it; the rebuild on every events change keeps it current.
  */
-import type { getCopy, getCsrPage, getSite } from "./content";
+import type { getCopy, getCsrPage, getKalakritiPage, getSite } from "./content";
 import type { PublicEvent } from "./events/contract";
 import { neighbourhood } from "./events/format";
 
@@ -13,6 +13,7 @@ type Site = Awaited<ReturnType<typeof getSite>>;
 type Copy = Awaited<ReturnType<typeof getCopy>>;
 type Address = Site["contacts"]["addresses"][number];
 type CsrPage = Awaited<ReturnType<typeof getCsrPage>>;
+type KalakritiPage = Awaited<ReturnType<typeof getKalakritiPage>>;
 
 /** The city the way people search for it as well as its official name. */
 const CITY = {
@@ -20,6 +21,17 @@ const CITY = {
   name: "Bengaluru",
   alternateName: "Bangalore",
 } as const;
+
+/** A page's FAQ, with the answers as plain HTML (links absolute) */
+const faqPage = (url: string, faq: { q: string; a: string }[]) => ({
+  "@type": "FAQPage",
+  "@id": `${url}#faq`,
+  mainEntity: faq.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+});
 
 function sessionEvent(e: PublicEvent, origin: string, orgId: string) {
   const area = neighbourhood(e.area);
@@ -171,15 +183,7 @@ export function volunteerStructuredData(
     "@context": "https://schema.org",
     "@graph": [
       subPage(page, "Volunteer", origin),
-      {
-        "@type": "FAQPage",
-        "@id": `${page.url}#faq`,
-        mainEntity: faq.map((f) => ({
-          "@type": "Question",
-          name: f.q,
-          acceptedAnswer: { "@type": "Answer", text: f.a },
-        })),
-      },
+      faqPage(page.url, faq),
       ...events.map((e) => sessionEvent(e, origin, orgId)),
     ],
   };
@@ -271,15 +275,7 @@ export function csrStructuredData(
           priceCurrency: "INR",
         })),
       },
-      {
-        "@type": "FAQPage",
-        "@id": `${page.url}#faq`,
-        mainEntity: faq.map((f) => ({
-          "@type": "Question",
-          name: f.q,
-          acceptedAnswer: { "@type": "Answer", text: f.a },
-        })),
-      },
+      faqPage(page.url, faq),
     ],
   };
 }
@@ -287,3 +283,52 @@ export function csrStructuredData(
 /** Serialise for a <script type="application/ld+json">, safe against a "</script>" inside the data. */
 export const jsonLd = (data: unknown) =>
   JSON.stringify(data).replace(/</g, "\\u003c");
+
+/**
+ * /kalakriti/: the page, each edition as a Festival (free, in person, in Bengaluru, organised by us) and the FAQ. The
+ * next edition has no date yet, so it isn't an Event until it does.
+ */
+export function kalakritiStructuredData(
+  page: { url: string; title: string; description: string },
+  faq: { q: string; a: string }[],
+  kala: KalakritiPage,
+  origin: string
+) {
+  const orgId = new URL("/#organization", origin).href;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      subPage(page, "Kalakriti", origin),
+      ...kala.editions.items.map((x) => ({
+        "@type": "Festival",
+        "@id": `${page.url}#${x.date}`,
+        name: x.name,
+        description: `${kala.hero.lede} ${x.note}`,
+        startDate: x.date,
+        endDate: x.date,
+        eventStatus: "https://schema.org/EventScheduled",
+        eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+        isAccessibleForFree: true,
+        location: {
+          "@type": "Place",
+          name: x.venue,
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: CITY.name,
+            addressRegion: "Karnataka",
+            addressCountry: "IN",
+          },
+        },
+        organizer: { "@id": orgId },
+        url: `${page.url}#editions`,
+        subjectOf: {
+          "@type": "DigitalDocument",
+          name: `${x.name} financial disclosure`,
+          url: new URL(x.disclosure, origin).href,
+          encodingFormat: "application/pdf",
+        },
+      })),
+      faqPage(page.url, faq),
+    ],
+  };
+}

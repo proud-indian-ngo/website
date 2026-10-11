@@ -74,7 +74,7 @@ export function guideValues(site: Site): Record<string, string> {
 
 /** A page's FAQ answers rendered twice: for the page, and for its FAQPage structured data, which is read away from the
  *  page, so its links are absolute ("#volunteer" becomes "https://…/volunteer/#volunteer"). */
-export const faqAnswers = (
+const faqAnswers = (
   items: { q: string; a: string }[],
   values: Record<string, string>,
   pageUrl: string
@@ -84,7 +84,24 @@ export const faqAnswers = (
 });
 
 /** The site's origin and this page's absolute URL, for structured data. */
-export function pageUrls(site: URL | undefined, pathname: string) {
+function pageUrls(site: URL | undefined, pathname: string) {
   const origin = (site ?? new URL("https://proudindian.ngo/")).href;
   return { origin, url: new URL(pathname, origin).href };
+}
+
+/** What a guide page (/volunteer/, /csr/, /kalakriti/) works out first: its address, its FAQ answers for the page and
+ *  for structured data, and the page summary the structured data starts from. */
+export function guidePage(
+  meta: { title: string; description: string },
+  faq: { q: string; a: string }[],
+  values: Record<string, string>,
+  site: URL | undefined,
+  pathname: string
+) {
+  const { origin, url } = pageUrls(site, pathname);
+  return {
+    origin,
+    faq: faqAnswers(faq, values, url),
+    page: { url, title: meta.title, description: meta.description },
+  };
 }

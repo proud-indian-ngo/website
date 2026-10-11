@@ -50,7 +50,7 @@ const type = (r: Response) => r.headers.get("Content-Type") ?? "";
 const varies = (r: Response) => /\baccept\b/i.test(r.headers.get("Vary") ?? "");
 
 const r: Record<string, boolean> = {};
-for (const path of ["/", "/volunteer/", "/csr/", "/privacy/"]) {
+for (const path of ["/", "/volunteer/", "/csr/", "/kalakriti/", "/privacy/"]) {
   const md = await get(path, "text/markdown");
   const body = await md.text();
   r[`${path} markdown to text/markdown`] =
@@ -99,6 +99,17 @@ const old = await get("/faq", "text/markdown");
 r["_redirects still apply"] =
   old.status === 301 &&
   old.headers.get("Location")?.endsWith("/volunteer/#faq") === true;
+// Instagram posts link to /kalakriti, and the old site's page was kalakriti.php
+const kalaPhp = await get("/kalakriti.php", BROWSER);
+r["kalakriti.php redirects to /kalakriti/"] =
+  kalaPhp.status === 301 &&
+  kalaPhp.headers.get("Location")?.endsWith("/kalakriti/") === true;
+const kala = await get("/kalakriti", BROWSER);
+r["/kalakriti (no slash) reaches the page"] =
+  (kala.status === 200 && type(kala).startsWith("text/html")) ||
+  (kala.status >= 301 &&
+    kala.status <= 308 &&
+    kala.headers.get("Location")?.endsWith("/kalakriti/") === true);
 const direct = await get("/volunteer/index.md", BROWSER);
 r["index.md direct: markdown, noindex"] =
   type(direct).startsWith("text/markdown") &&

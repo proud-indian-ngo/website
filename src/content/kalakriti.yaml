@@ -53,6 +53,8 @@ tickets:
     title: Sponsor Kalakriti
     rail: [Kalakriti, Next edition, Sponsor]
     stub: Patron
+  # the link after the note, to /kalakriti/
+  more: The whole story
   note: Once a year, Kalakriti gives children from our communities one full day of arts and culture, with a stage of their own and an audience cheering them on.
 
 line:

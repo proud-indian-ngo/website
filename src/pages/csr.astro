@@ -8,7 +8,6 @@
 import MarginSprite from "../components/margins/MarginSprite.astro";
 import CsrClosing from "../components/csr/CsrClosing.astro";
 import CsrDays from "../components/csr/CsrDays.astro";
-import CsrFaq from "../components/csr/CsrFaq.astro";
 import CsrFund from "../components/csr/CsrFund.astro";
 import CsrHero from "../components/csr/CsrHero.astro";
 import CsrHow from "../components/csr/CsrHow.astro";
@@ -16,6 +15,7 @@ import CsrPaperwork from "../components/csr/CsrPaperwork.astro";
 import Safeguarding from "../components/sections/Safeguarding.astro";
 import CsrSponsor from "../components/csr/CsrSponsor.astro";
 import CsrWays from "../components/csr/CsrWays.astro";
+import FaqSection from "../components/sections/FaqSection.astro";
 import Footer from "../components/sections/Footer.astro";
 import Header from "../components/sections/Header.astro";
 import PhoneMenu from "../components/sections/PhoneMenu.astro";
@@ -27,7 +27,7 @@ import Base from "../layouts/Base.astro";
 import "../styles/volunteer-page.css";
 import "../styles/csr-page.css";
 import { facts, getCsrPage, getSite } from "../lib/content";
-import { faqAnswers, guideValues, pageUrls } from "../lib/inline";
+import { guidePage, guideValues } from "../lib/inline";
 import { mailto } from "../lib/links";
 import { csrStructuredData, jsonLd } from "../lib/structured-data";
 
@@ -36,14 +36,8 @@ const site = await getSite();
 const values = { ...facts(site), ...guideValues(site) };
 const email = values.connect!;
 const plan = mailto(email, page.contact.subject, page.contact.body);
-const { origin, url } = pageUrls(Astro.site, Astro.url.pathname);
-const faq = faqAnswers(page.faq.items, values, url);
-const structured = csrStructuredData(
-  { url, title: page.meta.title, description: page.meta.description },
-  faq.data,
-  page,
-  origin
-);
+const { origin, faq, page: summary } = guidePage(page.meta, page.faq.items, values, Astro.site, Astro.url.pathname);
+const structured = csrStructuredData(summary, faq.data, page, origin);
 /** the sections on this page: header, menu and footer links to them stay here, the rest go to the home page */
 const anchors = ["#ways", "#days", "#sponsor", "#fund", "#drives", "#safeguarding", "#paperwork", "#faq", "#partners", "#closing"];
 const navLinks = page.nav.links;
@@ -65,7 +59,7 @@ const menuLinks = [{ label: page.nav.home, href: "/" }, ...navLinks];
     <Safeguarding set="csafe" />
     <GuidePartners cta={false} />
     <CsrPaperwork values={values} />
-    <CsrFaq items={faq.page} />
+    <FaqSection eyebrow={page.faq.eyebrow} heading={page.faq.heading} items={faq.page} set="cfaq" />
     <CsrClosing plan={plan} email={email} />
   </main>
   <Footer anchors={anchors} />

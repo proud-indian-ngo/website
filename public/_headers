@@ -67,6 +67,8 @@ https://:project.pages.dev/*
   Link: </volunteer/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
 /csr/
   Link: </csr/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
+/kalakriti/
+  Link: </kalakriti/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
 /privacy/
   Link: </privacy/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
 
@@ -77,6 +79,8 @@ https://:project.pages.dev/*
 /volunteer/index.md
   X-Robots-Tag: noindex
 /csr/index.md
+  X-Robots-Tag: noindex
+/kalakriti/index.md
   X-Robots-Tag: noindex
 /privacy/index.md
   X-Robots-Tag: noindex
