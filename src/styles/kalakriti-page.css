@@ -84,6 +84,10 @@
   }
   .kh-troupe .tp {
     bottom: 0;
+    /* on the dark stage the paper outline reads on its own, so the plain sticker filter, not the home poster's extra
+       ink hairline: that stack of drop-shadows, above the fold, cost ~1s of main-thread paint without a GPU (CI's
+       Lighthouse TBT) */
+    filter: var(--sticker);
   }
   .kh-t1 {
     left: 0;
