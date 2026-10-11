@@ -1,6 +1,7 @@
 # Reports and disclosures, shown in the Reports bento and drawer, newest first within each kind.
 # kind: annual | audited | disclosure. `year` is the financial year (2023-24); `date` is the month a disclosure was
-# issued (2025-09). The PDFs are in public/reports/, unaltered.
+# issued (2025-09). The PDFs are in public/reports/, unaltered apart from a searchable text layer (ocrmypdf --skip-text
+# --optimize 0, so the page images are untouched) on the scanned ones.
 # The bento counts, the drawer tab counts and the year ranges are all derived from this list.
 - id: annual-2025-26
   kind: annual
