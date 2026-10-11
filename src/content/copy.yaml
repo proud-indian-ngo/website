@@ -223,6 +223,12 @@ trustees:
       alt: Optimists holding their trophies and certificates at the Proud Indian Awards 2024–25
       caption: Proud Indian Awards 2024–25
 
+# the logos are src/content/partners.yaml
+partners:
+  heading: { before: With thanks to our, accent: partners. }
+  lede: The companies and organisations that have volunteered with us, backed our programmes or lent a hand.
+  visit: "{name} (opens their website)"
+
 closing:
   chip: Weekend sessions · Bengaluru
   heading: { before: See you this, accent: weekend? }

@@ -1,0 +1,42 @@
+# Partners and supporters, shown in this order on the home page (in Transparency, after the trustees) and on the
+# volunteer guide. logo: a transparent PNG under src/assets/partners/, trimmed to the artwork. url: the partner's site.
+items:
+  - name: Goodera
+    logo: partners/goodera.png
+    url: https://www.goodera.com/
+  - name: Connect For
+    logo: partners/connect-for.png
+    url: https://www.connectfor.org/
+  - name: iVolunteer
+    logo: partners/ivolunteer.png
+    url: https://www.ivolunteer.in/
+  - name: Ethos
+    logo: partners/ethos.png
+    url: https://www.ethos.com/
+  - name: RSP India
+    logo: partners/rsp-india.png
+    url: https://rsp.design/india
+  - name: Xencia Technologies
+    logo: partners/xencia.png
+    url: https://www.xencia.com/
+  - name: Avascent Aero
+    logo: partners/avascent-aero.png
+    url: https://avascent-aero.com/
+  - name: Mirage AEC
+    logo: partners/mirage-aec.png
+    url: https://mirageaec.com/
+  - name: Shishu Mandir
+    logo: partners/shishu-mandir.png
+    url: https://www.shishumandir.org/
+  - name: TALRadio Kannada
+    logo: partners/talradio.png
+    url: https://www.talradio.org/
+  - name: Elementary Studio
+    logo: partners/elementary-studio.png
+    url: https://www.elementarystudio.in/
+  - name: MotionCap Pictures
+    logo: partners/motioncap-pictures.png
+    url: https://www.instagram.com/motioncappictures/
+  - name: Clay Station
+    logo: partners/clay-station.png
+    url: https://claystation.in/

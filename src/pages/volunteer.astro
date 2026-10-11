@@ -2,7 +2,7 @@
 /**
  * /volunteer/: everything about volunteering with Proud Indian, for people looking for weekend volunteering in
  * Bengaluru. The hero, then the home page's volunteer section (live sessions, how to join), what you'd do, where we
- * meet, internships and the FAQ, then the closing section and the footer. Copy: src/content/volunteer.yaml; sessions
+ * meet, internships, the FAQ and the partners, then the closing section and the footer. Copy: src/content/volunteer.yaml; sessions
  * from the events feed. Structured data: the page, its FAQ and the sessions (src/lib/structured-data.ts).
  */
 import MarginSprite from "../components/margins/MarginSprite.astro";
@@ -15,6 +15,7 @@ import Volunteer from "../components/sections/Volunteer.astro";
 import GuideDo from "../components/volunteer/GuideDo.astro";
 import GuideFaq from "../components/volunteer/GuideFaq.astro";
 import GuideHero from "../components/volunteer/GuideHero.astro";
+import GuidePartners from "../components/volunteer/GuidePartners.astro";
 import GuideInternships from "../components/volunteer/GuideInternships.astro";
 import GuideWhere from "../components/volunteer/GuideWhere.astro";
 import Base from "../layouts/Base.astro";
@@ -59,6 +60,7 @@ const menuLinks = [{ label: page.nav.home, href: "/" }, ...navLinks];
     <GuideWhere events={events.data.events} />
     <GuideInternships values={values} email={values.hr!} />
     <GuideFaq items={faq} />
+    <GuidePartners />
     <Closing anchors={anchors} />
   </main>
   <Footer anchors={anchors} />
