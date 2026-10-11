@@ -1,0 +1,73 @@
+---
+/**
+ * /csr/: for companies looking for a CSR partner or an employee volunteering day in Bengaluru. The hero with the
+ * registrations, the four ways to partner, volunteering days, Kalakriti sponsorship, programme funding and drives, how
+ * it works, safeguarding, the partner logos, the paperwork, the FAQ and a closing with the email and WhatsApp.
+ * Copy: src/content/csr.yaml. Structured data: the page, its FAQ and the offers (src/lib/structured-data.ts).
+ */
+import MarginSprite from "../components/margins/MarginSprite.astro";
+import CsrClosing from "../components/csr/CsrClosing.astro";
+import CsrDays from "../components/csr/CsrDays.astro";
+import CsrFaq from "../components/csr/CsrFaq.astro";
+import CsrFund from "../components/csr/CsrFund.astro";
+import CsrHero from "../components/csr/CsrHero.astro";
+import CsrHow from "../components/csr/CsrHow.astro";
+import CsrPaperwork from "../components/csr/CsrPaperwork.astro";
+import CsrSafeguarding from "../components/csr/CsrSafeguarding.astro";
+import CsrSponsor from "../components/csr/CsrSponsor.astro";
+import CsrWays from "../components/csr/CsrWays.astro";
+import Footer from "../components/sections/Footer.astro";
+import Header from "../components/sections/Header.astro";
+import PhoneMenu from "../components/sections/PhoneMenu.astro";
+import StickyDonateBar from "../components/sections/StickyDonateBar.astro";
+import GuidePartners from "../components/volunteer/GuidePartners.astro";
+import Base from "../layouts/Base.astro";
+// after Base, so global.css (and its @layer order) comes first. The hero's cut-outs, the tick pills and the FAQ
+// accordion are the volunteer guide's, so this page uses its stylesheet too.
+import "../styles/volunteer-page.css";
+import "../styles/csr-page.css";
+import { facts, getCsrPage, getSite } from "../lib/content";
+import { faqAnswers, guideValues, pageUrls } from "../lib/inline";
+import { mailto } from "../lib/links";
+import { csrStructuredData, jsonLd } from "../lib/structured-data";
+
+const page = await getCsrPage();
+const site = await getSite();
+const values = { ...facts(site), ...guideValues(site) };
+const email = values.connect!;
+const plan = mailto(email, page.contact.subject, page.contact.body);
+const { origin, url } = pageUrls(Astro.site, Astro.url.pathname);
+const faq = faqAnswers(page.faq.items, values, url);
+const structured = csrStructuredData(
+  { url, title: page.meta.title, description: page.meta.description },
+  faq.data,
+  page,
+  origin
+);
+/** the sections on this page: header, menu and footer links to them stay here, the rest go to the home page */
+const anchors = ["#ways", "#days", "#sponsor", "#fund", "#drives", "#paperwork", "#faq", "#partners", "#closing"];
+const navLinks = page.nav.links;
+const menuLinks = [{ label: page.nav.home, href: "/" }, ...navLinks];
+---
+
+<Base title={page.meta.title} description={page.meta.description} og="csr" markdown>
+  <script is:inline slot="head" type="application/ld+json" set:html={jsonLd(structured)} />
+  <MarginSprite />
+  <Header anchors={anchors} links={navLinks} join={plan} joinLabel={page.nav.join} />
+  <PhoneMenu anchors={anchors} links={menuLinks} />
+  <main id="main">
+    <CsrHero values={values} plan={plan} />
+    <CsrWays />
+    <CsrDays plan={plan} />
+    <CsrSponsor email={email} />
+    <CsrFund email={email} />
+    <CsrHow />
+    <CsrSafeguarding />
+    <GuidePartners cta={false} />
+    <CsrPaperwork values={values} />
+    <CsrFaq items={faq.page} />
+    <CsrClosing plan={plan} email={email} />
+  </main>
+  <Footer anchors={anchors} />
+  <StickyDonateBar anchors={anchors} />
+</Base>

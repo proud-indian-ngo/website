@@ -17,6 +17,16 @@ volunteer:
       cutouts/GiftASmile2026_DSC_0036.png,
     ]
   alt: "Weekend volunteering in Bengaluru with Proud Indian: 18 and over, no experience needed, Saturdays and Sundays."
+csr:
+  pre: CSR and employee volunteering in
+  word: Bengaluru.
+  pills: [CSR-1 · 80G · 12A, Volunteering days]
+  kids:
+    [
+      cutouts/Kalakriti3_DSC01695.png,
+      cutouts/NutritionDistribution_DSC_0177.png,
+    ]
+  alt: "CSR and employee volunteering in Bengaluru with Proud Indian: CSR-1 registered, 80G and 12A; volunteering days and Kalakriti sponsorship."
 privacy:
   pre: How we handle your data
   word: Privacy policy.

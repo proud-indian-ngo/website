@@ -73,8 +73,25 @@
   --cl: 620px; /* the 1328px footer */
   --cr: 620px;
 }
-/* the volunteer guide's sections: the 1264px section width, plus the hero's cut-outs and the cards' overhang */
-.mg:is(.vhero, .vdo, .vwhere, .vint, .vfaq) {
+/* the volunteer guide's and the /csr/ page's sections: the 1264px section width, plus the hero's cut-outs and the
+   cards' overhang */
+.mg:is(
+  .vhero,
+  .vdo,
+  .vwhere,
+  .vint,
+  .vfaq,
+  .chero,
+  .cways,
+  .cdays,
+  .csponsor,
+  .cfund,
+  .chow,
+  .csafe,
+  .cdocs,
+  .cfaq,
+  .cclose
+) {
   --cl: 660px;
   --cr: 660px;
 }
@@ -135,7 +152,17 @@
     .mg.vdo,
     .mg.vwhere,
     .mg.vint,
-    .mg.vfaq
+    .mg.vfaq,
+    .mg.chero,
+    .mg.cways,
+    .mg.cdays,
+    .mg.csponsor,
+    .mg.cfund,
+    .mg.chow,
+    .mg.csafe,
+    .mg.cdocs,
+    .mg.cfaq,
+    .mg.cclose
   ) {
     display: block;
   }

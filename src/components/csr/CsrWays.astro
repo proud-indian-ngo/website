@@ -1,0 +1,48 @@
+---
+/** /csr/, "Four ways to help.": one card per way to partner, each linking to its section. Copy: csr.yaml → ways. */
+import { getCsrPage } from "../../lib/content";
+import IndexBook from "../doodles/IndexBook.astro";
+import IndexBowl from "../doodles/IndexBowl.astro";
+import IndexBrush from "../doodles/IndexBrush.astro";
+import IndexHands from "../doodles/IndexHands.astro";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import CsrHead from "./CsrHead.astro";
+
+const { ways: w } = await getCsrPage();
+// in card order: a day together, the festival, the programmes, the drives
+const icons = [IndexHands, IndexBrush, IndexBook, IndexBowl];
+---
+
+<section
+  class="csr-ways relative overflow-hidden border-t-line border-ink bg-paper px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+  id="ways"
+  data-spy="ways"
+  aria-labelledby="csr-ways-h"
+>
+  <MarginDoodles set="cways" />
+  <div class="relative z-2 mx-auto max-w-section">
+    <CsrHead id="csr-ways-h" eyebrow={w.eyebrow} heading={w.heading} lede={w.lede} />
+    <ul class="mt-14 grid grid-cols-4 gap-5 max-lap:grid-cols-2 max-tab:mt-10 max-tab:grid-cols-1 max-tab:gap-4" data-stagger="60">
+      {
+        w.cards.map((c, i) => {
+          const Icon = icons[i];
+          return (
+            <li data-reveal="rise">
+              <a
+                class="csr-way pi-card group flex h-full flex-col gap-3.5 no-underline"
+                href={c.href}
+              >
+                {Icon && <Icon class="pi-doodle w-14" aria-hidden="true" />}
+                <h3 class="font-pi-display text-30 leading-[1.02] font-extrabold tracking-heading">{c.title}</h3>
+                <p class="font-pi-sans text-16 leading-body font-medium text-pretty">{c.line}</p>
+                <span class="mt-auto pt-2 font-pi-sans text-15 font-bold text-sky-ink">
+                  {c.link} <span aria-hidden="true">→</span>
+                </span>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>

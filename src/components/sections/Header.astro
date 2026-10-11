@@ -14,8 +14,10 @@ interface Props {
   links?: { label: string; href: string; spy: string }[];
   /** where "Become an Optimist" goes (default: the volunteer section) */
   join?: string;
+  /** the join button's label (default: "Become an Optimist", copy.yaml → nav.join) */
+  joinLabel?: string;
 }
-const { anchors, links = nav.links, join = "#volunteer" } = Astro.props;
+const { anchors, links = nav.links, join = "#volunteer", joinLabel = nav.join } = Astro.props;
 const to = (href: string) => linkTo(href, anchors);
 ---
 
@@ -51,7 +53,7 @@ const to = (href: string) => linkTo(href, anchors);
       data-reveal="rise"
       data-y="-16"
     >
-      <Button href={to(join)} class="px-[18px] py-[11px] text-14 max-tab:hidden">{nav.join}</Button>
+      <Button href={to(join)} class="px-[18px] py-[11px] text-14 max-tab:hidden">{joinLabel}</Button>
       <Button href={to("#donate")} variant="donate" class="px-[18px] py-[11px] text-14 max-[359px]:px-3.5">{nav.donate}</Button>
       <button
         class="burger hidden size-11 cursor-pointer place-items-center rounded-round border-line border-ink bg-ink max-nav:grid"

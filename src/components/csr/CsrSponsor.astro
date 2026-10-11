@@ -1,0 +1,75 @@
+---
+/** /csr/, "Give children a stage.": the Kalakriti sponsorships (per child, per event, title), what the last festival
+ *  cost with its financial disclosure, a pre-filled email and a link to the festival on the home page.
+ *  On ink, like the home page's Kalakriti band. Copy: csr.yaml → kalakriti. */
+import { getCsrPage, getKalakriti } from "../../lib/content";
+import { asset } from "../../lib/images";
+import { mailto } from "../../lib/links";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import Button from "../ui/Button.astro";
+import Polaroid from "../ui/Polaroid.astro";
+import CsrHead from "./CsrHead.astro";
+
+interface Props {
+  /** where the email goes */
+  email: string;
+}
+
+const { email } = Astro.props;
+const { kalakriti: k } = await getCsrPage();
+// the group dance polaroid from the festival's photo line (kalakriti.yaml), or its first photo
+const { photos } = (await getKalakriti()).line;
+const photo = photos.find((p) => p.event === "Group dance") ?? photos[0]!;
+---
+
+<div class="s-kala">
+  <section
+    class="csr-sponsor relative overflow-hidden bg-ink px-14 pt-28 pb-32 text-paper max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+    id="sponsor"
+    data-spy="sponsor"
+    aria-labelledby="csr-sponsor-h"
+  >
+    <MarginDoodles set="csponsor" tone="ink" />
+    <div class="relative z-2 mx-auto max-w-section">
+      <div class="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-14 max-lap:grid-cols-1 max-lap:gap-10">
+        <CsrHead id="csr-sponsor-h" eyebrow={k.eyebrow} heading={k.heading} lede={k.lede} tone="ink" />
+        <div class="csr-pol wob max-lap:hidden">
+          <span class="pi-tape tape" aria-hidden="true" />
+          <Polaroid
+            src={asset(photo.image)}
+            alt={photo.alt}
+            width={240}
+            caption={photo.caption}
+            position={photo.position}
+          />
+        </div>
+      </div>
+      <ul class="mt-14 grid grid-cols-3 gap-6 max-lap:grid-cols-1 max-tab:mt-10 max-tab:gap-4.5" data-stagger="70">
+        {
+          k.tiers.map((t, i) => (
+            <li
+              class:list={["pi-card flex flex-col gap-2 text-ink", i === 1 && "pi-card--sky"]}
+              data-reveal="rise"
+            >
+              <p class="font-pi-sans text-14 font-bold tracking-caption text-sky-ink uppercase">{t.name}</p>
+              <p class="font-pi-display text-56 leading-none font-extrabold tracking-heavy max-tab:text-44">{t.amount}</p>
+              <p class="mt-2 font-pi-sans text-17 leading-body font-medium text-pretty">{t.line}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mt-8 max-w-[60ch] font-pi-sans text-17 leading-body text-pretty text-paper-a90" data-reveal="rise">
+        {k.cost}{" "}
+        <a class="font-semibold text-paper underline decoration-1 underline-offset-3" href={k.disclosure}
+          >{k.costLink}</a
+        >
+      </p>
+      <div class="mt-10 flex flex-wrap items-center gap-3 max-tab:mt-8" data-reveal="rise">
+        <Button href={mailto(email, k.subject)} variant="sky" size="lg" arrow>{k.cta}</Button>
+        <a class="tap-44 inline-flex items-center px-2 font-pi-sans text-16 font-semibold text-paper underline decoration-1 underline-offset-3" href="/#kalakriti"
+          >{k.more}</a
+        >
+      </div>
+    </div>
+  </section>
+</div>

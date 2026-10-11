@@ -9,6 +9,7 @@ import Notepad from "../doodles/Notepad.astro";
 import Squiggle from "../doodles/Squiggle.astro";
 import MarginDoodles from "../margins/MarginDoodles.astro";
 import AccentWord from "../ui/AccentWord.astro";
+import FaqAccordion from "../ui/FaqAccordion.astro";
 
 interface Props {
   /** the questions with their answers already rendered (src/lib/inline.ts) */
@@ -48,19 +49,7 @@ const { faq: f } = await getVolunteerPage();
           >
         </h2>
       </div>
-      <div class="vg-qs mt-12 grid gap-3.5 max-tab:mt-9">
-        {
-          items.map((it, i) => (
-            <details class="vg-q" open={i === 0}>
-              <summary>
-                <span>{it.q}</span>
-                <span class="vg-q-ic" aria-hidden="true" />
-              </summary>
-              <p set:html={it.a} />
-            </details>
-          ))
-        }
-      </div>
+      <FaqAccordion items={items} />
     </div>
   </section>
 </div>

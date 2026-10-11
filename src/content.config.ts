@@ -51,6 +51,7 @@ const site = defineCollection({
       darpan: z.string(),
       pan: z.string(),
       registrationNo: z.string(),
+      csr1: z.string().regex(/^CSR\d{8}$/),
     }),
     contacts: z.object({
       emails: z.array(z.object({ label: z.string(), address: z.email() })),
@@ -403,6 +404,7 @@ const copy = defineCollection({
       lede: z.string(),
       /** the accessible name of each logo link; {name} is the partner */
       visit: z.string(),
+      cta: z.string(),
     }),
     closing: z.object({
       chip: z.string(),
@@ -472,6 +474,173 @@ const privacy = defineCollection({
 });
 
 /** Share images per page (src/content/og.yaml); `bun run og` renders them to public/og/ */
+/** /csr/: the page for companies (CSR partners and employee volunteering days). */
+const csr = defineCollection({
+  loader: single("csr"),
+  schema: z.object({
+    meta: z.object({ title: z.string(), description: z.string() }),
+    nav: z.object({
+      links: z
+        .array(
+          z.object({ label: z.string(), href: z.string(), spy: z.string() })
+        )
+        .min(1),
+      home: z.string(),
+      join: z.string(),
+    }),
+    contact: z.object({ subject: z.string(), body: z.string() }),
+    hero: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      plan: z.string(),
+      fund: z.string(),
+      facts: z.array(z.string()).min(1),
+      kids: z.array(z.object({ image: asset, label: z.string() })).length(2),
+    }),
+    ways: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      cards: z
+        .array(
+          z.object({
+            title: z.string(),
+            line: z.string(),
+            href: z.string().startsWith("#"),
+            link: z.string(),
+          })
+        )
+        .length(4),
+    }),
+    days: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      labels: z.object({
+        size: z.string(),
+        length: z.string(),
+        where: z.string(),
+        provide: z.string(),
+      }),
+      formats: z
+        .array(
+          z.object({
+            name: z.string(),
+            size: z.string(),
+            length: z.string(),
+            where: z.string(),
+            what: z.string(),
+            provide: z.string(),
+          })
+        )
+        .min(1),
+      cost: z.object({ heading: z.string(), text: z.string() }),
+      done: z.object({
+        heading: z.string(),
+        items: z.array(z.object({ name: z.string(), did: z.string() })),
+      }),
+      cta: z.string(),
+    }),
+    kalakriti: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      cost: z.string(),
+      costLink: z.string(),
+      disclosure: z.string().startsWith("/reports/"),
+      tiers: z
+        .array(
+          z.object({ amount: z.string(), name: z.string(), line: z.string() })
+        )
+        .min(1),
+      cta: z.string(),
+      subject: z.string(),
+      more: z.string(),
+    }),
+    fund: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      scheduleLabel: z.string(),
+      fundsLabel: z.string(),
+      rows: z
+        .array(
+          z.object({
+            programme: z.string(),
+            schedule: z.string(),
+            funds: z.string(),
+          })
+        )
+        .min(1),
+      budget: z.string(),
+      cta: z.string(),
+      subject: z.string(),
+    }),
+    drives: z.object({
+      heading: z.string(),
+      lede: z.string(),
+      items: z
+        .array(
+          z.object({ name: z.string(), when: z.string(), line: z.string() })
+        )
+        .min(1),
+      cta: z.string(),
+      subject: z.string(),
+    }),
+    how: z.object({
+      eyebrow: z.string(),
+      heading,
+      steps: z.array(z.object({ title: z.string(), line: z.string() })).min(2),
+    }),
+    safeguarding: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      rules: z.array(z.string()).min(1),
+    }),
+    paperwork: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      registrationsLabel: z.string(),
+      items: z.array(
+        z.object({
+          label: z.string(),
+          value: z.string(),
+          /** validity or date, under the value */
+          note: z.string().optional(),
+          /** the certificate in public/certificates/ */
+          pdf: z
+            .string()
+            .startsWith("/certificates/")
+            .endsWith(".pdf")
+            .optional(),
+        })
+      ),
+      /** the certificate link's label */
+      pdf: z.string(),
+      documentsLabel: z.string(),
+      latestAudited: z.string(),
+      latestAnnual: z.string(),
+      all: z.string(),
+      certificates: z.string(),
+    }),
+    faq: z.object({
+      eyebrow: z.string(),
+      heading,
+      items: z.array(z.object({ q: z.string(), a: z.string() })).min(1),
+    }),
+    closing: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      email: z.string(),
+      whatsapp: z.string(),
+    }),
+  }),
+});
+
 const og = defineCollection({
   loader: single("og"),
   schema: z.record(
@@ -569,5 +738,6 @@ export const collections = {
   copy,
   privacy,
   volunteer,
+  csr,
   og,
 };

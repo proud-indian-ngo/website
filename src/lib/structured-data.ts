@@ -1,16 +1,18 @@
 /**
  * schema.org JSON-LD. The home page: the NGO, the website, and one Event per upcoming session from the build's
- * events feed. The volunteer guide (/volunteer/): the page, its FAQ and the same sessions. Search engines and AI agents read it to answer "where can I volunteer at weekends in Bangalore?".
+ * events feed. The volunteer guide (/volunteer/): the page, its FAQ and the same sessions. The page for companies
+ * (/csr/): the page, its FAQ, the volunteering days and the Kalakriti sponsorships as offers. Search engines and AI agents read it to answer "where can I volunteer at weekends in Bangalore?".
  * Facts come from site.yaml and copy.yaml, sessions from the pi-dash feed (src/lib/events/load.ts), so nothing here
  * needs editing by hand. The browser refresh does not touch it; the rebuild on every events change keeps it current.
  */
-import type { getCopy, getSite } from "./content";
+import type { getCopy, getCsrPage, getSite } from "./content";
 import type { PublicEvent } from "./events/contract";
 import { neighbourhood } from "./events/format";
 
 type Site = Awaited<ReturnType<typeof getSite>>;
 type Copy = Awaited<ReturnType<typeof getCopy>>;
 type Address = Site["contacts"]["addresses"][number];
+type CsrPage = Awaited<ReturnType<typeof getCsrPage>>;
 
 /** The city the way people search for it as well as its official name. */
 const CITY = {
@@ -123,6 +125,11 @@ export function homeStructuredData(
         propertyID: "Registration no.",
         value: site.registrations.registrationNo,
       },
+      {
+        "@type": "PropertyValue",
+        propertyID: "CSR-1 (Ministry of Corporate Affairs)",
+        value: site.registrations.csr1,
+      },
     ],
     taxID: site.registrations.pan,
     knowsAbout: [
@@ -163,33 +170,7 @@ export function volunteerStructuredData(
   return {
     "@context": "https://schema.org",
     "@graph": [
-      {
-        "@type": "WebPage",
-        "@id": page.url,
-        url: page.url,
-        name: page.title,
-        description: page.description,
-        inLanguage: "en-IN",
-        isPartOf: { "@id": new URL("/#website", origin).href },
-        about: { "@id": orgId },
-        breadcrumb: {
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            {
-              "@type": "ListItem",
-              position: 1,
-              name: "Home",
-              item: new URL("/", origin).href,
-            },
-            {
-              "@type": "ListItem",
-              position: 2,
-              name: "Volunteer",
-              item: page.url,
-            },
-          ],
-        },
-      },
+      subPage(page, "Volunteer", origin),
       {
         "@type": "FAQPage",
         "@id": `${page.url}#faq`,
@@ -200,6 +181,105 @@ export function volunteerStructuredData(
         })),
       },
       ...events.map((e) => sessionEvent(e, origin, orgId)),
+    ],
+  };
+}
+
+/** A page under the home page: the WebPage about the NGO, with a breadcrumb home. */
+function subPage(
+  page: { url: string; title: string; description: string },
+  crumb: string,
+  origin: string
+) {
+  return {
+    "@type": "WebPage",
+    "@id": page.url,
+    url: page.url,
+    name: page.title,
+    description: page.description,
+    inLanguage: "en-IN",
+    isPartOf: { "@id": new URL("/#website", origin).href },
+    about: { "@id": new URL("/#organization", origin).href },
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: new URL("/", origin).href,
+        },
+        { "@type": "ListItem", position: 2, name: crumb, item: page.url },
+      ],
+    },
+  };
+}
+
+/** "₹4,50,000" -> 450000 */
+const rupees = (amount: string) => Number(amount.replace(/[^\d]/g, ""));
+
+/**
+ * The page for companies: the page, its FAQ (answers as the page's HTML), the volunteering days as a Service with
+ * one Offer per format (each day is quoted, so no price), and the Kalakriti sponsorships as a Service with priced
+ * Offers. Search engines and agents read it to answer "CSR NGO in Bangalore" or "corporate volunteering in Bengaluru".
+ */
+export function csrStructuredData(
+  page: { url: string; title: string; description: string },
+  faq: { q: string; a: string }[],
+  csr: CsrPage,
+  origin: string
+) {
+  const orgId = new URL("/#organization", origin).href;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      subPage(page, "CSR and employee volunteering", origin),
+      {
+        "@type": "Service",
+        "@id": `${page.url}#days`,
+        name: "Employee volunteering days in Bengaluru",
+        serviceType: "Corporate volunteering",
+        description: csr.days.lede,
+        provider: { "@id": orgId },
+        areaServed: CITY,
+        url: `${page.url}#days`,
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: csr.days.heading.before + " " + csr.days.heading.accent,
+          itemListElement: csr.days.formats.map((f) => ({
+            "@type": "Offer",
+            name: f.name,
+            description: `${f.what} Team size: ${f.size}. ${f.length}. Where: ${f.where}.`,
+            areaServed: CITY,
+          })),
+        },
+      },
+      {
+        "@type": "Service",
+        "@id": `${page.url}#sponsor`,
+        name: "Kalakriti sponsorship",
+        serviceType: "Event sponsorship",
+        description: csr.kalakriti.lede,
+        provider: { "@id": orgId },
+        areaServed: CITY,
+        url: `${page.url}#sponsor`,
+        offers: csr.kalakriti.tiers.map((t) => ({
+          "@type": "Offer",
+          name: `${t.name}: ${t.amount}`,
+          description: t.line,
+          price: rupees(t.amount),
+          priceCurrency: "INR",
+        })),
+      },
+      {
+        "@type": "FAQPage",
+        "@id": `${page.url}#faq`,
+        mainEntity: faq.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      },
     ],
   };
 }

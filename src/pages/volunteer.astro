@@ -23,20 +23,18 @@ import Base from "../layouts/Base.astro";
 import "../styles/volunteer-page.css";
 import { getSite, getVolunteerPage } from "../lib/content";
 import { loadEvents } from "../lib/events/load";
-import { guideValues, inline } from "../lib/inline";
+import { faqAnswers, guideValues, pageUrls } from "../lib/inline";
 import { jsonLd, volunteerStructuredData } from "../lib/structured-data";
 
 const page = await getVolunteerPage();
 const site = await getSite();
 const events = await loadEvents();
 const values = guideValues(site);
-const faq = page.faq.items.map((f) => ({ q: f.q, a: inline(f.a, values) }));
-const origin = (Astro.site ?? new URL("https://proudindian.ngo/")).href;
-const pageUrl = new URL(Astro.url.pathname, origin).href;
+const { origin, url } = pageUrls(Astro.site, Astro.url.pathname);
+const faq = faqAnswers(page.faq.items, values, url);
 const structured = volunteerStructuredData(
-  { url: pageUrl, title: page.meta.title, description: page.meta.description },
-  // structured data is read away from the page, so its links are absolute ("#volunteer", "/#donate")
-  page.faq.items.map((f) => ({ q: f.q, a: inline(f.a, values, pageUrl) })),
+  { url, title: page.meta.title, description: page.meta.description },
+  faq.data,
   events.data.events,
   origin
 );
@@ -59,7 +57,7 @@ const menuLinks = [{ label: page.nav.home, href: "/" }, ...navLinks];
     <GuideDo />
     <GuideWhere events={events.data.events} />
     <GuideInternships values={values} email={values.hr!} />
-    <GuideFaq items={faq} />
+    <GuideFaq items={faq.page} />
     <GuidePartners />
     <Closing anchors={anchors} />
   </main>
