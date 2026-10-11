@@ -1,5 +1,4 @@
-/* /csr/ page only (imported by src/pages/csr.astro, after volunteer-page.css, whose hero cut-outs, tick pills and FAQ
-   accordion it reuses). Layout and type sizes are utilities in the components (src/components/csr/); this keeps the
+/* /csr/ page only (imported by src/pages/csr.astro, after volunteer-page.css, whose FAQ accordion it reuses). Layout and type sizes are utilities in the components (src/components/csr/); this keeps the
    few things utilities express badly. @reference gives it the theme without emitting global.css a second time. */
 @reference "./global.css";
 
@@ -9,6 +8,94 @@
     max-width: 15ch;
     font-size: clamp(52px, 6.6vw, 104px);
   }
+  /* ── the hero: the copy, and a team day printed like a page of the report (CsrHero.astro) ── */
+  .ch-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 520px);
+    column-gap: var(--space-56);
+    align-items: center;
+  }
+  .ch-report {
+    rotate: 1.2deg;
+    box-shadow: var(--shadow-ink);
+  }
+  /* rubber stamps in sky ink, a little off-square, like they were pressed by hand */
+  .ch-stamp {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-sky-ink);
+    border: var(--border-heavy) solid var(--color-sky-ink);
+    font: var(--font-weight-bold) var(--text-12-5) / var(--leading-none)
+      var(--font-pi-sans);
+    letter-spacing: var(--tracking-stamp);
+    text-transform: uppercase;
+    text-align: center;
+  }
+  .ch-stamp b {
+    font: var(--font-weight-extrabold) var(--text-19) / var(--leading-none)
+      var(--font-pi-display);
+    letter-spacing: var(--tracking-label);
+    text-transform: none;
+    margin-top: var(--space-4);
+  }
+  .ch-stamp--rect {
+    padding: var(--space-8) var(--space-14);
+    border-radius: var(--radius-6);
+    rotate: -1.5deg;
+  }
+  .ch-stamp--rect:nth-child(2) {
+    rotate: 1.2deg;
+  }
+  /* 80G and 12A, stamped over the photo's top corner */
+  .ch-seals {
+    position: absolute;
+    right: -38px;
+    top: 26px;
+    display: flex;
+    gap: var(--space-8);
+  }
+  .ch-stamp--round {
+    width: 104px;
+    height: 104px;
+    padding: 0 var(--space-10);
+    border-radius: var(--radius-round);
+    background: var(--color-paper-a90);
+    rotate: -10deg;
+  }
+  .ch-stamp--round:nth-child(2) {
+    rotate: 7deg;
+    translate: 0 14px;
+  }
+  .ch-stamp--round b {
+    font-size: var(--text-26);
+    margin: 0 0 var(--space-2);
+  }
+  @media (width < --theme(--breakpoint-desk)) {
+    .ch-grid {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: var(--space-56);
+    }
+    .ch-report {
+      width: min(560px, 100%);
+      margin-inline: auto;
+    }
+  }
+  @media (width < --theme(--breakpoint-tab)) {
+    .ch-seals {
+      right: -10px;
+      top: 52px;
+    }
+    .ch-stamp--round {
+      width: 80px;
+      height: 80px;
+    }
+    .ch-stamp--round b {
+      font-size: var(--text-22);
+    }
+  }
+
   /* the way-to-partner cards lift on hover, like the other cards you can press */
   .csr-way {
     color: inherit;
@@ -37,5 +124,64 @@
     z-index: 2;
     translate: -50% 0;
     rotate: -4deg;
+  }
+
+  /* ── how it works: one ruled line through the numbered stops (CsrHow.astro) ── */
+  .chw-stop::before {
+    content: "";
+    position: absolute;
+    top: 23px;
+    left: 0;
+    right: calc(-1 * var(--space-32));
+    border-top: var(--border-heavy) dashed var(--color-ink-a40);
+  }
+  .chw-stop:last-child::before {
+    right: auto;
+    width: 24px;
+  }
+  @media (width < --theme(--breakpoint-lap)) {
+    .chw-stop:nth-child(2n)::before {
+      right: auto;
+      width: 24px;
+    }
+  }
+  /* on phones the line runs down the left, the steps beside it */
+  @media (width < --theme(--breakpoint-tab)) {
+    .chw-stop {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr);
+      column-gap: var(--space-18);
+      padding-bottom: var(--space-28);
+    }
+    .chw-stop::before,
+    .chw-stop:nth-child(2n)::before {
+      top: 0;
+      bottom: 0;
+      left: 23px;
+      right: auto;
+      width: 0;
+      border-top: 0;
+      border-left: var(--border-heavy) dashed var(--color-ink-a40);
+    }
+    .chw-stop:last-child::before {
+      bottom: auto;
+      height: 24px;
+    }
+  }
+
+  /* ── paperwork: the registrations filed in a folder, its tab up top (CsrPaperwork.astro) ── */
+  .cd-folder {
+    border-radius: 0 var(--radius-20) var(--radius-20) var(--radius-20);
+  }
+  .cd-tab {
+    position: absolute;
+    bottom: 100%;
+    left: -2px;
+    padding: var(--space-8) var(--space-18) var(--space-6);
+    background: var(--color-white);
+    border: var(--line-ink);
+    border-bottom: 0;
+    border-radius: var(--radius-10) var(--radius-10) 0 0;
+    margin-bottom: -2px;
   }
 }

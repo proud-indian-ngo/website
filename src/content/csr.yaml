@@ -36,18 +36,23 @@ hero:
   lede: "Bring your team for a day with children from Bengaluru’s low-income communities, fund the weekend classes they come to, or put your name on Kalakriti, their arts festival. We plan it with you, run it with you, and send a report afterwards."
   plan: Plan a volunteering day
   fund: Ways to fund us
-  facts:
-    [
-      "CSR-1 {csr1}",
-      "{taxExemption} and {registered}",
-      "NGO Darpan {darpan}",
-      "Audited every year since 2019–20",
-    ]
-  kids:
-    - image: cutouts/Kalakriti3_DSC01695.png
-      label: A girl in costume and jewellery, smiling, at Kalakriti’s fancy dress event
-    - image: cutouts/NutritionDistribution_DSC_0177.png
-      label: A girl smiling with her nutrition pack
+  # the registrations a CSR team checks first, as rubber stamps: two round ones over the photo, two in a row under the
+  # buttons, then the audit line
+  stamps:
+    label: Registrations
+    round:
+      - { value: "{taxExemption}", label: Tax exempt }
+      - { value: "{registered}", label: Regd. }
+    rect:
+      - { label: CSR-1, value: "{csr1}" }
+      - { label: NGO Darpan, value: "{darpan}" }
+    audited: Audited every year since 2019–20
+  # a team day at the community centre, printed like a page of the report we send afterwards
+  photo:
+    image: photos/csr-ethos-team.jpg
+    alt: The Ethos team with children and Optimists at our community centre, holding up a framed painting
+    kicker: Volunteering day · Ethos
+    caption: The Ethos team at our community centre in Bengaluru, March 2025.
 
 ways:
   eyebrow: Ways to partner

@@ -311,7 +311,11 @@ export async function csrMarkdown(origin: URL | undefined) {
     "",
     hero.lede,
     "",
-    hero.facts.map((f) => fill(f, values)).join(" · "),
+    [
+      ...hero.stamps.rect.map((r) => `${r.label} ${fill(r.value, values)}`),
+      hero.stamps.round.map((r) => fill(r.value, values)).join(" and "),
+      hero.stamps.audited,
+    ].join(" · "),
     "",
     `To plan something, write to ${values.connect} (subject “${csr.contact.subject}”) with your team size, rough dates and what you have in mind, or call or WhatsApp ${site.contacts.phone.display}.`,
     "",

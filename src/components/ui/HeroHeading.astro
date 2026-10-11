@@ -1,6 +1,6 @@
 ---
-/** A guide page's h1 with its outlined accent word, and the lede under it (/csr/ and /kalakriti/). `class` sets the
- *  heading's size (csr-page.css, kalakriti-page.css). */
+/** A guide page's h1 with its accent word, and the lede under it, on paper (/csr/). `class` sets the heading's size
+ *  (csr-page.css). */
 import AccentWord from "./AccentWord.astro";
 
 interface Props {
@@ -14,7 +14,7 @@ const { id, heading, lede, class: cls } = Astro.props;
 ---
 
 <h1 id={id} class:list={[cls, "font-pi-display leading-[.9] font-extrabold tracking-poster text-balance"]} data-reveal="wipe">
-  {`${heading.before} `}<AccentWord variant="outline" class="relative inline-block">{heading.accent}</AccentWord>
+  {`${heading.before} `}<AccentWord class="relative inline-block">{heading.accent}</AccentWord>
 </h1>
 <p class="mt-7 max-w-[50ch] font-pi-sans text-20 leading-lede text-pretty max-tab:mt-5 max-tab:text-17" data-reveal="rise">
   {lede}

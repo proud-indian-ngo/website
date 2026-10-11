@@ -519,8 +519,22 @@ const csr = defineCollection({
       lede: z.string(),
       plan: z.string(),
       fund: z.string(),
-      facts: z.array(z.string()).min(1),
-      kids: z.array(z.object({ image: asset, label: z.string() })).length(2),
+      stamps: z.object({
+        label: z.string(),
+        round: z
+          .array(z.object({ value: z.string(), label: z.string() }))
+          .length(2),
+        rect: z
+          .array(z.object({ label: z.string(), value: z.string() }))
+          .min(1),
+        audited: z.string(),
+      }),
+      photo: z.object({
+        image: asset,
+        alt: z.string(),
+        kicker: z.string(),
+        caption: z.string(),
+      }),
     }),
     ways: z.object({
       eyebrow: z.string(),

@@ -1,5 +1,7 @@
 ---
-/** /csr/, "From first email to report.": the steps from an enquiry to the report afterwards. Copy: csr.yaml → how. */
+/** /csr/, "From first email to report.": the steps from an enquiry to the report afterwards, as a timeline on a pale
+ *  sky wash: numbered stops on one ruled line, the last one the report. Copy: csr.yaml → how. Layout: csr-page.css
+ *  (.chw-*). */
 import { getCsrPage } from "../../lib/content";
 import MarginDoodles from "../margins/MarginDoodles.astro";
 import SectionHead from "../ui/SectionHead.astro";
@@ -8,25 +10,30 @@ const { how: h } = await getCsrPage();
 ---
 
 <section
-  class="csr-how relative overflow-hidden border-t-line border-ink bg-sky px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+  class="relative overflow-hidden border-t-line border-ink bg-sky-wash px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
   id="how"
   aria-labelledby="csr-how-h"
 >
-  <MarginDoodles set="chow" tone="sky" />
+  <MarginDoodles set="chow" />
   <div class="relative z-2 mx-auto max-w-section">
-    <SectionHead id="csr-how-h" eyebrow={h.eyebrow} heading={h.heading} tone="sky" />
-    <ol class="mt-14 grid grid-cols-4 gap-5 max-lap:grid-cols-2 max-tab:mt-10 max-tab:grid-cols-1 max-tab:gap-4" data-stagger="70">
+    <SectionHead id="csr-how-h" eyebrow={h.eyebrow} heading={h.heading} />
+    <ol class="chw-line mt-16 grid grid-cols-4 gap-8 max-lap:grid-cols-2 max-tab:mt-10 max-tab:grid-cols-1 max-tab:gap-0" data-stagger="70">
       {
         h.steps.map((s, i) => (
-          <li class="pi-card flex flex-col gap-3" data-reveal="rise">
+          <li class="chw-stop relative" data-reveal="rise">
             <span
-              class="grid size-11 place-items-center rounded-full border-line border-ink bg-sky font-pi-display text-22 font-extrabold"
+              class:list={[
+                "chw-dot relative z-1 grid size-12 place-items-center rounded-full border-line border-ink font-pi-display text-22 font-extrabold",
+                i === h.steps.length - 1 ? "bg-marigold" : "bg-white",
+              ]}
               aria-hidden="true"
             >
               {i + 1}
             </span>
-            <h3 class="font-pi-display text-26 leading-[1.05] font-extrabold tracking-heading">{s.title}</h3>
-            <p class="font-pi-sans text-16 leading-body font-medium text-pretty">{s.line}</p>
+            <div class="mt-5 max-tab:mt-0">
+              <h3 class="font-pi-display text-26 leading-[1.05] font-extrabold tracking-heading">{s.title}</h3>
+              <p class="mt-2 max-w-[30ch] font-pi-sans text-16 leading-body text-pretty text-text-muted">{s.line}</p>
+            </div>
           </li>
         ))
       }
