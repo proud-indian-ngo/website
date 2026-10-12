@@ -4,6 +4,12 @@ items:
   - name: Goodera
     logo: partners/goodera.png
     url: https://www.goodera.com/
+  - name: Oracle
+    logo: partners/oracle.png
+    url: https://www.oracle.com/
+  - name: CGI
+    logo: partners/cgi.png
+    url: https://www.cgi.com/
   - name: Connect For
     logo: partners/connect-for.png
     url: https://www.connectfor.org/
@@ -22,8 +28,8 @@ items:
   - name: Avascent Aero
     logo: partners/avascent-aero.png
     url: https://avascent-aero.com/
-  - name: Mirage AEC
-    logo: partners/mirage-aec.png
+  - name: MAEC
+    logo: partners/maec.png
     url: https://mirageaec.com/
   - name: Shishu Mandir
     logo: partners/shishu-mandir.png
