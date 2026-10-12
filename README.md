@@ -2,7 +2,7 @@
 
 The Proud Indian website: a fully prerendered [Astro](https://astro.build) site, styled with Tailwind CSS v4 on a token system, deployed to Cloudflare Pages.
 
-One page for the Proud Indian NGO in Bengaluru: the programmes (Teach, Feed, Paint, Connect), the Kalakriti festival, upcoming volunteer sessions, donations, reports and trustees, plus a volunteer guide (`/volunteer/`), a privacy policy and an internal style guide.
+One page for the Proud Indian NGO in Bengaluru: the programmes (Teach, Feed, Paint, Connect), the Kalakriti festival, upcoming volunteer sessions, donations, reports and trustees, plus a volunteer guide (`/volunteer/`), a privacy policy, an internal style guide and an internal brand kit (`/brand/`).
 
 - Repo: <https://github.com/proud-indian-ngo/website>. Pushes to `main` deploy to Cloudflare Pages (see [Deploying](#deploying-to-cloudflare-pages)).
 - Brand tokens, primitive CSS, fonts and logo artwork come from [proud-indian-ngo/design](https://github.com/proud-indian-ngo/design) (`@proudindian/design`; see [Design package](#design-package-proudindiandesign)).
@@ -142,7 +142,7 @@ Every run installs with the frozen lockfile. Production deploys only once every 
 
 The output is fully static, with no adapter. The one Pages Function, `functions/_middleware.ts`, serves the pages' Markdown to AI agents (see [Search and AI agents](#search-and-ai-agents)); `public/_routes.json` keeps the assets (`/_astro/*`, images, PDFs, icons, `llms.txt`, the sitemap, `/.well-known/*`) away from it, so only page requests count towards the Free plan's 100,000 Functions requests a day. Add a new top-level asset there too. `public/_headers` sets the following:
 - **Caching:** a year, immutable, for the hashed `/_astro/*` assets; HTML revalidates on every visit; icons and the OG image get a day; the report PDFs in `/reports/*` get a year (served inline as `application/pdf`), so a corrected report needs a new file name.
-- **Security headers:** HSTS, nosniff, frame denial, a referrer policy, a permissions policy and a CSP. The CSP `connect-src` allows `https://dash.proudindian.ngo`; if `PUBLIC_EVENTS_URL` points anywhere else, add that origin. Cloudflare Web Analytics is enabled for proudindian.ngo in the Cloudflare dashboard, so the CSP also allows its beacon: `https://static.cloudflareinsights.com` in `script-src` and `https://cloudflareinsights.com` in `connect-src`. Remove both if the analytics is turned off, and update the privacy policy (`src/content/privacy.md`) to match. `public/robots.txt` and the generated `sitemap-index.xml` exclude `/styleguide/`.
+- **Security headers:** HSTS, nosniff, frame denial, a referrer policy, a permissions policy and a CSP. The CSP `connect-src` allows `https://dash.proudindian.ngo`; if `PUBLIC_EVENTS_URL` points anywhere else, add that origin. Cloudflare Web Analytics is enabled for proudindian.ngo in the Cloudflare dashboard, so the CSP also allows its beacon: `https://static.cloudflareinsights.com` in `script-src` and `https://cloudflareinsights.com` in `connect-src`. Remove both if the analytics is turned off, and update the privacy policy (`src/content/privacy.md`) to match. `public/robots.txt` and the generated `sitemap-index.xml` exclude `/styleguide/` and `/brand/`; everything under `/brand/` also gets `X-Robots-Tag: noindex, nofollow`.
 - **Link headers** ([RFC 8288](https://www.rfc-editor.org/rfc/rfc8288)) for agent discovery: `/`, `/volunteer/`, `/csr/`, `/kalakriti/` and `/privacy/` point to their Markdown (`rel="alternate"; type="text/markdown"`) and to `/llms.txt` (`rel="describedby"`); `/` also points to the API catalog (`rel="api-catalog"`). A new page with Markdown gets its own `Link` block.
 - **API catalog:** `/.well-known/api-catalog` is served as `application/linkset+json`, cached for an hour.
 
@@ -158,7 +158,7 @@ The site is meant to come up when someone, or an assistant answering for them, l
 - **API catalog** (`public/.well-known/api-catalog`, [RFC 9727](https://www.rfc-editor.org/rfc/rfc9727)): lists pi-dash's public events feed (`https://dash.proudindian.ngo/api/public/events`) for agents, with its OpenAPI description (`/api/public/openapi.json`, `service-desc`) and health check (`/api/health`, `status`). The spec lives in pi-dash next to the feed; edit this file only if the feed moves or another public API is added.
 - **WebMCP** (`src/scripts/webmcp.ts`, [WebMCP](https://webmachinelearning.github.io/webmcp/)): in a browser with `document.modelContext`, the pages register tools for its AI agent. `list-volunteer-sessions` (read-only) returns the sessions on the page, as last refreshed; `start-volunteer-sign-up` opens a session's sign-up link; `fill-donation-amount` (home only) sets the donate card's amount and scrolls to it. The person still signs up on the dashboard and presses Donate and pays on Razorpay themselves; no tool books or pays. Without the API nothing runs. `qa:behaviour` checks the tools with a stand-in `modelContext`.
 - **Redirects from the old site.** `public/_redirects` sends every page and report PDF of the old PHP site to where it lives now (301), so links and search ranking carry over: old pages go to their section of the home page, old PDFs to the identical file in `public/reports/` (matched by SHA-256). Keep them.
-- **Crawlers.** `public/robots.txt` allows everyone except `/styleguide/` and declares [content signals](https://contentsignals.org/): `search=yes, ai-input=yes, ai-train=yes`, so search engines and AI assistants may index, quote and learn from the site (`ai-input` is what lets assistants use it in answers; set `ai-train=no` there to opt out of model training only). Cloudflare can still block AI crawlers before robots.txt is read (Security → Bots → "Block AI bots" / AI Crawl Control); since 9 October 2026 every search and AI crawler is allowed. Keep Cloudflare's managed robots.txt off, or it adds its own `Content-Signal` and `Disallow` lines on top of these.
+- **Crawlers.** `public/robots.txt` allows everyone except `/styleguide/` and `/brand/` and declares [content signals](https://contentsignals.org/): `search=yes, ai-input=yes, ai-train=yes`, so search engines and AI assistants may index, quote and learn from the site (`ai-input` is what lets assistants use it in answers; set `ai-train=no` there to opt out of model training only). Cloudflare can still block AI crawlers before robots.txt is read (Security → Bots → "Block AI bots" / AI Crawl Control); since 9 October 2026 every search and AI crawler is allowed. Keep Cloudflare's managed robots.txt off, or it adds its own `Content-Signal` and `Disallow` lines on top of these.
 
 ## Styling
 
@@ -185,6 +185,10 @@ The site is meant to come up when someone, or an assistant answering for them, l
 - **Raw colours.** Hex colours are only allowed in the package's token files (`node_modules/@proudindian/design/tokens/`). `bun run lint:css` fails on a hex anywhere in `src/` (stylesheets and `.astro` `<style>` blocks). Inline SVG doodles keep their original fills.
 - **Adding a token** happens in the design repo, not here. See its README ("Adding a token"); then bump the package and reinstall.
 - **Style guide:** `/styleguide/` (noindex, not in the sitemap). It shows the swatches with contrast ratios, the type scale, space, radii, lines, shadows, breakpoints and motion demos (they respect Pause), and every primitive in every variant.
+- **Brand kit:** `/brand/` (`src/pages/brand.astro`), for the team and the people we work with: the short brand rules (which file goes where, colour with HEX/RGB/CMYK to copy, contrast pairs, type, logo rules, photos, voice), every logo, seal, icon, doodle and font, the guidelines PDF, and the marketing kit (posts, stories and covers; print flyer, leaflet, poster and standee; slides, letterhead, certificate, email signature; cards, badge and merchandise). Everything downloads one by one, zipped per group, or as two kits (the brand kit and the marketing kit; one zip of everything would pass Cloudflare Pages' 25 MiB file limit, and the build fails if any zip does). `src/lib/brand-kit.ts` lists the files and `src/pages/brand/files/[...file].ts` builds them at `/brand/files/`:
+  - from `@proudindian/design`: the SVGs, and transparent PNGs at 512, 1024 and 2048 px rendered with sharp (cached in `node_modules/.astro/brand-kit/`, so only the first build after a package update renders them, about 25 s);
+  - from the design release's `proud-indian-brand-assets.zip` (git installs leave these out): the guidelines PDF, the Anek fonts and the marketing kit with its `manifest.json`. The build downloads the zip for the pinned version from GitHub once and caches it beside the PNGs, so builds need network the first time after a design update. To build before a design release exists, point `BRAND_ASSETS_ZIP` at a local zip (from a design checkout: `zip -qr /tmp/assets.zip brand/Proud-Indian-Brand-Guidelines.pdf brand/guidelines/assets/fonts marketing/out`). The email signature loads its logo from `/brand/files/office/email-signature-logo.png`, so keep that path.
+  It is unlisted, not protected: it's not linked from the site, is noindex, out of the sitemap, disallowed in robots.txt, `X-Robots-Tag` on every file, with no Markdown or `llms.txt` entry, but anyone with the link can open it.
 
 ## Design package (`@proudindian/design`)
 
@@ -193,7 +197,7 @@ The tokens, primitive CSS, fonts, generic reset, custom utilities, favicons and 
 **Installing.** The package is not published to npm; it installs from its public GitHub repo, pinned to a tag:
 
 ```jsonc
-"@proudindian/design": "github:proud-indian-ngo/design#v0.3.0"
+"@proudindian/design": "github:proud-indian-ngo/design#v0.4.0"
 ```
 
 The package commits its built `dist/`, so the install needs no build step and no token. bun blocks the package's `prepare` script (`lefthook install`), which is expected.
@@ -202,7 +206,8 @@ The package commits its built `dist/`, so the install needs no build step and no
 1. In the design repo, open a PR that bumps `version` in `package.json`, adds the CHANGELOG section and commits the rebuilt `dist/`. Merging it tags `vX.Y.Z` and publishes the release automatically.
 2. Point the dependency at the new tag and run `bun install`.
 3. Run `bun run design:sync` if the favicons or the share card changed.
-4. Run `bun run check`. `check:design` fails on a version outside `^0.3.0` (`COMPATIBLE` in `scripts/check-design.ts`) or a `public/` brand file that differs from the package.
+4. Run `bun run check`. `check:design` fails on a version outside `^0.4.0` (`COMPATIBLE` in `scripts/check-design.ts`) or a `public/` brand file that differs from the package.
+5. Run `bun run build`: the brand kit downloads the new release's `proud-indian-brand-assets.zip`, so the release must have it attached (the design repo's CI does this).
 
 To try unreleased design-package changes, point the dependency at a local checkout of the design repo (`"file:<path>"`) and reinstall with `rm -rf node_modules/@proudindian && bun install --force` after every change there (bun copies the folder at install time). Switch back to the tag before committing: CI can't see the checkout.
 

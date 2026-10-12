@@ -31,8 +31,10 @@
     "check:updates": "bunx taze -I"
   },
   "dependencies": {
-    "@proudindian/design": "github:proud-indian-ngo/design#v0.3.0",
-    "astro": "^7.3.7"
+    "@proudindian/design": "github:proud-indian-ngo/design#v0.4.0",
+    "astro": "^7.3.7",
+    "fflate": "^0.8.3",
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",

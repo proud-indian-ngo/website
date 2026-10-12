@@ -16,8 +16,8 @@ const privacyDraft = /^draft:\s*true\s*$/m.test(
   readFileSync(new URL("./src/content/privacy.md", import.meta.url), "utf8")
 );
 const hidden = privacyDraft
-  ? /\/(styleguide|404|privacy|thanks)\/?$/
-  : /\/(styleguide|404|thanks)\/?$/;
+  ? /\/(styleguide|brand|404|privacy|thanks)\/?$/
+  : /\/(styleguide|brand|404|thanks)\/?$/;
 
 // Fully prerendered static site (no adapter). Output: dist/, deployed to Cloudflare Pages.
 export default defineConfig({
@@ -26,7 +26,7 @@ export default defineConfig({
   build: { format: "directory", inlineStylesheets: "always" },
   integrations: [
     sitemap({
-      // the style guide, the 404 page and a draft privacy policy stay out of search
+      // the style guide, the brand kit, the 404 page and a draft privacy policy stay out of search
       filter: (page) => !hidden.test(page),
     }),
   ],
