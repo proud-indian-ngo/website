@@ -1,0 +1,647 @@
+---
+/**
+ * Brand kit, for the team and the people we work with: the short rules and every logo, seal, icon, doodle and font,
+ * one by one or zipped (files: src/lib/brand-kit.ts, built by brand/files/[...file].ts). Internal: not linked from the
+ * site, noindex, out of the sitemap (astro.config.ts), disallowed in robots.txt, X-Robots-Tag on everything under
+ * /brand/ (_headers), and no Markdown or llms.txt entry for agents.
+ */
+import KitItem from "../components/brand/KitItem.astro";
+import AccentWord from "../components/ui/AccentWord.astro";
+import Button from "../components/ui/Button.astro";
+import NewTab from "../components/ui/NewTab.astro";
+import SectionLabel from "../components/ui/SectionLabel.astro";
+import Base from "../layouts/Base.astro";
+import { kitAll, kitGroups, kitSize, kitUrl, marketingAll, marketingGroups } from "../lib/brand-kit";
+import { getSite } from "../lib/content";
+import { grade, ratio } from "../lib/contrast";
+import { newTab } from "../lib/links";
+import { color } from "@proudindian/design/tokens";
+
+const site = await getSite();
+const email = site.contacts.emails[0]!.address;
+const groups = Object.fromEntries(kitGroups.map((g) => [g.id, g]));
+const pdf = groups.guidelines!.items[0]!.files[0]!;
+const sizes = Object.fromEntries(
+  await Promise.all(
+    [kitAll, marketingAll, pdf, ...[...kitGroups, ...marketingGroups].map((g) => g.zip)].map(async (f) => [f.path, await kitSize(f.path)] as const)
+  )
+);
+
+const nav = [
+  ["which", "Which file?"],
+  ["logo", "Logo"],
+  ["seals", "Seals"],
+  ["icons", "Icons"],
+  ["colour", "Colour"],
+  ["type", "Type"],
+  ["doodles", "Doodles"],
+  ...marketingGroups.map((g) => [g.id, g.title.replace(/ and .*/, "")] as const),
+  ["rules", "Rules"],
+  ["voice", "Voice"],
+] as const;
+
+// ---- Which file goes where (logo/README.md in @proudindian/design)
+const which = [
+  ["Letterhead, reports, receipts, certificates, signage", "logo/pi-lockup.svg"],
+  ["Website header, or any logo under 32 px tall", "logo/pi-lockup-compact.svg"],
+  ["Tees, square and portrait spaces", "logo/pi-stacked.svg"],
+  ["On ink or a dark photo, on screen", "logo/pi-lockup-reversed.svg"],
+  ["On sky, or printing in one colour", "logo/pi-lockup-mono.svg"],
+  ["Slides, Word, Canva, WhatsApp (a PNG)", "logo/pi-lockup-2048.png"],
+  ["Profile picture on any platform", "icons/avatar-1080.png"],
+  ["80G and 12A receipts, certificates", "seals/pi-seal-80g.svg"],
+  ["A rubber stamp", "seals/pi-seal-stamp-production.svg"],
+  ["Embroidery, screen print, merchandise", "logo/pi-stacked-mono.svg"],
+  ["An Instagram or Facebook post", "social/post-volunteer-4x5.jpg"],
+  ["A presentation", "office/proud-indian-slides.pptx"],
+  ["A letter", "office/letterhead.docx"],
+] as const;
+
+// ---- Colour (CMYK from the brand guidelines, p. 10: straight sRGB conversions, for reference only)
+const palette = [
+  ["sky", "Sky", "68 19 0 7", "Bands, the logo's bright head on ink, large graphics. Only ink text sits on it."],
+  ["skyDeep", "Sky deep", "94 27 0 32", "The child's head on light grounds, graphics, type 24 px and up."],
+  ["skyInk", "Sky ink", "94 27 0 45", "Small cyan text on paper: eyebrows, links, accent words."],
+  ["ink", "Ink", "58 25 0 86", "Text, the logo, dark bands, primary buttons, outlines."],
+  ["paper", "Paper", "0 2 5 4", "Calm sections, sticker outlines, the reversed logo."],
+  ["paper2", "Paper 2", "0 3 7 6", "A second paper for cards, tape and layered panels."],
+  ["marigold", "Marigold", "0 32 83 4", "Donate actions only, and the Kalakriti accent on ink. Never in the logo."],
+] as const;
+const rgb = (hex: string) => {
+  const n = parseInt(hex.slice(1), 16);
+  return `${(n >> 16) & 255} ${(n >> 8) & 255} ${n & 255}`;
+};
+const swatches = palette.map(([key, name, cmyk, use]) => ({
+  name,
+  use,
+  hex: color[key],
+  values: [
+    ["HEX", color[key]],
+    ["RGB", rgb(color[key])],
+    ["CMYK", cmyk],
+  ] as const,
+}));
+type Key = keyof typeof color;
+const pair = (fg: Key, bg: Key, use: string) => ({ fg: color[fg], bg: color[bg], use, r: ratio(color[fg], color[bg]) });
+const pairsOk = [
+  pair("ink", "paper", "Ink on paper: all text"),
+  pair("paper", "ink", "Paper on ink: all text"),
+  pair("ink", "sky", "Ink on sky: the only text colour on sky"),
+  pair("ink", "marigold", "Ink on marigold: donate buttons"),
+  pair("skyInk", "paper", "Sky ink on paper: small cyan text, links"),
+  pair("white", "skyInk", "White on sky ink: small text on deep bands"),
+  pair("sky", "ink", "Sky on ink: the bright head, accents"),
+  pair("marigold", "ink", "Marigold on ink: the Kalakriti accent"),
+];
+const pairsLarge = [
+  pair("white", "skyDeep", "White on sky deep: 24 px and up"),
+  pair("skyDeep", "paper", "Sky deep on paper: the logo head, large type"),
+];
+const pairsNever = [
+  pair("white", "sky", "White on sky: never as plain text"),
+  pair("sky", "paper", "Sky on paper: never text, never the logo head"),
+  pair("skyDeep", "ink", "Sky deep on ink: never the logo head"),
+  pair("white", "marigold", "White on marigold: never"),
+];
+
+// ---- Logo rules (brand guidelines pp. 6, 9 and 19)
+const minimums = [
+  ["Screen, symbol", "24 px (at 16 px, only the favicon)"],
+  ["Screen, lockup", "24 px tall (the compact lockup below 32 px)"],
+  ["Screen, seal", "64 px (below that, use the disc)"],
+  ["Print, symbol", "5 mm"],
+  ["Print, horizontal lockup", "8 mm tall"],
+  ["Rubber stamp", "8 mm symbol, 18 mm seal"],
+  ["Embroidery", "13 mm symbol, one colour only"],
+] as const;
+const dont = [
+  "Stretch, squash or rotate it.",
+  "Recolour the heads, or add a face.",
+  "Add shadows, outlines or effects.",
+  "Put bright cyan on paper, or a cyan head on sky.",
+  "Set it on a busy photo. Use a paper or ink panel, or the disc.",
+  "Retype the wordmark, or space out its letters.",
+  "Crowd it, or put stickers, doodles or tape on it.",
+];
+const photos = [
+  ["Real.", "Our own programmes, from our own albums. Never stock."],
+  ["Consented.", "Only photos taken and shared with consent for Proud Indian's use."],
+  ["Child-centred.", "Children over adult volunteers, doing things: painting, performing, learning, playing."],
+  ["Joyful, not pitiful.", "Pride and fun, never need or distress."],
+  ["Clean.", "No watermarks. Crop clear of old ones."],
+  ["Private.", "Crop or blur name badges, so no child's full name can be read."],
+] as const;
+
+// ---- Voice (brand guidelines p. 18)
+const voice = [
+  ["Short.", "Short sentences, one idea each. Verbs over abstractions: teach, feed, paint, connect."],
+  ["Warm, not sentimental.", "Invite people in; never guilt them."],
+  ["Volunteers are Optimists.", "“Become an Optimist” is the call to join."],
+  ["True, to the number.", "Stats and registration details stay exact. No per-rupee impact claims."],
+  ["Weekends, not weekly.", "Most sessions are at weekends; never promise “every Saturday”."],
+  ["Kalakriti is a festival.", "A yearly, full day of arts and culture. Never a “workshop”."],
+] as const;
+const insteadOf = [
+  ["See you on Saturday?", "See you this weekend?"],
+  ["Sponsor a workshop.", "Sponsor Kalakriti."],
+  ["Your ₹500 feeds ten children.", "Give once. Light up a weekend."],
+  ["Volunteers needed!", "Give a weekend, or give once. Either way, you're an Optimist."],
+  ["The people accountable.", "Our trustees."],
+] as const;
+
+const marketingNotes: Record<string, string> = {
+  social:
+    "Posts, stories and profile covers at each platform's upload size. The blank versions keep the ground, logo and art, so you can add your own words in Canva. Captions go in the post, not on the image.",
+  print:
+    "PDFs with bleed (no crop marks), ready for a print shop. Colours are RGB: ask the printer for a proof. QR codes open the register, donate and Kalakriti pages.",
+  office:
+    "Install Bricolage Grotesque and Geist (see Type) before opening the PPTX and DOCX files, or their text falls back to another font.",
+  merch:
+    "Cards and badges come as print PDFs plus a PPTX to type names into; export the PPTX to PDF for the printer. Fabric and mugs print in one colour.",
+};
+
+const googleFonts = [
+  ["Bricolage Grotesque", "https://fonts.google.com/specimen/Bricolage+Grotesque"],
+  ["Geist", "https://fonts.google.com/specimen/Geist"],
+  ["Anek Latin", "https://fonts.google.com/specimen/Anek+Latin"],
+  ["Anek Kannada", "https://fonts.google.com/specimen/Anek+Kannada"],
+  ["Anek Devanagari", "https://fonts.google.com/specimen/Anek+Devanagari"],
+] as const;
+---
+
+<Base
+  title="Brand kit · Proud Indian"
+  description="Proud Indian's logo, seals, colours, type, doodles and voice, ready to download. Internal."
+  noindex
+>
+  <main id="main" class="kit bg-paper px-14 pt-14 pb-32 text-ink max-tab:px-5">
+    <header class="mx-auto mb-16 max-w-section">
+      <img src={kitUrl("logo/pi-lockup.svg")} width="376" height="59" alt="Proud Indian" class="mb-12 h-10 w-auto" />
+      <SectionLabel num="BK">Internal · not linked from the site</SectionLabel>
+      <h1 class="mt-4 font-pi-display text-96 leading-display font-extrabold tracking-poster max-tab:text-56">
+        The brand, <AccentWord>ready to use.</AccentWord>
+      </h1>
+      <p class="mt-6 max-w-[60ch] text-19 leading-lede">
+        Every logo, seal, icon, doodle and font, ready-made posts, print, slides and cards, one by one or zipped, with the
+        short version of the rules. Use
+        the files as they are: never redraw, retype or recolour them. Please don't share this page publicly.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <Button href={kitUrl(kitAll.path)} size="lg" download>Brand kit ({sizes[kitAll.path]})</Button>
+        <Button href={kitUrl(marketingAll.path)} size="lg" variant="sky" download>
+          Marketing kit ({sizes[marketingAll.path]})
+        </Button>
+        <Button href={kitUrl(pdf.path)} size="lg" variant="ghost" newTab>
+          Brand guidelines PDF ({sizes[pdf.path]})
+        </Button>
+      </div>
+      <nav aria-label="On this page" class="mt-10">
+        <ul class="pi-chips">
+          {
+            nav.map(([id, label]) => (
+              <li class="pi-chip">
+                <a href={`#${id}`}>{label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </header>
+
+    <section id="which" class="kit-sec">
+      <h2 class="kit-h">Which file do I need?</h2>
+      <p class="kit-note">
+        Pick the file by the ground it sits on. Use the SVG wherever the app accepts it; PNGs are transparent and
+        come at 512, 1024 and 2048 px on the long edge.
+      </p>
+      <div class="overflow-x-auto rounded-14 border-line border-ink bg-white">
+        <table class="kit-table">
+          <thead>
+            <tr><th scope="col">For</th><th scope="col">Use</th></tr>
+          </thead>
+          <tbody>
+            {
+              which.map(([use, path]) => (
+                <tr>
+                  <td>{use}</td>
+                  <td>
+                    <a class="kit-link" href={kitUrl(path)} download>
+                      {path.split("/")[1]}
+                    </a>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    {
+      (["logo", "seals", "icons"] as const).map((id) => {
+        const g = groups[id]!;
+        return (
+          <section id={id} class="kit-sec">
+            <div class="kit-head">
+              <h2 class="kit-h">{g.title}</h2>
+              <Button href={kitUrl(g.zip.path)} variant="ghost" download>
+                All {g.title.toLowerCase()} ({sizes[g.zip.path]})
+              </Button>
+            </div>
+            {id === "logo" && (
+              <p class="kit-note">
+                Two figures side by side, an adult's arm across a child's shoulder. The child's head is the only colour:
+                deep cyan on light grounds, bright cyan on ink, and ink on sky. Marigold is never part of the logo, and
+                the wordmark is never cyan.
+              </p>
+            )}
+            {id === "seals" && (
+              <p class="kit-note">
+                Seals mark documents and occasions. A seal is decoration, not proof of registration: registration
+                numbers always go in the document's text. Rubber-stamp files are SVG only, for the stamp maker.
+              </p>
+            )}
+            {id === "icons" && (
+              <p class="kit-note">
+                The ink disc is the profile picture on every platform. The 16 px favicons are hand-built pixel art.
+              </p>
+            )}
+            <ul class="kit-grid">
+              {g.items.map((item) => (
+                <KitItem item={item} />
+              ))}
+            </ul>
+          </section>
+        );
+      })
+    }
+
+    <section id="colour" class="kit-sec">
+      <h2 class="kit-h">Colour</h2>
+      <p class="kit-note">
+        Sky, ink and paper. Marigold means donate. Press a value to copy it. CMYK values are straight conversions for
+        reference: match print against a proof.
+      </p>
+      <ul class="grid grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-4">
+        {
+          swatches.map((s) => (
+            <li class="overflow-hidden rounded-14 border-line border-ink bg-white">
+              <div class="h-24 border-b-line border-ink" style={`background:${s.hex}`} />
+              <div class="p-4">
+                <h3 class="font-pi-display text-22 font-extrabold tracking-heading">{s.name}</h3>
+                <p class="mt-1 text-14 leading-copy text-text-muted">{s.use}</p>
+                <dl class="mt-3 grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-1 text-14">
+                  {s.values.map(([k, v]) => (
+                    <>
+                      <dt class="text-12 font-semibold text-text-muted">{k}</dt>
+                      <dd>
+                        <button type="button" class="kit-copy" data-copy={v} aria-label={`Copy ${s.name} ${k} ${v}`}>
+                          {v}
+                        </button>
+                      </dd>
+                    </>
+                  ))}
+                </dl>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+      <p id="kit-copied" class="sr-only" aria-live="polite"></p>
+
+      <h3 class="kit-h3">Use roughly</h3>
+      <div class="flex h-10 overflow-hidden rounded-pill border-line border-ink text-13 font-semibold" role="img" aria-label="Paper 44%, sky 26%, ink 20%, sky deep and sky ink 7%, marigold 3% or less">
+        <span class="kit-bar bg-paper" style="flex:44">Paper 44%</span>
+        <span class="kit-bar bg-sky" style="flex:26">Sky 26%</span>
+        <span class="kit-bar bg-ink text-paper" style="flex:20">Ink 20%</span>
+        <span class="kit-bar bg-sky-deep text-white" style="flex:7">7%</span>
+        <span class="kit-bar bg-marigold" style="flex:3"></span>
+      </div>
+
+      <h3 class="kit-h3">Text and colour pairs</h3>
+      {
+        [
+          ["For any text", pairsOk],
+          ["Large text (24 px and up) and graphics only", pairsLarge],
+          ["Never", pairsNever],
+        ].map(([label, list]) => (
+          <>
+            <p class="mt-6 mb-3 text-14 font-semibold">{label as string}</p>
+            <ul class="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3">
+              {(list as typeof pairsOk).map((p) => (
+                <li class="rounded-10 border-line border-ink p-4" style={`color:${p.fg};background:${p.bg}`}>
+                  <p class="font-pi-display text-22 font-extrabold">Aa</p>
+                  <p class="text-14">{p.use}</p>
+                  <p class="text-13">
+                    {p.r.toFixed(2)}:1 · {grade(p.r)}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </>
+        ))
+      }
+    </section>
+
+    <section id="type" class="kit-sec">
+      <div class="kit-head">
+        <h2 class="kit-h">Type</h2>
+        <Button href={kitUrl(groups.fonts!.zip.path)} variant="ghost" download>
+          All fonts ({sizes[groups.fonts!.zip.path]})
+        </Button>
+      </div>
+      <div class="grid grid-cols-2 gap-4 max-tab:grid-cols-1">
+        <div class="rounded-14 border-line border-ink bg-white p-6">
+          <p class="font-pi-display text-84 leading-display font-extrabold tracking-poster">Aa</p>
+          <h3 class="mt-4 font-pi-display text-26 font-extrabold tracking-heading">Bricolage Grotesque 800</h3>
+          <p class="mt-2 text-16 leading-copy">
+            Display and headings. Weight 800 only, normal width, sentence case, letters set slightly tight (−3.5%).
+            Numbers and stats too.
+          </p>
+        </div>
+        <div class="rounded-14 border-line border-ink bg-white p-6">
+          <p class="font-pi-sans text-84 leading-display font-normal">Aa</p>
+          <h3 class="mt-4 font-pi-display text-26 font-extrabold tracking-heading">Geist</h3>
+          <p class="mt-2 text-16 leading-copy">
+            Body and interface. Regular at 17–19 px. Buttons and chips in Geist 600 with an ink outline.
+          </p>
+        </div>
+      </div>
+      <ul class="mt-6 max-w-[70ch] list-disc space-y-1 pl-5 text-16">
+        <li>No italics. Emphasis is an accent word: on paper in sky ink, on sky in white with an ink outline.</li>
+        <li>Text is solid ink or paper. Never pale grey on cyan.</li>
+        <li>Anek Kannada and Anek Devanagari are for Indian scripts. Anek Latin is the wordmark's typeface: never retype the wordmark with it.</li>
+      </ul>
+      <p class="mt-6 max-w-[70ch] text-16">
+        The .woff2 files are for websites. To install the fonts on a computer for Word, Keynote or Figma, get them from
+        Google Fonts:{" "}
+        {
+          googleFonts.map(([name, href], i) => (
+            <>
+              {i > 0 && ", "}
+              <a class="kit-link" href={href} {...newTab()}>
+                {name}
+                <NewTab />
+              </a>
+            </>
+          ))
+        }. In Canva, all of them are in the font list. All are under the SIL Open Font License.
+      </p>
+      <ul class="kit-grid mt-6">
+        {groups.fonts!.items.map((item) => <KitItem item={item} />)}
+      </ul>
+    </section>
+
+    <section id="doodles" class="kit-sec">
+      <div class="kit-head">
+        <h2 class="kit-h">Doodles</h2>
+        <Button href={kitUrl(groups.doodles!.zip.path)} variant="ghost" download>
+          All doodles ({sizes[groups.doodles!.zip.path]})
+        </Button>
+      </div>
+      <p class="kit-note">
+        The playful layer: one 3 px ink line with round ends, filled only from the palette. Use them around content,
+        never on the logo. Stickers (cut-out children with a paper outline and a soft shadow, tilted up to about 5°),
+        polaroids and tape belong to the same layer.
+      </p>
+      <ul class="kit-grid">
+        {groups.doodles!.items.map((item) => <KitItem item={item} />)}
+      </ul>
+    </section>
+
+    {
+      marketingGroups.map((g) => (
+        <section id={g.id} class="kit-sec">
+          <div class="kit-head">
+            <h2 class="kit-h">{g.title}</h2>
+            <Button href={kitUrl(g.zip.path)} variant="ghost" download>
+              All {g.title.toLowerCase()} ({sizes[g.zip.path]})
+            </Button>
+          </div>
+          <p class="kit-note">{marketingNotes[g.id]}</p>
+          <ul class="kit-grid">
+            {g.items.map((item) => (
+              <KitItem item={item} tall />
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+
+    <section id="rules" class="kit-sec">
+      <h2 class="kit-h">Logo rules</h2>
+      <div class="grid grid-cols-2 gap-8 max-tab:grid-cols-1">
+        <div>
+          <h3 class="kit-h3 mt-0">Clear space</h3>
+          <p class="text-16">
+            Keep one adult-head diameter clear on every side: about a third of the wordmark's capital height in the
+            lockups.
+          </p>
+          <h3 class="kit-h3">Minimum sizes</h3>
+          <div class="overflow-x-auto rounded-14 border-line border-ink bg-white">
+            <table class="kit-table">
+              <tbody>
+                {
+                  minimums.map(([where, size]) => (
+                    <tr>
+                      <th scope="row">{where}</th>
+                      <td>{size}</td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <h3 class="kit-h3 mt-0">Don't</h3>
+          <ul class="space-y-2 text-16">
+            {
+              dont.map((d) => (
+                <li class="flex gap-2">
+                  <span aria-hidden="true" class="font-bold">✕</span>
+                  {d}
+                </li>
+              ))
+            }
+          </ul>
+          <h3 class="kit-h3">Photos</h3>
+          <ul class="space-y-2 text-16">
+            {
+              photos.map(([lead, rest]) => (
+                <li>
+                  <b>{lead}</b> {rest}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="voice" class="kit-sec">
+      <h2 class="kit-h">Voice</h2>
+      <p class="kit-note">Short. Warm. Plain English.</p>
+      <ul class="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-3">
+        {
+          voice.map(([lead, rest]) => (
+            <li class="rounded-14 border-line border-ink bg-white p-4">
+              <p class="font-pi-display text-19 font-extrabold tracking-heading">{lead}</p>
+              <p class="mt-1 text-15 leading-copy">{rest}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="mt-6 overflow-x-auto rounded-14 border-line border-ink bg-white">
+        <table class="kit-table">
+          <thead>
+            <tr><th scope="col">Instead of</th><th scope="col">Say</th></tr>
+          </thead>
+          <tbody>
+            {
+              insteadOf.map(([no, yes]) => (
+                <tr>
+                  <td class="text-text-muted">{no}</td>
+                  <td class="font-semibold">{yes}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="mx-auto max-w-section border-t-line border-ink pt-8 text-16">
+      Not sure which file to use? Ask at <a class="kit-link" href={`mailto:${email}`}>{email}</a>. The files come from
+      the <code>@proudindian/design</code> package, so this page updates with it.
+    </footer>
+  </main>
+</Base>
+
+<script>
+  // Copy a colour value. The button flashes "Copied" and screen readers hear it through the live region.
+  const status = document.getElementById("kit-copied");
+  document.addEventListener("click", async (e) => {
+    const button = (e.target as Element).closest<HTMLButtonElement>("[data-copy]");
+    if (!button || !status) return;
+    const value = button.dataset.copy!;
+    try {
+      await navigator.clipboard.writeText(value);
+      status.textContent = `Copied ${value}`;
+      button.dataset.copied = "";
+      setTimeout(() => delete button.dataset.copied, 1400);
+    } catch {
+      status.textContent = "Couldn't copy. Select the value instead.";
+    }
+  });
+</script>
+
+<style is:global>
+  .kit-sec {
+    max-width: var(--container-section);
+    margin: 0 auto var(--space-96);
+    scroll-margin-top: var(--space-24);
+  }
+  .kit-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-12);
+    margin-bottom: var(--space-12);
+  }
+  .kit-h {
+    font: var(--font-weight-extrabold) var(--text-52) / var(--leading-none) var(--font-pi-display);
+    letter-spacing: var(--tracking-heavy);
+  }
+  .kit-sec > .kit-h {
+    margin-bottom: var(--space-12);
+  }
+  .kit-h3 {
+    font: var(--font-weight-extrabold) var(--text-22) var(--font-pi-display);
+    margin: var(--space-32) 0 var(--space-12);
+  }
+  .kit-note {
+    max-width: 70ch;
+    margin-bottom: var(--space-20);
+    color: var(--color-text-muted);
+  }
+  .kit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: var(--space-16);
+  }
+  .kit-pixel {
+    width: 64px;
+    height: 64px;
+    image-rendering: pixelated;
+  }
+  .kit-dl {
+    display: inline-block;
+    padding: var(--space-4) var(--space-10);
+    border: var(--line-ink);
+    border-radius: var(--radius-pill);
+    background: var(--color-paper);
+    font-size: var(--text-13);
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+  }
+  .kit-dl:hover {
+    background: var(--color-sky);
+  }
+  .kit-copy {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    border-radius: var(--radius-4);
+    padding: 0 var(--space-4);
+    margin-left: calc(-1 * var(--space-4));
+  }
+  .kit-copy:hover {
+    background: var(--color-sky-wash);
+  }
+  .kit-copy[data-copied]::after {
+    content: " ✓ Copied";
+    font-family: var(--font-pi-sans);
+    color: var(--color-sky-ink);
+  }
+  .kit-bar {
+    display: grid;
+    place-items: center;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .kit-bar + .kit-bar {
+    border-left: var(--line-ink);
+  }
+  .kit-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-16);
+  }
+  .kit-table th,
+  .kit-table td {
+    padding: var(--space-10) var(--space-16);
+    text-align: left;
+    vertical-align: top;
+  }
+  .kit-table thead th {
+    font-size: var(--text-13);
+    color: var(--color-text-muted);
+  }
+  .kit-table tbody th {
+    font-weight: var(--font-weight-semibold);
+  }
+  .kit-table tr + tr,
+  .kit-table thead + tbody tr {
+    border-top: var(--line-ink);
+  }
+  .kit-link {
+    color: var(--color-sky-ink);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+  .kit code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.9em;
+  }
+</style>

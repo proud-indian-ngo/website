@@ -1,0 +1,43 @@
+---
+/** One brand-kit artwork on /brand/: a preview on the ground it's made for, what it's for, and its downloads. */
+import { type KitItem, kitUrl } from "../../lib/brand-kit";
+
+type Props = { item: KitItem; /** a taller preview, for posters, posts and stories */ tall?: boolean };
+const { item, tall = false } = Astro.props;
+const grounds = { paper: "bg-paper", ink: "bg-ink", sky: "bg-sky" } as const;
+// favicons and other tiny icons stay crisp at their pixel size instead of being scaled up
+const tiny = item.preview && item.preview.width <= 48;
+---
+
+<li class="flex flex-col overflow-hidden rounded-14 border-line border-ink bg-white">
+  {
+    item.preview && (
+      <div class:list={["grid place-items-center border-b-line border-ink p-6", tall ? "h-72" : "h-40", grounds[item.ground]]}>
+        <img
+          src={item.preview.src}
+          width={item.preview.width}
+          height={item.preview.height}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          class:list={[tiny ? "kit-pixel" : tall ? "h-60 w-full object-contain" : "h-28 w-full object-contain"]}
+        />
+      </div>
+    )
+  }
+  <div class="flex flex-1 flex-col gap-1 p-4">
+    <h3 class="font-pi-display text-17 leading-title font-extrabold tracking-heading">{item.title}</h3>
+    <p class="text-14 leading-copy text-text-muted">{item.use}</p>
+    <ul class="mt-auto flex flex-wrap gap-1.5 pt-3" aria-label={`Download ${item.title}`}>
+      {
+        item.files.map((f) => (
+          <li>
+            <a class="kit-dl" href={kitUrl(f.path)} download>
+              {f.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</li>

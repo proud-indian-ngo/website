@@ -66,6 +66,14 @@ https://:project.pages.dev/*
   Cache-Control: public, max-age=86400
   X-Robots-Tag: noindex
 
+# The brand kit (/brand/, src/pages/brand.astro): internal, so the page and every file under it stay out of search
+# and away from crawlers that ignore robots.txt. The files (/brand/files/*) change only with @proudindian/design: a day.
+/brand/*
+  X-Robots-Tag: noindex, nofollow
+/brand/files/*
+  ! Cache-Control
+  Cache-Control: public, max-age=86400
+
 # Link headers for agent discovery (RFC 8288): each page with Markdown points to it (the same as its
 # <link rel="alternate" type="text/markdown">), and to /llms.txt, the whole site in Markdown; the home page also to the
 # API catalog. A new page with an index.md.ts gets its own block here.
