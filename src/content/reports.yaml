@@ -80,6 +80,11 @@
   date: "2026-10"
   url: /reports/disclosure-kalakriti-3-0.pdf
   featured: true
+- id: gift-a-smile-2026
+  kind: disclosure
+  title: "Gift a Smile 2026"
+  date: "2026-07"
+  url: /reports/disclosure-gift-a-smile-2026-07.pdf
 - id: kalakriti-2-0
   kind: disclosure
   title: "Kalakriti 2.0"
