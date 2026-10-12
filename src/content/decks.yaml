@@ -1,0 +1,226 @@
+# The two pitch decks, rendered to PDF by `bun run decks` (scripts/decks.ts) and listed on /brand/ under Pitch decks.
+# Both are written to be sent ahead and read without anyone presenting them.
+# Only the decks' own copy is here. Prices, formats, programme costs, editions, Horizon, registrations, partners and
+# the safeguarding rules come from csr.yaml, kalakriti-page.yaml, site.yaml, partners.yaml and safeguarding.yaml, so
+# a deck can't disagree with the site. Re-run `bun run decks` and commit the PDFs after changing any of them.
+# Text may use {placeholders} (the site facts, as on the pages) and *accent* for the coloured word in a heading.
+
+csr:
+  title: Proud Indian · CSR and employee volunteering in Bengaluru
+  cover:
+    eyebrow: For companies · Bengaluru
+    heading: CSR and employee volunteering in *Bengaluru.*
+    lede: A volunteering day with children from Bengaluru’s low-income communities, CSR funding for the classes they come to, or your name on Kalakriti, their arts festival.
+    date: October 2026
+  about:
+    eyebrow: Who we are
+    heading: Run by volunteers, *since 2019.*
+    lede: "Proud Indian started on Republic Day 2019 with a handful of friends in Bengaluru who wanted their volunteering to add up to something. It is still run by volunteers: we call them Optimists, and they plan and run every class, drive and festival themselves."
+    points:
+      - We go back to the same communities, so the children know us by name and we know them.
+      - Classes are at our community centre in Ibbaluru, near Bellandur, most weekends.
+      - Our accounts have been audited every year since 2019–20, and every big event gets its own financial disclosure.
+  what:
+    eyebrow: What we do
+    heading: Four programmes, *one city.*
+    # one card per programme band, in the site's order; `fact` is a Bengaluru figure for 2025–26 or 2026
+    cards:
+      - verb: Teach
+        line: Weekend maths and Spoken English classes, and art & craft that gets children talking about their world.
+        fact: Weekend classes at our community centre
+      - verb: Feed
+        line: Ration kits for families, and a proper meal whenever we bring the children together.
+        fact: Lunch for 500 children at Kalakriti 3.0
+      - verb: Paint
+        line: Kalakriti, our yearly arts festival, and Kalakriti Horizon, a year of training for the children who shine.
+        fact: 500 children at Kalakriti 3.0
+      - verb: Connect
+        line: Gift a Smile, kit drives, outings, and volunteering days with companies.
+        fact: 851 children at Gift a Smile 2026
+  ways:
+    eyebrow: Ways to partner
+  days:
+    eyebrow: Volunteering days
+  cost:
+    eyebrow: What a day costs
+    heading: Materials, plus *planning.*
+    photo:
+      {
+        image: photos/deck-oracle-seed-pens.jpg,
+        caption: "Oracle’s seed-pen day, March 2026",
+      }
+  kalakriti:
+    eyebrow: Sponsor Kalakriti
+    backers: Kalakriti 3.0 was funded by Ethos (₹5,00,000) and Xencia Technologies (₹1,00,000).
+    more: A separate deck covers Kalakriti 4.0 in full.
+  fund:
+    eyebrow: Fund a programme
+  drives:
+    eyebrow: Gift and kit drives
+  how:
+    eyebrow: How it works
+    report: What the report has
+    reportItems:
+      - Photos from the day, ready for your intranet and social media
+      - "The numbers: children, volunteers, hours, kits"
+      - Receipts for every rupee, and an 80G receipt or invoice
+      - For CSR funding, a utilisation report against the plan we agreed
+  trust:
+    eyebrow: Safeguarding and partners
+    partners: Companies and organisations we have worked with
+  paperwork:
+    eyebrow: Paperwork
+  closing:
+    heading: Let’s plan *something.*
+    lede: Write with your team size, rough dates and what you have in mind, or message us on WhatsApp. We reply within two working days.
+
+kalakriti:
+  title: Proud Indian · Kalakriti 4.0 sponsorship
+  cover:
+    eyebrow: Sponsorship · Kalakriti 4.0
+    heading: A stage of their own, *once a year.*
+    lede: Kalakriti is our arts festival for children from Bengaluru’s low-income communities. The fourth edition is in September 2027, and we are looking for the companies who will make it happen.
+    date: September 2027 · Bengaluru
+  why:
+    eyebrow: Why Kalakriti
+    heading: Talent is everywhere. *Stages aren’t.*
+    lede: "The children who come to Kalakriti sing, dance and paint as well as any child in the city. What they rarely get is a stage: a real one, with lights, judges, costumes and a hall that cheers for them."
+    points:
+      - It is free for every child. We pay for the buses, the lunch, the materials, the costumes, the medals and the certificates.
+      - Every child goes home with a certificate, and the winners lift a trophy on stage.
+      - The children who shine don’t go back to waiting for next September. Kalakriti Horizon trains them all year.
+  day:
+    eyebrow: The day
+  editions:
+    eyebrow: Three Septembers so far
+    heading: Bigger *every year.*
+  gallery:
+    eyebrow: Kalakriti 3.0 · 20 September 2026
+    heading: One Sunday, *in pictures.*
+    # six photos: the hall, the stage, and the moments in between
+    photos:
+      - {
+          image: photos/kalakriti-3-hall.jpg,
+          caption: The hall,
+          before the stage events,
+        }
+      - { image: photos/kala3-classical.jpg, caption: "Folk, in full colour" }
+      - { image: photos/kala3-pot.jpg, caption: Pot painting }
+      - { image: photos/deck-kala3-judges.jpg, caption: The judges’ table }
+      - { image: photos/kala3-kurtas.jpg, caption: All in orange }
+      - { image: photos/kala3-certificates.jpg, caption: Certificates for all }
+  money:
+    eyebrow: Where the money goes
+    heading: Every rupee, *line by line.*
+    lede: "Kalakriti 3.0 cost ₹4,44,190 for 500 children, about ₹890 a child. The biggest costs are getting the children there and feeding them."
+    # the Kalakriti 3.0 disclosure, part A, grouped
+    rows:
+      - { label: "Buses for the children and volunteers (9)", amount: 135936 }
+      - { label: "Food and refreshments", amount: 82924 }
+      - {
+          label: "Venue staff: cooking, cleaning, sound, security",
+          amount: 65955,
+        }
+      - { label: "Art supplies, costumes and stage", amount: 80891 }
+      - { label: "Certificates, medals, ID cards and gifts", amount: 28880 }
+      - {
+          label: "Volunteer T-shirts, printing, photography and the rest",
+          amount: 49604,
+        }
+    photo:
+      {
+        image: photos/deck-kala3-bus.jpg,
+        caption: "Arriving at Shishu Mandir, 20 September 2026",
+      }
+  horizon:
+    eyebrow: Kalakriti Horizon
+  plan:
+    eyebrow: The plan for Kalakriti 4.0
+    heading: Make the next one *bigger.*
+    lede: "Kalakriti 4.0 is on the second or third Sunday of September 2027. Our targets, and what they cost at Kalakriti 3.0’s prices:"
+    targets:
+      - { number: "600", label: children, note: up from 500 }
+      - { number: "8", label: events, note: judged by guests }
+      - { number: "220", label: volunteers, note: up from 200 }
+      - {
+          number: "40+",
+          label: children in Horizon,
+          note: at 4 or more centres,
+        }
+    budget:
+      - {
+          label: The festival day,
+          amount: "₹6,00,000",
+          note: "600 children at about ₹1,000 each",
+        }
+      - {
+          label: "Kalakriti Horizon, 2026–27",
+          amount: "₹2,50,000",
+          note: "a year of training at 4 or more centres",
+        }
+      - { label: Total, amount: "₹8,50,000", total: true }
+  tiers:
+    eyebrow: Sponsorships
+    heading: Pick your *part.*
+    # what each tier gets, beside csr.yaml → kalakriti.tiers (same order)
+    gets:
+      - - An 80G receipt
+        - Your name in the festival report
+      - - Your name on that event’s stage and in the festival report
+        - Your logo on the sponsors’ wall
+        - A seat on that event’s judging panel
+        - A post about your event on our social media
+      - - “Kalakriti 4.0, presented by” your company, on the LED screen, the stage banner and every poster
+        - Your logo on the volunteers’ T-shirts and on every child’s certificate
+        - A crew day for up to 40 of your employees, running the festival with us
+        - A seat on the judging panel, and posts on our social media
+        - The festival report with photos, and a utilisation report for your CSR team
+    note: "Every sponsorship comes with the paperwork your CSR team needs: {csr1}, {taxExemption} and {registered}, an invoice or receipt, and the edition’s financial disclosure."
+    photo:
+      {
+        image: photos/deck-kala3-stage.jpg,
+        caption: "The title sponsor’s name goes up here",
+      }
+  backers:
+    eyebrow: Who has backed it
+    heading: Companies who made *Kalakriti 3.0.*
+    lede: "Kalakriti 3.0 raised ₹6,00,000 from two companies. Kalakriti 2.0 was mostly crowdfunded: ₹3,23,014 through GiveIndia."
+    items:
+      - {
+          name: Ethos,
+          amount: "₹5,00,000",
+          line: Lead sponsor of Kalakriti 3.0. An Ethos team also painted a wall at an orphanage with us.,
+        }
+      - {
+          name: Xencia Technologies,
+          amount: "₹1,00,000",
+          line: Sponsor of Kalakriti 3.0.,
+        }
+    photo:
+      {
+        image: photos/deck-kala3-backdrop.jpg,
+        caption: "The sponsors’ wall at Kalakriti 3.0",
+      }
+  timeline:
+    eyebrow: Timeline
+    heading: From now to *September.*
+    steps:
+      - {
+          when: Now to June 2027,
+          what: "Sponsors sign on. Commit by 30 June 2027 to get your name on everything we print.",
+        }
+      - {
+          when: July and August,
+          what: "We book the venue and buses, register the centres and their children, and the crew meets every weekend.",
+        }
+      - {
+          when: September 2027,
+          what: "Kalakriti 4.0, on the second or third Sunday. Your team can crew it with us.",
+        }
+      - {
+          when: October 2027,
+          what: "The financial disclosure and the festival report, with photos, within a month.",
+        }
+  closing:
+    heading: Give them a *stage.*
+    lede: Write to us about sponsoring Kalakriti 4.0, or message us on WhatsApp. We reply within two working days.

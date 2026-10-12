@@ -11,6 +11,7 @@
  *   downloaded once per design version into the same cache. BRAND_ASSETS_ZIP points the build at a local copy;
  * - a zip per group, one of the brand kit and one of the marketing kit (one of everything would pass Cloudflare
  *   Pages' 25 MiB file limit), each with a README.txt listing what each file is for.
+ * - the pitch decks, PDFs that scripts/decks.ts renders into src/assets/decks/ (committed, with a cover preview each).
  * Stamp-production seals ship as SVG only: a stamp maker needs the vector.
  */
 import { createHash } from "node:crypto";
@@ -581,6 +582,46 @@ const marketingItems = (items: Manifest["groups"][number]["items"]) =>
     })
   );
 
+// ---- Pitch decks: rendered by `bun run decks` (scripts/decks.ts) into src/assets/decks/
+
+const DECKS = join(process.cwd(), "src/assets/decks");
+/** `ground` is the tile's, in contrast to the cover (the CSR deck is paper, the Kalakriti deck ink) */
+const deck = async (
+  name: string,
+  title: string,
+  use: string,
+  ground: Ground
+): Promise<KitItem> => {
+  const preview = new Uint8Array(readFileSync(join(DECKS, `${name}.jpg`)));
+  const { width = 1200, height = 675 } = await sharp(preview).metadata();
+  add(`decks/${name}-cover.jpg`, () => preview);
+  return {
+    title,
+    use,
+    ground,
+    preview: { src: url(`decks/${name}-cover.jpg`), width, height },
+    files: [
+      add(`decks/proud-indian-${name}-deck.pdf`, () =>
+        readFileSync(join(DECKS, `${name}.pdf`))
+      ),
+    ],
+  };
+};
+const decks = await Promise.all([
+  deck(
+    "csr",
+    "CSR and employee volunteering",
+    "For companies: volunteering days, Kalakriti sponsorship, programme funding, drives and the paperwork. 13 slides.",
+    "ink"
+  ),
+  deck(
+    "kalakriti",
+    "Kalakriti 4.0 sponsorship",
+    "For sponsors of Kalakriti 4.0 (September 2027): the day, three editions, where the money goes, Horizon, the plan and the sponsorships. 12 slides.",
+    "paper"
+  ),
+]);
+
 // ---- Zips
 
 const README_HEAD =
@@ -661,6 +702,8 @@ export const kitGroups: KitGroup[] = [
   group("fonts", "Fonts", fonts),
   group("guidelines", "Guidelines", guidelines),
 ];
+
+export const deckGroup: KitGroup = group("decks", "Pitch decks", decks);
 
 export const kitAll: KitFile = {
   path: "proud-indian-brand-kit.zip",

@@ -11,7 +11,7 @@ import Button from "../components/ui/Button.astro";
 import NewTab from "../components/ui/NewTab.astro";
 import SectionLabel from "../components/ui/SectionLabel.astro";
 import Base from "../layouts/Base.astro";
-import { kitAll, kitGroups, kitSize, kitUrl, marketingAll, marketingGroups } from "../lib/brand-kit";
+import { deckGroup, kitAll, kitGroups, kitSize, kitUrl, marketingAll, marketingGroups } from "../lib/brand-kit";
 import { getSite } from "../lib/content";
 import { grade, ratio } from "../lib/contrast";
 import { newTab } from "../lib/links";
@@ -23,7 +23,7 @@ const groups = Object.fromEntries(kitGroups.map((g) => [g.id, g]));
 const pdf = groups.guidelines!.items[0]!.files[0]!;
 const sizes = Object.fromEntries(
   await Promise.all(
-    [kitAll, marketingAll, pdf, ...[...kitGroups, ...marketingGroups].map((g) => g.zip)].map(async (f) => [f.path, await kitSize(f.path)] as const)
+    [kitAll, marketingAll, pdf, ...[...kitGroups, ...marketingGroups, deckGroup].map((g) => g.zip)].map(async (f) => [f.path, await kitSize(f.path)] as const)
   )
 );
 
@@ -36,6 +36,7 @@ const nav = [
   ["type", "Type"],
   ["doodles", "Doodles"],
   ...marketingGroups.map((g) => [g.id, g.title.replace(/ and .*/, "")] as const),
+  ["decks", "Decks"],
   ["rules", "Rules"],
   ["voice", "Voice"],
 ] as const;
@@ -54,6 +55,8 @@ const which = [
   ["Embroidery, screen print, merchandise", "logo/pi-stacked-mono.svg"],
   ["An Instagram or Facebook post", "social/post-volunteer-4x5.jpg"],
   ["A presentation", "office/proud-indian-slides.pptx"],
+  ["A pitch to a company: CSR or a volunteering day", "decks/proud-indian-csr-deck.pdf"],
+  ["A pitch to a Kalakriti sponsor", "decks/proud-indian-kalakriti-deck.pdf"],
   ["A letter", "office/letterhead.docx"],
 ] as const;
 
@@ -427,6 +430,23 @@ const googleFonts = [
         </section>
       ))
     }
+
+    <section id="decks" class="kit-sec">
+      <div class="kit-head">
+        <h2 class="kit-h">{deckGroup.title}</h2>
+        <Button href={kitUrl(deckGroup.zip.path)} variant="ghost" download>
+          Both decks ({sizes[deckGroup.zip.path]})
+        </Button>
+      </div>
+      <p class="kit-note">
+        PDFs to send ahead of a meeting, written to be read without anyone presenting them. Their prices, costs and
+        numbers come from the website's pages, so they match /csr/ and /kalakriti/. To change one, edit
+        src/content/decks.yaml (or the page it quotes) and run <code>bun run decks</code>.
+      </p>
+      <ul class="kit-grid">
+        {deckGroup.items.map((item) => <KitItem item={item} tall />)}
+      </ul>
+    </section>
 
     <section id="rules" class="kit-sec">
       <h2 class="kit-h">Logo rules</h2>
