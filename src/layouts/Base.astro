@@ -77,6 +77,8 @@ const markdownHref = `${Astro.url.pathname.replace(/\/?$/, "/")}index.md`;
   <body>
     <LogoSprite />
     <slot />
+    <div class="edge edge-top" aria-hidden="true"></div>
+    <div class="edge edge-bottom" aria-hidden="true"></div>
     <script>
       import "../scripts/main";
     </script>

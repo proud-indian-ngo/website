@@ -5,6 +5,7 @@
 import { initBento } from "./bento";
 import { PHONE } from "./dom";
 import { initDonate } from "./donate";
+import { initEdges } from "./edges";
 import { refreshEvents } from "./events-refresh";
 import { fitProg, fitVerbs } from "./layout";
 import { initLite } from "./lite";
@@ -45,6 +46,7 @@ initReveal();
 initPlane();
 initNudge();
 initPause();
+initEdges();
 // tools for a browser's AI agent (WebMCP), where the browser has the API
 initWebMcp(donate);
 

@@ -75,6 +75,25 @@ label {
 body {
   padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
 }
+/* Safari's status bar and toolbar take the colour of a fixed element at the page's edge (theme-color is ignored in a
+   tab): one strip per edge, coloured by edges.ts to the band under it. Below the header so the pill stays on top. */
+.edge {
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: calc(var(--z-header) - 1);
+  pointer-events: none;
+}
+.edge-top {
+  top: 0;
+  height: max(12px, env(safe-area-inset-top));
+  background: var(--edge-top, var(--color-sky));
+}
+.edge-bottom {
+  bottom: 0;
+  height: max(12px, env(safe-area-inset-bottom));
+  background: var(--edge-bottom, var(--color-paper));
+}
 /* a 44px-tall hit area for small text links (footer, logo, "See every session"): an invisible box centred on the link,
    so neither the layout nor the focus ring changes */
 .tap-44 {
