@@ -51,8 +51,12 @@ function arcLength(segs: Seg[]) {
   };
 }
 let frames: string[] = [];
+let raf = 0;
 
-export function layoutPlane() {
+/** Measures the flight path from the live layout. Its writes (the trail and the plane's resting pose) wait for the
+ *  next frame, so the relayout pass's later reads (scroll-spy, loops, reveals) don't force a style recalc; `now`
+ *  writes them at once, for the flight that starts straight after. */
+export function layoutPlane(now = false) {
   if (!st) return;
   const svg = $<SVGSVGElement>(".fly", st)!;
   const to = $("[data-plane-target]", st)!;
@@ -124,8 +128,6 @@ export function layoutPlane() {
     segs
       .map((g) => `C${g[2]} ${g[3]} ${g[4]} ${g[5]} ${g[6]} ${g[7]}`)
       .join("");
-  $(".trail", svg)!.setAttribute("d", d);
-  $(".trail-reveal", svg)!.setAttribute("d", d);
   // 65 frames evenly spaced along the path's length, each turned to the path's direction (measured over ±2px), as
   // getPointAtLength would give, but computed from the curves: well under a millisecond instead of ~80ms on a slow phone
   const at = arcLength(segs);
@@ -140,12 +142,20 @@ export function layoutPlane() {
     );
   }
   frames = pts;
-  $(".plane", svg)!.style.transform = pts[pts.length - 1]!;
+  const write = () => {
+    raf = 0;
+    $(".trail", svg)!.setAttribute("d", d);
+    $(".trail-reveal", svg)!.setAttribute("d", d);
+    $(".plane", svg)!.style.transform = pts[pts.length - 1]!;
+  };
+  cancelAnimationFrame(raf);
+  if (now) write();
+  else raf = requestAnimationFrame(write);
 }
 
 function fly() {
   if (!st) return;
-  layoutPlane();
+  layoutPlane(true);
   const E = EASE.glide;
   A(
     $(".plane", st),
