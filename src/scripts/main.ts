@@ -2,6 +2,7 @@
  * Site scripts entry (bundled by Astro). Split by concern; the boot order below
  * matters (see the comments). Every module tolerates missing markup, so the same bundle runs on every page.
  */
+import { initAccordion } from "./accordion";
 import { initBento } from "./bento";
 import { PHONE } from "./dom";
 import { initDonate } from "./donate";
@@ -41,6 +42,7 @@ initLoops();
 initWobble();
 initSwipe();
 initTear();
+initAccordion();
 initBento();
 initReveal();
 initPlane();

@@ -366,10 +366,10 @@
   .vg-q-ic::after {
     rotate: 90deg;
   }
-  .vg-q[open] .vg-q-ic {
+  .vg-q[open]:not(.is-shut) .vg-q-ic {
     background: var(--color-marigold);
   }
-  .vg-q[open] .vg-q-ic::after {
+  .vg-q[open]:not(.is-shut) .vg-q-ic::after {
     rotate: 0deg;
   }
   html[data-motion="on"] .vg-q-ic::after {

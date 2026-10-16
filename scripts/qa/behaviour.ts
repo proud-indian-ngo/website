@@ -589,8 +589,13 @@ async function guide(browser: Browser, url: string) {
   await q.locator("summary").click();
   const opened = await q.evaluate((d) => (d as HTMLDetailsElement).open);
   await q.locator("summary").click();
+  // the close animates (scripts/accordion.ts): the <details> shuts when it ends
   r["guide: FAQ opens and closes"] =
-    opened && !(await q.evaluate((d) => (d as HTMLDetailsElement).open));
+    opened &&
+    (await until(
+      page,
+      () => !(document.querySelectorAll(".vg-q")[1] as HTMLDetailsElement).open
+    ));
   r["guide: own nav links"] = await page.evaluate(
     () =>
       [...document.querySelectorAll(".site-hd [data-spy-link]")]
