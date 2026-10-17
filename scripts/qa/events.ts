@@ -152,7 +152,7 @@ const isB = (s: State) =>
   // the feed's signUpUrl as sent; an open-ended session shows its start time only; no area falls back to the city
   s.firstReg ===
     "https://dash.proudindian.ngo/register?interestEventId=b2&occDate=2026-10-26" &&
-  s.lastMeta === "Bengaluru10:00 am" &&
+  s.lastMeta === "Bangalore10:00 am" &&
   s.cmoreShown &&
   s.kid &&
   !s.clockShown;

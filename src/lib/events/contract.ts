@@ -1,8 +1,8 @@
 /**
  * pi-dash public events API, GET https://dash.proudindian.ngo/api/public/events (proud-indian-ngo/dash#150).
- * Public, upcoming, not cancelled, never Kalakriti, no personal data; sorted by startTime, then id. Defaults: city
- * bangalore, the next 30 days, at most 20 events. CORS allows any origin. OpenAPI description:
- * https://dash.proudindian.ngo/api/public/openapi.json.
+ * Public, upcoming, not cancelled, never Kalakriti, no personal data; sorted by startTime, then id. Defaults: every
+ * active city (so PUBLIC_EVENTS_URL pins ?city=BLR), the next 30 days, at most 20 events. CORS allows any origin.
+ * OpenAPI description (2.0.0): https://dash.proudindian.ngo/api/public/openapi.json.
  * Shared by the build (src/lib/events/load.ts) and the browser refresh (src/scripts/events-refresh.ts), so it has no
  * dependencies.
  */
@@ -22,9 +22,10 @@ export interface PublicEvent {
   startTime: string;
   /** always present; equal to startTime for an open-ended event */
   endTime: string;
-  /** coarse public area, never the exact address, e.g. "Koramangala, Bengaluru"; just the city when no area is set */
+  /** coarse public area, never the exact address, e.g. "Koramangala, Bangalore"; just the city name when no area is
+   *  set */
   area: string;
-  /** cityEnum value, e.g. "bangalore" */
+  /** city code, e.g. "BLR" (the feed also sends cityName, e.g. "Bangalore", which the site doesn't use) */
   city: string;
   team: string;
   programme?: Programme;

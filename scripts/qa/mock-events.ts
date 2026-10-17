@@ -21,7 +21,8 @@ const ev = (
   startTime: `${date}T${startUtc}:00.000Z`,
   endTime: `${date}T${endUtc}:00.000Z`,
   area,
-  city: "bangalore",
+  city: "BLR",
+  cityName: "Bangalore",
   team,
   programme,
   signUpUrl: `https://dash.proudindian.ngo/register?interestEventId=${id}&occDate=${date}`,
@@ -33,7 +34,7 @@ const A = [
     "04:30",
     "06:30",
     "Story hour",
-    "Ejipura, Bengaluru",
+    "Ejipura, Bangalore",
     "education",
     "Education"
   ),
@@ -43,7 +44,7 @@ const A = [
     "05:00",
     "08:00",
     "Lunch drive",
-    "Bellandur, Bengaluru",
+    "Bellandur, Bangalore",
     "nutrition",
     "Nutrition"
   ),
@@ -53,7 +54,7 @@ const A = [
     "09:30",
     "12:00",
     "Park outing",
-    "Cubbon Park, Bengaluru",
+    "Cubbon Park, Bangalore",
     "community",
     "Community"
   ),
@@ -65,7 +66,7 @@ const B = [
     "03:30",
     "06:00",
     "Science fair prep",
-    "Iblur, Bengaluru",
+    "Iblur, Bangalore",
     "education",
     "Education"
   ),
@@ -75,7 +76,7 @@ const B = [
     "04:00",
     "07:00",
     "Diwali food drive",
-    "HSR Layout, Bengaluru",
+    "HSR Layout, Bangalore",
     "nutrition",
     "Nutrition"
   ),
@@ -85,7 +86,7 @@ const B = [
     "08:30",
     "11:30",
     "Rangoli workshop",
-    "Koramangala, Bengaluru",
+    "Koramangala, Bangalore",
     "kalakriti",
     "Kalakriti"
   ),
@@ -95,7 +96,7 @@ const B = [
     "04:30",
     "04:30",
     "Football afternoon",
-    "Bengaluru",
+    "Bangalore",
     "community",
     "Community"
   ),
