@@ -58,6 +58,7 @@ Copy `.env.example` to `.env` for local overrides.
 | Variable | Default | Purpose |
 |---|---|---|
 | `PUBLIC_EVENTS_URL` | unset | The pi-dash public events API. When unset, the poster points to the dashboard and no sessions are shown (see [Events](#events-volunteer-section)). |
+| `PUBLIC_POSTHOG_KEY` | unset | PostHog project API key for product analytics (see [Analytics](#analytics)). When unset, or on any host but `proudindian.ngo`, nothing is sent. |
 | `PUBLIC_SITE_URL` | `https://proudindian.ngo` | Canonical origin for canonical links, Open Graph and the sitemap |
 
 ## Editing content
@@ -139,14 +140,24 @@ Every run installs with the frozen lockfile. Production deploys only once every 
 - Secret `CLOUDFLARE_API_TOKEN`: an account-owned API token in the Proud Indian account ("GitHub Actions: proud-indian-ngo/website (Pages deploy)"), with Pages Write only. Replace it there if it leaks.
 - Secret `CLOUDFLARE_ACCOUNT_ID`: the Proud Indian account ID.
 - Variable `PUBLIC_EVENTS_URL`: the pi-dash events feed, `https://dash.proudindian.ngo/api/public/events?city=BLR` (see [Events](#events-volunteer-section)). The build in CI reads it; Cloudflare Pages doesn't build, so it isn't set there.
+- Variable `PUBLIC_POSTHOG_KEY`: the website's PostHog project API key (see [Analytics](#analytics)).
 
 **Going live** is done in the Cloudflare dashboard, after the first deployment: add `proudindian.ngo` (and `www`) as custom domains of the Pages project, and redirect `www` to the bare domain.
 
 The output is fully static, with no adapter. The one Pages Function, `functions/_middleware.ts`, serves the pages' Markdown to AI agents (see [Search and AI agents](#search-and-ai-agents)); `public/_routes.json` keeps the assets (`/_astro/*`, images, PDFs, icons, `llms.txt`, the sitemap, `/.well-known/*`) away from it, so only page requests count towards the Free plan's 100,000 Functions requests a day. Add a new top-level asset there too. `public/_headers` sets the following:
 - **Caching:** a year, immutable, for the hashed `/_astro/*` assets; HTML revalidates on every visit; icons and the OG image get a day; the report PDFs in `/reports/*` get a year (served inline as `application/pdf`), so a corrected report needs a new file name.
-- **Security headers:** HSTS, nosniff, frame denial, a referrer policy, a permissions policy and a CSP. The CSP `connect-src` allows `https://dash.proudindian.ngo`; if `PUBLIC_EVENTS_URL` points anywhere else, add that origin. Cloudflare Web Analytics is enabled for proudindian.ngo in the Cloudflare dashboard, so the CSP also allows its beacon: `https://static.cloudflareinsights.com` in `script-src` and `https://cloudflareinsights.com` in `connect-src`. Remove both if the analytics is turned off, and update the privacy policy (`src/content/privacy.md`) to match. `public/robots.txt` and the generated `sitemap-index.xml` exclude `/styleguide/` and `/brand/`; everything under `/brand/` also gets `X-Robots-Tag: noindex, nofollow`.
+- **Security headers:** HSTS, nosniff, frame denial, a referrer policy, a permissions policy and a CSP. The CSP `connect-src` allows `https://dash.proudindian.ngo`; if `PUBLIC_EVENTS_URL` points anywhere else, add that origin. Cloudflare Web Analytics is enabled for proudindian.ngo in the Cloudflare dashboard, so the CSP also allows its beacon: `https://static.cloudflareinsights.com` in `script-src` and `https://cloudflareinsights.com` in `connect-src`. Remove both if the analytics is turned off, and update the privacy policy (`src/content/privacy.md`) to match. PostHog only needs `https://us.i.posthog.com` in `connect-src` (see [Analytics](#analytics)). `public/robots.txt` and the generated `sitemap-index.xml` exclude `/styleguide/` and `/brand/`; everything under `/brand/` also gets `X-Robots-Tag: noindex, nofollow`.
 - **Link headers** ([RFC 8288](https://www.rfc-editor.org/rfc/rfc8288)) for agent discovery: `/`, `/volunteer/`, `/csr/`, `/kalakriti/` and `/privacy/` point to their Markdown (`rel="alternate"; type="text/markdown"`) and to `/llms.txt` (`rel="describedby"`); `/` also points to the API catalog (`rel="api-catalog"`). A new page with Markdown gets its own `Link` block.
 - **API catalog:** `/.well-known/api-catalog` is served as `application/linkset+json`, cached for an hour.
+
+## Analytics
+
+Two kinds, both cookieless:
+
+- **Cloudflare Web Analytics** counts visits: page views, referrers, countries, devices and Core Web Vitals. It is enabled in the Cloudflare dashboard, which injects its beacon.
+- **PostHog** (`src/scripts/analytics.ts`) shows what people do: time on page and scroll depth (from `$pageleave`), page-to-page paths, sessions, clicks (autocapture: the element and its text, never what is typed) and heatmaps. It is bundled with the site and loads 2.5 seconds after the page, at the next idle moment, so it stays out of the first paint. It runs only on `proudindian.ngo` with `PUBLIC_POSTHOG_KEY` set, so local builds, the QA scripts and `pages.dev` previews send nothing. Session recording, surveys, feature flags and remote config are off, and it loads no other scripts, so the CSP only allows `https://us.i.posthog.com` in `connect-src`.
+
+PostHog setup, once, in its own project for the website (not the dashboard's): copy the project API key into the repository variable `PUBLIC_POSTHOG_KEY`, and turn on **Cookieless server hash mode** in the project settings. Without it, PostHog drops every event the site sends. To track a click with extra context, add `data-ph-capture-attribute-<name>="<value>"` to the element; to keep an element out, add the class `ph-no-capture`. If the analytics changes, update the privacy policy (`src/content/privacy.md`) to match.
 
 ## Search and AI agents
 
@@ -265,7 +276,7 @@ src/
                            MarginSprite (the package's outline sprite, inlined once)
   lib/                     content helpers, image resolver, events (contract, load, render, format), structured data
   scripts/                 client modules: reveal, loops, wobble, plane, coins, donate, reports drawer, rail, menu,
-                           nudge, pause, events refresh (entry: main.ts)
+                           nudge, pause, events refresh, analytics (entry: main.ts)
   styles/                  global.css (entry: package CSS + site CSS), sections/, base.css (site-only), images.css
 scripts/                   check-css.ts (style lint), check-design.ts (package check, design:sync),
                            qa/ (behaviour, doodles, events, markdown, mock-events, perf)
