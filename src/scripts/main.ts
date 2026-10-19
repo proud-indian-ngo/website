@@ -3,6 +3,7 @@
  * matters (see the comments). Every module tolerates missing markup, so the same bundle runs on every page.
  */
 import { initAccordion } from "./accordion";
+import { initAnalytics } from "./analytics";
 import { initBento } from "./bento";
 import { PHONE } from "./dom";
 import { initDonate } from "./donate";
@@ -51,6 +52,7 @@ initPause();
 initEdges();
 // tools for a browser's AI agent (WebMCP), where the browser has the API
 initWebMcp(donate);
+initAnalytics();
 
 // boot: the header and hero load sequence is CSS and is already playing from the first paint; mark it as played. The
 // below-the-fold measuring (verb fitting, the plane path, scroll-spy) waits one frame so it does not hold up the

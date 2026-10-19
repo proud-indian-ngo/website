@@ -8,7 +8,7 @@
 #                       code is main's, already checked, so lint, types and fallow are skipped
 #   schedule          → nightly rebuild, only while PUBLIC_EVENTS_URL is set (same as events-changed)
 # `checks` is the required status check on main. Secrets: CLOUDFLARE_API_TOKEN (account-owned, Pages Write only) and
-# CLOUDFLARE_ACCOUNT_ID. Variable: PUBLIC_EVENTS_URL (the pi-dash public events feed).
+# CLOUDFLARE_ACCOUNT_ID. Variables: PUBLIC_EVENTS_URL (the pi-dash public events feed), PUBLIC_POSTHOG_KEY (analytics).
 name: CI
 
 on:
@@ -97,6 +97,7 @@ jobs:
         env:
           PUBLIC_SITE_URL: https://proudindian.ngo
           PUBLIC_EVENTS_URL: ${{ vars.PUBLIC_EVENTS_URL }}
+          PUBLIC_POSTHOG_KEY: ${{ vars.PUBLIC_POSTHOG_KEY }}
 
       # a pull request's preview goes up as soon as it builds; everything else deploys after the checks below.
       # Wrangler is a devDependency, so the action uses it instead of installing its own
@@ -246,6 +247,7 @@ jobs:
         env:
           PUBLIC_SITE_URL: https://proudindian.ngo
           PUBLIC_EVENTS_URL: ${{ vars.PUBLIC_EVENTS_URL }}
+          PUBLIC_POSTHOG_KEY: ${{ vars.PUBLIC_POSTHOG_KEY }}
       - name: Playwright version
         id: playwright
         run: echo "version=$(bun -p 'require("playwright/package.json").version')" >> "$GITHUB_OUTPUT"
