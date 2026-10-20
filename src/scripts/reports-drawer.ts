@@ -1,6 +1,7 @@
 /** Reports drawer and its tabs. */
 import { $, $$ } from "./dom";
 import { lockScroll, modal, prewarm } from "./modal";
+import { play } from "./sound";
 
 export function initReportsDrawer() {
   const selectors = new WeakMap<Element, (k: string) => void>();
@@ -14,11 +15,15 @@ export function initReportsDrawer() {
         document.getElementById(x.getAttribute("aria-controls")!)!.hidden = !o;
       });
     bs.forEach((b, i) => {
-      b.addEventListener("click", () => sel(b));
+      b.addEventListener("click", () => {
+        if (b.getAttribute("aria-selected") !== "true") play("tab");
+        sel(b);
+      });
       b.addEventListener("keydown", (e) => {
         const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
         if (d) {
           const n = bs[(i + d + bs.length) % bs.length]!;
+          play("tab");
           sel(n);
           n.focus();
         }
@@ -39,6 +44,7 @@ export function initReportsDrawer() {
     last = document.activeElement as HTMLElement | null;
     selectors.get($(".tr-tabs", dr)!)?.(k);
     dr.hidden = scrim.hidden = false;
+    play("drawer");
     lockScroll(true);
     modal(wrap, true);
     $(".cClose", dr)?.focus({ preventScroll: true });
@@ -46,6 +52,7 @@ export function initReportsDrawer() {
   const close = () => {
     if (dr.hidden) return;
     dr.hidden = scrim.hidden = true;
+    play("sweep");
     lockScroll(false);
     // the opener can take focus back once the page is no longer inert
     const to = last;
@@ -60,6 +67,7 @@ export function initReportsDrawer() {
   // "See all" lists the rest of the disclosures in place, then hands focus to the first one it revealed
   for (const b of $$("[data-see-all]", dr))
     b.addEventListener("click", () => {
+      play("unfold");
       const items = $$<HTMLLIElement>("[data-more-item]", b.closest("ul")!);
       // .fresh fades them in (transparency.css, @starting-style); dropped once that's over, so a later tab switch
       // back to this list doesn't fade them again

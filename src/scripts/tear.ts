@@ -5,6 +5,7 @@
  * Markup: <Ticket tear /> (data-tear). Styles: sections/kalakriti.css (the cursor, touch handling and the stub's copy).
  */
 import { $$, EASE, on } from "./dom";
+import { play } from "./sound";
 
 /** px of pull (leftwards, away from the stub) that tears it */
 const PULL = 110;
@@ -60,6 +61,7 @@ function setup(a: HTMLAnchorElement) {
     a.append(stub);
     a.classList.add("is-tearing");
     tear = { stub, x, w, h };
+    play("pickup");
   };
 
   /** p: 0 (whole) to 1 (torn) */
@@ -91,6 +93,7 @@ function setup(a: HTMLAnchorElement) {
   const back = () => {
     const t = tear;
     if (!t) return;
+    play("rebound");
     const from = { translate: body.style.translate, rotate: body.style.rotate };
     const stubFrom = t.stub.style.rotate;
     body.style.translate = body.style.rotate = t.stub.style.rotate = "";
@@ -105,6 +108,7 @@ function setup(a: HTMLAnchorElement) {
     const t = tear;
     if (!t) return;
     torn = true;
+    play("leaf");
     if (id !== null && a.hasPointerCapture(id)) a.releasePointerCapture(id);
     id = null;
     const from = {

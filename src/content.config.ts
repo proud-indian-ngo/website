@@ -462,6 +462,13 @@ const copy = defineCollection({
         paused: z.string(),
         reduced: z.string(),
       }),
+      sound: z.object({
+        label: z.string(),
+        /** the button label while muted */
+        on: z.string(),
+        idle: z.string(),
+        muted: z.string(),
+      }),
     }),
     stickyBar: z.object({
       lead: z.string(),

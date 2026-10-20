@@ -3,6 +3,7 @@ import { clearCoins } from "./coins";
 import { $$, D, RM, isCss } from "./dom";
 import { stopNudge } from "./nudge";
 import { flushReveals } from "./reveal";
+import { play } from "./sound";
 
 const KEY = "pi-motion-paused";
 
@@ -37,6 +38,7 @@ export function initPause() {
   for (const b of buttons)
     b.addEventListener("click", () => {
       const p = saved !== "1";
+      play(p ? "clasp" : "unclasp");
       saved = p ? "1" : "0";
       try {
         localStorage.setItem(KEY, saved);

@@ -276,7 +276,7 @@ src/
                            MarginSprite (the package's outline sprite, inlined once)
   lib/                     content helpers, image resolver, events (contract, load, render, format), structured data
   scripts/                 client modules: reveal, loops, wobble, plane, coins, donate, reports drawer, rail, menu,
-                           nudge, pause, events refresh, analytics (entry: main.ts)
+                           nudge, pause, sound, events refresh, analytics (entry: main.ts)
   styles/                  global.css (entry: package CSS + site CSS), sections/, base.css (site-only), images.css
 scripts/                   check-css.ts (style lint), check-design.ts (package check, design:sync),
                            qa/ (behaviour, doodles, events, markdown, mock-events, perf)
@@ -309,6 +309,10 @@ Motion is built to stay on the compositor (performance pass, 2026-10-08):
 - **Opening a dialog stays responsive.** The phone menu and the reports drawer open on the first frame; `inert` on the page behind is applied in small chunks over the next frames (`src/scripts/modal.ts`), so no single task blocks.
 - **Hover effects need a real pointer.** Every `:hover` style is gated on `(hover: hover) and (pointer: fine)`, so taps never leave a stuck hover state; buttons and cards get a short `:active` press instead.
 - The paper plane's path is sampled from its Bézier curves (no `getPointAtLength`); the scroll backstop for reveals and loops runs at most every 100ms; the phone menu and the reports drawer are laid out once while the page is idle, so the first tap is cheap.
+
+## Sound
+
+Taps, toggles, the menu, the reports drawer, the FAQ, the swipe arrows, the stickers, the donate chips (a coin clink timed to the coin drop) and the tear-off tickets play short interface sounds (`src/scripts/sound.ts`, `play("coin")`). The MP3s in `src/assets/sounds/` are rendered from [React Bits Sound Lab](https://reactbits.dev/tools/sound-lab) presets of the same name (MIT + Commons Clause: fine as part of the site, not to be redistributed on their own). Nothing loads until the first press, which creates the audio context and fetches all of them (about 90KB). Sounds are on by default; the footer "Mute sounds" switch turns them off, saved in `localStorage` (`pi-sound-off`), independent of Pause motion. To add one, render the preset from Sound Lab as MP3 into `src/assets/sounds/` and add its name to `Sound`. The MP3s are kept out of Vite's `data:` inlining (`astro.config.ts`), since the CSP's `connect-src` does not allow fetching `data:` URLs.
 
 ## Scrollbars
 

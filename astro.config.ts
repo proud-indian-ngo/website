@@ -36,6 +36,10 @@ export default defineConfig({
     plugins: [tailwindcss()],
     // keep min-/max-width media queries (range syntax needs Safari 16.4); the design already needs Safari 16 for
     // container query units and overflow:clip
-    build: { cssTarget: ["chrome105", "edge105", "firefox110", "safari16"] },
+    build: {
+      cssTarget: ["chrome105", "edge105", "firefox110", "safari16"],
+      // the interface sounds are fetched, and the CSP's connect-src has no data:, so even the small ones stay files
+      assetsInlineLimit: (file) => (file.endsWith(".mp3") ? false : undefined),
+    },
   },
 });

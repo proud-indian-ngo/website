@@ -4,6 +4,7 @@
  * plain <details>. While one closes it carries .is-shut, so its + turns back as the close starts, not after it.
  */
 import { $$, EASE, on } from "./dom";
+import { play } from "./sound";
 
 function setup(d: HTMLDetailsElement) {
   const sum = d.querySelector("summary");
@@ -12,6 +13,7 @@ function setup(d: HTMLDetailsElement) {
   let anim: Animation | null = null;
 
   sum.addEventListener("click", (e) => {
+    play(d.open && !d.classList.contains("is-shut") ? "fold" : "unfold");
     if (!on()) return;
     e.preventDefault();
     // open and not already closing: close it (a click while it opens closes it too, and one while it closes reopens it)

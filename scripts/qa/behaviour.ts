@@ -287,12 +287,13 @@ async function desktopPause(browser: Browser, url: string) {
   r["marquee paused off-screen"] = await until(page, () =>
     document.querySelector(".marquee")!.classList.contains("is-paused")
   );
-  await page.click(".ft-pmb");
+  await page.click(".ft-pmb[data-pause]");
   r["Pause: motion off + pressed + saved"] = await page.evaluate(
     () =>
       document.documentElement.dataset.motion === "off" &&
-      document.querySelector(".ft-pmb")!.getAttribute("aria-pressed") ===
-        "true" &&
+      document
+        .querySelector(".ft-pmb[data-pause]")!
+        .getAttribute("aria-pressed") === "true" &&
       localStorage.getItem("pi-motion-paused") === "1" &&
       getComputedStyle(document.querySelector(".fC-scene .kite")!)
         .animationName === "none"
@@ -305,11 +306,27 @@ async function desktopPause(browser: Browser, url: string) {
   );
   await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
   await sleep(300);
-  await page.click(".ft-pmb");
+  await page.click(".ft-pmb[data-pause]");
   r["Resume: motion back on"] = await page.evaluate(
     () =>
       document.documentElement.dataset.motion === "on" &&
       localStorage.getItem("pi-motion-paused") === "0"
+  );
+  await page.click(".ft-pmb[data-sound]");
+  r["Mute sounds: pressed + saved, motion untouched"] = await page.evaluate(
+    () =>
+      document
+        .querySelector(".ft-pmb[data-sound]")!
+        .getAttribute("aria-pressed") === "true" &&
+      localStorage.getItem("pi-sound-off") === "1" &&
+      document.documentElement.dataset.motion === "on"
+  );
+  await page.reload({ waitUntil: "networkidle" });
+  r["Mute persists across reload"] = await page.evaluate(
+    () =>
+      document
+        .querySelector(".ft-pmb[data-sound]")!
+        .getAttribute("aria-pressed") === "true"
   );
   r["no console errors (desktop pause)"] = errors.length === 0;
   if (errors.length) console.log(errors);

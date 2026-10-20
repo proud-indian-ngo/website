@@ -539,6 +539,8 @@ const googleFonts = [
 </Base>
 
 <script>
+  import { play } from "../scripts/sound";
+
   // Copy a colour value. The button flashes "Copied" and screen readers hear it through the live region.
   const status = document.getElementById("kit-copied");
   document.addEventListener("click", async (e) => {
@@ -548,10 +550,12 @@ const googleFonts = [
     try {
       await navigator.clipboard.writeText(value);
       status.textContent = `Copied ${value}`;
+      play("settle");
       button.dataset.copied = "";
       setTimeout(() => delete button.dataset.copied, 1400);
     } catch {
       status.textContent = "Couldn't copy. Select the value instead.";
+      play("shake");
     }
   });
 </script>

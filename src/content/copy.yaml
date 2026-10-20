@@ -300,6 +300,11 @@ footer:
     idle: Stops the moving banner and animations across the site.
     paused: Motion is paused on every page. Press again to resume.
     reduced: Motion is off because your device asks for reduced motion.
+  sound:
+    label: Mute sounds
+    on: Sounds muted
+    idle: Soft sounds when you tap buttons, tickets and stickers.
+    muted: Sounds are muted on every page. Press again to hear them.
 
 stickyBar:
   lead: Fund a weekend

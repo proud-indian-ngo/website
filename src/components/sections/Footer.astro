@@ -138,7 +138,8 @@ const link = "tap-44 font-pi-sans text-16 font-semibold wrap-anywhere";
         <div class="l flex flex-wrap items-center gap-x-6 gap-y-2.5">
           <span>{f.copyright}</span><a href="/privacy/" class="tap-44 underline decoration-1 underline-offset-3">{f.privacy}</a>
         </div>
-        <div class="ft-pm flex flex-wrap items-center gap-3.5 max-tab:flex-col max-tab:items-start max-tab:gap-2.5">
+        <div class="grid grid-cols-[auto_auto] gap-y-4 max-tab:flex max-tab:flex-col max-tab:gap-6">
+        <div class="ft-pm col-span-2 grid grid-cols-subgrid items-center gap-x-3.5 max-tab:flex max-tab:flex-col max-tab:items-start max-tab:gap-2.5">
           <button
             type="button"
             class="ft-pmb"
@@ -159,6 +160,26 @@ const link = "tap-44 font-pi-sans text-16 font-semibold wrap-anywhere";
               ></svg
             ><span class="t">{f.pause.label}</span><span class="t-on">{f.pause.on}</span><span class="sw" aria-hidden="true"><i></i></span></button
           ><span class="ft-pms max-w-[30ch] font-pi-sans text-13-5 font-medium text-paper-a82" id="pm-s">{f.pause.idle}</span>
+        </div>
+        <div class="ft-pm col-span-2 grid grid-cols-subgrid items-center gap-x-3.5 max-tab:flex max-tab:flex-col max-tab:items-start max-tab:gap-2.5">
+          <button
+            type="button"
+            class="ft-pmb"
+            aria-pressed="false"
+            aria-describedby="snd-s"
+            data-sound
+            data-idle={f.sound.idle}
+            data-muted={f.sound.muted}
+            ><svg viewBox="0 0 20 20" class="ic" aria-hidden="true"
+              ><path d="M3 7.5h3l4.5-4v13L6 12.5H3z" fill="currentColor"></path><path
+                d="M13.5 7.2a4 4 0 0 1 0 5.6M15.8 5a7 7 0 0 1 0 10"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"></path></svg
+            ><span class="t">{f.sound.label}</span><span class="t-on">{f.sound.on}</span><span class="sw" aria-hidden="true"><i></i></span></button
+          ><span class="ft-pms max-w-[30ch] font-pi-sans text-13-5 font-medium text-paper-a82" id="snd-s">{f.sound.idle}</span>
+        </div>
         </div>
       </div>
     </div>
