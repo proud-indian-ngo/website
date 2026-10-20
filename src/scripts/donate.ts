@@ -7,7 +7,7 @@ import { dropCoins } from "./coins";
  * the picker): the minimum, and a way to set the amount as if typed into the field.
  */
 import { $, $$, on } from "./dom";
-import { play } from "./sound";
+import { onPress, play } from "./sound";
 
 const inr = (n: number) => Math.round(n).toLocaleString("en-IN");
 
@@ -80,12 +80,14 @@ export function initDonate() {
     });
   }
   // below the minimum the button is aria-disabled: it stays focusable (and says why) but goes nowhere
-  for (const a of $$<HTMLAnchorElement>("[data-donate]", scope))
+  for (const a of $$<HTMLAnchorElement>("[data-donate]", scope)) {
+    onPress(a, () =>
+      a.getAttribute("aria-disabled") === "true" ? "shake" : null
+    );
     a.addEventListener("click", (e) => {
-      if (a.getAttribute("aria-disabled") !== "true") return;
-      e.preventDefault();
-      play("shake");
+      if (a.getAttribute("aria-disabled") === "true") e.preventDefault();
     });
+  }
   // the card is a <form> for grouping only; Enter in the amount field must not reload the page
   form.addEventListener("submit", (e) => e.preventDefault());
 

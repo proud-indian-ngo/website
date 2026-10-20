@@ -23,7 +23,7 @@ export function initMenu() {
   const close = (focus = true) => {
     if (menu.hidden) return;
     menu.hidden = true;
-    play("sweep");
+    play("flick");
     burger.setAttribute("aria-expanded", "false");
     lockScroll(false);
     onScroll();

@@ -1,7 +1,7 @@
 /** Reports drawer and its tabs. */
 import { $, $$ } from "./dom";
 import { lockScroll, modal, prewarm } from "./modal";
-import { play } from "./sound";
+import { onPress, play } from "./sound";
 
 export function initReportsDrawer() {
   const selectors = new WeakMap<Element, (k: string) => void>();
@@ -15,15 +15,15 @@ export function initReportsDrawer() {
         document.getElementById(x.getAttribute("aria-controls")!)!.hidden = !o;
       });
     bs.forEach((b, i) => {
-      b.addEventListener("click", () => {
-        if (b.getAttribute("aria-selected") !== "true") play("tab");
-        sel(b);
-      });
+      onPress(b, () =>
+        b.getAttribute("aria-selected") !== "true" ? "notch" : null
+      );
+      b.addEventListener("click", () => sel(b));
       b.addEventListener("keydown", (e) => {
         const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
         if (d) {
           const n = bs[(i + d + bs.length) % bs.length]!;
-          play("tab");
+          play("notch");
           sel(n);
           n.focus();
         }
@@ -52,7 +52,7 @@ export function initReportsDrawer() {
   const close = () => {
     if (dr.hidden) return;
     dr.hidden = scrim.hidden = true;
-    play("sweep");
+    play("flick");
     lockScroll(false);
     // the opener can take focus back once the page is no longer inert
     const to = last;

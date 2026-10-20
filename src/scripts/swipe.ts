@@ -5,7 +5,7 @@
  * follow its content as well as its size.
  */
 import { $$ } from "./dom";
-import { play } from "./sound";
+import { onPress } from "./sound";
 
 /** round paper buttons with an ink outline; the arrow points right and turns for "back" */
 const BUTTON =
@@ -28,13 +28,13 @@ function setup(row: HTMLElement) {
     b.innerHTML = arrow(dir < 0);
     b.hidden = true;
     b.addEventListener("click", () => {
-      play(dir < 0 ? "retreat" : "advance");
       const smooth = document.documentElement.dataset.motion === "on";
       row.scrollBy({
         left: dir * Math.max(row.clientWidth * 0.8, 240),
         behavior: smooth ? "smooth" : "auto",
       });
     });
+    onPress(b, () => (dir < 0 ? "retreat" : "advance"));
     host.append(b);
     return b;
   };
