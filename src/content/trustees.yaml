@@ -11,6 +11,6 @@
   name: Somasundaram A
   role: Secretary
   image: board/somu.png
-  tile: wash
+  tile: sky
   tilt: 4
-  fit: { width: 113.15, bottom: -25.6, marginLeft: -56.58 }
+  fit: { width: 94, bottom: -29, marginLeft: -47 }

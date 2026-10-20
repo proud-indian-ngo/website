@@ -3,6 +3,7 @@ import { clearCoins } from "./coins";
 import { $$, D, RM, isCss } from "./dom";
 import { stopNudge } from "./nudge";
 import { flushReveals } from "./reveal";
+import { onPress } from "./sound";
 
 const KEY = "pi-motion-paused";
 
@@ -34,7 +35,8 @@ export function initPause() {
     }
   };
   set(saved === "1");
-  for (const b of buttons)
+  for (const b of buttons) {
+    onPress(b, () => (saved !== "1" ? "clasp" : "unclasp"));
     b.addEventListener("click", () => {
       const p = saved !== "1";
       saved = p ? "1" : "0";
@@ -45,5 +47,6 @@ export function initPause() {
       }
       set(p);
     });
+  }
   RM.addEventListener("change", () => set(saved === "1"));
 }

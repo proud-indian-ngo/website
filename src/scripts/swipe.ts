@@ -5,6 +5,7 @@
  * follow its content as well as its size.
  */
 import { $$ } from "./dom";
+import { onPress } from "./sound";
 
 /** round paper buttons with an ink outline; the arrow points right and turns for "back" */
 const BUTTON =
@@ -33,6 +34,7 @@ function setup(row: HTMLElement) {
         behavior: smooth ? "smooth" : "auto",
       });
     });
+    onPress(b, () => (dir < 0 ? "retreat" : "advance"));
     host.append(b);
     return b;
   };

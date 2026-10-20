@@ -6,7 +6,8 @@ import { dropCoins } from "./coins";
  * come from data attributes rendered from src/content/site.yaml. Returns what the WebMCP donate tool needs (null without
  * the picker): the minimum, and a way to set the amount as if typed into the field.
  */
-import { $, $$ } from "./dom";
+import { $, $$, on } from "./dom";
+import { onPress, play } from "./sound";
 
 const inr = (n: number) => Math.round(n).toLocaleString("en-IN");
 
@@ -56,6 +57,8 @@ export function initDonate() {
       for (const x of chips) x.setAttribute("aria-pressed", String(x === b));
       setAmt(+b.dataset.amt!);
       dropCoins(scope, +(b.dataset.coins || 3));
+      // the clink lands with the first coin (coins.ts), or at once when motion is off
+      play("coin", on() ? 0.47 : 0);
     });
   for (const i of inputs) {
     // the field is its own choice: focusing it deselects the presets and the total follows what is typed (or 0)
@@ -71,14 +74,20 @@ export function initDonate() {
       setAmt(n, i);
     });
     i.addEventListener("change", () => {
-      if (+i.value.replace(/\D/g, "")) dropCoins(scope, 3);
+      if (!+i.value.replace(/\D/g, "")) return;
+      dropCoins(scope, 3);
+      play("coin", on() ? 0.47 : 0);
     });
   }
   // below the minimum the button is aria-disabled: it stays focusable (and says why) but goes nowhere
-  for (const a of $$<HTMLAnchorElement>("[data-donate]", scope))
+  for (const a of $$<HTMLAnchorElement>("[data-donate]", scope)) {
+    onPress(a, () =>
+      a.getAttribute("aria-disabled") === "true" ? "shake" : null
+    );
     a.addEventListener("click", (e) => {
       if (a.getAttribute("aria-disabled") === "true") e.preventDefault();
     });
+  }
   // the card is a <form> for grouping only; Enter in the amount field must not reload the page
   form.addEventListener("submit", (e) => e.preventDefault());
 

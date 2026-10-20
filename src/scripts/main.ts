@@ -19,6 +19,7 @@ import { initPlane, layoutPlane } from "./plane";
 import { initRail, onScroll } from "./rail";
 import { initReportsDrawer } from "./reports-drawer";
 import { fireLoadTriggers, initReveal, sweep } from "./reveal";
+import { initSound } from "./sound";
 import { initSwipe } from "./swipe";
 import { initTear } from "./tear";
 import { initWebMcp } from "./webmcp";
@@ -49,6 +50,7 @@ initReveal();
 initPlane();
 initNudge();
 initPause();
+initSound();
 initEdges();
 // tools for a browser's AI agent (WebMCP), where the browser has the API
 initWebMcp(donate);

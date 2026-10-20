@@ -4,6 +4,7 @@ import { breakpoint } from "@proudindian/design/tokens";
 import { $, $$ } from "./dom";
 import { lockScroll, modal, prewarm } from "./modal";
 import { onScroll } from "./rail";
+import { play } from "./sound";
 
 export function initMenu() {
   const menu = $("#menu");
@@ -12,6 +13,7 @@ export function initMenu() {
   if (!menu || !burger || !closeBtn) return;
   const open = () => {
     menu.hidden = false;
+    play("popover");
     lockScroll(true);
     burger.setAttribute("aria-expanded", "true");
     modal(menu, true);
@@ -21,6 +23,7 @@ export function initMenu() {
   const close = (focus = true) => {
     if (menu.hidden) return;
     menu.hidden = true;
+    play("flick");
     burger.setAttribute("aria-expanded", "false");
     lockScroll(false);
     onScroll();

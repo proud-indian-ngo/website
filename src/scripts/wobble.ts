@@ -1,5 +1,6 @@
 /** 04 stickers wobble on hover (desktop) or tap. Not while the sticker is still arriving (its reveal or slap runs). */
 import { $$, A, HOVER, isCss, rest } from "./dom";
+import { onPress } from "./sound";
 
 const wob = new WeakMap<Element, Animation | null>();
 
@@ -38,5 +39,7 @@ export function initWobble() {
   for (const w of $$(".wob")) {
     if (HOVER) w.addEventListener("pointerenter", () => wobble(w));
     w.addEventListener("pointerdown", () => wobble(w));
+    // a press makes a soft pop (a touch only on the click, so one that scrolls the page past a sticker stays quiet; hovering is silent)
+    onPress(w, () => "plush");
   }
 }
