@@ -32,7 +32,7 @@
     "check:updates": "bunx taze -I"
   },
   "dependencies": {
-    "@proudindian/design": "github:proud-indian-ngo/design#v0.5.0",
+    "@proudindian/design": "github:proud-indian-ngo/design#v0.6.0",
     "astro": "^7.3.7",
     "fflate": "^0.8.3",
     "posthog-js": "^1.438.12",
