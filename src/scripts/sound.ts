@@ -3,9 +3,10 @@
  * https://reactbits.dev/tools/sound-lab, MIT + Commons Clause: fine inside the site, not to be redistributed as a pack),
  * and the tear-off ticket's paper, made in code (paper.ts).
  * On by default; the footer "Mute sounds" switch turns them off, saved for the whole site. Separate from Pause motion.
- * Nothing loads before the pointer first moves (or a key or finger goes down), which sets up the audio context and
- * fetches and decodes the files; browsers only let audio start from a press, so the first press resumes the context.
- * Getting ready ahead of that press keeps the first sound from landing late.
+ * Nothing loads before the pointer first moves or the page first scrolls (or a key or finger goes down), which sets up
+ * the audio context and fetches and decodes the files; browsers only let audio start from a press, so the first press
+ * resumes the context. Getting ready ahead of that press keeps the first sound from landing late, and keeps the setup
+ * out of a phone's first tap (no pointer moves there, but the page usually scrolls first).
  */
 import { $$ } from "./dom";
 import { rip, snapBack, tearLoop } from "./paper";
@@ -78,8 +79,9 @@ const load = (c: AudioContext, u: string) => {
 };
 
 /**
- * the audio context, and every sound loading. Made as the pointer first moves too, since making a context can take a
- * few hundred milliseconds; one made before a press stays suspended until wake() resumes it inside one.
+ * the audio context, and every sound loading. Made as the pointer first moves or the page first scrolls too, since
+ * making a context can take a few hundred milliseconds; one made before a press stays suspended until wake() resumes it
+ * inside one.
  */
 function ready() {
   if (!ctx) {
@@ -200,7 +202,7 @@ export function onPress(el: Element, pick: () => Sound | null) {
 
 export function initSound() {
   if (!muted) {
-    for (const t of ["pointermove", "pointerdown", "keydown"])
+    for (const t of ["pointermove", "scroll", "pointerdown", "keydown"])
       addEventListener(t, ready, {
         capture: true,
         once: true,
