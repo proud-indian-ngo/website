@@ -92,6 +92,7 @@ links:
   dashboardHost: dash.proudindian.ngo
   # Razorpay Payment Page. The pre-fill parameter is the item name lower-cased with underscores; the value is whole
   # rupees. If the item is renamed in Razorpay, this parameter changes and the amount silently stops pre-filling.
+  # public/_redirects sends /donate to `base`; change both together.
   razorpay:
     base: https://pages.razorpay.com/proud-indian-ngo-donate
     param: your_donation

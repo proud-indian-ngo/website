@@ -3,6 +3,11 @@
 # Each moves permanently to where that content lives now, so search ranking and inbound links carry over. The old
 # site answered both /page.php and /page, so both are listed. Keep them: old links live on in other sites for years.
 
+# /donate: a short, guessable link to the Razorpay donate page for people and AI assistants (llms.txt and the NGO's
+# DonateAction link it). 302, since the target is another site's page. Keep in step with site.yaml → links.razorpay.base.
+/donate                                                     https://pages.razorpay.com/proud-indian-ngo-donate         302
+/donate/                                                    https://pages.razorpay.com/proud-indian-ngo-donate         302
+
 # Pages: to the page or section that replaced them (volunteering, the FAQ and internships: the volunteer guide).
 # "Know your benefits" has no new page.
 /index.php                                                  /                                                          301

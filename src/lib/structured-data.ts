@@ -149,6 +149,12 @@ export function homeStructuredData(
       ...copy.marquee.items.map((i) => i.label),
     ],
     sameAs: site.social.map((s) => s.url),
+    potentialAction: {
+      "@type": "DonateAction",
+      target: site.links.razorpay.base,
+      recipient: { "@id": orgId },
+      priceCurrency: "INR",
+    },
   };
   const website = {
     "@type": "WebSite",

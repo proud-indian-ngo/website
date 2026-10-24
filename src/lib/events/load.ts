@@ -23,7 +23,14 @@ export const loadEvents = () =>
 async function fetchEvents(): Promise<LoadedEvents> {
   const url = import.meta.env.PUBLIC_EVENTS_URL?.trim() || null;
   const unavailable = (why: string): LoadedEvents => {
-    if (url) console.warn(`[events] ${why}; the poster links to the dashboard`);
+    if (url) {
+      console.warn(`[events] ${why}; the poster links to the dashboard`);
+      // a GitHub Actions annotation, so a build without sessions shows on the run instead of only in its log
+      if (process.env.GITHUB_ACTIONS)
+        console.log(
+          `::warning title=Events feed::${why}; built without sessions`
+        );
+    }
     return {
       data: { events: [], generatedAt: "" },
       source: "unavailable",
@@ -36,7 +43,12 @@ async function fetchEvents(): Promise<LoadedEvents> {
       signal: AbortSignal.timeout(BUILD_TIMEOUT_MS),
       headers: { accept: "application/json" },
     });
-    if (!res.ok) return unavailable(`${url} answered ${res.status}`);
+    // Cloudflare marks a bot challenge with cf-mitigated, which tells it apart from a 403 from the dashboard
+    const mitigated = res.headers.get("cf-mitigated");
+    if (!res.ok)
+      return unavailable(
+        `${url} answered ${res.status}${mitigated ? ` (Cloudflare ${mitigated})` : ""}`
+      );
     const data = parseEventsResponse(await res.json());
     if (!data) return unavailable(`${url} returned an unexpected shape`);
     console.info(`[events] ${data.events.length} sessions from ${url}`);
