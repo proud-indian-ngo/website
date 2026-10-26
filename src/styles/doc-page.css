@@ -1,0 +1,4 @@
+/* Markdown pages only (imported by src/pages/[doc].astro), so the home page doesn't carry it. Same layer as the section CSS;
+   @reference gives it the theme (for --theme() breakpoints) without emitting global.css a second time. */
+@reference "./global.css";
+@import "./sections/doc.css" layer(components);

@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
@@ -11,13 +11,19 @@ const env = loadEnv(
   "PUBLIC_"
 );
 const site = env.PUBLIC_SITE_URL || "https://proudindian.ngo";
-// The privacy policy stays out of the sitemap while its front matter says `draft: true` (the page is also noindex).
-const privacyDraft = /^draft:\s*true\s*$/m.test(
-  readFileSync(new URL("./src/content/privacy.md", import.meta.url), "utf8")
+// A Markdown page (src/content/<page>.md, rendered at /<page>/) stays out of the sitemap while its front matter says
+// `draft: true` (the page is also noindex).
+const content = new URL("./src/content/", import.meta.url);
+const drafts = readdirSync(content)
+  .filter(
+    (f) =>
+      f.endsWith(".md") &&
+      /^draft:\s*true\s*$/m.test(readFileSync(new URL(f, content), "utf8"))
+  )
+  .map((f) => f.slice(0, -3));
+const hidden = new RegExp(
+  `/(${["styleguide", "brand", "404", "thanks", ...drafts].join("|")})/?$`
 );
-const hidden = privacyDraft
-  ? /\/(styleguide|brand|404|privacy|thanks)\/?$/
-  : /\/(styleguide|brand|404|thanks)\/?$/;
 
 // Fully prerendered static site (no adapter). Output: dist/, deployed to Cloudflare Pages.
 export default defineConfig({
@@ -26,7 +32,7 @@ export default defineConfig({
   build: { format: "directory", inlineStylesheets: "always" },
   integrations: [
     sitemap({
-      // the style guide, the brand kit, the 404 page and a draft privacy policy stay out of search
+      // the style guide, the brand kit, the 404 page and draft Markdown pages stay out of search
       filter: (page) => !hidden.test(page),
     }),
   ],

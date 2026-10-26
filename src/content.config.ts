@@ -1,8 +1,8 @@
 import { file, glob } from "astro/loaders";
 import { z } from "astro/zod";
 /**
- * Content collections. Everything editable lives in src/content/ as YAML (the privacy policy is Markdown),
- * validated here at build time.
+ * Content collections. Everything editable lives in src/content/ as YAML (the privacy policy, the terms of use and
+ * the assistants page are Markdown), validated here at build time.
  * Images are paths relative to src/assets/ (e.g. "photos/teach-postmaster.jpg"); src/lib/images.ts resolves them and
  * fails the build if one is missing. The shapes are plain YAML so a git-based CMS (Keystatic, Sveltia) can be pointed
  * at the same files later.
@@ -454,6 +454,7 @@ const copy = defineCollection({
       stampsHeading: z.string(),
       copyright: z.string(),
       privacy: z.string(),
+      terms: z.string(),
       pause: z.object({
         label: z.string(),
         /** the button label while motion is paused or reduced */
@@ -491,16 +492,25 @@ const copy = defineCollection({
   }),
 });
 
-// The privacy policy is Markdown (src/content/privacy.md) so the text is easy to edit; /privacy/ renders it.
-const privacy = defineCollection({
-  loader: glob({ pattern: "privacy.md", base: "./src/content" }),
+// The Markdown pages: every .md file in src/content/ (privacy.md, terms.md, assistants.md), so the text is easy to
+// edit. src/pages/[doc].astro renders each at /<file name>/ (privacy.md at /privacy/), and [doc]/index.md.ts its
+// Markdown for agents.
+const docs = defineCollection({
+  loader: glob({ pattern: "*.md", base: "./src/content" }),
   schema: z.object({
+    /** the page heading; its last word is set in the accent colour */
     title: z.string(),
+    /** the meta description for search and share previews */
+    description: z.string(),
     /** shows the draft note and keeps the page out of search and the sitemap */
     draft: z.boolean(),
     draftNote: z.string(),
     effectiveDate: z.string(),
+    /** the label before the date under the lede */
+    dateLabel: z.string().default("Effective date"),
     lede: z.string(),
+    /** the one line about this page in /llms.txt */
+    summary: z.string(),
   }),
 });
 
@@ -899,7 +909,7 @@ export const collections = {
   partners,
   safeguarding,
   copy,
-  privacy,
+  docs,
   volunteer,
   csr,
   kalakritiPage,

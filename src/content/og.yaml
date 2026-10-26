@@ -39,3 +39,15 @@ privacy:
   pills: [No cookies on this site, DPDP Act 2023]
   kids: []
   alt: Proud Indian's privacy policy.
+terms:
+  pre: Our site, dashboard and connector
+  word: Terms of use.
+  pills: [Volunteers 18+, Governed by Indian law]
+  kids: []
+  alt: Proud Indian's terms of use.
+assistants:
+  pre: Volunteering, in ChatGPT and Claude
+  word: Ask an assistant.
+  pills: [Find sessions, Sign up in a chat]
+  kids: []
+  alt: Use Proud Indian in ChatGPT and Claude to find volunteering sessions in Bengaluru and sign up.

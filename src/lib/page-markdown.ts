@@ -1,7 +1,8 @@
 /**
  * The pages as Markdown, for AI agents. /llms.txt is the whole site in one file; each page with prose also has an
- * index.md beside its index.html (/index.md, /volunteer/index.md, /csr/index.md, /privacy/index.md), which functions/_middleware.ts
- * serves at the page's own URL to requests that send `Accept: text/markdown`. Built from the same content and events
+ * index.md beside its index.html (/index.md, /volunteer/index.md, /csr/index.md, and /privacy/index.md and the other
+ * Markdown pages), which functions/_middleware.ts serves at the page's own URL to requests that send
+ * `Accept: text/markdown`. Built from the same content and events
  * feed as the pages, so none of it needs editing by hand. Links are absolute: the text is read away from the page.
  */
 import {
@@ -13,13 +14,14 @@ import {
   getKalakriti,
   getKalakritiPage,
   getPartners,
-  getPrivacy,
+  getDocs,
   getProgrammes,
   getReports,
   getSafeguarding,
   getSite,
   getVolunteerPage,
   postalAddress,
+  type Doc,
 } from "./content";
 import type { PublicEvent } from "./events/contract";
 import { dateLabel, neighbourhood, timeRange } from "./events/format";
@@ -94,7 +96,7 @@ const safeguardingLines = (s: Awaited<ReturnType<typeof getSafeguarding>>) => [
 
 /** The whole site in one file: /llms.txt (https://llmstxt.org) and the home page's Markdown. */
 export async function siteMarkdown(origin: URL | undefined) {
-  const [site, copy, programmes, kalakriti, reports, partners, events] =
+  const [site, copy, programmes, kalakriti, reports, partners, events, docs] =
     await Promise.all([
       getSite(),
       getCopy(),
@@ -103,6 +105,7 @@ export async function siteMarkdown(origin: URL | undefined) {
       getReports(),
       getPartners(),
       loadEvents(),
+      getDocs(),
     ]);
   const guide = await getVolunteerPage();
   const values = guideValues(site);
@@ -169,7 +172,7 @@ export async function siteMarkdown(origin: URL | undefined) {
       (d) => `- [${d.title}](${abs(d.url)})`
     ),
     `- ${pdfs("disclosure").length} project disclosures, listed on the [website](${abs("/#reports")}).`,
-    `- [Privacy policy](${abs("/privacy/")}): what personal data we collect from visitors, donors, volunteers and the children in our programmes, and how we protect it.`,
+    ...docs.map((d) => `- [${d.title}](${abs(`/${d.id}/`)}): ${d.summary}`),
     "",
     ...partnerLines(copy, partners),
     "## Contact",
@@ -406,22 +409,24 @@ export async function csrMarkdown(origin: URL | undefined) {
   ].join("\n");
 }
 
-/** The privacy policy (/privacy/): its own Markdown, without the team's <!-- notes -->. */
-export async function privacyMarkdown(origin: URL | undefined) {
-  const [site, policy] = await Promise.all([getSite(), getPrivacy()]);
+/** A Markdown page (/privacy/, /terms/, /assistants/): its own Markdown, without the team's <!-- notes -->. */
+export async function docMarkdown(doc: Doc, origin: URL | undefined) {
+  const site = await getSite();
   const abs = (path: string) => new URL(path, origin ?? site.url).href;
-  const body = policy.body
+  const body = doc.body
     .replace(/<!--[\s\S]*?-->\n*/g, "")
-    // in-page links ("#cookies-and-local-storage") point at the page, since this file is read away from it
-    .replace(/\]\(#/g, `](${abs("/privacy/")}#`)
+    // in-page links ("#cookies-and-local-storage") point at the page, and site links ("/privacy/") at the site, since
+    // this file is read away from it
+    .replace(/\]\(#/g, `](${abs(`/${doc.id}/`)}#`)
+    .replace(/\]\(\//g, `](${abs("/")}`)
     .trim();
   return [
-    `# ${policy.title}`,
+    `# ${doc.title}`,
     "",
-    ...(policy.draft ? [`**Draft.** ${policy.draftNote}`, ""] : []),
-    policy.lede,
+    ...(doc.draft ? [`**Draft.** ${doc.draftNote}`, ""] : []),
+    doc.lede,
     "",
-    `Effective date: ${policy.effectiveDate}`,
+    `${doc.dateLabel}: ${doc.effectiveDate}`,
     "",
     body,
     "",

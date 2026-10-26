@@ -1,24 +1,29 @@
 ---
 /**
- * Privacy policy. The text lives in src/content/privacy.md; this page renders it with a table of contents built from
- * its ## headings, and a "#" anchor link on every ## and ### heading. While the front matter says `draft: true`, the
- * page shows the draft note and is noindex (astro.config.ts also leaves it out of the sitemap).
- * Styles: src/styles/sections/privacy.css (imported for this page only, via src/styles/privacy-page.css).
+ * The Markdown pages: the privacy policy (/privacy/), the terms of use (/terms/) and the assistants help (/assistants/).
+ * Each src/content/<doc>.md becomes /<doc>/, rendered with a table of contents built from its ## headings, and a "#"
+ * anchor link on every ## and ### heading. While the front matter says `draft: true`, the page shows the draft note
+ * and is noindex (astro.config.ts also leaves it out of the sitemap).
+ * Styles: src/styles/sections/doc.css (imported for these pages only, via src/styles/doc-page.css).
  */
 import Lockup from "../components/brand/Lockup.astro";
 import Button from "../components/ui/Button.astro";
 import Base from "../layouts/Base.astro";
 // after Base, so global.css (and its @layer order) comes first
-import "../styles/privacy-page.css";
-import { getPrivacy } from "../lib/content";
+import "../styles/doc-page.css";
+import { type Doc, docPaths } from "../lib/content";
 import { markNewTabLinks } from "../lib/links";
 
-const policy = await getPrivacy();
-const toc = policy.headings.filter((h) => h.depth === 2);
+export const getStaticPaths = docPaths;
+
+const { doc } = Astro.props as { doc: Doc };
+const toc = doc.headings.filter((h) => h.depth === 2);
+// the heading's last word takes the accent colour: "Privacy policy." with "policy." in the accent
+const lastSpace = doc.title.lastIndexOf(" ");
 
 // Drop the team's <!-- CONFIRM --> notes from the output, add a "#" link after each ## and ### heading so readers
 // can copy a link to a section, and open other sites in a new tab like the rest of the site.
-const html = markNewTabLinks(policy.html).replace(/<!--[\s\S]*?-->/g, "").replace(
+const html = markNewTabLinks(doc.html).replace(/<!--[\s\S]*?-->/g, "").replace(
   /<h([23]) id="([^"]+)">([\s\S]*?)<\/h\1>/g,
   (_, level: string, id: string, text: string) =>
     `<h${level} id="${id}">${text}<a class="pp-anchor" href="#${id}" aria-label="Link to this section">#</a></h${level}>`
@@ -26,10 +31,10 @@ const html = markNewTabLinks(policy.html).replace(/<!--[\s\S]*?-->/g, "").replac
 ---
 
 <Base
-  title="Privacy policy · Proud Indian"
-  description="How Proud Indian collects, uses and protects personal data from visitors, donors, volunteers and the children in our programmes."
-  noindex={policy.draft}
-  og="privacy"
+  title={`${doc.title} · Proud Indian`}
+  description={doc.description}
+  noindex={doc.draft}
+  og={doc.id}
   markdown
 >
   <main id="main" class="min-h-dvh bg-paper px-14 py-16 max-tab:px-5 max-tab:py-10">
@@ -39,19 +44,19 @@ const html = markNewTabLinks(policy.html).replace(/<!--[\s\S]*?-->/g, "").replac
       >
 
       {
-        policy.draft && (
+        doc.draft && (
           <p class="pp-draft" role="note">
-            <strong>Draft.</strong> {policy.draftNote}
+            <strong>Draft.</strong> {doc.draftNote}
           </p>
         )
       }
 
       <header class="max-w-[68ch]">
         <h1 class="font-pi-display text-92 leading-display font-extrabold tracking-poster max-tab:text-56">
-          Privacy <span class="pi-accent">policy.</span>
+          {doc.title.slice(0, lastSpace)} <span class="pi-accent">{doc.title.slice(lastSpace + 1)}.</span>
         </h1>
-        <p class="mt-8 font-pi-sans text-19 leading-lede max-tab:text-17">{policy.lede}</p>
-        <p class="mt-4 font-pi-sans text-15 text-text-muted">Effective date: {policy.effectiveDate}</p>
+        <p class="mt-8 font-pi-sans text-19 leading-lede max-tab:text-17">{doc.lede}</p>
+        <p class="mt-4 font-pi-sans text-15 text-text-muted">{doc.dateLabel}: {doc.effectiveDate}</p>
       </header>
 
       <div class="pp-layout">

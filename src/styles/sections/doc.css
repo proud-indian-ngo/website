@@ -1,5 +1,5 @@
-/* Privacy policy page (/privacy/): the draft note, a sticky table of contents beside the text on wide screens (a
-   collapsible list above it on phones), and the Markdown body from src/content/privacy.md. */
+/* Markdown pages (/privacy/, /terms/, /assistants/): the draft note, a sticky table of contents beside the text on
+   wide screens (a collapsible list above it on phones), and the Markdown body from src/content/<page>.md. */
 .pp-draft {
   display: block;
   max-width: 68ch;
