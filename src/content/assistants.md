@@ -1,7 +1,7 @@
 ---
 # The help page for Proud Indian in ChatGPT, Claude and other AI assistants: the documentation and support link in
 # both directory listings. Edit the Markdown below; the page at /assistants/ renders it with a table of contents built
-# from the ## headings. HTML comments (<!-- CONFIRM: ... -->) are notes for the team and do not appear on the page.
+# from the ## headings. HTML comments are notes for the team and do not appear on the page.
 # Keep it in step with what the dashboard's assistant tools do (docs/architecture/assistants.md in proud-indian-ngo/dash).
 title: Proud Indian in ChatGPT and Claude
 description: Use Proud Indian in ChatGPT, Claude and other AI assistants to find volunteering sessions in Bengaluru, sign up for one and follow your requests.
@@ -60,8 +60,6 @@ Until then, or in an assistant without a directory, add it as a custom connector
 3. Enter the address above and add it.
 
 If you don't see these options, your plan or workspace may not allow custom connectors. You don't need to sign in to anything to add Proud Indian: you only connect your account later, if you want to.
-
-<!-- CONFIRM: check these menu names in ChatGPT and Claude once the listings are live, and replace "Once Proud Indian is listed" with direct links to the two listings. -->
 
 ## Signing up through an assistant
 

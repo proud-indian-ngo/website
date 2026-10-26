@@ -1,6 +1,6 @@
 ---
 # Terms of use. Edit the Markdown below; the page at /terms/ renders it with a table of contents built from the ##
-# headings. HTML comments (<!-- CONFIRM: ... -->) are notes for the team and do not appear on the page.
+# headings. HTML comments are notes for the team and do not appear on the page.
 title: Terms of use
 description: The terms for using the Proud Indian website, the volunteer dashboard and Proud Indian in ChatGPT, Claude and other AI assistants.
 # the line about this page in /llms.txt
@@ -14,8 +14,6 @@ lede: >-
   These terms explain what you can expect from Proud Indian and what we ask of you when you use our website, our
   volunteer dashboard, or Proud Indian in an AI assistant. They are short, and we have tried to keep them plain.
 ---
-
-<!-- CONFIRM: these terms were drafted without a lawyer, like the privacy policy. Read them in full before publishing, and consider a legal review when it becomes possible. -->
 
 ## Who we are
 
@@ -45,8 +43,6 @@ When you volunteer with us, you agree to:
 - follow the instructions of your team lead and the people running the session;
 - treat children, families, partners and other volunteers with respect;
 - keep private what you learn about the children and families we work with, and not share their photos or details yourself.
-
-<!-- CONFIRM: is the full child-safeguarding policy published anywhere we can link to? If so, link it here instead of only the safeguarding rules on /volunteer/. -->
 
 We may decline a request to volunteer, or end someone's participation, at our discretion, especially where the safety of children is concerned. We will usually explain why, but we don't have to when doing so could put someone at risk.
 
@@ -80,8 +76,6 @@ All donations are voluntary. Proud Indian is registered under section 80G of the
 
 If you have a question about a donation, or think a payment was made in error, write to us at connect@proudindian.ngo with your Razorpay payment ID, and we will look into it.
 
-<!-- CONFIRM: refund policy. As drafted, we only promise to look into a request. Decide whether to say that a donation made in error can be refunded within a set time (for example 7 days), and whether a refund is still possible once an 80G receipt has been issued or the donation has been reported in Form 10BD. -->
-
 ## Acceptable use
 
 When you use our website, the dashboard or our connector, please don't:
@@ -100,8 +94,6 @@ If you find a security problem, please tell us at connect@proudindian.ngo and gi
 
 The text, photos, logos and design of this website, and the reports and documents we publish, belong to Proud Indian or to the people who allowed us to use them. You may share links to our pages and quote short passages with credit. Please don't reuse our photos, especially photos of children, or our name and logo without asking us first.
 
-<!-- CONFIRM: the brand kit at /brand/ is internal and not linked from the site, so these terms don't link it. Say if there is a public brand page or press kit to point to. -->
-
 ## Privacy
 
 Our [privacy policy](/privacy/) explains what personal data we collect, why, who we share it with, and the rights you have under the Digital Personal Data Protection Act, 2023.
@@ -119,13 +111,9 @@ As far as the law allows, Proud Indian, its trustees and its volunteers are not 
 
 Nothing in these terms limits any liability that cannot be limited under Indian law, including liability for fraud or for death or personal injury caused by our negligence.
 
-<!-- CONFIRM: we have deliberately not set a money cap on our liability. Decide whether to add one (for example, the amount of any donation involved). -->
-
 ## Changes to these terms
 
 We will update these terms when our services or the law change. When we do, we will change the effective date at the top of this page. If a change matters for people with a dashboard account, we will also tell them by email or in the dashboard. If you keep using our services after a change, the new terms apply.
-
-<!-- CONFIRM: this promises to tell account holders about a change that matters, by email or in the dashboard. Keep it only if we will actually do that. -->
 
 ## Governing law
 
