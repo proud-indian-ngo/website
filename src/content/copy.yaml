@@ -284,6 +284,8 @@ footer:
     - { label: Reports, href: "#reports" }
     - { label: About, href: "#about" }
     - { label: Privacy policy, href: /privacy/ }
+    - { label: Terms of use, href: /terms/ }
+    - { label: ChatGPT and Claude, href: /assistants/ }
   write: Write to us
   call: Call
   visit: Visit
@@ -294,6 +296,7 @@ footer:
   stampsHeading: Registered and verifiable
   copyright: © 2026 Proud Indian, Bengaluru
   privacy: Privacy policy
+  terms: Terms of use
   pause:
     label: Pause motion
     on: Motion paused

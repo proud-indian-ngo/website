@@ -2,16 +2,19 @@
 # Privacy policy text. Edit the Markdown below; the page at /privacy/ renders it with a table of contents built from
 # the ## headings. HTML comments (<!-- NOTE: ... -->) are notes for the team and do not appear on the page.
 title: Privacy policy
+description: How Proud Indian collects, uses and protects personal data from visitors, donors, volunteers and the children in our programmes.
+# the line about this page in /llms.txt
+summary: what personal data we collect from visitors, donors, volunteers, people who use Proud Indian in an AI assistant and the children in our programmes, and how we protect it.
 # While true, the page shows the draft note, stays out of search engines (noindex) and out of the sitemap.
 # Published on 9 October 2026 after an internal review (no lawyer); set back to true only to withdraw it.
 draft: false
 draftNote: This policy is a draft and may change.
 # change this whenever the policy changes (see "Changes to this policy")
-effectiveDate: "19 October 2026"
+effectiveDate: "26 October 2026"
 lede: >-
   This policy explains what personal data Proud Indian collects, why we collect it, who we share it with and what
-  you can ask us to do with it. It covers this website, our volunteer dashboard at dash.proudindian.ngo, donations
-  made through our Razorpay page, and our programmes.
+  you can ask us to do with it. It covers this website, our volunteer dashboard at dash.proudindian.ngo, Proud Indian
+  in ChatGPT, Claude and other AI assistants, donations made through our Razorpay page, and our programmes.
 ---
 
 ## Who we are
@@ -95,6 +98,28 @@ If you claim a reimbursement or an advance for programme costs, we keep the clai
 
 The dashboard sends page views and error reports to PostHog, an analytics service, linked to your account ID and role. Session recording is turned off. PostHog stores this data in the United States. We use it to find and fix problems.
 
+### If you use Proud Indian in ChatGPT or Claude
+
+You can add Proud Indian to ChatGPT, Claude or another AI assistant that supports it. The assistant then talks to our dashboard at `https://dash.proudindian.ngo/api/mcp`. [Proud Indian in ChatGPT and Claude](/assistants/) explains how it works.
+
+What you type in the chat goes to OpenAI (for ChatGPT) or Anthropic (for Claude), and they handle it under their own privacy policies. They are not working for us, and we don't control what they do with your chat. We only receive what the assistant sends to our dashboard when it uses one of our tools. We never receive your chat history.
+
+Without an account, the assistant can tell you about Proud Indian, list upcoming public sessions and give you the link to our donation page. None of this sends us anything about you.
+
+If you ask the assistant to sign you up for a session, it sends us your name, email address, phone number and date of birth, and the session you chose. That is all: not your gender, and nothing else from your chat. With these we:
+
+- create a dashboard account for you, with no password, that stays unverified until you confirm your email address;
+- email you a link and a 6-digit code to confirm it. We store the code only in hashed form; it works for one hour and allows three tries;
+- send your welcome message and WhatsApp orientation only after you have confirmed your email, since anyone could type someone else's details into a chat.
+
+<!-- NOTE: an account made through an assistant and never confirmed is kept like any other account. If the dashboard starts deleting unconfirmed accounts after a set time, say so here and under "How long we keep it". -->
+
+Once you confirm, the account and your session request are like any other volunteer's, and you set your own password. Everything under [If you volunteer through the dashboard](#if-you-volunteer-through-the-dashboard) then applies.
+
+If you already have an account, you can connect it to the assistant. You sign in on our own page at dash.proudindian.ngo and approve the connection there, so the assistant never sees your password. The assistant can then list your own session requests and ask to join a session for you; the team lead still approves it. For each connection we store the assistant's registered details (its name and the addresses it uses to connect), your approval, and hashed forms of the access and refresh tokens the assistant uses. An access token works for one hour, and a refresh token for 30 days.
+
+What our tools send back, such as the list of sessions or your own session requests, appears in your chat, so OpenAI or Anthropic receive it too, under their policies.
+
 ### Kalakriti
 
 Kalakriti is our yearly arts festival for children. To run it we keep:
@@ -125,6 +150,8 @@ We process personal data for these purposes:
 | Purpose | Legal basis |
 |---|---|
 | Running volunteer accounts, events, teams and messages | Your consent, given when you sign up |
+| Signing you up for a session through an AI assistant | Your consent, given when you ask the assistant to sign you up and confirm your email address |
+| Letting an AI assistant act for your account | Your consent, given when you approve the connection on our page |
 | Paying reimbursements and vendors, and keeping accounts | Your consent, and our legal duty to keep accounts |
 | Issuing donation receipts and 80G certificates | Your consent when you donate |
 | Reporting donations to the Income Tax Department (Form 10BD) | Legal obligation under the Income Tax Act, 1961 |
@@ -151,6 +178,7 @@ We share personal data only with the services that help us run Proud Indian, and
 | WhatsApp (Meta) | Your phone number and the messages and polls we send | WhatsApp notifications and team groups |
 | PostHog (United States) | Account ID, role, page views and error reports from the dashboard; the pages viewed, time on page, scrolling, clicks and browser details from this website, without IP addresses | Fixing problems and understanding use |
 | Gravatar and DiceBear | A hashed form of your email address | Showing a default profile picture |
+| OpenAI (ChatGPT) or Anthropic (Claude), if you use Proud Indian in their assistant | What our tools send back to your chat: session details, the donation page link, the result of a sign-up and, if you connect your account, your session requests | Answering you in the assistant you chose. They handle it under their own policies |
 | Income Tax Department | Donor name, address, PAN and donation amount | 80G reporting (Form 10BD) |
 | Courts, police or regulators | Only what a lawful order or the law requires | Legal compliance |
 
@@ -176,6 +204,8 @@ We keep personal data until it is deleted, either because you ask us to delete i
 - In-app notifications are deleted automatically 90 days after you archive them, or 180 days after you read them.
 - Unfinished uploads are deleted after 24 hours.
 - Sign-in sessions expire after 7 days unless you keep using the dashboard.
+- Email confirmation codes for a sign-up through an AI assistant stop working after one hour.
+- An AI assistant's access token stops working after one hour, and its refresh token after 30 days. We keep the record of a connection and your approval until you ask us to remove it or your account is deleted. Deleting your account removes all its connections.
 - Emails and messages you send us are kept as long as we need them to deal with your request.
 - PostHog keeps website analytics for one year. Since it can't be linked to you, we can't find or delete your part of it on request.
 
@@ -185,7 +215,8 @@ We keep personal data until it is deleted, either because you ask us to delete i
 - Passwords are stored only as hashes.
 - The dashboard gives each volunteer access only to what their role needs, and it records who changed what.
 - The dashboard shows an uploaded file only to people allowed to see it, through a link that works for a few minutes.
-- Sign-in and sign-up are rate-limited to slow down password guessing.
+- Sign-in and sign-up are rate-limited to slow down password guessing. Sign-ups through an AI assistant are limited to three a day for each email address and each phone number.
+- AI assistants never see your password: you sign in on our own page to connect one, and we store only hashed forms of the tokens it uses.
 - We never see your card or UPI details.
 
 If a personal data breach affects you, we will tell you and the Data Protection Board of India, as the DPDP Act and Rules require.
@@ -206,6 +237,8 @@ Under the DPDP Act you can:
 To use any of these rights, write to our Grievance Officer, Somasundaram A (Secretary), at connect@proudindian.ngo from the email address we know you by, or tell us how we can confirm it is you. Somasundaram A also handles requests to correct or delete your data. You can't delete your own volunteer account in the dashboard yet, so write to connect@proudindian.ngo and we will delete it for you. We usually reply within a few days.
 
 You can turn off email or WhatsApp notifications yourself in the dashboard's settings.
+
+To stop an AI assistant using your account, disconnect Proud Indian in the assistant's settings. Its tokens then stop working within the times listed in [How long we keep it](#how-long-we-keep-it). There is no page in the dashboard to remove a connection yet, so you can also write to connect@proudindian.ngo and we will remove it for you.
 
 ## Grievances
 

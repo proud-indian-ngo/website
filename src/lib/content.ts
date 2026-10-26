@@ -139,14 +139,27 @@ export function fill(text: string, values: Record<string, string>): string {
 export const shortYear = (year: string) =>
   `${year.slice(2, 4)}–${year.slice(5, 7)}`;
 
-/** The privacy policy (src/content/privacy.md): front matter, its Markdown, rendered HTML and its headings. */
-export async function getPrivacy() {
-  const entry = await getEntry("privacy", "privacy");
-  if (!entry) throw new Error("Missing src/content/privacy.md");
+/** A Markdown page (src/content/<id>.md): front matter, its Markdown, rendered HTML and its headings. */
+async function getDoc(id: string) {
+  const entry = await getEntry("docs", id);
+  if (!entry) throw new Error(`Missing src/content/${id}.md`);
   return {
+    id,
     ...entry.data,
     body: entry.body ?? "",
     html: entry.rendered?.html ?? "",
     headings: (entry.rendered?.metadata?.headings ?? []) as MarkdownHeading[],
   };
 }
+
+export type Doc = Awaited<ReturnType<typeof getDoc>>;
+
+/** Every Markdown page, by file name. */
+export async function getDocs() {
+  const ids = (await getCollection("docs")).map((e) => e.id).sort();
+  return Promise.all(ids.map(getDoc));
+}
+
+/** getStaticPaths for /<doc>/ and its index.md: one path per Markdown page, the page as `doc` */
+export const docPaths = async () =>
+  (await getDocs()).map((doc) => ({ params: { doc: doc.id }, props: { doc } }));

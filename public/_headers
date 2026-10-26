@@ -88,6 +88,10 @@ https://:project.pages.dev/*
   Link: </kalakriti/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
 /privacy/
   Link: </privacy/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
+/terms/
+  Link: </terms/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
+/assistants/
+  Link: </assistants/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
 
 # The pages as Markdown for agents (src/pages/**/index.md.ts; functions/_middleware.ts serves them at the pages' own
 # URLs to `Accept: text/markdown`). Fetched directly, they stay out of search: the HTML page is the one to index.
@@ -100,6 +104,10 @@ https://:project.pages.dev/*
 /kalakriti/index.md
   X-Robots-Tag: noindex
 /privacy/index.md
+  X-Robots-Tag: noindex
+/terms/index.md
+  X-Robots-Tag: noindex
+/assistants/index.md
   X-Robots-Tag: noindex
 
 # API catalog (RFC 9727): the public events feed on dash.proudindian.ngo, with its OpenAPI description and health check.
