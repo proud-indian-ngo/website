@@ -10,7 +10,7 @@ summary: what personal data we collect from visitors, donors, volunteers, people
 draft: false
 draftNote: This policy is a draft and may change.
 # change this whenever the policy changes (see "Changes to this policy")
-effectiveDate: "26 October 2026"
+effectiveDate: "28 October 2026"
 lede: >-
   This policy explains what personal data Proud Indian collects, why we collect it, who we share it with and what
   you can ask us to do with it. It covers this website, our volunteer dashboard at dash.proudindian.ngo, Proud Indian
@@ -73,13 +73,13 @@ Razorpay handles your payment under its own [privacy policy](https://razorpay.co
 
 ### If you volunteer through the dashboard
 
-You sign up at dash.proudindian.ngo to volunteer. Volunteer accounts are for people aged 18 and over. When you register, we ask for your name, email address, phone number, date of birth and gender, and you choose a password. We store the password only in hashed form, so nobody at Proud Indian can read it. If you sign up from a link for a particular group or event, we note that too.
+You sign up at dash.proudindian.ngo to volunteer. Volunteer accounts are for people aged 18 and over. When you register, we ask for your name, email address, phone number and gender, ask you to confirm that you are 18 or older, and you choose a password. We store the password only in hashed form, so nobody at Proud Indian can read it. If you sign up from a link for a particular group or event, we note that too.
 
-We ask for your date of birth so we can check that you are 18 or over. We ask for your gender only to choose the style of your default cartoon avatar (see below). You can change either in the dashboard's settings.
+We don't ask for your date of birth, and we don't store your confirmation that you are 18 or older. We ask for your gender only to choose the style of your default cartoon avatar (see below). You can change it in the dashboard's settings.
 
 We use your phone number for WhatsApp messages and for adding you to the WhatsApp groups of your teams and events. We check whether the number you gave is registered on WhatsApp so we know whether to message you there.
 
-<!-- NOTE: the dashboard's sign-up check for the 18+ rule is in progress (a pi-dash pull request); until it ships, the team checks it. If the dashboard ever stops needing date of birth or gender, stop collecting them and update this section (DPDP data minimisation). -->
+<!-- NOTE: if the dashboard ever stops needing gender, stop collecting it and update this section (DPDP data minimisation). -->
 
 While you use the dashboard, we also keep:
 
@@ -106,10 +106,10 @@ What you type in the chat goes to OpenAI (for ChatGPT) or Anthropic (for Claude)
 
 Without an account, the assistant can tell you about Proud Indian, list upcoming public sessions and give you the link to our donation page. None of this sends us anything about you.
 
-If you ask the assistant to sign you up for a session, it sends us your name, email address, phone number and date of birth, and the session you chose. That is all: not your gender, and nothing else from your chat. With these we:
+If you ask the assistant to sign you up for a session, it sends us your name, email address and phone number, your confirmation that you are 18 or older, and the session you chose. That is all: not your gender, and nothing else from your chat. With these we:
 
 - create a dashboard account for you, with no password, that stays unverified until you confirm your email address;
-- email you a link and a 6-digit code to confirm it. We store the code only in hashed form; it works for one hour and allows three tries;
+- email you a link to confirm it;
 - send your welcome message and WhatsApp orientation only after you have confirmed your email, since anyone could type someone else's details into a chat.
 
 <!-- NOTE: an account made through an assistant and never confirmed is kept like any other account. If the dashboard starts deleting unconfirmed accounts after a set time, say so here and under "How long we keep it". -->
@@ -204,7 +204,6 @@ We keep personal data until it is deleted, either because you ask us to delete i
 - In-app notifications are deleted automatically 90 days after you archive them, or 180 days after you read them.
 - Unfinished uploads are deleted after 24 hours.
 - Sign-in sessions expire after 7 days unless you keep using the dashboard.
-- Email confirmation codes for a sign-up through an AI assistant stop working after one hour.
 - An AI assistant's access token stops working after one hour, and its refresh token after 30 days. We keep the record of a connection and your approval until you ask us to remove it or your account is deleted. Deleting your account removes all its connections.
 - Emails and messages you send us are kept as long as we need them to deal with your request.
 - PostHog keeps website analytics for one year. Since it can't be linked to you, we can't find or delete your part of it on request.
@@ -228,7 +227,7 @@ If a personal data breach affects you, we will tell you and the Data Protection 
 Under the DPDP Act you can:
 
 - ask for a summary of the personal data we have about you, how we use it, and who we have shared it with;
-- correct or update it. You can edit your name, phone, date of birth, gender and photo yourself in the dashboard's settings, or ask us;
+- correct or update it. You can edit your name, phone, gender and photo yourself in the dashboard's settings, or ask us;
 - ask us to delete it, unless the law requires us to keep it, as it does for tax and accounting records;
 - withdraw your consent at any time. This stops future use. It does not undo what we did before, and we may no longer be able to offer the service that needed it;
 - nominate someone to use these rights for you if you die or become unable to act;
