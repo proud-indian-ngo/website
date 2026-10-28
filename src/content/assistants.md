@@ -11,7 +11,7 @@ summary: how to add Proud Indian to ChatGPT, Claude and other AI assistants, wha
 draft: false
 draftNote: This page is a draft and may change.
 dateLabel: Last updated
-effectiveDate: "26 October 2026"
+effectiveDate: "28 October 2026"
 lede: >-
   Add Proud Indian to ChatGPT, Claude or another AI assistant, and you can find a volunteering session in Bengaluru,
   sign up for it and follow your requests without leaving the chat.
@@ -63,14 +63,11 @@ If you don't see these options, your plan or workspace may not allow custom conn
 
 ## Signing up through an assistant
 
-Tell the assistant which session you'd like to join. It asks for your name, email address, phone number and date of birth. Before it sends them, check the details and the session: assistants can make mistakes.
+Tell the assistant which session you'd like to join. It asks for your name, email address and phone number, and asks you to confirm that you are 18 or older. Before it sends them, check the details and the session: assistants can make mistakes.
 
-We then email you to confirm your address. You can either:
+We then email you a link to confirm your address. Open it to confirm. Never read anything from the email back to the assistant.
 
-- open the link in the email, or
-- read the 6-digit code from the email to the assistant. The code works for one hour, and you get three tries.
-
-Once you have confirmed, we send your welcome message and WhatsApp orientation, and you set a password for the dashboard: the link takes you there, and if you used the code we email you a link to set one. Your team lead then approves your request to join the session.
+Once you have confirmed, we send your welcome message and WhatsApp orientation, and the link takes you to the dashboard to set a password. Your team lead then approves your request to join the session.
 
 If you already have an account, the assistant can't sign you up again. Use the session's sign-up link to sign in, or connect your account (below).
 
@@ -102,7 +99,7 @@ Everything else, such as your profile, teams, attendance and notifications, is i
 
 What you type in the chat goes to OpenAI (for ChatGPT) or Anthropic (for Claude) under their own privacy policies. We never receive your chat history: we only receive what the assistant sends to our tools.
 
-When you sign up, that is your name, email address, phone number, date of birth and the session you chose, and nothing else. When you connect your account, we store the connection and your approval, and only hashed forms of the tokens the assistant uses.
+When you sign up, that is your name, email address, phone number, your confirmation that you are 18 or older and the session you chose, and nothing else. When you connect your account, we store the connection and your approval, and only hashed forms of the tokens the assistant uses.
 
 The full details are in our privacy policy, under [If you use Proud Indian in ChatGPT or Claude](/privacy/#if-you-use-proud-indian-in-chatgpt-or-claude).
 
@@ -113,4 +110,4 @@ If something doesn't work, or you have a question about Proud Indian in an assis
 - email connect@proudindian.ngo;
 - call or WhatsApp +91 99864 31321.
 
-Tell us which assistant you used and what you asked, and leave out passwords and codes. We usually reply within a few days.
+Tell us which assistant you used and what you asked, and leave out passwords. We usually reply within a few days.
