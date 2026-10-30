@@ -3,13 +3,14 @@
  * Every raster image on the site goes through here: AVIF via <picture> with a JPG/PNG fallback, responsive widths,
  * lazy loading by default. (No WebP: every browser that has WebP but not AVIF is old enough to take the fallback, and
  * the extra <source> cost HTML bytes on every image.) `phone` is the image's width on phones (700px and below) as a
- * CSS length, e.g. "41vw" or "216px", so phones fetch the right file instead of the desktop size. <picture> is
- * display:contents (base.css), so the section CSS that targets the
- * <img> applies unchanged.
+ * CSS length, e.g. "41vw" or "216px"; phones then get their own AVIF set, sized up to 2x of that width on a
+ * PHONE_REF-wide screen, so a 3x phone takes the 2x file instead of a desktop one (the difference is hard to see at
+ * these sizes, the bytes aren't). <picture> is display:contents (base.css), so the section CSS that targets the <img>
+ * applies unchanged. Built like astro:assets' <Picture>, which has no media-scoped sources.
  */
 import type { ImageMetadata } from "astro";
 import { PHONE_MAX } from "@proudindian/design/tokens";
-import { Picture } from "astro:assets";
+import { getImage } from "astro:assets";
 import type { HTMLAttributes } from "astro/types";
 
 type Props = Omit<HTMLAttributes<"img">, "src" | "width" | "height"> & {
@@ -17,27 +18,56 @@ type Props = Omit<HTMLAttributes<"img">, "src" | "width" | "height"> & {
   alt: string;
   /** the largest CSS width (px) this image is shown at; 1x, 1.5x and 2x variants are generated */
   width: number;
-  /** the width on phones (700px and below), as a CSS length ("41vw", "216px"); defaults to `width` */
+  /** the width on phones (700px and below): "216px", "41vw" or "calc(52vw - 72px)"; defaults to `width` */
   phone?: string;
   /** above the fold: load eagerly with high priority */
   eager?: boolean;
 };
 
+/** the widest common phone (CSS px); phone files are sized for it */
+const PHONE_REF = 430;
+
 const { src, alt, width, phone, eager = false, ...rest } = Astro.props;
-const widths = [...new Set([1, 1.5, 2].map((k) => Math.min(Math.round(width * k), src.width)))].toSorted((a, b) => a - b);
+const scale = (w: number) =>
+  [...new Set([1, 1.5, 2].map((k) => Math.min(Math.round(w * k), src.width)))].toSorted((a, b) => a - b);
+const phoneWidth = (len: string) => {
+  const m = len.match(/^(?:([\d.]+)px|([\d.]+)vw|calc\(([\d.]+)vw - ([\d.]+)px\))$/);
+  if (!m) throw new Error(`Img: can't size phone="${len}" (use px, vw or calc(Nvw - Npx))`);
+  if (m[1]) return Number(m[1]);
+  return (Number(m[2] ?? m[3]) * PHONE_REF) / 100 - Number(m[4] ?? 0);
+};
 const sizes = phone ? `(max-width: ${PHONE_MAX}px) ${phone}, ${width}px` : `${width}px`;
-const fallbackFormat = src.format === "png" ? "png" : "jpg";
+const props = {
+  src,
+  alt,
+  widths: scale(width),
+  sizes,
+  loading: eager ? "eager" : "lazy",
+  decoding: eager ? "sync" : "async",
+  fetchpriority: eager ? "high" : undefined,
+  ...rest,
+} as const;
+const [phoneAvif, avif, fallback] = await Promise.all([
+  phone ? getImage({ ...props, widths: scale(phoneWidth(phone)), format: "avif" }) : undefined,
+  getImage({ ...props, format: "avif" }),
+  getImage({ ...props, format: src.format === "png" ? "png" : "jpg" }),
+]);
+const { class: cls, ...attributes } = fallback.attributes;
+// a scoped style class also goes on <picture>, as <Picture> does
+const scoped = typeof cls === "string" ? cls.match(/\bastro-\w{8}\b/)?.[0] : undefined;
 ---
 
-<Picture
-  src={src}
-  alt={alt}
-  formats={["avif"]}
-  fallbackFormat={fallbackFormat}
-  widths={widths}
-  sizes={sizes}
-  loading={eager ? "eager" : "lazy"}
-  decoding={eager ? "sync" : "async"}
-  fetchpriority={eager ? "high" : undefined}
-  {...rest}
-/>
+<picture class={scoped}>
+  {
+    phoneAvif && (
+      <source
+        media={`(max-width: ${PHONE_MAX}px)`}
+        srcset={phoneAvif.srcSet.attribute}
+        type="image/avif"
+        sizes={phone}
+      />
+    )
+  }
+  <source srcset={avif.srcSet.attribute} type="image/avif" sizes={sizes} />
+  <img src={fallback.src} srcset={fallback.srcSet.attribute} {...attributes} class={cls} />
+</picture>
