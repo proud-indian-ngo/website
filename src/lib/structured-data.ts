@@ -33,7 +33,18 @@ const faqPage = (url: string, faq: { q: string; a: string }[]) => ({
   })),
 });
 
-function sessionEvent(e: PublicEvent, origin: string, orgId: string) {
+/**
+ * The NGO as an Event's organizer or performer. Google's Event checks don't follow an "@id" to the home page's node,
+ * so the name and URL go inline as well.
+ */
+const eventOrg = (origin: string) => ({
+  "@type": "NGO",
+  "@id": new URL("/#organization", origin).href,
+  name: "Proud Indian",
+  url: new URL("/", origin).href,
+});
+
+function sessionEvent(e: PublicEvent, origin: string) {
   const area = neighbourhood(e.area);
   return {
     "@type": "Event",
@@ -69,9 +80,9 @@ function sessionEvent(e: PublicEvent, origin: string, orgId: string) {
       availability: "https://schema.org/InStock",
       url: e.signUpUrl,
     },
-    organizer: { "@id": orgId },
+    organizer: eventOrg(origin),
     // our volunteers lead every session
-    performer: { "@id": orgId },
+    performer: eventOrg(origin),
   };
 }
 
@@ -168,11 +179,7 @@ export function homeStructuredData(
   };
   return {
     "@context": "https://schema.org",
-    "@graph": [
-      ngo,
-      website,
-      ...events.map((e) => sessionEvent(e, origin, orgId)),
-    ],
+    "@graph": [ngo, website, ...events.map((e) => sessionEvent(e, origin))],
   };
 }
 
@@ -186,13 +193,12 @@ export function volunteerStructuredData(
   events: PublicEvent[],
   origin: string
 ) {
-  const orgId = new URL("/#organization", origin).href;
   return {
     "@context": "https://schema.org",
     "@graph": [
       subPage(page, "Volunteer", origin),
       faqPage(page.url, faq),
-      ...events.map((e) => sessionEvent(e, origin, orgId)),
+      ...events.map((e) => sessionEvent(e, origin)),
     ],
   };
 }
@@ -302,7 +308,6 @@ export function kalakritiStructuredData(
   kala: KalakritiPage,
   origin: string
 ) {
-  const orgId = new URL("/#organization", origin).href;
   return {
     "@context": "https://schema.org",
     "@graph": [
@@ -327,7 +332,13 @@ export function kalakritiStructuredData(
             addressCountry: "IN",
           },
         },
-        organizer: { "@id": orgId },
+        image: new URL("/og/kalakriti.png", origin).href,
+        organizer: eventOrg(origin),
+        // the children perform; our volunteers run the day
+        performer: {
+          "@type": "PerformingGroup",
+          name: `Children from ${CITY.name}'s low-income communities`,
+        },
         url: `${page.url}#editions`,
         subjectOf: {
           "@type": "DigitalDocument",
