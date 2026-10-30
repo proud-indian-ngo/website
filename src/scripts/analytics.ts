@@ -3,8 +3,10 @@
  * (autocapture) and heatmaps. Runs only on the production host with PUBLIC_POSTHOG_KEY set, so local builds, the
  * behaviour QA and pages.dev previews send nothing.
  * Cookieless: no cookies or storage; PostHog's servers derive a daily visitor and session from a salted hash, which
- * needs "Cookieless server hash mode" on in the PostHog project settings. No remote config, flags or extra scripts
- * load, so the CSP only needs PostHog's ingestion host in connect-src.
+ * needs "Cookieless server hash mode" on in the PostHog project settings. Web vitals (LCP, FCP, CLS, INP) come from
+ * PostHog's web-vitals extension, bundled here rather than fetched from its CDN; the observers are buffered, so the
+ * late load still reports the page's first paints. No remote config, flags or extra scripts load, so the CSP only
+ * needs PostHog's ingestion host in connect-src.
  */
 const KEY = import.meta.env.PUBLIC_POSTHOG_KEY?.trim();
 const HOST = "proudindian.ngo";
@@ -12,7 +14,11 @@ const HOST = "proudindian.ngo";
 export function initAnalytics() {
   if (!KEY || location.hostname !== HOST) return;
   const run = () =>
-    import("posthog-js").then(({ default: posthog }) =>
+    Promise.all([
+      import("posthog-js"),
+      // registers itself on window.__PosthogExtensions__, where init looks for it
+      import("posthog-js/dist/web-vitals"),
+    ]).then(([{ default: posthog }]) =>
       posthog.init(KEY, {
         api_host: "https://us.i.posthog.com",
         defaults: "2026-08-30",
@@ -25,7 +31,11 @@ export function initAnalytics() {
         disable_session_recording: true,
         disable_surveys: true,
         capture_dead_clicks: false,
-        capture_performance: false,
+        // the lighter build without attribution (which element or interaction caused a slow metric)
+        capture_performance: {
+          web_vitals: true,
+          web_vitals_attribution: false,
+        },
         capture_exceptions: false,
       })
     );

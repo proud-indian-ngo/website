@@ -15,6 +15,7 @@ const values = facts(site);
 const people = await getTrustees();
 const g = t.glance;
 const cq = (n: number) => `${n.toFixed(2)}cqw`;
+// on phones the face box is about calc(48.3vw - 24.5px) (two columns, measured) and the portrait fit.width % of it
 ---
 
 <div class="tr-board relative mt-28 max-tab:mt-20" id="about" data-spy="about">
@@ -53,7 +54,7 @@ const cq = (n: number) => `${n.toFixed(2)}cqw`;
                   src={asset(p.image)}
                   alt=""
                   width={410}
-                  phone="54vw"
+                  phone={`calc(${(0.483 * p.fit.width).toFixed(1)}vw - ${(0.245 * p.fit.width).toFixed(1)}px)`}
                   style={`width:${cq(p.fit.width)};bottom:${cq(p.fit.bottom)};margin-left:${cq(p.fit.marginLeft)}`}
                 />
               </span>

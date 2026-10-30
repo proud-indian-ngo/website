@@ -341,7 +341,7 @@ Light outline doodles in both side gutters of every section, the closing section
 
 It also checks the adaptive draw-ons: drawn at 1×–3×, lite at 4× and 6×, and the lite path plays as a wipe.
 
-It exits non-zero unless Lighthouse is 100 in all four categories on both form factors (mobile Performance 99 is accepted; set `MOBILE_PERF_MIN=100` to tighten) and, at 4×, every scenario stays under 1% bad frames with no long task during an animation. `RUNS`, `RATES`, `WIDTHS`, `SKIP_LH`, `SKIP_FRAMES` and `SITE` narrow it down (see the script header). Images: give `Img`/`Sticker`/`Polaroid` a `phone` width (`"41vw"`, `"216px"`) whenever the phone size differs from the desktop one, so phones fetch the right file.
+It exits non-zero unless Lighthouse is 100 in all four categories on both form factors (mobile Performance 99 is accepted; set `MOBILE_PERF_MIN=100` to tighten) and, at 4×, every scenario stays under 1% bad frames with no long task during an animation. `RUNS`, `RATES`, `WIDTHS`, `SKIP_LH`, `SKIP_FRAMES` and `SITE` narrow it down (see the script header). Images: give `Img`/`Sticker`/`Polaroid` a `phone` width (`"41vw"`, `"216px"`, `"calc(52vw - 72px)"`) whenever the phone size differs from the desktop one. Phones then get their own AVIF set, capped at 2x, so measure the rendered width at 390px rather than guessing: a `phone` value that's too big makes every phone over-download.
 
 ## Quality checks
 
