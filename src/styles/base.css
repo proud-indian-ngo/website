@@ -95,6 +95,13 @@ body {
   height: max(12px, env(safe-area-inset-bottom));
   background: var(--edge-bottom, var(--color-paper));
 }
+/* desktop browsers take theme-color (edges.ts keeps it on the top band) and have no inset to fill, so the strips would
+   only be a 12px bar over the page */
+@media (hover: hover) and (pointer: fine) {
+  .edge {
+    display: none;
+  }
+}
 /* a 44px-tall hit area for small text links (footer, logo, "See every session"): an invisible box centred on the link,
    so neither the layout nor the focus ring changes */
 .tap-44 {
