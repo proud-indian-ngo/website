@@ -6,6 +6,7 @@
  * (src/scripts/events-refresh.ts); both render with src/lib/events/render.ts.
  */
 import { getCopy, getSite } from "../../lib/content";
+import type { Programme } from "../../lib/events/contract";
 import type { LoadedEvents } from "../../lib/events/load";
 import { type EventLabels, poster, tickets } from "../../lib/events/render";
 import { asset } from "../../lib/images";
@@ -22,9 +23,14 @@ interface Props {
   events: LoadedEvents;
   /** link to the volunteer guide under the join button (the home page; the guide itself leaves it out) */
   guide?: string;
+  /** only this programme's sessions (a programme page); the build and the browser refresh both filter by it */
+  programme?: Programme;
 }
 
-const { events, guide } = Astro.props;
+const { events: loaded, guide, programme } = Astro.props;
+const events = programme
+  ? { ...loaded, data: { ...loaded.data, events: loaded.data.events.filter((e) => e.programme === programme) } }
+  : loaded;
 const { volunteer: v } = await getCopy();
 const site = await getSite();
 const labels: EventLabels = {
@@ -44,6 +50,7 @@ const state = {
   labels,
   url: events.url,
   events: events.data.events,
+  programme,
 };
 ---
 

@@ -12,7 +12,7 @@
  *   SITE=http://127.0.0.1:4321/ bun run qa:doodles   # or check a running server
  *   WIDTHS=1440,2560 bun run qa:doodles
  *   JOBS=1 bun run qa:doodles                         # widths checked at once (default 4)
- *   PAGES=volunteer/ bun run qa:doodles               # pages, relative to SITE (default: the home page, the volunteer guide, /csr/ and /kalakriti/)
+ *   PAGES=volunteer/ bun run qa:doodles               # pages, relative to SITE (default: the home page, the volunteer guide, /csr/, /kalakriti/ and the programme pages)
  *
  * Exits non-zero on any overlap.
  */
@@ -44,7 +44,10 @@ if (!SITE) {
 }
 
 const JOBS = Number(process.env.JOBS ?? 4);
-const PAGES = (process.env.PAGES ?? ",volunteer/,csr/,kalakriti/").split(",");
+const PAGES = (
+  process.env.PAGES ??
+  ",volunteer/,csr/,kalakriti/,education/,nutrition/,community/"
+).split(",");
 
 interface Check {
   n: number;

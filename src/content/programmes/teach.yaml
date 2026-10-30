@@ -12,6 +12,8 @@ doodle: book
 line: Weekend maths and Spoken English classes, and art & craft that gets children talking about their world.
 chips: [Maths classes, Spoken English, Art & craft]
 cta: Volunteer for this
+# this programme's own page (/education/, src/content/programme-pages/education.yaml) and the band's link to it
+page: { slug: education, link: More about Education }
 polaroids:
   - image: photos/teach-postmaster.jpg
     alt: A girl writing a letter at the Learning with Postmaster session

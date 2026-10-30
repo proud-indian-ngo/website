@@ -1,0 +1,105 @@
+# /nutrition/: Feed, for people looking for nutrition-drive or food-distribution volunteering in Bengaluru (Bangalore).
+# The home band is programmes/feed.yaml; the sessions are the events feed's `nutrition` ones. Facts come from
+# feed.yaml, volunteer.yaml, csr.yaml, copy.yaml and safeguarding.yaml; the figures from the annual reports in
+# public/reports/ (2025-26: "Feed"; 2024-25: "Food and nutrition"), each under its year. The 2020 kit photos come
+# from Proud Indian's Immich library. The 2025-26 food work was mostly in Mumbai, and the page says so.
+# Text may use {placeholders}: {register} {events} {hr} {connect} {phone}. FAQ answers may also use [text](url) links.
+
+meta:
+  title: Nutrition drive volunteering in Bengaluru (Bangalore) · Proud Indian
+  description: "Volunteer at Proud Indian’s nutrition drives in Bangalore: ration kits for families and shared meals for children. One-off days, 18+, free, no experience needed."
+
+crumb: Nutrition
+
+nav:
+  links:
+    - { label: What happens, href: "#what", spy: what }
+    - { label: Sessions, href: "#volunteer", spy: volunteer }
+    - { label: Numbers, href: "#numbers", spy: numbers }
+    - { label: Photos, href: "#photos", spy: photos }
+    - { label: FAQ, href: "#faq", spy: faq }
+  home: Home
+
+hero:
+  eyebrow: Nutrition · Feed
+  heading: { before: Nutrition drives in, accent: Bengaluru. }
+  lede: "Nutrition drives and shared meals, because nobody learns hungry. Ration kits go to families, and whenever we bring the children together there’s a proper meal. Drives are one-off days, so come when you can."
+  join: Volunteer for this
+  sessions: See upcoming drives
+  factsTitle: The fine print
+  facts: [18 and over, No experience needed, Free to join, One-off drives]
+  photos:
+    - image: photos/feed-nutrition-drive-dec2022.jpg
+      alt: A grinning boy flashing a peace sign with his red nutrition pack at the December 2022 nutrition drive
+      caption: Nutrition drive
+    - image: photos/feed-lunch-kalakriti2.jpg
+      alt: Two girls in festival dresses eating lunch on a bench at Kalakriti 2.0
+      caption: Kalakriti lunch
+  donate: Or donate towards food for our drives
+
+what:
+  eyebrow: What happens
+  heading: { before: "Kits for families, lunch for", accent: everyone. }
+  lede: Drives and distributions are one-off days, so come when you can. Each one is listed on the dashboard with its date and area.
+  cards:
+    - title: Ration kits
+      line: Groceries for a family’s month, packed on packing days and taken to families by our Optimists.
+    - title: Distribution days
+      line: Volunteers hand out the kits and nutrition packs in the communities we work with.
+    - title: Shared meals
+      line: "A proper meal whenever we bring the children together. In 2025–26 the biggest one in Bengaluru was at Kalakriti 2.0, where hundreds of children ate together, many still in costume."
+
+numbers:
+  eyebrow: In numbers
+  heading: { before: The drives, accent: counted. }
+  lede: From our annual reports. Each year runs from April to March.
+  source: From the annual report
+  years:
+    - year: 2025-26
+      stats:
+        - { number: "4,600", label: ration kits }
+        - { number: "12,400", label: people reached }
+        - { number: "11", label: packing and distribution days }
+      note: Most of the year’s food work was in Mumbai, where company volunteers packed the kits and our Optimists got them to families.
+    - year: 2024-25
+      stats:
+        - { number: "705", label: beneficiaries }
+        - { number: "7", label: distributions }
+        - { number: "99", label: volunteer field hours }
+
+# the three 2020 photos are from the COVID-19 family care kits (phase II, June 2020; its disclosure is in reports.yaml)
+photos:
+  eyebrow: Photos
+  heading: { before: From our, accent: drives. }
+  items:
+    - image: photos/feed-kit-packing-2020.jpg
+      alt: Volunteers sitting on the floor packing groceries into bags for family care kits
+      caption: Packing kits, June 2020
+    - image: photos/feed-ration-kits-2020.jpg
+      alt: Rows of tied grocery bags, packed and ready to hand out
+      caption: Ready to go
+    - image: photos/feed-kit-distribution-2020.jpg
+      alt: A masked volunteer in gloves lifting a grocery kit off the back of a truck
+      caption: Distribution day
+    - image: photos/feed-food-drive-sep2022.jpg
+      alt: A smiling boy holding his plate of food at the September 2022 food distribution
+      caption: Food drive
+
+faq:
+  eyebrow: FAQ
+  heading: { before: "Questions,", accent: answered. }
+  items:
+    - q: Who can volunteer at a nutrition drive?
+      a: Anyone aged 18 or over. You don’t need any experience; turning up matters most.
+    - q: How much time do I need to give?
+      a: Drives and distributions are one-off days, so come when you can.
+    - q: When and where are the drives?
+      a: Each drive’s date, time and area is listed [above](#volunteer) and on the [dashboard]({events}). Most of our Bengaluru sessions are in south-east Bengaluru, around Bellandur and Iblur, and you get the exact meeting point once you’re approved.
+    - q: How do I sign up?
+      a: "[Register on the dashboard]({register}), tap “Show interest” on a drive, and come along once you’re approved."
+    - q: What are the rules with the children?
+      a: Every session with children starts with a short briefing, nobody is ever alone with a child, and please don’t photograph the children yourself. Food and gifts go through us, never to one child, so every child gets the same. [Read all the safeguarding rules](/volunteer/#safeguarding).
+    - q: Can my company run a ration-kit drive?
+      a: "Yes. Your team packs groceries for a family’s month, or buys them through us, and our Optimists get them to families. [Plan a drive](/csr/#drives)."
+    - q: Can I help without volunteering?
+      a: You can [donate](/#donate) towards food for our drives and festival lunches. Every gift gets an 80G tax receipt by email.

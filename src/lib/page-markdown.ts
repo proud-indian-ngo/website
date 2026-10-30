@@ -15,6 +15,8 @@ import {
   getKalakritiPage,
   getPartners,
   getDocs,
+  annualReport,
+  getProgrammePage,
   getProgrammes,
   getReports,
   getSafeguarding,
@@ -143,7 +145,7 @@ export async function siteMarkdown(origin: URL | undefined) {
     "",
     ...programmes.map((p) =>
       p.kind === "band"
-        ? `- **${p.verb} (${p.name})**: ${p.line} (${p.chips.join(", ")})`
+        ? `- **${p.verb} (${p.name})**: ${p.line} (${p.chips.join(", ")}) [${p.page.link}](${abs(`/${p.page.slug}/`)}).`
         : `- **${p.verb} (${p.name})**: ${kalakriti.tickets.note} ${kalakriti.edition.name} ${kalakriti.edition.version} was on ${kalakriti.edition.date}: ${kalakriti.edition.lineup.map((l) => `${l.number} ${l.word}`).join(", ")}. Events: ${kalakriti.edition.events.join(", ")}.`
     ),
     "",
@@ -516,6 +518,78 @@ export async function kalakritiMarkdown(origin: URL | undefined) {
     `- [Proud Indian](${abs("/")}): the programmes, donations and reports.`,
     `- [For companies](${abs("/csr/")}): CSR, Kalakriti sponsorship and employee volunteering.`,
     `- Questions: ${values.connect}, or call or WhatsApp ${site.contacts.phone.display}.`,
+    "",
+  ].join("\n");
+}
+
+/** A programme's page (/education/, /nutrition/, /community/), section by section in page order. */
+export async function programmeMarkdown(
+  slug: "education" | "nutrition" | "community",
+  origin: URL | undefined
+) {
+  const [site, copy, { page, band }, events] = await Promise.all([
+    getSite(),
+    getCopy(),
+    getProgrammePage(slug),
+    loadEvents(),
+  ]);
+  const values = guideValues(site);
+  const abs = (path: string) => new URL(path, origin ?? site.url).href;
+  const url = abs(`/${slug}/`);
+  const heading = (h: { before: string; accent: string }) =>
+    `${h.before} ${h.accent}`;
+  const { hero, what, numbers: n } = page;
+  const years = await Promise.all(
+    n.years.map(async (y) => ({ ...y, report: await annualReport(y.year) }))
+  );
+
+  return [
+    `# ${band.verb} (${band.name}): ${heading(hero.heading)}`,
+    "",
+    `> ${page.meta.description}`,
+    "",
+    hero.lede,
+    "",
+    hero.facts.join(" · "),
+    "",
+    `[${hero.join}](${site.links.register}) · [Donate](${abs("/#donate")})`,
+    "",
+    `## ${heading(what.heading)}`,
+    "",
+    what.lede,
+    "",
+    ...what.cards.map((c) => `- **${c.title}.** ${c.line}`),
+    "",
+    "## Upcoming sessions",
+    "",
+    ...sessionLines(
+      site,
+      events.data.events.filter((e) => e.programme === slug)
+    ),
+    "",
+    "How to join:",
+    "",
+    ...joinSteps(copy),
+    "",
+    `## ${heading(n.heading)}`,
+    "",
+    n.lede,
+    "",
+    ...years.flatMap((y) => [
+      `### [${n.source} ${y.report.label}](${abs(y.report.url)})`,
+      "",
+      ...y.stats.map((x) => `- ${x.number} ${x.label}`),
+      ...(y.note ? ["", y.note] : []),
+      "",
+    ]),
+    `## ${heading(page.faq.heading)}`,
+    "",
+    ...faqLines(page.faq.items, values, url),
+    "## More",
+    "",
+    `- [Volunteer guide](${abs("/volunteer/")}): every programme, where we meet, the safeguarding rules, internships and the FAQ.`,
+    `- [Proud Indian](${abs("/")}): the programmes, Kalakriti, donations and reports.`,
+    `- Questions: ${values.hr}, or call or WhatsApp ${site.contacts.phone.display}.`,
     "",
   ].join("\n");
 }

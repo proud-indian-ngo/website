@@ -1,0 +1,110 @@
+# /community/: Connect, for people looking for one-off or weekend community volunteering with children in Bengaluru
+# (Bangalore). The home band is programmes/connect.yaml; the sessions are the events feed's `community` ones. Facts come
+# from connect.yaml, volunteer.yaml, csr.yaml and safeguarding.yaml; the figures from the annual reports in
+# public/reports/ (2025-26: "Gather" and "Volunteering days with companies"; 2024-25: "Gift a Smile"; 2023-24: "Field
+# trip IISc"), each under its year.
+# Text may use {placeholders}: {register} {events} {hr} {connect} {phone}. FAQ answers may also use [text](url) links.
+
+meta:
+  title: Community volunteering with children in Bengaluru (Bangalore) · Proud Indian
+  description: "Volunteer with children in Bangalore on one-off days: Gift a Smile, kit drives, outings to IISc and the zoo, and company volunteering days. 18+, free, come when you can."
+
+crumb: Community
+
+nav:
+  links:
+    - { label: What happens, href: "#what", spy: what }
+    - { label: Sessions, href: "#volunteer", spy: volunteer }
+    - { label: Numbers, href: "#numbers", spy: numbers }
+    - { label: Photos, href: "#photos", spy: photos }
+    - { label: FAQ, href: "#faq", spy: faq }
+  home: Home
+
+hero:
+  eyebrow: Community · Connect
+  heading: { before: Community days in, accent: Bengaluru. }
+  lede: "Bringing the children and the city together: Gift a Smile, kit drives, trips to IISc and the zoo, and volunteering days with companies. These are one-off days, so come when you can."
+  join: Volunteer for this
+  sessions: See upcoming days
+  factsTitle: The fine print
+  facts: [18 and over, No experience needed, Free to join, One-off days]
+  photos:
+    - image: photos/connect-gift-a-smile.jpg
+      alt: Three girls with the badminton sets they got at Gift a Smile
+      caption: Gift a Smile
+    - image: photos/csr-ethos-team.jpg
+      alt: The Ethos team with children and Optimists at our community centre, holding up a framed painting
+      caption: Volunteering day
+  donate: Or donate towards Gift a Smile and outings
+
+what:
+  eyebrow: What happens
+  heading: { before: Days out and, accent: days in. }
+  lede: Gift a Smile, drives, outings and volunteering days are one-off days, so come when you can.
+  cards:
+    - title: Gift a Smile
+      line: "It begins with a question: volunteers sit down with the children and ask what they’d like. In December and January we hand the gifts over. In 2026 that was badminton sets, cricket bats, school kits and lunch boxes."
+    - title: Kit drives
+      line: School kits of bags, books and stationery before the school year, and ration kits for families any time.
+    - title: Outings
+      line: Trips with the children, to IISc and the zoo, playground outings and a visit to Prani.
+    - title: Volunteering days
+      line: "Company teams spend a day with us: a session with the children, kit-building at their office, painting a classroom or crewing one of our big days."
+
+numbers:
+  eyebrow: In numbers
+  heading: { before: The days, accent: counted. }
+  lede: From our annual reports. Each year runs from April to March.
+  source: From the annual report
+  years:
+    - year: 2025-26
+      stats:
+        - { number: "851", label: children at Gift a Smile 2026 }
+        - { number: "6", label: places where we handed out the gifts }
+        - { number: "53", label: volunteering days with 11 companies }
+      note: Most of the company volunteering days were in Mumbai, run by our chapter there.
+    - year: 2024-25
+      stats:
+        - { number: "556", label: beneficiaries of Gift a Smile }
+        - { number: "250", label: volunteer field hours at Gift a Smile }
+    - year: 2023-24
+      stats:
+        - { number: "42", label: children on the field trip to IISc }
+        - { number: "296", label: volunteer field hours on the trip }
+
+photos:
+  eyebrow: Photos
+  heading: { before: From our, accent: days out. }
+  items:
+    - image: photos/connect-playground.jpg
+      alt: Boys arm in arm on the playground outing
+      caption: Playground outing
+    - image: photos/connect-prani.jpg
+      alt: A boy holding a rabbit on the Prani visit
+      caption: Prani visit
+    - image: photos/strip-gift-a-smile.jpg
+      alt: A boy smiling with his Gift a Smile present
+      caption: Gift a Smile
+
+faq:
+  eyebrow: FAQ
+  heading: { before: "Questions,", accent: answered. }
+  items:
+    - q: Who can volunteer on community days?
+      a: Anyone aged 18 or over. You don’t need any experience; patience and turning up matter most.
+    - q: How much time do I need to give?
+      a: Gift a Smile, drives, outings and volunteering days are one-off days, so come when you can.
+    - q: When is Gift a Smile?
+      a: In December and January. Children tell us what they wish for, and volunteers help plan the gifts and hand them over.
+    - q: When and where are the sessions?
+      a: Each one’s date, time and area is listed [above](#volunteer) and on the [dashboard]({events}). Most of our Bengaluru sessions are in south-east Bengaluru, around Bellandur and Iblur, and you get the exact meeting point once you’re approved.
+    - q: How do I sign up?
+      a: "[Register on the dashboard]({register}), tap “Show interest” on a session, and come along once you’re approved."
+    - q: Can I bring a gift for a child?
+      a: Gifts and money go through us, never to one child, so every child gets the same. Gift a Smile is how children get their wishes.
+    - q: What are the rules with the children?
+      a: Every session with children starts with a short briefing, nobody is ever alone with a child, and please don’t photograph the children yourself. [Read all the safeguarding rules](/volunteer/#safeguarding).
+    - q: Can my company volunteer together?
+      a: "Yes. We run volunteering days with companies and groups: sessions with the children, kit-building at your office, painting days and crewing our big days. [See the formats and how to plan one](/csr/#days)."
+    - q: Can I help without volunteering?
+      a: You can [donate](/#donate) towards Gift a Smile gifts and outings. Every gift gets an 80G tax receipt by email.

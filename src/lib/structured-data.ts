@@ -1,6 +1,6 @@
 /**
  * schema.org JSON-LD. The home page: the NGO, the website, and one Event per upcoming session from the build's
- * events feed. The volunteer guide (/volunteer/): the page, its FAQ and the same sessions. The page for companies
+ * events feed. The volunteer guide (/volunteer/) and the programme pages: the page, its FAQ and the sessions. The page for companies
  * (/csr/): the page, its FAQ, the volunteering days and the Kalakriti sponsorships as offers. Search engines and AI agents read it to answer "where can I volunteer at weekends in Bangalore?".
  * Facts come from site.yaml and copy.yaml, sessions from the pi-dash feed (src/lib/events/load.ts), so nothing here
  * needs editing by hand. The browser refresh does not touch it; the rebuild on every events change keeps it current.
@@ -184,11 +184,13 @@ export function homeStructuredData(
 }
 
 /**
- * The volunteer guide: the page (about the NGO, with a breadcrumb home), its FAQ and the upcoming sessions. `faq`
- * answers are the HTML the page shows (Google allows links and basic markup in an Answer).
+ * The volunteer guide and the programme pages (/education/, /nutrition/, /community/): the page (about the NGO, with a
+ * breadcrumb home named `crumb`), its FAQ and its upcoming sessions (a programme page's own only). `faq` answers are the
+ * HTML the page shows (Google allows links and basic markup in an Answer).
  */
-export function volunteerStructuredData(
+export function guideStructuredData(
   page: { url: string; title: string; description: string },
+  crumb: string,
   faq: { q: string; a: string }[],
   events: PublicEvent[],
   origin: string
@@ -196,7 +198,7 @@ export function volunteerStructuredData(
   return {
     "@context": "https://schema.org",
     "@graph": [
-      subPage(page, "Volunteer", origin),
+      subPage(page, crumb, origin),
       faqPage(page.url, faq),
       ...events.map((e) => sessionEvent(e, origin)),
     ],

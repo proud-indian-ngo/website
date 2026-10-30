@@ -50,6 +50,32 @@ export async function getReports() {
     .map((e) => ({ id: e.id, ...e.data }))
     .toSorted((a, b) => when(b).localeCompare(when(a)));
 }
+/** A programme's page (/education/, /nutrition/, /community/): its copy (programme-pages/<slug>.yaml) and its home
+ *  band (the programmes/*.yaml entry whose `page.slug` it is). */
+export async function getProgrammePage(slug: string) {
+  const [entry, programmes] = await Promise.all([
+    getEntry("programmePages", slug),
+    getProgrammes(),
+  ]);
+  if (!entry)
+    throw new Error(`Missing src/content/programme-pages/${slug}.yaml`);
+  const band = programmes.find(
+    (p) => p.kind === "band" && p.page.slug === slug
+  );
+  if (band?.kind !== "band")
+    throw new Error(`No programme band has page.slug ${slug}`);
+  return { page: entry.data, band, slug: band.page.slug };
+}
+
+/** The annual report for a financial year ("2025-26"), with its label ("2025–26"); a missing one fails the build. */
+export async function annualReport(year: string) {
+  const report = (await getReports()).find(
+    (r) => r.kind === "annual" && r.year === year
+  );
+  if (!report) throw new Error(`No annual report for ${year} in reports.yaml`);
+  return { url: report.url, label: year.replace("-", "–") };
+}
+
 /** in partners.yaml order */
 export async function getKalakritiPage() {
   const entry = await getEntry("kalakritiPage", "kalakriti-page");

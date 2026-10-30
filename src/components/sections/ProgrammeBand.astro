@@ -2,7 +2,8 @@
 /**
  * One programme band, reused for Teach, Feed and Connect and driven by
  * src/content/programmes/*.yaml: the giant verb, the line, chips and call to action, three polaroids pegged on a
- * string, the cut-out child on the band floor and the band's ambient doodle.
+ * string, the cut-out child on the band floor and the band's ambient doodle. The second button goes to the
+ * programme's own page (/education/, /nutrition/, /community/).
  */
 import type { CollectionEntry } from "astro:content";
 import { asset } from "../../lib/images";
@@ -46,6 +47,7 @@ const stickerWidth = { book: 270, bowl: 420, heart: 300 }[b.doodle];
     <ul class="pi-chips mb-5.5">{b.chips.map((c) => <Chip>{c}</Chip>)}</ul>
     <div class="ctas">
       <Button href="#volunteer" arrow>{b.cta}</Button>
+      <Button href={`/${b.page.slug}/`} variant="ghost">{b.page.link}</Button>
     </div>
     <div class="bside">
       <div class="bpics loop">

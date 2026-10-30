@@ -1,0 +1,64 @@
+---
+/**
+ * A programme's own page (/education/, /nutrition/, /community/), for people searching for that kind of volunteering in
+ * Bengaluru: the guide hero, what happens, the programme's upcoming sessions (the events feed's `programme`), its
+ * figures from the annual reports, its photos, the FAQ and the closing. One template for the three; the pages in
+ * src/pages/ only pick the slug. Copy: src/content/programme-pages/<slug>.yaml, with the home band from
+ * programmes/*.yaml. Structured data: the page, its FAQ and its sessions (src/lib/structured-data.ts).
+ */
+import Closing from "../sections/Closing.astro";
+import FaqSection from "../sections/FaqSection.astro";
+import Footer from "../sections/Footer.astro";
+import Header from "../sections/Header.astro";
+import PhoneMenu from "../sections/PhoneMenu.astro";
+import StickyDonateBar from "../sections/StickyDonateBar.astro";
+import Volunteer from "../sections/Volunteer.astro";
+import MarginSprite from "../margins/MarginSprite.astro";
+import GuideHero from "../volunteer/GuideHero.astro";
+import ProgrammeNumbers from "./ProgrammeNumbers.astro";
+import ProgrammePhotos from "./ProgrammePhotos.astro";
+import ProgrammeWhat from "./ProgrammeWhat.astro";
+import Base from "../../layouts/Base.astro";
+// after Base, so global.css (and its @layer order) comes first. The hero, the notepad and the FAQ accordion are the
+// volunteer guide's, so these pages use its stylesheet too.
+import "../../styles/volunteer-page.css";
+import "../../styles/programme-page.css";
+import { getProgrammePage, getSite } from "../../lib/content";
+import { loadEvents } from "../../lib/events/load";
+import { guidePage, guideValues } from "../../lib/inline";
+import { guideStructuredData, jsonLd } from "../../lib/structured-data";
+
+interface Props {
+  slug: "education" | "nutrition" | "community";
+}
+
+const { page, slug } = await getProgrammePage(Astro.props.slug);
+const site = await getSite();
+const events = await loadEvents();
+const values = guideValues(site);
+const { origin, faq, page: summary } = guidePage(page.meta, page.faq.items, values, Astro.site, Astro.url.pathname);
+const sessions = events.data.events.filter((e) => e.programme === slug);
+const structured = guideStructuredData(summary, page.crumb, faq.data, sessions, origin);
+/** the sections on this page: header, menu and footer links to them stay here, the rest go to the home page */
+const anchors = ["#what", "#volunteer", "#numbers", ...(page.photos ? ["#photos"] : []), "#faq", "#closing"];
+const navLinks = page.nav.links;
+const menuLinks = [{ label: page.nav.home, href: "/" }, ...navLinks];
+---
+
+<Base title={page.meta.title} description={page.meta.description} og={slug} markdown>
+  <script is:inline slot="head" type="application/ld+json" set:html={jsonLd(structured)} />
+  <MarginSprite />
+  <Header anchors={anchors} links={navLinks} join={site.links.register} />
+  <PhoneMenu anchors={anchors} links={menuLinks} />
+  <main id="main">
+    <GuideHero hero={page.hero} />
+    <ProgrammeWhat what={page.what} />
+    <Volunteer events={events} programme={slug} />
+    <ProgrammeNumbers numbers={page.numbers} />
+    {page.photos && <ProgrammePhotos photos={page.photos} />}
+    <FaqSection eyebrow={page.faq.eyebrow} heading={page.faq.heading} items={faq.page} set="pfaq" />
+    <Closing anchors={anchors} />
+  </main>
+  <Footer anchors={anchors} />
+  <StickyDonateBar anchors={anchors} />
+</Base>
