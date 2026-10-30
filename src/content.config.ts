@@ -120,6 +120,12 @@ const programmes = defineCollection({
         .array(pic.extend({ caption: z.string(), position }))
         .length(3),
       sticker: pic,
+      /** the programme's own page, /<slug>/ (src/content/programme-pages/<slug>.yaml). The slug is also the events
+       *  feed's `programme` for its sessions. */
+      page: z.object({
+        slug: z.enum(["education", "nutrition", "community"]),
+        link: z.string(),
+      }),
     }),
     z.object({
       kind: z.literal("festival"),
@@ -824,6 +830,21 @@ const kalakritiPage = defineCollection({
   }),
 });
 
+/** a guide hero (GuideHero.astro): /volunteer/ and the programme pages */
+const guideHero = z.object({
+  eyebrow: z.string(),
+  heading,
+  lede: z.string(),
+  join: z.string(),
+  sessions: z.string(),
+  factsTitle: z.string(),
+  facts: z.array(z.string()).min(1),
+  /** pinned up beside the notepad */
+  photos: z.array(photo).length(2),
+  /** a line under the buttons linking to the home page's donate card */
+  donate: z.string().optional(),
+});
+
 const volunteer = defineCollection({
   loader: single("volunteer"),
   schema: z.object({
@@ -836,19 +857,7 @@ const volunteer = defineCollection({
         .min(1),
       home: z.string(),
     }),
-    hero: z.object({
-      eyebrow: z.string(),
-      heading,
-      lede: z.string(),
-      join: z.string(),
-      sessions: z.string(),
-      factsTitle: z.string(),
-      facts: z.array(z.string()).min(1),
-      /** pinned up beside the notepad */
-      photos: z
-        .array(z.object({ image: asset, alt: z.string(), caption: z.string() }))
-        .length(2),
-    }),
+    hero: guideHero,
     do: z.object({
       eyebrow: z.string(),
       heading,
@@ -900,6 +909,68 @@ const volunteer = defineCollection({
   }),
 });
 
+/** /education/, /nutrition/, /community/: one page per programme band (src/content/programme-pages/<slug>.yaml, the
+ *  slug in that band's `page`). Figures come from the annual reports, each under its year. */
+const programmePages = defineCollection({
+  loader: glob({ pattern: "*.yaml", base: "./src/content/programme-pages" }),
+  schema: z.object({
+    meta: z.object({ title: z.string(), description: z.string() }),
+    /** the breadcrumb's name for this page */
+    crumb: z.string(),
+    nav: z.object({
+      links: z
+        .array(
+          z.object({
+            label: z.string(),
+            href: z.string().startsWith("#"),
+            spy: z.string(),
+          })
+        )
+        .min(1),
+      home: z.string(),
+    }),
+    hero: guideHero,
+    what: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      cards: z.array(z.object({ title: z.string(), line: z.string() })).min(1),
+    }),
+    numbers: z.object({
+      eyebrow: z.string(),
+      heading,
+      lede: z.string(),
+      /** "From the annual report": each year's label, linking its PDF (reports.yaml) */
+      source: z.string(),
+      years: z
+        .array(
+          z.object({
+            /** a financial year with an annual report in reports.yaml */
+            year: z.string().regex(/^\d{4}-\d{2}$/),
+            stats: z
+              .array(z.object({ number: z.string(), label: z.string() }))
+              .min(1),
+            note: z.string().optional(),
+          })
+        )
+        .min(1),
+    }),
+    /** left out when the programme has no photos beyond the hero's */
+    photos: z
+      .object({
+        eyebrow: z.string(),
+        heading,
+        items: z.array(photo).min(2),
+      })
+      .optional(),
+    faq: z.object({
+      eyebrow: z.string(),
+      heading,
+      items: z.array(z.object({ q: z.string(), a: z.string() })).min(1),
+    }),
+  }),
+});
+
 export const collections = {
   site,
   programmes,
@@ -913,5 +984,6 @@ export const collections = {
   volunteer,
   csr,
   kalakritiPage,
+  programmePages,
   og,
 };

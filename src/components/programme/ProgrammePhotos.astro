@@ -1,0 +1,36 @@
+---
+/** A programme page's photos: its polaroids, taped down and leaning alternately (programme-page.css). Copy:
+ *  programme-pages/*.yaml → photos. */
+import type { CollectionEntry } from "astro:content";
+import { asset } from "../../lib/images";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import Polaroid from "../ui/Polaroid.astro";
+import SectionHead from "../ui/SectionHead.astro";
+
+interface Props {
+  photos: NonNullable<CollectionEntry<"programmePages">["data"]["photos"]>;
+}
+
+const { photos: p } = Astro.props;
+---
+
+<section
+  class="relative overflow-hidden border-t-line border-ink bg-sky px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+  id="photos"
+  data-spy="photos"
+  aria-labelledby="pp-photos-h"
+>
+  <MarginDoodles set="pphotos" tone="sky" />
+  <div class="relative z-2 mx-auto max-w-section">
+    <SectionHead id="pp-photos-h" eyebrow={p.eyebrow} heading={p.heading} tone="sky" />
+    <ul class="pp-pols mt-14 grid grid-cols-4 gap-x-6 gap-y-8 max-lap:grid-cols-2 max-tab:mt-10 max-tab:gap-x-4.5">
+      {
+        p.items.map((x) => (
+          <li>
+            <Polaroid class="wob" variant="tape" src={asset(x.image)} alt={x.alt} width={280} phone="42vw" caption={x.caption} />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

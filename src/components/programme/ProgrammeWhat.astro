@@ -1,0 +1,35 @@
+---
+/** A programme page's "What happens": what a session or drive involves, one card each. Copy: programme-pages/*.yaml →
+ *  what. */
+import type { CollectionEntry } from "astro:content";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import SectionHead from "../ui/SectionHead.astro";
+
+interface Props {
+  what: CollectionEntry<"programmePages">["data"]["what"];
+}
+
+const { what: w } = Astro.props;
+---
+
+<section
+  class="relative overflow-hidden border-t-line border-ink bg-paper-2 px-14 pt-28 pb-32 max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+  id="what"
+  data-spy="what"
+  aria-labelledby="pp-what-h"
+>
+  <MarginDoodles set="pwhat" />
+  <div class="relative z-2 mx-auto max-w-section">
+    <SectionHead id="pp-what-h" eyebrow={w.eyebrow} heading={w.heading} lede={w.lede} />
+    <ul class="mt-14 grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-5 max-tab:mt-10 max-tab:grid-cols-1 max-tab:gap-4">
+      {
+        w.cards.map((c) => (
+          <li class="pi-card flex flex-col gap-3">
+            <h3 class="font-pi-display text-30 leading-[1.02] font-extrabold tracking-heading">{c.title}</h3>
+            <p class="font-pi-sans text-16 leading-body font-medium text-pretty">{c.line}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

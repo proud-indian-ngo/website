@@ -86,6 +86,12 @@ https://:project.pages.dev/*
   Link: </csr/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
 /kalakriti/
   Link: </kalakriti/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
+/education/
+  Link: </education/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
+/nutrition/
+  Link: </nutrition/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
+/community/
+  Link: </community/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
 /privacy/
   Link: </privacy/index.md>; rel="alternate"; type="text/markdown", </llms.txt>; rel="describedby"; type="text/plain"
 /terms/
@@ -102,6 +108,12 @@ https://:project.pages.dev/*
 /csr/index.md
   X-Robots-Tag: noindex
 /kalakriti/index.md
+  X-Robots-Tag: noindex
+/education/index.md
+  X-Robots-Tag: noindex
+/nutrition/index.md
+  X-Robots-Tag: noindex
+/community/index.md
   X-Robots-Tag: noindex
 /privacy/index.md
   X-Robots-Tag: noindex

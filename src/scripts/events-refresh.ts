@@ -5,6 +5,7 @@
  * CORS, bad shape) keeps the built list.
  */
 import {
+  type Programme,
   type PublicEvent,
   fingerprint,
   parseEventsResponse,
@@ -17,6 +18,8 @@ interface State {
   labels: EventLabels;
   url: string | null;
   events: PublicEvent[];
+  /** a programme page shows only that programme's sessions */
+  programme?: Programme;
 }
 
 /** The state the page was built with, then whatever the refresh last rendered (see `sessions`). */
@@ -88,7 +91,9 @@ export async function refreshEvents(onChange: () => void) {
     if (!res.ok) return;
     const data = parseEventsResponse(await res.json());
     if (!data) return;
-    events = data.events;
+    events = state.programme
+      ? data.events.filter((e) => e.programme === state.programme)
+      : data.events;
   } catch {
     return; // keep what was built
   }

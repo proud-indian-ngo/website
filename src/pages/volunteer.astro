@@ -25,14 +25,14 @@ import "../styles/volunteer-page.css";
 import { getSite, getVolunteerPage } from "../lib/content";
 import { loadEvents } from "../lib/events/load";
 import { guidePage, guideValues } from "../lib/inline";
-import { jsonLd, volunteerStructuredData } from "../lib/structured-data";
+import { guideStructuredData, jsonLd } from "../lib/structured-data";
 
 const page = await getVolunteerPage();
 const site = await getSite();
 const events = await loadEvents();
 const values = guideValues(site);
 const { origin, faq, page: summary } = guidePage(page.meta, page.faq.items, values, Astro.site, Astro.url.pathname);
-const structured = volunteerStructuredData(summary, faq.data, events.data.events, origin);
+const structured = guideStructuredData(summary, "Volunteer", faq.data, events.data.events, origin);
 /** the sections on this page: header, menu and footer links to them stay here, the rest (and the logo, "#top") go to
  *  the home page */
 const anchors = ["#volunteer", "#do", "#where", "#safeguarding", "#internships", "#faq", "#closing"];
@@ -47,7 +47,7 @@ const menuLinks = [{ label: page.nav.home, href: "/" }, ...navLinks];
   <Header anchors={anchors} links={navLinks} join={site.links.register} />
   <PhoneMenu anchors={anchors} links={menuLinks} />
   <main id="main">
-    <GuideHero />
+    <GuideHero hero={page.hero} />
     <Volunteer events={events} />
     <GuideDo />
     <GuideWhere events={events.data.events} />

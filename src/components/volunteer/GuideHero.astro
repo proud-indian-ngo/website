@@ -1,11 +1,13 @@
 ---
 /**
- * Volunteer guide hero: "Weekend volunteering in Bengaluru." on cyan, with a pinboard beside it: two photos of
- * Optimists with the children (a class and a circle) and the fine print on a notepad (18 and over, free, weekends),
- * pinned over them. The calls to action sit under the lede. Copy: volunteer.yaml → hero. Layout: volunteer-page.css
- * (.vg-board, and .vg-pad, the notepad the FAQ is written on too).
+ * Guide hero: "Weekend volunteering in Bengaluru." on cyan, with a pinboard beside it: two photos of Optimists with
+ * the children and the fine print on a notepad (18 and over, free, weekends), pinned over them. The calls to action
+ * (and an optional donate link) sit under the lede. Used by /volunteer/ (volunteer.yaml → hero) and the programme pages
+ * (programme-pages/*.yaml → hero). Layout: volunteer-page.css (.vg-board, and .vg-pad, the notepad the FAQ is written
+ * on too).
  */
-import { getSite, getVolunteerPage } from "../../lib/content";
+import type { CollectionEntry } from "astro:content";
+import { getSite } from "../../lib/content";
 import { asset } from "../../lib/images";
 import HandsUp from "../doodles/HandsUp.astro";
 import HeroSun from "../doodles/HeroSun.astro";
@@ -14,7 +16,11 @@ import AccentWord from "../ui/AccentWord.astro";
 import Button from "../ui/Button.astro";
 import Polaroid from "../ui/Polaroid.astro";
 
-const { hero: h } = await getVolunteerPage();
+interface Props {
+  hero: CollectionEntry<"volunteer">["data"]["hero"];
+}
+
+const { hero: h } = Astro.props;
 const site = await getSite();
 const [p1, p2] = h.photos;
 ---
@@ -50,6 +56,18 @@ const [p1, p2] = h.photos;
           <Button href={site.links.register} size="lg" arrow>{h.join}</Button>
           <Button href="#volunteer" variant="ghost" size="lg">{h.sessions}</Button>
         </div>
+        {
+          h.donate && (
+            <p class="mt-5" data-reveal="rise">
+              <a
+                class="tap-44 font-pi-sans text-16 font-semibold text-ink underline decoration-[1.5px] underline-offset-4"
+                href="/#donate"
+              >
+                {h.donate} <span aria-hidden="true">→</span>
+              </a>
+            </p>
+          )
+        }
       </div>
       <div class="vg-board" data-stagger="0">
         <HeroSun class="sun loop vg-sun overflow-visible" aria-hidden="true" />

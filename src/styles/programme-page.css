@@ -1,0 +1,16 @@
+/* The programme pages only (/education/, /nutrition/, /community/; src/components/programme/ProgrammePage.astro).
+   Everything else on them is the volunteer guide's (volunteer-page.css) or utilities. */
+@reference "./global.css";
+
+@layer components {
+  /* the photos lean a little, alternately, like the festival page's */
+  .pp-pols > li:nth-child(odd) .pi-polaroid {
+    rotate: -2deg;
+  }
+  .pp-pols > li:nth-child(even) .pi-polaroid {
+    rotate: 2.5deg;
+  }
+  .pp-pols > li:nth-child(3n) .pi-polaroid {
+    rotate: -1deg;
+  }
+}

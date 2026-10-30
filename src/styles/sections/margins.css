@@ -73,7 +73,7 @@
   --cl: 620px; /* the 1328px footer */
   --cr: 620px;
 }
-/* the volunteer guide's, the /csr/ page's and the /kalakriti/ page's sections: the 1264px section width, plus the hero's cut-outs and the
+/* the volunteer guide's, the /csr/ page's, the /kalakriti/ page's and the programme pages' sections: the 1264px section width, plus the hero's cut-outs and the
    cards' overhang */
 .mg:is(
   .vhero,
@@ -98,7 +98,11 @@
   .kfaq,
   .cdocs,
   .cfaq,
-  .cclose
+  .cclose,
+  .pwhat,
+  .pnums,
+  .pphotos,
+  .pfaq
 ) {
   --cl: 660px;
   --cr: 660px;
@@ -178,7 +182,11 @@
     .mg.kfaq,
     .mg.cdocs,
     .mg.cfaq,
-    .mg.cclose
+    .mg.cclose,
+    .mg.pwhat,
+    .mg.pnums,
+    .mg.pphotos,
+    .mg.pfaq
   ) {
     display: block;
   }

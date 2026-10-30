@@ -10,6 +10,8 @@ doodle: bowl
 line: Nutrition drives and shared meals, because nobody learns hungry.
 chips: [Nutrition drives, Shared meals]
 cta: Volunteer for this
+# this programme's own page (/nutrition/, src/content/programme-pages/nutrition.yaml) and the band's link to it
+page: { slug: nutrition, link: More about Nutrition }
 polaroids:
   - image: photos/feed-nutrition-drive-dec2022.jpg
     alt: A grinning boy flashing a peace sign with his red nutrition pack at the December 2022 nutrition drive

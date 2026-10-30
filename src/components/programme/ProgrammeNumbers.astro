@@ -1,0 +1,52 @@
+---
+/** A programme page's numbers, on ink: a few figures per financial year, each year headed with a link to its annual
+ *  report (reports.yaml), so every number can be checked. Copy: programme-pages/*.yaml → numbers. */
+import type { CollectionEntry } from "astro:content";
+import { annualReport } from "../../lib/content";
+import { newTab } from "../../lib/links";
+import MarginDoodles from "../margins/MarginDoodles.astro";
+import NewTab from "../ui/NewTab.astro";
+import SectionHead from "../ui/SectionHead.astro";
+
+interface Props {
+  numbers: CollectionEntry<"programmePages">["data"]["numbers"];
+}
+
+const { numbers: n } = Astro.props;
+const years = await Promise.all(n.years.map(async (y) => ({ ...y, report: await annualReport(y.year) })));
+---
+
+<section
+  class="relative overflow-hidden bg-ink px-14 pt-28 pb-32 text-paper max-tab:px-5 max-tab:pt-18 max-tab:pb-20"
+  id="numbers"
+  data-spy="numbers"
+  aria-labelledby="pp-numbers-h"
+>
+  <MarginDoodles set="pnums" tone="ink" />
+  <div class="relative z-2 mx-auto max-w-section">
+    <SectionHead id="pp-numbers-h" eyebrow={n.eyebrow} heading={n.heading} lede={n.lede} tone="ink" />
+    <div class="mt-12 grid gap-11 max-tab:mt-9 max-tab:gap-9">
+      {
+        years.map((y) => (
+          <div>
+            <h3 class="font-pi-sans text-14 font-bold tracking-caption text-sky uppercase">
+              <a class="tap-44 underline decoration-[1.5px] underline-offset-4" href={y.report.url} {...newTab()}>
+                {n.source} {y.report.label}
+                <NewTab />
+              </a>
+            </h3>
+            <ul class="mt-4 grid grid-cols-3 gap-5 max-tab:grid-cols-1 max-tab:gap-4">
+              {y.stats.map((s) => (
+                <li class="rounded-20 border-line border-paper-a60 px-5 pt-4 pb-5">
+                  <p class="font-pi-display text-44 leading-none font-extrabold tracking-heavy">{s.number}</p>
+                  <p class="mt-2 font-pi-sans text-15 leading-body font-medium text-pretty text-paper-a90">{s.label}</p>
+                </li>
+              ))}
+            </ul>
+            {y.note && <p class="mt-4 max-w-[64ch] font-pi-sans text-16 leading-body text-pretty text-paper-a90">{y.note}</p>}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

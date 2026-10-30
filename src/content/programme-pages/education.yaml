@@ -1,0 +1,115 @@
+# /education/: Teach, for people looking for teaching or Spoken English volunteering in Bengaluru (Bangalore). The home
+# band is programmes/teach.yaml; the sessions are the events feed's `education` ones. Facts come from teach.yaml,
+# volunteer.yaml, csr.yaml and safeguarding.yaml; the figures from the annual reports in public/reports/ (2025-26:
+# "Teach" page and "The year, counted"; 2024-25: "Education impact"), each under its year. The 2023-24 education
+# figures mix in Key For Success, which is not this programme, so they are left out.
+# Text may use {placeholders}: {register} {events} {hr} {connect} {phone}. FAQ answers may also use [text](url) links.
+
+meta:
+  title: Teach Spoken English and maths to children in Bengaluru (Bangalore) · Proud Indian
+  description: "Volunteer to teach children at weekends in Bangalore: maths, Spoken English and art & craft in small groups around Bellandur and Iblur. 18+, free, no teaching background needed."
+
+crumb: Education
+
+nav:
+  links:
+    - { label: What happens, href: "#what", spy: what }
+    - { label: Sessions, href: "#volunteer", spy: volunteer }
+    - { label: Numbers, href: "#numbers", spy: numbers }
+    - { label: Photos, href: "#photos", spy: photos }
+    - { label: FAQ, href: "#faq", spy: faq }
+  home: Home
+
+hero:
+  eyebrow: Education · Teach
+  heading: { before: Teach at weekends in, accent: Bengaluru. }
+  lede: "Weekend maths and Spoken English classes, and art & craft that gets children talking about their world. Classes are small, around Bellandur and Iblur in south-east Bengaluru, and you teach alongside Optimists who run them every week."
+  join: Volunteer for this
+  sessions: See upcoming classes
+  factsTitle: The fine print
+  facts:
+    [
+      18 and over,
+      No teaching background needed,
+      Free to join,
+      Saturdays and Sundays,
+    ]
+  photos:
+    - image: photos/volunteer-maths-board.jpg
+      alt: A volunteer at the whiteboard teaching multiplication to children at their desks
+      caption: Maths class, Saturday
+    - image: photos/strip-spoken-english.jpg
+      alt: A boy speaking in front of the class at Spoken English
+      caption: Spoken English
+  donate: Or donate towards class materials
+
+what:
+  eyebrow: What happens
+  heading: { before: Small groups and, accent: a whiteboard. }
+  lede: Classes meet every week, so we ask class volunteers to come regularly. Groups stay small, so every child gets called up to the board sooner or later.
+  cards:
+    - title: Maths class
+      line: Times tables and sums on the whiteboard, worked through in small groups, so every child gets a turn.
+    - title: Spoken English
+      line: Children practise speaking English and speaking up in front of the group. The classes run at our community centre in Ibbaluru.
+    - title: Art & craft
+      line: "Social-awareness art classes: Optimists teach a topic through pictures, then the children make posters about it and explain what they understood, which builds their confidence in speaking."
+    - title: Special sessions
+      line: "Some sessions bring the outside world in: disaster preparedness, caring for older relatives, and a postmaster who left every child with a postcard to send."
+
+numbers:
+  eyebrow: In numbers
+  heading: { before: The classes, accent: counted. }
+  lede: From our annual reports. Each year runs from April to March.
+  source: From the annual report
+  years:
+    - year: 2025-26
+      stats:
+        - { number: "2,000+", label: children in classes and learning drives }
+        - { number: "24", label: classes and drives }
+        - { number: "980", label: volunteer hours }
+    - year: 2024-25
+      stats:
+        - { number: "909", label: beneficiaries }
+        - { number: "34", label: classes }
+        - { number: "218", label: volunteer field hours }
+
+photos:
+  eyebrow: Photos
+  heading: { before: From our, accent: classes. }
+  items:
+    - image: photos/teach-maths-class.jpg
+      alt: A volunteer teaching multiplication at a maths class
+      caption: Maths class
+    - image: photos/teach-postmaster.jpg
+      alt: A girl writing a letter at the Learning with Postmaster session
+      caption: Postmaster day
+    - image: photos/teach-art-craft.jpg
+      alt: A girl holding up the bookmark she made in art and craft class
+      caption: Art & craft
+    - image: photos/volunteer-circle.jpg
+      alt: Volunteers sitting in a circle on the floor with children at the community centre
+      caption: Spoken English, Sunday
+
+faq:
+  eyebrow: FAQ
+  heading: { before: "Questions,", accent: answered. }
+  items:
+    - q: Who can teach with Proud Indian?
+      a: Anyone aged 18 or over. You don’t need a teaching background or any experience; patience and turning up matter most.
+    - q: What would I teach?
+      a: Maths, Spoken English or art and craft, in small groups, alongside the Optimists who teach the class every week.
+    - q: How much time do I need to give?
+      a: Classes run every week, so we ask class volunteers to come regularly.
+    - q: When and where are the classes?
+      a: Most are on Saturdays or Sundays, in neighbourhoods around Bellandur and Iblur and at our community centre in Ibbaluru. Every class’s date, time and area is listed [above](#volunteer) and on the [dashboard]({events}), and you get the exact meeting point once you’re approved.
+    - q: How do I sign up?
+      a: "[Register on the dashboard]({register}), tap “Show interest” on a class, and come along once you’re approved."
+    - q: What are the rules with the children?
+      a: Every session with children starts with a short briefing, nobody is ever alone with a child, and please don’t photograph the children yourself. [Read all the safeguarding rules](/volunteer/#safeguarding).
+    - q: Do I get a certificate?
+      a: On request. Write to {hr} and we’ll send you a certificate or letter for the hours you’ve volunteered.
+    - q: Can my company run a class with you?
+      a: "Yes. A team can run a maths, Spoken English or art and craft session with the children on a Saturday or Sunday. [See the volunteering-day formats](/csr/#days)."
+    - q: Can I help without volunteering?
+      a: You can [donate](/#donate) towards class materials and art supplies. Every gift gets an 80G tax receipt by email.

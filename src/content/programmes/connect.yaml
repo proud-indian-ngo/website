@@ -10,6 +10,8 @@ doodle: heart
 line: "Bringing the children and the city together: Gift a Smile, kit drives, trips to IISc and the zoo, and volunteering days with companies."
 chips: [Gift a Smile, Kit drives, Outings, Volunteering days]
 cta: Volunteer for this
+# this programme's own page (/community/, src/content/programme-pages/community.yaml) and the band's link to it
+page: { slug: community, link: More about Community }
 polaroids:
   - image: photos/connect-gift-a-smile.jpg
     alt: Three girls with the badminton sets they got at Gift a Smile

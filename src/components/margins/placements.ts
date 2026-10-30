@@ -64,7 +64,12 @@ export type SetName =
   | "kfaq"
   | "cdocs"
   | "cfaq"
-  | "cclose";
+  | "cclose"
+  // the programme pages (/education/, /nutrition/, /community/)
+  | "pwhat"
+  | "pnums"
+  | "pphotos"
+  | "pfaq";
 export interface Spot {
   m: Motif;
   side: "l" | "r";
@@ -334,6 +339,35 @@ const plans: Record<SetName, Plan> = {
   cfaq: {
     l: ["notepad", "sparkle", "star"],
     r: ["clock", "book"],
+    h: 1300,
+    gl: 400,
+    gr: 400,
+  },
+  // the programme pages' sections (the 1264px section width, like the guides'; the hero is the guide's, vhero)
+  pwhat: {
+    l: ["pencil", "star"],
+    r: ["book", "sparkle"],
+    h: 1100,
+    gl: 400,
+    gr: 400,
+  },
+  pnums: {
+    l: ["tick", "star"],
+    r: ["notepad", "sparkle"],
+    h: 900,
+    gl: 400,
+    gr: 400,
+  },
+  pphotos: {
+    l: ["heart", "sparkle"],
+    r: ["kite", "star"],
+    h: 900,
+    gl: 400,
+    gr: 400,
+  },
+  pfaq: {
+    l: ["notepad", "sparkle", "star"],
+    r: ["clock", "hands"],
     h: 1300,
     gl: 400,
     gr: 400,
