@@ -373,6 +373,7 @@ const copy = defineCollection({
         accent: z.string(),
       }),
       lede: z.string(),
+      current: z.string(),
       ring: z.string(),
       tiles: z.object({
         reached: z.string(),

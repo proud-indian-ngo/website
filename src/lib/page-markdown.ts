@@ -170,6 +170,7 @@ export async function siteMarkdown(origin: URL | undefined) {
     `- Founded in ${site.city} on ${site.founded.long}. ${site.stats.optimists} Optimists (volunteers), ${site.stats.hours} volunteer hours, ${site.stats.reached} people reached.`,
     `- Registered ${r.taxExemption} and ${r.registered}. NGO Darpan ${r.darpan}, PAN ${r.pan}, registration no. ${r.registrationNo}. Registered with the Ministry of Corporate Affairs to take on CSR projects (CSR-1 ${r.csr1}).`,
     `- Certificates (PDF): [CSR-1](${abs(site.certificates.csr1)}), [${r.taxExemption}](${abs(site.certificates.taxExemption)}), [${r.registered}](${abs(site.certificates.registered)}), [NGO Darpan](${abs(site.certificates.darpan)}).`,
+    `- ${copy.reports.current} ${new Intl.ListFormat("en-GB").format(programmes.flatMap((p) => (p.kind === "band" ? [`[${p.name}](${abs(`/${p.page.slug}/`)})`] : [])))}.`,
     ...[...pdfs("annual"), ...pdfs("audited")].map(
       (d) => `- [${d.title}](${abs(d.url)})`
     ),

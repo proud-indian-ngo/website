@@ -165,6 +165,9 @@ reports:
   eyebrow: Transparency
   heading: { line1: "Every rupee,", line2: on the, accent: record. }
   lede: Our numbers, registrations and reports are all here.
+  # under the lede: the programme bands with a page are linked after it, so readers (and crawlers) of the older
+  # reports also see what we run today
+  current: "Each annual report covers its own year. What we run today:"
   ring: of funds go to programmes
   tiles:
     reached: People reached
