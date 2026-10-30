@@ -70,6 +70,8 @@ function sessionEvent(e: PublicEvent, origin: string, orgId: string) {
       url: e.signUpUrl,
     },
     organizer: { "@id": orgId },
+    // our volunteers lead every session
+    performer: { "@id": orgId },
   };
 }
 
