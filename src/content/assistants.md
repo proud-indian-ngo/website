@@ -11,7 +11,7 @@ summary: how to add Proud Indian to ChatGPT, Claude and other AI assistants, wha
 draft: false
 draftNote: This page is a draft and may change.
 dateLabel: Last updated
-effectiveDate: "28 October 2026"
+effectiveDate: "30 October 2026"
 lede: >-
   Add Proud Indian to ChatGPT, Claude or another AI assistant, and you can find a volunteering session in Bengaluru,
   sign up for it and follow your requests without leaving the chat.
@@ -41,9 +41,9 @@ Volunteers must be 18 or older. Our [terms of use](/terms/) apply when you use P
 
 ## Adding Proud Indian to your assistant
 
-Once Proud Indian is listed, search for "Proud Indian" in ChatGPT's plugin directory or Claude's Connectors Directory and add it from there.
+In ChatGPT, add Proud Indian from its [plugin directory listing](https://chatgpt.com/plugins/plugin_asdk_app_6adef6f22d08819188d20d4fa63e4aec), or search for "Proud Indian" under **Plugins**.
 
-Until then, or in an assistant without a directory, add it as a custom connector with this address:
+Proud Indian isn't in Claude's Connectors Directory yet. Until it is, or in an assistant without a directory, add it as a custom connector with this address:
 
 `https://dash.proudindian.ngo/api/mcp`
 
