@@ -3,7 +3,7 @@
  * Transparency: the bento wall. The document tiles open the reports drawer (ReportsDrawer.astro,
  * src/scripts/reports-drawer.ts). The registrations with a certificate link its PDF (site.yaml → certificates). Trustees, "At a glance" and the partners render inside this section through the slot.
  */
-import { facts, fill, getCopy, getReports, getSite } from "../../lib/content";
+import { facts, fill, getCopy, getProgrammes, getReports, getSite } from "../../lib/content";
 import MarginDoodles from "../margins/MarginDoodles.astro";
 import HeartBadge from "../doodles/HeartBadge.astro";
 import Notepad from "../doodles/Notepad.astro";
@@ -22,6 +22,8 @@ const annual = docs.filter((d) => d.kind === "annual");
 const audited = docs.filter((d) => d.kind === "audited");
 const disclosures = docs.filter((d) => d.kind === "disclosure");
 const featured = disclosures.find((d) => d.featured);
+/** the programmes with a page of their own, linked under the lede */
+const current = (await getProgrammes()).flatMap((p) => (p.kind === "band" ? [p] : []));
 /** "2019-20 to 2023-24" from the oldest and newest year of a kind */
 const span = (list: typeof docs) => {
   const ys = list.map((d) => d.year!).toSorted();
@@ -65,6 +67,17 @@ const span = (list: typeof docs) => {
         <div class="tr-side" data-reveal="rise">
           <Notepad class="pi-doodle tr-list loop" aria-hidden="true" /><p class="tr-lede pb-2 font-pi-sans text-19 leading-lede font-normal text-pretty max-tab:text-17">
             {r.lede}
+          </p>
+          <p class="tr-current mt-3 font-pi-sans text-17 leading-lede text-pretty max-tab:text-15">
+            {r.current}{" "}
+            {
+              current.map((p, i) => (
+                <>
+                  {i > 0 && (i === current.length - 1 ? " and " : ", ")}
+                  <a href={`/${p.page.slug}/`} class="underline decoration-1 underline-offset-3">{p.name}</a>
+                </>
+              ))
+            }.
           </p>
         </div>
       </header>
